@@ -2,18 +2,17 @@ package com.fagougou.xiaoben
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 
 @Composable
 fun HomePage(navController:NavController) {
@@ -30,6 +29,8 @@ fun HomePage(navController:NavController) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = {
                     navController.navigate("friendslist")
                 },
@@ -39,12 +40,10 @@ fun HomePage(navController:NavController) {
                         contentDescription = "交通事故"
                     )
                 },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent,
-                    contentColor = Color.Red
-                )
             )
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { },
                 content = {
                     Image(
@@ -54,6 +53,8 @@ fun HomePage(navController:NavController) {
                 }
             )
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { },
                 content = {
                     Image(
@@ -69,6 +70,8 @@ fun HomePage(navController:NavController) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { },
                 content = {
                     Image(
@@ -78,6 +81,8 @@ fun HomePage(navController:NavController) {
                 }
             )
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { },
                 content = {
                     Image(
@@ -87,6 +92,8 @@ fun HomePage(navController:NavController) {
                 }
             )
             Button(
+                shape = RoundedCornerShape(CORNER_PERCENT),
+                contentPadding = PaddingValues(0.dp),
                 onClick = { },
                 content = {
                     Image(
