@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.fagougou.xiaoben.utils.IFly
 
 @Composable
-fun RecordingPage() {
+fun IFlyUi() {
     val scrollState = rememberScrollState(0)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

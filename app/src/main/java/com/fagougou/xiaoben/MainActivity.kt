@@ -10,10 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.Navigator
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
-import com.fagougou.xiaoben.utils.IFly
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
@@ -21,13 +24,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             XiaoBenTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ) {
-                    Home()
-                }
+                ) { Home() }
             }
         }
     }
@@ -36,25 +36,20 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Home() {
+    val navController = rememberNavController()
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
     ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(0.133f),
-            verticalAlignment = Alignment.CenterVertically
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier.fillMaxHeight(0.5f)
         ) {
-            Text(text = "丰台法治工商小助手", fontSize = 32.sp)
+            composable("home") { HomePage(navController) }
+            composable("friendslist") { Text("friendslist") }
         }
-        RecordingPage()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    XiaoBenTheme {
-        Home()
+        Text(text = "智能法律计算器", fontSize = 36.sp, modifier = Modifier.padding(horizontal = 36.dp))
+        IFlyUi()
     }
 }
