@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -15,12 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.fagougou.xiaoben.utils.IFly
-import com.fagougou.xiaoben.utils.Tips.toast
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.rememberPagerState
-import com.iflytek.cloud.ErrorCode
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +30,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        IFly.startWakeUp()
     }
 }
 
@@ -47,7 +40,7 @@ fun Home() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
-    ){
+    ) {
         Row(
             modifier = Modifier.fillMaxHeight(0.133f),
             verticalAlignment = Alignment.CenterVertically
