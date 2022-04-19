@@ -6,17 +6,20 @@ import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
+import com.iflytek.cloud.util.ResourceUtil
+import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
 import org.json.JSONException
 import org.json.JSONObject
 
 object IFly {
     val TAG = javaClass.simpleName
-    val result = mutableStateOf("暂无内容")
+    val recognizeResult = mutableStateOf("暂无内容")
+    val wakeUpResult = mutableStateOf("未唤醒")
     val recordingState = mutableStateOf("开始录音")
-    val mInitListener = InitListener { code: Int ->
+    val mInitListener = InitListener { code ->
         Log.d(TAG,"SpeechRecognizer init() code = $code")
         if (code != ErrorCode.SUCCESS)
-            toast("初始化失败，错误码：$code,请点击网址https://www.xfyun.cn/document/error-code查询解决方案")
+            toast("初始化失败，错误码：$code")
     }
     var mIatResults = mutableMapOf<String, String>()
     val mRecognizerListener = object:RecognizerListener{
@@ -30,6 +33,8 @@ object IFly {
         override fun onEndOfSpeech() {
             recordingState.value = "开始录音"
             toast("录音结束")
+            mIat.stopListening()
+            mIvw.startListening(mWakeuperListener)
         }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
@@ -51,7 +56,7 @@ object IFly {
             for (key in mIatResults.keys) {
                 resultBuffer.append(mIatResults[key])
             }
-            result.value = resultBuffer.toString()
+            recognizeResult.value = resultBuffer.toString()
         }
 
         override fun onError(error: SpeechError) {
@@ -63,35 +68,64 @@ object IFly {
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
 
     }
+    val mWakeuperListener = object:WakeuperListener{
+        override fun onBeginOfSpeech() {
+            wakeUpResult.value = "输入音频"
+        }
+
+        override fun onResult(results: WakeuperResult) {
+            Log.d(TAG, "唤醒成功 ")
+            wakeUpResult.value = "唤醒成功"
+            mIvw.stopListening()
+            startRecognize()
+        }
+
+        override fun onError(error: SpeechError) {
+            Log.d(TAG, "onError " + error.getPlainDescription(true))
+            toast(error.getPlainDescription(true))
+        }
+
+        override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
+
+        override fun onVolumeChanged(volume: Int) { }
+
+    }
     val mIat = SpeechRecognizer.createRecognizer(context, mInitListener)
-    fun setParam() {
+    val mIvw = VoiceWakeuper.createWakeuper(context, mInitListener)
+    fun startRecognize() {
+        if (recordingState.value!="开始录音")return
+        //setParam()
+        val ret = mIat.startListening(mRecognizerListener)
+        if (ret != ErrorCode.SUCCESS) toast("听写失败,错误码：$ret")
+    }
+    fun startWakeUp(){
         // 清空参数
-        mIat.setParameter(SpeechConstant.PARAMS, null)
-        // 设置听写引擎
-        mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD)
-        // 设置返回结果格式
-        mIat.setParameter(SpeechConstant.RESULT_TYPE, "json")
-        mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn")
-        // 设置语言区域
-        val lag = "mandarin"
-        mIat.setParameter(SpeechConstant.ACCENT, lag)
-        Log.e(TAG, "last language:" + mIat.getParameter(SpeechConstant.LANGUAGE))
-
-        //此处用于设置dialog中不显示错误码信息
-        //mIat.setParameter("view_tips_plain","false");
-
-        // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS,"4000")
-
-        // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS,"1000")
-
-        // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
-        mIat.setParameter(SpeechConstant.ASR_PTT,"1")
-
-        // 设置音频保存路径，保存音频格式支持pcm、wav.
-        mIat.setParameter(SpeechConstant.AUDIO_FORMAT, "wav")
-        val dir = context.getExternalFilesDir("msc")?.absolutePath ?: return
-        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, "$dir/iat.wav")
+        mIvw.setParameter(SpeechConstant.PARAMS, null)
+        // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
+        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:1450")
+        // 设置唤醒模式
+        mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup")
+        // 设置持续进行唤醒
+        mIvw.setParameter(SpeechConstant.KEEP_ALIVE, "1")
+        // 设置闭环优化网络模式
+        mIvw.setParameter(SpeechConstant.IVW_NET_MODE, "0")
+        // 设置唤醒资源路径
+        mIvw.setParameter(
+            SpeechConstant.IVW_RES_PATH,
+            ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/33b963d0.jet")
+        )
+        // 设置唤醒录音保存路径，保存最近一分钟的音频
+        val path = context.getExternalFilesDir("msc")?.absolutePath ?: return
+        mIvw.setParameter(
+            SpeechConstant.IVW_AUDIO_PATH,
+            "$path/ivw.wav"
+        )
+        mIvw.setParameter(SpeechConstant.AUDIO_FORMAT, "wav")
+        // 如有需要，设置 NOTIFY_RECORD_DATA 以实时通过 onEvent 返回录音音频流字节
+        //mIvw.setParameter( SpeechConstant.NOTIFY_RECORD_DATA, "1" );
+        // 启动唤醒
+        /*	mIvw.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");*/
+        val ret = mIvw.startListening(mWakeuperListener)
+        if (ret != ErrorCode.SUCCESS) toast("听写失败,错误码：$ret")
     }
 }

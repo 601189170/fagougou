@@ -36,13 +36,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        IFly.startWakeUp()
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Home() {
-    val pagerState = rememberPagerState()
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,40 +54,8 @@ fun Home() {
         ) {
             Text(text = "丰台法治工商小助手", fontSize = 32.sp)
         }
-        HorizontalPager(
-            count = 2,
-            state = pagerState,
-            modifier = Modifier.fillMaxHeight(0.96f),
-        ) { index ->
-            when (index) {
-                0 -> Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Button(
-                        content = { Text(IFly.recordingState.value) },
-                        onClick = {
-                            with(IFly){
-                                if (recordingState.value!="开始录音")return@with
-                                setParam()
-                                val ret = mIat.startListening(mRecognizerListener)
-                                if (ret != ErrorCode.SUCCESS) toast("听写失败,错误码：$ret")
-                            }
-                        }
-                    )
-                    Text(IFly.result.value)
-                }
-                1 -> Text(text = "第二页")
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            HorizontalPagerIndicator( pagerState = pagerState )
-        }
+        RecordingPage()
     }
-
 }
 
 @Preview(showBackground = true)
