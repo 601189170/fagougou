@@ -69,4 +69,5 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:0.24.4-alpha"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.24.4-alpha"
     implementation 'com.tencent:mmkv:1.2.12'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }

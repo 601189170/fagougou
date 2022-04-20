@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
+import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -20,7 +21,7 @@ object IFly {
     val recognizeResult = mutableStateOf("暂无内容")
     val wakeUpResult = mutableStateOf("未唤醒")
     val volumeState = mutableStateOf("=")
-    val history = mutableStateListOf<String>()
+
     var mIatResults = mutableMapOf<String, String>()
     val mInitListener = InitListener { code ->
         if (code != ErrorCode.SUCCESS) toast("初始化失败，错误码：$code")
@@ -64,8 +65,9 @@ object IFly {
             for (key in mIatResults.keys) resultBuilder.append(mIatResults[key])
             recognizeResult.value = resultBuilder.toString()
             if(isLast) {
-                history.add(resultBuilder.toString())
+                ChatPage.history.add(resultBuilder.toString())
                 mIatResults.clear()
+                recognizeResult.value = ""
             }
             resultBuilder.clear()
         }
@@ -99,9 +101,9 @@ object IFly {
         // 设置动态修正
         mIat.setParameter("dwa", "wpgs")
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS,"4000")
+        mIat.setParameter(SpeechConstant.VAD_BOS,"3000")
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS,"4000")
+        mIat.setParameter(SpeechConstant.VAD_EOS,"3000")
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
