@@ -1,5 +1,6 @@
-package com.fagougou.xiaoben
+package com.fagougou.xiaoben.homePage
 
+import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -15,7 +17,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
+import com.fagougou.xiaoben.homePage.HomePage.allNumber
+import com.fagougou.xiaoben.model.About
+import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+object HomePage{
+    val allNumber = mutableStateOf(0)
+    val monthNumber = mutableStateOf(0)
+    val qrcodeUrl = mutableStateOf("")
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = retrofitClient.aboutRobot().execute()
+            val body = response.body() ?: About()
+            allNumber.value = body.aboutData.aboutFirm.allNumber
+            monthNumber.value = body.aboutData.aboutFirm.monthNumber
+            qrcodeUrl.value = body.aboutData.aboutFirm.qrcodeUrl
+        }
+    }
+}
+
+@Composable
+fun HomeButton(
+    onClick: () -> Unit,
+    content: @Composable RowScope.() -> Unit
+) {
+    Button(
+        modifier = Modifier.height(210.dp).width(280.dp),
+        shape = RoundedCornerShape(CORNER_PERCENT),
+        contentPadding = PaddingValues(0.dp),
+        onClick = onClick,
+        content = content
+    )
+}
 
 @Composable
 fun HomePage(navController:NavController) {
@@ -39,11 +79,11 @@ fun HomePage(navController:NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "交通事故"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
                         painter = painterResource(R.drawable.traffic),
@@ -51,11 +91,11 @@ fun HomePage(navController:NavController) {
                     )
                 },
             )
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "民间借贷"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
                         painter = painterResource(R.drawable.loan),
@@ -63,14 +103,14 @@ fun HomePage(navController:NavController) {
                     )
                 }
             )
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "企业人事"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
-                        painter = painterResource(R.drawable.hr),
+                        painter = painterResource(R.drawable.employer),
                         contentDescription = "企业人事"
                     )
                 }
@@ -81,11 +121,11 @@ fun HomePage(navController:NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "社会保险"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
                         painter = painterResource(R.drawable.insurance),
@@ -93,23 +133,23 @@ fun HomePage(navController:NavController) {
                     )
                 }
             )
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "员工维权"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
-                        painter = painterResource(R.drawable.litigation),
-                        contentDescription = "诉讼指导"
+                        painter = painterResource(R.drawable.employee),
+                        contentDescription = "员工维权"
                     )
                 }
             )
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                shape = RoundedCornerShape(CORNER_PERCENT),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate("chat") },
+            HomeButton(
+                onClick = {
+                    selectedChatBot.value = "消费维权"
+                    navController.navigate("chat")
+                },
                 content = {
                     Image(
                         painter = painterResource(R.drawable.comsume),
@@ -129,7 +169,7 @@ fun HomePage(navController:NavController) {
                 content = { Text("智能文书生成") }
             )
             Button(
-                modifier = Modifier.height(70.dp).width(640.dp),
+                modifier = Modifier.height(70.dp).width(620.dp),
                 onClick = {},
                 content = { Text("常用合同文书检索") }
             )
@@ -150,7 +190,7 @@ fun HomePage(navController:NavController) {
             Button(
                 modifier = Modifier.height(210.dp).width(280.dp),
                 onClick = {},
-                content = { Text("咨询次数") }
+                content = { Text("已经有${allNumber.value}人通过本系统获得专业解答") }
             )
         }
     }

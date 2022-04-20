@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 object Tips {
     var lastDisplayString = ""
     var lastDisplayTime = 0L
-
     fun toast(str: String) { CoroutineScope(Dispatchers.Main).launch {
             if (str == lastDisplayString && System.currentTimeMillis() < lastDisplayTime) return@launch
             lastDisplayString = str

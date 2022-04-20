@@ -2,10 +2,12 @@ package com.fagougou.xiaoben.utils
 
 import android.os.Bundle
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.chatPage.ChatPage
+import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
+import com.fagougou.xiaoben.model.Message
+import com.fagougou.xiaoben.model.Speaker
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -64,8 +66,8 @@ object IFly {
             mIatResults[sn] = text
             for (key in mIatResults.keys) resultBuilder.append(mIatResults[key])
             recognizeResult.value = resultBuilder.toString()
-            if(isLast) {
-                ChatPage.history.add(resultBuilder.toString())
+            if(isLast && selectedChatBot.value!="小笨") {
+                ChatPage.history.add(Message(Speaker.USER,resultBuilder.toString()))
                 mIatResults.clear()
                 recognizeResult.value = ""
             }

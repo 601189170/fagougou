@@ -2,6 +2,12 @@ package com.fagougou.xiaoben
 
 import android.app.Application
 import android.content.Context
+import com.fagougou.xiaoben.chatPage.ChatPage.chatBotMap
+import com.fagougou.xiaoben.model.Auth
+import com.fagougou.xiaoben.model.AuthRequest
+import com.fagougou.xiaoben.model.BotList
+import com.fagougou.xiaoben.repo.Client.retrofitClient
+import com.fagougou.xiaoben.utils.MMKV.kv
 import com.iflytek.cloud.SpeechUtility
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
@@ -12,6 +18,7 @@ import kotlin.properties.Delegates
 class CommonApplication: Application(){
     companion object {
         var context: Context by Delegates.notNull()
+        const val TAG = "FaGouGou@XiaoBen"
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -22,17 +29,15 @@ class CommonApplication: Application(){
     override fun onCreate() {
         super.onCreate()
         context = this
-        // 应用程序入口处调用，避免手机内存过小，杀死后台进程后通过历史intent进入Activity造成SpeechUtility对象为null
-        // 如在Application中调用初始化，需要在Mainifest中注册该Applicaiton
-        // 注意：此接口在非主进程调用会返回null对象，如需在非主进程使用语音功能，请增加参数：SpeechConstant.FORCE_LOGIN+"=true"
-        // 参数间使用半角“,”分隔。
-        // 设置你申请的应用appid,请勿在'='与appid之间添加空格及空转义符
-
-        // 注意： appid 必须和下载的SDK保持一致，否则会出现10407错误
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
-        CoroutineScope(Dispatchers.Default).launch {
-
+        CoroutineScope(Dispatchers.IO).launch {
+            val tokenResponse = retrofitClient.auth(AuthRequest()).execute()
+            val tokenBody = tokenResponse.body() ?: Auth()
+            kv.encode("token",tokenBody.data.token)
+            val botListResponse = retrofitClient.botList().execute()
+            val botListBody = botListResponse.body() ?: BotList()
+            for(bot in botListBody.data)chatBotMap[bot.name]=bot.id
         }
     }
 }

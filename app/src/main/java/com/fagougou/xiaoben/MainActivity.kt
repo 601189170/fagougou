@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fagougou.xiaoben.chatPage.ChatPage
+import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ) { Home() }
+                ) { Main() }
             }
         }
     }
@@ -44,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Home() {
+fun Main() {
     val navController = rememberNavController()
     Column(
         modifier = Modifier.fillMaxSize(),
