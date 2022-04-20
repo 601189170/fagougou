@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.homePage.HomePage.allNumber
 import com.fagougou.xiaoben.model.About
@@ -83,6 +84,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "交通事故"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(
@@ -95,6 +97,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "民间借贷"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(
@@ -107,6 +110,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "企业人事"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(
@@ -125,6 +129,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "社会保险"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(
@@ -137,6 +142,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "员工维权"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(
@@ -149,6 +155,7 @@ fun HomePage(navController:NavController) {
                 onClick = {
                     selectedChatBot.value = "消费维权"
                     navController.navigate("chat")
+                    ChatPage.startChat()
                 },
                 content = {
                     Image(

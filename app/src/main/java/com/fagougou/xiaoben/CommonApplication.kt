@@ -3,6 +3,7 @@ package com.fagougou.xiaoben
 import android.app.Application
 import android.content.Context
 import com.fagougou.xiaoben.chatPage.ChatPage.chatBotMap
+import com.fagougou.xiaoben.chatPage.ChatPage.tyBotMap
 import com.fagougou.xiaoben.model.Auth
 import com.fagougou.xiaoben.model.AuthRequest
 import com.fagougou.xiaoben.model.BotList
@@ -37,7 +38,10 @@ class CommonApplication: Application(){
             kv.encode("token",tokenBody.data.token)
             val botListResponse = retrofitClient.botList().execute()
             val botListBody = botListResponse.body() ?: BotList()
-            for(bot in botListBody.data)chatBotMap[bot.name]=bot.id
+            for(bot in botListBody.data) {
+                if(bot.tyId=="") chatBotMap[bot.name]=bot.id
+                else tyBotMap[bot.name] = bot.id
+            }
         }
     }
 }

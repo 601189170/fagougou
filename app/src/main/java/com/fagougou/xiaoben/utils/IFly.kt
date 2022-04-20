@@ -30,8 +30,8 @@ object IFly {
     }
     val mRecognizerListener = object:RecognizerListener{
         override fun onVolumeChanged(volume: Int, data: ByteArray) {
-            val stringBuilder = StringBuilder(volume+1)
-            for (i in 0..volume+1)stringBuilder.append('=')
+            val stringBuilder = StringBuilder(volume+3)
+            for (i in 0..volume+3)stringBuilder.append('=')
             volumeState.value = stringBuilder.toString()
         }
 
@@ -39,7 +39,10 @@ object IFly {
             wakeUpResult.value = "唤醒成功,录音中"
         }
 
-        override fun onEndOfSpeech() = wakeMode()
+        override fun onEndOfSpeech() {
+            volumeState.value = ""
+            wakeMode()
+        }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
             Log.d(TAG, results.resultString)

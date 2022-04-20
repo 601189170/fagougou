@@ -14,14 +14,28 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.chatPage.ChatPage.chatBotMap
 import com.fagougou.xiaoben.chatPage.ChatPage.history
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
-import com.fagougou.xiaoben.model.Bot
+import com.fagougou.xiaoben.chatPage.ChatPage.startChat
 import com.fagougou.xiaoben.model.Message
+import com.fagougou.xiaoben.model.Speaker
+import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.utils.IFly
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object ChatPage {
     val history = mutableStateListOf<Message>()
     val selectedChatBot = mutableStateOf("小笨")
     var chatBotMap = mutableMapOf<String,String>()
+    var tyBotMap = mutableMapOf<String,String>()
+
+    fun startChat(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = retrofitClient.startChat(chatBotMap[selectedChatBot.value]?:"").execute()
+            val body = response.body() ?: return@launch
+            for(say in body.startChatData.botSays) history.add(Message(Speaker.ROBOT,say.content.body))
+        }
+    }
 }
 
 @Composable
@@ -50,9 +64,12 @@ fun ChatPage(navController: NavController) {
                     .padding(40.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                for(i in 0..5)Button(
-                    onClick = {  },
-                    content = { Text("某一项",fontSize = 32.sp) }
+                for(bot in chatBotMap)Button(
+                    onClick = {
+                        selectedChatBot.value = bot.key
+                        startChat()
+                    },
+                    content = { Text(bot.key,fontSize = 24.sp) }
                 )
             }
         }
