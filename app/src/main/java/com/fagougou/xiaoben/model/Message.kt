@@ -3,7 +3,7 @@ package com.fagougou.xiaoben.model
 import com.google.gson.annotations.SerializedName
 
 enum class Speaker { ROBOT, USER }
-data class Message(val speaker: Speaker, val content:String)
+data class Message(val speaker: Speaker, val content:String, val recommendQA: List<String> = listOf())
 
 data class StartChatResult(
     @SerializedName("data")
