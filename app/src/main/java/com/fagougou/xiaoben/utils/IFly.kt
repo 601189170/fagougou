@@ -20,8 +20,7 @@ import java.lang.Exception
 object IFly {
     val TAG = javaClass.simpleName
     val resultBuilder = StringBuilder()
-    val recognizeResult = mutableStateOf("暂无内容")
-    val wakeUpResult = mutableStateOf("未唤醒")
+    val recognizeResult = mutableStateOf("请说\"你好小笨\"")
     val volumeState = mutableStateOf("=")
 
     var mIatResults = mutableMapOf<String, String>()
@@ -36,7 +35,7 @@ object IFly {
         }
 
         override fun onBeginOfSpeech() {
-            wakeUpResult.value = "唤醒成功,录音中"
+            recognizeResult.value = "请说出您的问题"
         }
 
         override fun onEndOfSpeech() {
@@ -70,9 +69,10 @@ object IFly {
             for (key in mIatResults.keys) resultBuilder.append(mIatResults[key])
             recognizeResult.value = resultBuilder.toString()
             if(isLast && selectedChatBot.value!="小笨") {
-                ChatPage.history.add(Message(Speaker.USER,resultBuilder.toString()))
+                val result = resultBuilder.toString()
+                ChatPage.nextChat(result)
                 mIatResults.clear()
-                recognizeResult.value = ""
+                recognizeResult.value = "请说\"你好小笨\""
             }
             resultBuilder.clear()
         }
@@ -84,7 +84,6 @@ object IFly {
     }
     val mWakeuperListener = object:WakeuperListener{
         override fun onBeginOfSpeech() {
-            wakeUpResult.value = "等待唤醒"
         }
 
         override fun onResult(results: WakeuperResult) = recognizeMode()
@@ -108,7 +107,7 @@ object IFly {
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mIat.setParameter(SpeechConstant.VAD_BOS,"3000")
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS,"3000")
+        mIat.setParameter(SpeechConstant.VAD_EOS,"2800")
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入

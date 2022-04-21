@@ -15,5 +15,11 @@ interface ApiService {
     fun botList(): Call<BotList>
 
     @POST("/robot/chatbot/{id}/query")
-    fun startChat(@Path("id")botId:String): Call<StartChatResult>
+    fun startChat(@Path("id")botId:String): Call<ChatResponse>
+
+    @POST("/robot/query/{sessionId}/chat")
+    fun nextChat(@Path("sessionId")sessionId:String, @Body message:ChatRequest): Call<ChatResponse>
+
+    @GET("/v1/qritem/{queryRecordItemId}/related-qas")
+    fun relateQuestion(@Path("queryRecordItemId")queryRecordItemId:String): Call<RelateResponse>
 }
