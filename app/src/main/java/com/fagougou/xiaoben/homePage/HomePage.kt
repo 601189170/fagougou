@@ -4,67 +4,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.model.About
-import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.utils.Time.timeText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-object HomePage{
-    val allNumber = mutableStateOf(0)
-    val monthNumber = mutableStateOf(0)
-    val qrcodeUrl = mutableStateOf("")
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = retrofitClient.aboutRobot().execute()
-            val body = response.body() ?: About()
-            allNumber.value = body.aboutData.aboutFirm.allNumber
-            monthNumber.value = body.aboutData.aboutFirm.monthNumber
-            qrcodeUrl.value = body.aboutData.aboutFirm.qrcodeUrl
-        }
-    }
-}
-
-@Composable
-fun Headder(title:String){
-    Row(
-        modifier = Modifier
-            .height(100.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row {
-            Image(
-                painter = painterResource(R.drawable.ic_back),
-                contentDescription = "Back"
-            )
-        }
-        Text(
-            title,
-            color = Color.White,
-            fontSize = 40.sp
-        )
-        Box{}
-    }
-}
 
 @Composable
 fun HomeButton(
@@ -151,7 +102,7 @@ fun HomePage(navController:NavController) {
                     modifier = Modifier
                         .width(224.dp)
                         .height(320.dp),
-                    onClick = { },
+                    onClick = { navController.navigate("statistic") },
                     contentId = R.drawable.home_statistic)
             }
             Row(
@@ -169,7 +120,7 @@ fun HomePage(navController:NavController) {
                         .padding(start = 12.dp)
                         .width(472.dp)
                         .height(168.dp),
-                    onClick = { },
+                    onClick = {  },
                     contentId = R.drawable.home_about_us)
             }
         }

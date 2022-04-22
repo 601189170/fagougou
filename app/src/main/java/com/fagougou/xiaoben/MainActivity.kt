@@ -6,17 +6,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.homePage.HomePage
+import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -67,6 +71,50 @@ fun Main() {
         ) {
             composable("home") { HomePage(navController) }
             composable("chat") { ChatPage(navController) }
+            composable("statistic") { StatisticPage(navController) }
+        }
+    }
+}
+
+@Composable
+fun Headder(title:String,navController: NavController){
+    Surface(color = Color(0xFF17192C)) {
+        Row(
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Button(
+                elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
+                onClick = { navController.popBackStack() },
+                content = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            modifier = Modifier.padding(start = 24.dp, end = 12.dp),
+                            painter = painterResource(R.drawable.ic_back),
+                            contentDescription = "Back"
+                        )
+                        Text("返回", fontSize = 26.sp, color = Color.White)
+                    }
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                title,
+                color = Color.White,
+                fontSize = 30.sp
+            )
         }
     }
 }
