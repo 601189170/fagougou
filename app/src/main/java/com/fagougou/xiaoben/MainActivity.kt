@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.xiaoben.chatPage.ChatPage
+import com.fagougou.xiaoben.chatPage.GuidePage
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
@@ -70,6 +71,7 @@ fun Main() {
             modifier = Modifier.fillMaxHeight()
         ) {
             composable("home") { HomePage(navController) }
+            composable("guide") { GuidePage(navController) }
             composable("chat") { ChatPage(navController) }
             composable("statistic") { StatisticPage(navController) }
         }

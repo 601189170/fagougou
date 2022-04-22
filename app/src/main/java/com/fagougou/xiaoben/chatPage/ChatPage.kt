@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -23,14 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.chatPage.ChatPage.chatBotMap
+import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
 import com.fagougou.xiaoben.chatPage.ChatPage.history
 import com.fagougou.xiaoben.chatPage.ChatPage.listState
 import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatPage.startChat
-import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
@@ -46,8 +47,7 @@ object ChatPage {
     val history = mutableStateListOf<Message>()
     val selectedChatBot = mutableStateOf("小笨")
     var sessionId = ""
-    var chatBotMap = mutableMapOf<String, String>()
-    var tyBotMap = mutableMapOf<String, String>()
+    var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     var tempQueryId = ""
 
@@ -85,7 +85,7 @@ object ChatPage {
     fun startChat() {
         TTS.stopSpeaking()
         CoroutineScope(Dispatchers.IO).launch {
-            val response = retrofitClient.startChat(chatBotMap[selectedChatBot.value] ?: "").execute()
+            val response = retrofitClient.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return@launch
             sessionId = body.chatData.queryId
             addChatData(body.chatData)
@@ -131,7 +131,7 @@ object ChatPage {
 
 @Composable
 fun BotMenu() {
-    val botList = chatBotMap.toList()
+    val botList = botQueryIdMap.toList()
     val menuList = listOf(
         botList.subList(0, botList.size / 2),
         botList.subList((botList.size) / 2, botList.size),
@@ -265,23 +265,7 @@ fun ChatPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(40.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { navController.popBackStack() },
-                    content = { Text("返回", fontSize = 32.sp) }
-                )
-                Text(
-                    "智能咨询(${selectedChatBot.value}${chatBotMap[selectedChatBot.value]})",
-                    fontSize = 32.sp
-                )
-                Surface { }
-            }
+            Headder("智能咨询(${selectedChatBot.value}" , navController )
             BotMenu()
         }
         val scope = rememberCoroutineScope()

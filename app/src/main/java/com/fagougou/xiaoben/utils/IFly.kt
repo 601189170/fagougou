@@ -124,10 +124,6 @@ object IFly {
             SpeechConstant.IVW_RES_PATH,
             ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/33b963d0.jet")
         )
-        // 设置唤醒录音保存路径，保存最近一分钟的音频
-        val path = context.getExternalFilesDir("msc")?.absolutePath ?: ""
-        mIvw.setParameter( SpeechConstant.IVW_AUDIO_PATH, "$path/ivw.wav")
-        mIvw.setParameter(SpeechConstant.AUDIO_FORMAT, "wav")
         mIvw.startListening(mWakeuperListener)
     }
 
