@@ -82,6 +82,7 @@ object ChatPage {
     }
 
     fun startChat() {
+        TTS.stopSpeaking()
         CoroutineScope(Dispatchers.IO).launch {
             val response = retrofitClient.startChat(chatBotMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return@launch
@@ -91,6 +92,7 @@ object ChatPage {
     }
 
     fun nextChat(message:String) {
+        TTS.stopSpeaking()
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
             listState.scrollToItem(history.lastIndex)

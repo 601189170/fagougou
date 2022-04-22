@@ -8,6 +8,7 @@ import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.model.Message
 import com.fagougou.xiaoben.model.Speaker
+import com.fagougou.xiaoben.utils.TTS.mTts
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -136,6 +137,8 @@ object IFly {
     }
 
     fun recognizeMode(){
+        TTS.stopSpeaking()
+        TTS.speak("您请说")
         mIvw.stopListening()
         mIat.startListening(mRecognizerListener)
     }
