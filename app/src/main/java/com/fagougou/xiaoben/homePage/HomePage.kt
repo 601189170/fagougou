@@ -10,19 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.chatPage.ChatPage
-import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
-import com.fagougou.xiaoben.homePage.HomePage.allNumber
 import com.fagougou.xiaoben.model.About
 import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import com.fagougou.xiaoben.utils.Time.timeText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,16 +43,46 @@ object HomePage{
 }
 
 @Composable
+fun Headder(title:String){
+    Row(
+        modifier = Modifier
+            .height(100.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row {
+            Image(
+                painter = painterResource(R.drawable.ic_back),
+                contentDescription = "Back"
+            )
+        }
+        Text(
+            title,
+            color = Color.White,
+            fontSize = 40.sp
+        )
+        Box{}
+    }
+}
+
+@Composable
 fun HomeButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit
+    contentId: Int
 ) {
     Button(
-        modifier = Modifier.height(210.dp).width(280.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(CORNER_PERCENT),
         contentPadding = PaddingValues(0.dp),
         onClick = onClick,
-        content = content
+        content = {
+            Image(
+                painter = painterResource(contentId),
+                contentDescription = "HomeButton"
+            )
+        }
     )
 }
 
@@ -62,148 +91,93 @@ fun HomePage(navController:NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Text(
-            modifier = Modifier.padding(vertical = 40.dp),
-            text = "法狗狗智能法律服务系统",
-            fontSize = 42.sp
-        )
-        Text(
-            modifier = Modifier.padding(vertical = 40.dp),
-            text = "智能咨询",
-            fontSize = 36.sp
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "交通事故"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.traffic),
-                        contentDescription = "交通事故"
-                    )
-                },
-            )
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "民间借贷"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.loan),
-                        contentDescription = "民间借贷"
-                    )
-                }
-            )
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "企业人事"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.employer),
-                        contentDescription = "企业人事"
-                    )
-                }
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "社会保险"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.insurance),
-                        contentDescription = "社会保险"
-                    )
-                }
-            )
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "员工维权"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.employee),
-                        contentDescription = "员工维权"
-                    )
-                }
-            )
-            HomeButton(
-                onClick = {
-                    selectedChatBot.value = "消费维权"
-                    navController.navigate("chat")
-                    ChatPage.startChat()
-                },
-                content = {
-                    Image(
-                        painter = painterResource(R.drawable.comsume),
-                        contentDescription = "消费维权"
-                    )
-                }
-            )
-        }
-        Text(text = "智能法律计算器", fontSize = 36.sp)
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
-                modifier = Modifier.height(70.dp).width(280.dp),
-                onClick = {},
-                content = { Text("智能文书生成") }
-            )
-            Button(
-                modifier = Modifier.height(70.dp).width(620.dp),
-                onClick = {},
-                content = { Text("常用合同文书检索") }
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                onClick = {},
-                content = { Text("关于我们") }
-            )
-            Surface(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                content = {}
-            )
-            Button(
-                modifier = Modifier.height(210.dp).width(280.dp),
-                onClick = {},
-                content = { Text("已经有${allNumber.value}人通过本系统获得专业解答") }
-            )
-        }
-    }
-}
+        verticalArrangement = Arrangement.SpaceBetween,
 
-@Preview
-@Composable
-fun ComposablePreview() {
-    HomePage(rememberNavController())
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(28.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(R.drawable.home_logo),
+                contentDescription = "Home Logo",
+                modifier = Modifier.height(36.dp)
+            )
+            Text(
+                timeText.value,
+                color = Color.White,
+                fontSize = 24.sp
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f).padding(horizontal = 36.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 48.dp),
+                text = "欢迎使用",
+                fontSize = 48.sp,
+                color = Color.White
+            )
+            Text(
+                modifier = Modifier.padding(bottom = 72.dp),
+                text = "智能法律服务系统",
+                fontSize = 56.sp,
+                color = Color.White
+            )
+            Row(
+                modifier = Modifier.padding(vertical = 12.dp)
+            ) {
+                HomeButton(
+                    modifier = Modifier
+                        .width(472.dp)
+                        .height(320.dp),
+                    onClick = { },
+                    contentId = R.drawable.home_law_ask)
+                HomeButton(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .width(224.dp)
+                        .height(320.dp),
+                    onClick = { },
+                    contentId = R.drawable.home_document)
+                HomeButton(
+                    modifier = Modifier
+                        .width(224.dp)
+                        .height(320.dp),
+                    onClick = { },
+                    contentId = R.drawable.home_statistic)
+            }
+            Row(
+                modifier = Modifier.padding(vertical = 12.dp)
+            ) {
+                HomeButton(
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .width(472.dp)
+                        .height(168.dp),
+                    onClick = { },
+                    contentId = R.drawable.home_law_calculator)
+                HomeButton(
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .width(472.dp)
+                        .height(168.dp),
+                    onClick = { },
+                    contentId = R.drawable.home_about_us)
+            }
+        }
+        Text(
+            modifier = Modifier.padding(vertical = 24.dp),
+            text = "技术支持：法狗狗人工智能 v2.0",
+            fontSize = 24.sp,
+            color = Color.White
+        )
+    }
 }

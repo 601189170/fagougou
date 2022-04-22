@@ -30,6 +30,7 @@ import com.fagougou.xiaoben.chatPage.ChatPage.listState
 import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatPage.startChat
+import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
@@ -307,5 +308,6 @@ fun ChatPage(navController: NavController) {
 fun ComposablePreview() {
     Surface(
         color = Color.White,
-    ) { }
+    ) {
+    }
 }
