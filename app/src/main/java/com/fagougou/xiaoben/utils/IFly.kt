@@ -6,9 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
-import com.fagougou.xiaoben.model.Message
-import com.fagougou.xiaoben.model.Speaker
-import com.fagougou.xiaoben.utils.TTS.mTts
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -78,7 +75,9 @@ object IFly {
             resultBuilder.clear()
         }
 
-        override fun onError(error: SpeechError) = toast(error.getPlainDescription(true))
+        override fun onError(error: SpeechError?) {
+            if(error!=null) toast(error.getPlainDescription(true))
+        }
 
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
 
@@ -133,6 +132,7 @@ object IFly {
     }
 
     fun recognizeMode(){
+        Log.d(TAG,"Wake Up")
         TTS.stopSpeaking()
         TTS.speak("您请说")
         mIvw.stopListening()

@@ -7,7 +7,6 @@ import com.fagougou.xiaoben.utils.IFly.TAG
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import kotlinx.coroutines.*
-import java.lang.Exception
 import java.util.*
 
 object TTS {

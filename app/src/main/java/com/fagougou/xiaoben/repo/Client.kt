@@ -1,15 +1,15 @@
 package com.fagougou.xiaoben.repo
 
 import android.net.ParseException
+import android.util.Log
+import com.fagougou.xiaoben.CommonApplication.Companion.TAG
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONException
 import retrofit2.HttpException
@@ -21,6 +21,7 @@ import java.net.UnknownHostException
 import java.net.UnknownServiceException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
+
 
 class CommonInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -34,12 +35,34 @@ class CommonInterceptor : Interceptor {
     }
 }
 
+class ParametersIntercept : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request: Request = chain.request()
+        val response = chain.proceed(request)
+        if(response.code == 200 && response.body!=null){
+            try{
+                var bodyString = response.body!!.string()
+                bodyString = bodyString.replace(",\"option\":[]","")
+                bodyString = bodyString.replace("\"option\":[{\"title\"","\"option\":{\"title\"")
+                bodyString = bodyString.replace("\"}]},\"isAnswered\"","\"}},\"isAnswered\"")
+                val contentType = response.body!!.contentType()
+                val body = ResponseBody.create(contentType,bodyString)
+                return response.newBuilder().body(body).build()
+            }catch (e:Exception){
+                Log.e(TAG,e.message ?: "")
+            }
+        }
+        return response
+    }
+}
+
 object Client {
     const val url = "https://api.fagougou.com"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(ParametersIntercept())
             .addInterceptor(CommonInterceptor())
             .callTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)

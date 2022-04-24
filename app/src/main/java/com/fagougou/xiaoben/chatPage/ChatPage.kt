@@ -1,5 +1,6 @@
 package com.fagougou.xiaoben.chatPage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.CommonApplication.Companion.TAG
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
@@ -51,7 +53,6 @@ object ChatPage {
     var tempQueryId = ""
 
     suspend fun addChatData(chatData: ChatData) {
-        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.last().isExpend = false
         for (say in chatData.botSays) {
             val content = say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
             when (say.type) {
@@ -98,7 +99,6 @@ object ChatPage {
         withContext(Dispatchers.Main) {
             listState.scrollToItem(history.lastIndex)
         }
-
     }
 
     fun startChat() {
@@ -113,6 +113,7 @@ object ChatPage {
     }
 
     fun nextChat(message: String) {
+        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
         TTS.stopSpeaking()
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
@@ -124,19 +125,7 @@ object ChatPage {
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
             } catch (e: Exception) {
-                addChatData(
-                    ChatData(
-                        botSays = listOf(
-                            BotSay(
-                                "text",
-                                BotSaysContent(
-                                    body = "抱歉，您的查询暂无相关数据哦，建议扩大查询范围，或修改查询条件试试看。",
-                                    queryRecordItemId = tempQueryId
-                                )
-                            )
-                        )
-                    )
-                )
+                Log.e(TAG,e.stackTraceToString())
             }
         }
     }
@@ -332,7 +321,7 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState: LazyListStat
         ) {
             when (message.option.type) {
                 "radio" -> {
-                    if (message.isExpend) for (item in message.option.items) Button(
+                    for (item in message.option.items) Button(
                         onClick = { nextChat(item) },
                         content = { Text(item, fontSize = 28.sp) },
                     )
