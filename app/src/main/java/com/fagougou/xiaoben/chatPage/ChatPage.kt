@@ -53,10 +53,9 @@ object ChatPage {
     suspend fun addChatData(chatData: ChatData) {
         if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.last().isExpend = false
         for (say in chatData.botSays) {
+            val content = say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
             when (say.type) {
                 "text" -> {
-                    val content = say.content.body.replace("question::", "").replace("def::", "")
-                        .replace("#", "")
                     history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
                     TTS.speak(content)
                 }
@@ -70,7 +69,9 @@ object ChatPage {
                     TTS.speak(say.content.description)
                 }
                 "complex" -> {
-
+                    history.add(Message(Speaker.COMPLEX, content = content, complex = say.content))
+                    TTS.speak(content)
+                    getComplex(say.content.attachmentId)
                 }
             }
             if (say.recommends.isNotEmpty()) history.add(
@@ -156,6 +157,9 @@ object ChatPage {
         }
     }
 
+    fun getComplex(attachmentId:String){
+
+    }
 }
 
 @Composable

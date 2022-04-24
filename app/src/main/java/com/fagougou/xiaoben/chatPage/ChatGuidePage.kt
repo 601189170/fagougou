@@ -49,6 +49,7 @@ fun ChatGuidePage(navController: NavController) {
             color = Color.White
         )
         LazyVerticalGrid(
+            userScrollEnabled = false,
             modifier = Modifier.padding(64.dp),
             columns = GridCells.Fixed(4),
             content = {

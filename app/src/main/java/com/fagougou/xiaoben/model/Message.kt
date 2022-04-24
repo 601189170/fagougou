@@ -2,7 +2,7 @@ package com.fagougou.xiaoben.model
 
 import com.google.gson.annotations.SerializedName
 
-enum class Speaker { ROBOT, USER, RECOMMEND, OPTIONS }
+enum class Speaker { ROBOT, USER, RECOMMEND, OPTIONS, COMPLEX }
 
 data class Message(
     val speaker: Speaker,
@@ -10,6 +10,7 @@ data class Message(
     val recommends: List<String> = listOf(),
     val laws: List<Law> = listOf(),
     val option: Option = Option(),
+    val complex: BotSaysContent = BotSaysContent(),
     var isExpend:Boolean = false
 )
 
@@ -67,6 +68,15 @@ data class BotSaysContent(
 
     @SerializedName("url")
     val url:String = "",
+
+    @SerializedName("attachmentId")
+    val attachmentId:String = "",
+
+    @SerializedName("attachmentType")
+    val attachmentType:String = "",
+
+    @SerializedName("explanation")
+    val explanation:String = "",
 )
 
 data class Law(

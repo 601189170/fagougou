@@ -29,7 +29,6 @@ object TTS {
         }
 
         override fun onSpeakResumed() {
-            toast("继续播放")
         }
 
         override fun onBufferProgress(percent: Int, beginPos: Int, endPos: Int, info: String) {
@@ -38,11 +37,12 @@ object TTS {
 
         override fun onSpeakProgress(percent: Int, beginPos: Int, endPos: Int) {
             // 播放进度
-            Log.d(TAG, "SpeakProgress：$percent")
+            if(percent%20 == 1)Log.d(TAG, "SpeakProgress：$percent")
             SpeakingProcess = percent
         }
 
-        override fun onCompleted(error: SpeechError) {
+        override fun onCompleted(error: SpeechError?) {
+            Log.d(TAG, "Speak Complete")
             SpeakingProcess = 100
         }
 
@@ -77,23 +77,19 @@ object TTS {
         // 设置播放合成音频打断音乐播放，默认为true
         mTts.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true")
     }
+
     init {
         // 设置参数
         setParam()
         CoroutineScope(Dispatchers.Default).launch{
             while (true){
                 delay(100)
-                if (TTSQueue.isNotEmpty() && SpeakingProcess>97){
+                if (TTSQueue.isNotEmpty() && SpeakingProcess==100){
                     SpeakingProcess=0
                     val text = TTSQueue.pop()
                     delay(50)
-                    try {
-                        mTts.startSpeaking(text, mTtsListener)
-                        Log.d(TAG, "Speak $text")
-                    }catch (e:Exception){
-                        SpeakingProcess = 100
-                        Log.e(TAG, "Speak Failed $text")
-                    }
+                    mTts.startSpeaking(text, mTtsListener)
+                    Log.d(TAG, "Speak $text")
                 }
             }
         }
@@ -108,4 +104,5 @@ object TTS {
     fun speak(text:String) {
         TTSQueue.add(text)
     }
+
 }

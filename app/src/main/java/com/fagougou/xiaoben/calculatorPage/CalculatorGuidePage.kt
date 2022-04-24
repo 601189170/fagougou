@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.homePage.HomeButton
+import com.fagougou.xiaoben.webViewPage.WebViewModel.WebViewUrl
 
 @Composable
 fun CalculatorGuidePage(navController: NavController) {
@@ -26,6 +27,15 @@ fun CalculatorGuidePage(navController: NavController) {
         Pair("公证费", R.drawable.cal_notary),
         Pair("违约金", R.drawable.cal_damage),
         Pair("仲裁费", R.drawable.cal_arbitration),
+    )
+    val calUrlMap = mapOf(
+        Pair("律师费", "https://www.fagougou.com/homepage/m/legalTools/Legalfee.html"),
+        Pair("诉讼费", "https://www.fagougou.com/homepage/m/legalTools/Litigation.html"),
+        Pair("司法鉴定", "https://www.fagougou.com/homepage/m/legalTools/Attorneys.html"),
+        Pair("逾期利息", "https://www.fagougou.com/homepage/m/legalTools/OverdueInterest.html"),
+        Pair("公证费", "https://www.fagougou.com/homepage/m/legalTools/Notarial.html"),
+        Pair("违约金", "https://www.fagougou.com/homepage/m/legalTools/Breach.html"),
+        Pair("仲裁费", "https://www.fagougou.com/homepage/m/legalTools/Arbitration.html"),
     )
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -45,6 +55,7 @@ fun CalculatorGuidePage(navController: NavController) {
             color = Color.White
         )
         LazyVerticalGrid(
+            userScrollEnabled = false,
             modifier = Modifier.padding(48.dp),
             columns = GridCells.Fixed(2),
             content = {
@@ -57,6 +68,8 @@ fun CalculatorGuidePage(navController: NavController) {
                                 .width(472.dp)
                                 .height(160.dp),
                             onClick = {
+                                WebViewUrl = calUrlMap[cal.first] ?: ""
+                                navController.navigate("WebView")
                             },
                             contentId = cal.second
                         )

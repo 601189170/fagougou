@@ -26,6 +26,7 @@ import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
+import com.fagougou.xiaoben.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
@@ -79,6 +80,7 @@ fun Main() {
             composable("chat") { ChatPage(navController) }
             composable("statistic") { StatisticPage(navController) }
             composable("calculator") { CalculatorGuidePage(navController) }
+            composable("WebView") { WebViewPage(navController) }
             composable("about") { AboutUs(navController) }
         }
     }
