@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.GuidePage
 import com.fagougou.xiaoben.homePage.HomePage
@@ -74,6 +75,7 @@ fun Main() {
             composable("guide") { GuidePage(navController) }
             composable("chat") { ChatPage(navController) }
             composable("statistic") { StatisticPage(navController) }
+            composable("about") { AboutUs(navController) }
         }
     }
 }

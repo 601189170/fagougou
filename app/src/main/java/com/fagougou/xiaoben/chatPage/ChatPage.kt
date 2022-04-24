@@ -5,20 +5,16 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,32 +50,51 @@ object ChatPage {
     val listState = LazyListState()
     var tempQueryId = ""
 
-    suspend fun addChatData(chatData: ChatData){
+    suspend fun addChatData(chatData: ChatData) {
+        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.last().isExpend = false
         for (say in chatData.botSays) {
-            when(say.type){
+            when (say.type) {
                 "text" -> {
-                    val content = say.content.body.replace("question::","").replace("def::","").replace("#","")
-                    history.add(Message(Speaker.ROBOT, content = content))
+                    val content = say.content.body.replace("question::", "").replace("def::", "")
+                        .replace("#", "")
+                    history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
                     TTS.speak(content)
                 }
                 "hyperlink" -> {
-                    history.add(Message(Speaker.ROBOT, content = say.content.description+say.content.url))
+                    history.add(
+                        Message(
+                            Speaker.ROBOT,
+                            content = say.content.description + say.content.url
+                        )
+                    )
                     TTS.speak(say.content.description)
                 }
+                "complex" -> {
+
+                }
             }
-            if (say.recommends.isNotEmpty()) history.add(Message(Speaker.RECOMMEND, recommends = say.recommends))
-            if (say.content.laws.isNotEmpty()) history.add(Message(Speaker.LAW, laws = say.content.laws))
-            if (say.content.queryRecordItemId != ""){
+            if (say.recommends.isNotEmpty()) history.add(
+                Message(
+                    Speaker.RECOMMEND,
+                    recommends = say.recommends,
+                    isExpend = true
+                )
+            )
+            if (say.content.queryRecordItemId != "") {
                 tempQueryId = say.content.queryRecordItemId
-                if(say.content.title == "相关问题" || say.isAnswered){
-                    history.add(Message(Speaker.ROBOT, content = "我们找到了与您情况相关的一些问题"))
-                    TTS.speak("我们找到了与您情况相关的一些问题")
+                if (say.content.title == "相关问题" || say.isAnswered) {
                     getRelate(say.content.queryRecordItemId)
                 }
             }
         }
-        if (chatData.option.items.isNotEmpty()) history.add(Message(Speaker.OPTIONS, option = chatData.option))
-        withContext(Dispatchers.Main){
+        if (chatData.option.items.isNotEmpty()) history.add(
+            Message(
+                Speaker.OPTIONS,
+                option = chatData.option,
+                isExpend = true
+            )
+        )
+        withContext(Dispatchers.Main) {
             listState.scrollToItem(history.lastIndex)
         }
 
@@ -88,14 +103,15 @@ object ChatPage {
     fun startChat() {
         TTS.stopSpeaking()
         CoroutineScope(Dispatchers.IO).launch {
-            val response = retrofitClient.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+            val response =
+                retrofitClient.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return@launch
             sessionId = body.chatData.queryId
             addChatData(body.chatData)
         }
     }
 
-    fun nextChat(message:String) {
+    fun nextChat(message: String) {
         TTS.stopSpeaking()
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
@@ -106,25 +122,35 @@ object ChatPage {
                 val response = retrofitClient.nextChat(sessionId, ChatRequest(message)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
-            }catch (e:Exception){
-                addChatData(ChatData(
-                    botSays = listOf(BotSay("text",
-                        BotSaysContent(
-                            body = "抱歉，您的查询暂无相关数据哦，建议扩大查询范围，或修改查询条件试试看。",
-                            queryRecordItemId = tempQueryId
+            } catch (e: Exception) {
+                addChatData(
+                    ChatData(
+                        botSays = listOf(
+                            BotSay(
+                                "text",
+                                BotSaysContent(
+                                    body = "抱歉，您的查询暂无相关数据哦，建议扩大查询范围，或修改查询条件试试看。",
+                                    queryRecordItemId = tempQueryId
+                                )
+                            )
                         )
-                    ))
-                ))
+                    )
+                )
             }
         }
     }
 
-    fun getRelate(queryRecordItemId:String) {
+    fun getRelate(queryRecordItemId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = retrofitClient.relateQuestion(queryRecordItemId).execute()
             val body = response.body() ?: return@launch
-            for(say in body.data.says)history.add(Message(Speaker.RECOMMEND, recommends = say.content.questions))
-            withContext(Dispatchers.Main){
+            for (say in body.data.says) history.add(
+                Message(
+                    Speaker.RECOMMEND,
+                    recommends = say.content.questions
+                )
+            )
+            withContext(Dispatchers.Main) {
                 listState.scrollToItem(history.lastIndex)
             }
         }
@@ -153,16 +179,16 @@ fun BotMenu() {
             .horizontalScroll(scrollState)
             .padding(16.dp)
     ) {
-        for (bot in botList) Column(modifier= Modifier.padding(8.dp)){
+        for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
             HomeButton(
-            modifier= Modifier
-                .width(182.dp)
-                .height(228.dp),
-            onClick = {
-                selectedChatBot.value = bot.first
-                startChat()
-            },
-            contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
+                modifier = Modifier
+                    .width(182.dp)
+                    .height(228.dp),
+                onClick = {
+                    selectedChatBot.value = bot.first
+                    startChat()
+                },
+                contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
             )
         }
     }
@@ -170,40 +196,77 @@ fun BotMenu() {
 }
 
 @Composable
-fun Avatar(id: Int) {
-    Image(
-        modifier = Modifier
-            .clip(CircleShape)
-            .size(48.dp),
-        painter = painterResource(id),
-        contentDescription = "Robot Avatar"
-    )
-}
-
-@Composable
-fun MessageRect(
-    string: String,
-    backgroundColor: Color = Color.White,
-    textColor: Color = Color.Black
-) {
-    Surface(
-        modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .shadow(2.dp, shape = RoundedCornerShape(CORNER_PERCENT), false),
-        shape = RoundedCornerShape(CORNER_PERCENT),
-        color = backgroundColor,
+fun LawExpend(message: Message) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            string,
-            fontSize = 32.sp,
-            modifier = Modifier.padding(12.dp),
-            color = textColor,
+        if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
+            Text(
+                (i + 1).toString() + "." + law.name + law.position + ":",
+                modifier = Modifier.padding(12.dp),
+                fontSize = 25.sp
+            )
+            Text(
+                law.content,
+                modifier = Modifier.padding(12.dp),
+                color = Color(0xFF666666),
+                fontSize = 22.sp
+            )
+        } else Button(
+            onClick = { message.isExpend = true },
+            content = {
+                Row {
+                    Text(
+                        modifier = Modifier.padding(end = 24.dp),
+                        text = "点击查看法律依据",
+                        fontSize = 28.sp,
+                        color = Dodgerblue
+                    )
+                    Image(
+                        painterResource(R.drawable.ic_expend),
+                        null
+                    )
+                }
+            },
+            colors = ButtonDefaults.buttonColors(Color.Transparent),
+            elevation = ButtonDefaults.elevation(0.dp)
         )
     }
 }
 
 @Composable
-fun MessageItem(message: Message, scope: CoroutineScope, listState:LazyListState) {
+fun MessageRect(
+    message: Message,
+    backgroundColor: Color = Color.White,
+    textColor: Color = Color.Black,
+) {
+    Surface(
+        shape = RoundedCornerShape(CORNER_PERCENT),
+        color = backgroundColor,
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Text(
+                message.content,
+                fontSize = 28.sp,
+                color = textColor,
+            )
+            if (message.laws.isNotEmpty()) Divider(
+                modifier = Modifier.padding(18.dp),
+                color = Color(0xFFCCCCCC),
+                thickness = 2.dp,
+                startIndent = 10.dp
+            )
+            if (message.laws.isNotEmpty()) LawExpend(message)
+        }
+    }
+}
+
+
+@Composable
+fun MessageItem(message: Message, scope: CoroutineScope, listState: LazyListState) {
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
@@ -211,46 +274,50 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState:LazyListState
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) {
-            Avatar(R.drawable.fagougou)
-            MessageRect(message.content)
-        }
+        ) { MessageRect(message) }
         Speaker.USER -> Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-        ) {
-            MessageRect(message.content, Dodgerblue, Color.White)
-            Avatar(R.drawable.fagougou)
-        }
+        ) { MessageRect(message, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp),
-        ){
-            for (question in message.recommends) Button(
-                modifier = Modifier.padding(start = 72.dp, top = 12.dp, bottom = 12.dp),
-                onClick = {
-                    nextChat(question)
-                },
-                content = {
-                    Text(question, fontSize = 28.sp)
-                }
-            )
-        }
-        Speaker.LAW -> Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-        ){
-            for (law in message.laws) Text(
-                law.name+law.position+":"+law.content,
-                modifier = Modifier.padding(start = 72.dp, top = 12.dp, bottom = 12.dp),
+        ) {
+            Surface(
+                shape = RoundedCornerShape(CORNER_PERCENT),
                 color = Color.White,
-                fontSize = 16.sp
-            )
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    if (message.isExpend) for (question in message.recommends) Button(
+                        onClick = { nextChat(question) },
+                        content = { Text(question, fontSize = 28.sp, color = Dodgerblue) },
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        elevation = ButtonDefaults.elevation(0.dp)
+                    ) else Button(
+                        onClick = { message.isExpend = true },
+                        content = {
+                            Row {
+                                Image(painterResource(R.drawable.ic_relate_question), null)
+                                Text(
+                                    modifier = Modifier.padding(start = 24.dp),
+                                    text = "点击查看与您情况相关的问题",
+                                    fontSize = 28.sp,
+                                    color = Dodgerblue
+                                )
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        elevation = ButtonDefaults.elevation(0.dp)
+                    )
+                }
+            }
+
         }
         Speaker.OPTIONS -> Row(
             modifier = Modifier
@@ -258,15 +325,15 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState:LazyListState
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
-        ){
-            when(message.option.type){
+        ) {
+            when (message.option.type) {
                 "radio" -> {
-                    for (item in message.option.items) Button(
+                    if (message.isExpend) for (item in message.option.items) Button(
                         onClick = { nextChat(item) },
-                        content={ Text(item, fontSize = 28.sp) },
+                        content = { Text(item, fontSize = 28.sp) },
                     )
                 }
-                "address-with-search" ->{
+                "address-with-search" -> {
 
                 }
             }
@@ -283,7 +350,7 @@ fun ChatPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Headder(
-            "智能咨询(${selectedChatBot.value})" ,
+            "智能咨询(${selectedChatBot.value})",
             navController,
             onBack = {
                 mTts.stopSpeaking()
@@ -294,12 +361,15 @@ fun ChatPage(navController: NavController) {
         val scope = rememberCoroutineScope()
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.8f)
-                .padding(24.dp),
+                .fillMaxHeight(0.9f)
+                .padding(horizontal = 36.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
-            items(history.size) { index -> MessageItem(history[index], scope, listState) }
+            items(history) { message -> MessageItem(message, scope, listState) }
+            item{
+                Row(modifier = Modifier.fillMaxWidth().height(300.dp)){}
+            }
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally

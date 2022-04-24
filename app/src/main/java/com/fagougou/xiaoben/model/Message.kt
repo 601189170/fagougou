@@ -2,14 +2,15 @@ package com.fagougou.xiaoben.model
 
 import com.google.gson.annotations.SerializedName
 
-enum class Speaker { ROBOT, USER, RECOMMEND, LAW, OPTIONS }
+enum class Speaker { ROBOT, USER, RECOMMEND, OPTIONS }
 
 data class Message(
     val speaker: Speaker,
     val content:String = "",
     val recommends: List<String> = listOf(),
     val laws: List<Law> = listOf(),
-    val option: Option = Option()
+    val option: Option = Option(),
+    var isExpend:Boolean = false
 )
 
 data class ChatRequest(

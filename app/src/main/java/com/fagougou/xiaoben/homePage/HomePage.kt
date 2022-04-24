@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ fun HomeButton(
         shape = RoundedCornerShape(CORNER_PERCENT),
         contentPadding = PaddingValues(0.dp),
         onClick = onClick,
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
         content = {
             Image(
                 painter = painterResource(contentId),
@@ -66,7 +68,8 @@ fun HomePage(navController:NavController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.8f).padding(horizontal = 36.dp),
+                .fillMaxHeight(0.8f)
+                .padding(horizontal = 36.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -120,7 +123,7 @@ fun HomePage(navController:NavController) {
                         .padding(start = 12.dp)
                         .width(472.dp)
                         .height(168.dp),
-                    onClick = {  },
+                    onClick = { navController.navigate("about") },
                     contentId = R.drawable.home_about_us)
             }
         }
