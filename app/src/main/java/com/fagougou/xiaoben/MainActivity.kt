@@ -79,18 +79,21 @@ fun Main() {
 }
 
 @Composable
-fun Headder(title:String,navController: NavController){
+fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
-                .height(100.dp)
+                .height(96.dp).padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Button(
                 elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
-                onClick = { navController.popBackStack() },
+                onClick = {
+                    onBack.invoke()
+                    navController.popBackStack()
+                },
                 content = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
@@ -107,7 +110,7 @@ fun Headder(title:String,navController: NavController){
         }
         Row(
             modifier = Modifier
-                .height(100.dp)
+                .height(96.dp).padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,

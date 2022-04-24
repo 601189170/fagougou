@@ -1,10 +1,11 @@
 package com.fagougou.xiaoben.chatPage
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -32,12 +33,14 @@ import com.fagougou.xiaoben.chatPage.ChatPage.listState
 import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatPage.startChat
+import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client.retrofitClient
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.TTS
+import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -131,25 +134,39 @@ object ChatPage {
 
 @Composable
 fun BotMenu() {
-    val botList = botQueryIdMap.toList()
-    val menuList = listOf(
-        botList.subList(0, botList.size / 2),
-        botList.subList((botList.size) / 2, botList.size),
+    val botResMap = mapOf(
+        Pair("婚姻家事", R.drawable.bot_small_marry),
+        Pair("员工纠纷", R.drawable.bot_small_employee),
+        Pair("交通事故", R.drawable.bot_small_traffic),
+        Pair("企业人事", R.drawable.bot_small_employer),
+        Pair("民间借贷", R.drawable.bot_small_loan),
+        Pair("公司财税", R.drawable.bot_small_tax),
+        Pair("房产纠纷", R.drawable.bot_small_house),
+        Pair("知识产权", R.drawable.bot_small_knowledge),
+        Pair("刑事犯罪", R.drawable.bot_small_crime),
+        Pair("消费维权", R.drawable.bot_small_consumer),
     )
-    for (rowList in menuList) Row(
+    val botList = botQueryIdMap.toList()
+    val scrollState = rememberScrollState()
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+            .horizontalScroll(scrollState)
+            .padding(16.dp)
     ) {
-        for (bot in rowList) Button(
+        for (bot in botList) Column(modifier= Modifier.padding(8.dp)){
+            HomeButton(
+            modifier= Modifier
+                .width(182.dp)
+                .height(228.dp),
             onClick = {
                 selectedChatBot.value = bot.first
                 startChat()
             },
-            content = { Text(bot.first, fontSize = 18.sp) }
-        )
+            contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
+            )
+        }
     }
+    startChat()
 }
 
 @Composable
@@ -231,6 +248,8 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState:LazyListState
             for (law in message.laws) Text(
                 law.name+law.position+":"+law.content,
                 modifier = Modifier.padding(start = 72.dp, top = 12.dp, bottom = 12.dp),
+                color = Color.White,
+                fontSize = 16.sp
             )
         }
         Speaker.OPTIONS -> Row(
@@ -259,20 +278,24 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState:LazyListState
 fun ChatPage(navController: NavController) {
     Column(
         modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(0.86f),
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column {
-            Headder("智能咨询(${selectedChatBot.value}" , navController )
-            BotMenu()
-        }
+        Headder(
+            "智能咨询(${selectedChatBot.value})" ,
+            navController,
+            onBack = {
+                mTts.stopSpeaking()
+                history.clear()
+            }
+        )
+        BotMenu()
         val scope = rememberCoroutineScope()
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.86f)
-                .padding(top = 16.dp),
+                .fillMaxHeight(0.8f)
+                .padding(24.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
@@ -281,8 +304,8 @@ fun ChatPage(navController: NavController) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(IFly.volumeState.value, fontSize = 32.sp)
-            Text(IFly.recognizeResult.value, fontSize = 32.sp)
+            Text(IFly.volumeState.value, fontSize = 32.sp, color = Color.White)
+            Text(IFly.recognizeResult.value, fontSize = 32.sp, color = Color.White)
         }
     }
 }

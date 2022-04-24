@@ -24,10 +24,12 @@ fun GuidePage(navController: NavController) {
         Pair("员工纠纷", R.drawable.bot_employee),
         Pair("交通事故", R.drawable.bot_traffic),
         Pair("企业人事", R.drawable.bot_employer),
+        Pair("民间借贷", R.drawable.bot_loan),
         Pair("公司财税", R.drawable.bot_tax),
         Pair("房产纠纷", R.drawable.bot_house),
         Pair("知识产权", R.drawable.bot_knowledge),
         Pair("刑事犯罪", R.drawable.bot_crime),
+        Pair("消费维权", R.drawable.bot_consumer),
     )
     Column(
         modifier = Modifier.fillMaxSize(),
