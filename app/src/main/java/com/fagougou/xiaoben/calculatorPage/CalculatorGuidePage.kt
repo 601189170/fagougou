@@ -1,4 +1,4 @@
-package com.fagougou.xiaoben.chatPage
+package com.fagougou.xiaoben.calculatorPage
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,57 +14,51 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.homePage.HomeButton
 
 @Composable
-fun GuidePage(navController: NavController) {
-    val botResMap = mapOf(
-        Pair("婚姻家事", R.drawable.bot_marry),
-        Pair("员工纠纷", R.drawable.bot_employee),
-        Pair("交通事故", R.drawable.bot_traffic),
-        Pair("企业人事", R.drawable.bot_employer),
-        Pair("民间借贷", R.drawable.bot_loan),
-        Pair("公司财税", R.drawable.bot_tax),
-        Pair("房产纠纷", R.drawable.bot_house),
-        Pair("知识产权", R.drawable.bot_knowledge),
-        Pair("刑事犯罪", R.drawable.bot_crime),
-        Pair("消费维权", R.drawable.bot_consumer),
+fun CalculatorGuidePage(navController: NavController) {
+    val calResMap = mapOf(
+        Pair("律师费", R.drawable.cal_lawyer),
+        Pair("诉讼费", R.drawable.cal_litigation),
+        Pair("司法鉴定", R.drawable.cal_judicial),
+        Pair("逾期利息", R.drawable.cal_interest),
+        Pair("公证费", R.drawable.cal_notary),
+        Pair("违约金", R.drawable.cal_damage),
+        Pair("仲裁费", R.drawable.cal_arbitration),
     )
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Headder(title = "智能咨询", navController = navController)
+        Headder(title = "法律计算器", navController = navController)
         Text(
             modifier = Modifier.padding(top = 96.dp),
-            text = "智能咨询",
+            text = "法律计算器",
             fontSize = 45.sp,
             color = Color.White
         )
         Text(
             modifier = Modifier.padding(top = 24.dp),
-            text = "秒问秒答，快速解答法律疑惑",
+            text = "快速智能，助您计算相关费用",
             fontSize = 28.sp,
             color = Color.White
         )
         LazyVerticalGrid(
-            modifier = Modifier.padding(64.dp),
-            columns = GridCells.Fixed(4),
+            modifier = Modifier.padding(48.dp),
+            columns = GridCells.Fixed(2),
             content = {
-                items(botResMap.toList()){ bot ->
-                    Column(modifier= Modifier.fillMaxSize().height(292.dp),
+                items(calResMap.toList()){ cal ->
+                    Column(modifier= Modifier.fillMaxSize().height(184.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally){
                         HomeButton(
                             modifier= Modifier
-                                .width(218.dp)
-                                .height(272.dp),
+                                .width(472.dp)
+                                .height(160.dp),
                             onClick = {
-                                selectedChatBot.value = bot.first
-                                navController.navigate("chat")
                             },
-                            contentId = bot.second
+                            contentId = cal.second
                         )
                     }
 

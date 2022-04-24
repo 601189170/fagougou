@@ -99,7 +99,7 @@ fun HomePage(navController:NavController) {
                         .padding(horizontal = 24.dp)
                         .width(224.dp)
                         .height(320.dp),
-                    onClick = { },
+                    onClick = { navController.navigate("contract") },
                     contentId = R.drawable.home_document)
                 HomeButton(
                     modifier = Modifier
@@ -116,7 +116,7 @@ fun HomePage(navController:NavController) {
                         .padding(end = 12.dp)
                         .width(472.dp)
                         .height(168.dp),
-                    onClick = { },
+                    onClick = {  navController.navigate("calculator")  },
                     contentId = R.drawable.home_law_calculator)
                 HomeButton(
                     modifier = Modifier
