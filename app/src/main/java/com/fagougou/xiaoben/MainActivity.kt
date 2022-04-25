@@ -114,6 +114,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Button(
+                modifier = Modifier.fillMaxHeight(),
                 elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
                 onClick = {
                     onBack.invoke()

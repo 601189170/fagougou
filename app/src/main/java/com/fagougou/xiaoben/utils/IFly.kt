@@ -16,9 +16,12 @@ import org.json.JSONTokener
 import java.lang.Exception
 
 object IFly {
+    const val UNWAKE_TEXT = "请说,你好小笨"
+    const val WAKE_TEXT = "请说出您的问题"
     val TAG = javaClass.simpleName
+    var isEnable = false
     val resultBuilder = StringBuilder()
-    val recognizeResult = mutableStateOf("请说\"你好小笨\"")
+    val recognizeResult = mutableStateOf(UNWAKE_TEXT)
     val volumeState = mutableStateOf("=")
 
     var mIatResults = mutableMapOf<String, String>()
@@ -33,7 +36,7 @@ object IFly {
         }
 
         override fun onBeginOfSpeech() {
-            recognizeResult.value = "请说出您的问题"
+            recognizeResult.value = WAKE_TEXT
         }
 
         override fun onEndOfSpeech() {
@@ -70,7 +73,7 @@ object IFly {
                 val result = resultBuilder.toString()
                 ChatPage.nextChat(result)
                 mIatResults.clear()
-                recognizeResult.value = "请说\"你好小笨\""
+                recognizeResult.value = UNWAKE_TEXT
             }
             resultBuilder.clear()
         }
@@ -132,11 +135,13 @@ object IFly {
     }
 
     fun recognizeMode(){
-        Log.d(TAG,"Wake Up")
-        TTS.stopSpeaking()
-        TTS.speak("您请说")
-        mIvw.stopListening()
-        mIat.startListening(mRecognizerListener)
+        if(isEnable) {
+            Log.d(TAG, "Wake Up")
+            TTS.stopSpeaking()
+            TTS.speak("您请说")
+            mIvw.stopListening()
+            mIat.startListening(mRecognizerListener)
+        }
     }
 
     fun parseIatResult(json: String): String {

@@ -29,6 +29,7 @@ import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
 import com.fagougou.xiaoben.chatPage.ChatPage.history
+import com.fagougou.xiaoben.chatPage.ChatPage.ioState
 import com.fagougou.xiaoben.chatPage.ChatPage.listState
 import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
@@ -39,6 +40,7 @@ import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
+import com.fagougou.xiaoben.utils.IFly.UNWAKE_TEXT
 import com.fagougou.xiaoben.utils.TTS
 import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.*
@@ -52,6 +54,7 @@ object ChatPage {
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     var tempQueryId = ""
+    val ioState = mutableStateOf(false)
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {
@@ -114,6 +117,7 @@ object ChatPage {
     }
 
     fun nextChat(message: String) {
+        ioState.value = true
         TTS.stopSpeaking()
         if(message.isBlank())return
         if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
@@ -127,6 +131,7 @@ object ChatPage {
                 val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
+                ioState.value = false
             } catch (e: Exception) {
                 Log.e(TAG,e.stackTraceToString())
             }
@@ -331,7 +336,15 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 "radio" -> {
                     for (item in message.option.items) Button(
                         onClick = { nextChat(item) },
-                        content = { Text(item, fontSize = 28.sp) },
+                        content = {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = item,
+                                fontSize = 30.sp,
+                                color = Color.White
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(Dodgerblue)
                     )
                 }
                 "address-with-search" -> {
@@ -361,6 +374,7 @@ fun ChatPage(navController: NavController) {
             "智能咨询(${selectedChatBot.value})",
             navController,
             onBack = {
+                IFly.isEnable = false
                 mTts.stopSpeaking()
                 history.clear()
             }
@@ -375,6 +389,7 @@ fun ChatPage(navController: NavController) {
             state = listState,
         ) {
             items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
+            if(ioState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState) }
             item{
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -417,7 +432,7 @@ fun PAG(){
                         while (true) {
                             delay(50)
                             when (IFly.recognizeResult.value) {
-                                "请说\"你好小笨\"" -> if(alpha<100)alpha+=10
+                                UNWAKE_TEXT -> if(alpha<100)alpha+=10
                                 else -> if (alpha>1)alpha-=10
                             }
                             it.alpha = alpha.toFloat() / 100f
@@ -446,7 +461,7 @@ fun PAG(){
                         while (true) {
                             delay(50)
                             when (IFly.recognizeResult.value) {
-                                "请说\"你好小笨\"" -> if(alpha>1)alpha-=10
+                                UNWAKE_TEXT -> if(alpha>1)alpha-=10
                                 else -> if (alpha<100)alpha+=10
                             }
                             it.alpha = alpha.toFloat() / 100f

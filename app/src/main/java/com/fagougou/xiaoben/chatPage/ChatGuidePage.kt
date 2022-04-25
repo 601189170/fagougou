@@ -16,6 +16,7 @@ import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.homePage.HomeButton
+import com.fagougou.xiaoben.utils.IFly
 
 @Composable
 fun ChatGuidePage(navController: NavController) {
@@ -62,6 +63,7 @@ fun ChatGuidePage(navController: NavController) {
                                 .width(218.dp)
                                 .height(272.dp),
                             onClick = {
+                                IFly.isEnable = true
                                 selectedChatBot.value = bot.first
                                 navController.navigate("chat")
                             },
