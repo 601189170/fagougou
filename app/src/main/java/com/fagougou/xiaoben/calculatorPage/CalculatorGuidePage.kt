@@ -74,7 +74,6 @@ fun CalculatorGuidePage(navController: NavController) {
                             contentId = cal.second
                         )
                     }
-
                 }
             }
         )

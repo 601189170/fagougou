@@ -46,6 +46,7 @@ class ParametersIntercept : Interceptor {
                 bodyString = bodyString.replace(",\"option\":[]","")
                 bodyString = bodyString.replace("\"option\":[{\"title\"","\"option\":{\"title\"")
                 bodyString = bodyString.replace("\"}]},\"isAnswered\"","\"}},\"isAnswered\"")
+                bodyString = bodyString.replace("\"}]}}],\"bestScore\"","\"}}}],\"bestScore\"")
                 val contentType = response.body!!.contentType()
                 val body = ResponseBody.create(contentType,bodyString)
                 return response.newBuilder().body(body).build()
@@ -59,7 +60,7 @@ class ParametersIntercept : Interceptor {
 
 object Client {
     const val url = "https://api.fagougou.com"
-    const val contractUrl = "https://products.fagougou.com/api/"
+    const val contractUrl = "https://products.fagougou.com"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()

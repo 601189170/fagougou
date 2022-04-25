@@ -1,6 +1,8 @@
 package com.fagougou.xiaoben.chatPage
 
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -17,11 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.TAG
+import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
@@ -38,10 +41,9 @@ import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.TTS
 import com.fagougou.xiaoben.utils.TTS.mTts
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import org.libpag.PAGFile
+import org.libpag.PAGView
 
 object ChatPage {
     val history = mutableStateListOf<Message>()
@@ -246,7 +248,7 @@ fun MessageRect(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                message.content,
+                message.content+message.complex.explanation,
                 fontSize = 28.sp,
                 color = textColor,
             )
@@ -337,6 +339,13 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 }
             }
         }
+        Speaker.COMPLEX -> Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 18.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) { MessageRect(message,index) }
     }
 }
 
@@ -360,30 +369,91 @@ fun ChatPage(navController: NavController) {
         val scope = rememberCoroutineScope()
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.9f)
+                .fillMaxHeight(0.8f)
                 .padding(horizontal = 36.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
             items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
             item{
-                Row(modifier = Modifier.fillMaxWidth().height(300.dp)){}
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)){}
             }
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(IFly.volumeState.value, fontSize = 32.sp, color = Color.White)
-            Text(IFly.recognizeResult.value, fontSize = 32.sp, color = Color.White)
+            Text(
+                modifier = Modifier.padding(vertical = 32.dp),
+                text = IFly.recognizeResult.value,
+                fontSize = 32.sp,
+                color = Color.White)
+            PAG()
         }
     }
 }
 
-@Preview
 @Composable
-fun ComposablePreview() {
-    Surface(
-        color = Color.White,
-    ) {
+fun PAG(){
+    Surface(color = Color.Transparent) {
+        AndroidView(
+            modifier = Modifier
+                .height(128.dp)
+                .width(512.dp),
+            factory = {
+                PAGView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    val pagFile = PAGFile.Load(context.assets, "chat_unwaked.pag")
+                    composition = pagFile
+                    setRepeatCount(0)
+                    play()
+                    val it = this
+                    CoroutineScope(Dispatchers.Default).launch {
+                        var alpha = 0
+                        while (true) {
+                            delay(50)
+                            when (IFly.recognizeResult.value) {
+                                "请说\"你好小笨\"" -> if(alpha<100)alpha+=10
+                                else -> if (alpha>1)alpha-=10
+                            }
+                            it.alpha = alpha.toFloat() / 100f
+                        }
+                    }
+                }
+            }
+        )
+        AndroidView(
+            modifier = Modifier
+                .height(128.dp)
+                .width(512.dp),
+            factory = {
+                PAGView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    val pagFile = PAGFile.Load(context.assets, "chat_waked.pag")
+                    composition = pagFile
+                    setRepeatCount(0)
+                    play()
+                    val it = this
+                    CoroutineScope(Dispatchers.Default).launch {
+                        var alpha = 0
+                        while (true) {
+                            delay(50)
+                            when (IFly.recognizeResult.value) {
+                                "请说\"你好小笨\"" -> if(alpha>1)alpha-=10
+                                else -> if (alpha<100)alpha+=10
+                            }
+                            it.alpha = alpha.toFloat() / 100f
+                        }
+                    }
+                }
+            }
+        )
     }
 }

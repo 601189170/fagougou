@@ -2,15 +2,18 @@ package com.fagougou.xiaoben.contractPage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +25,25 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.contractPage.Contract.categoryList
+import com.fagougou.xiaoben.model.ContractCategory
+import com.fagougou.xiaoben.model.ContractCategoryResponse
+import com.fagougou.xiaoben.repo.Client.contractService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+object Contract{
+    val categoryList = mutableStateListOf<ContractCategory>()
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = contractService.listCategory().execute()
+            val body = response.body() ?: ContractCategoryResponse()
+            categoryList.addAll(body.categorys)
+        }
+    }
+}
 
 @Composable
 fun ContractGuidePage(navController: NavController) {
@@ -53,12 +75,11 @@ fun ContractGuidePage(navController: NavController) {
                         .fillMaxHeight()
                         .fillMaxSize(0.4f),
                 ) {
-                    LazyVerticalGrid(
+                    LazyColumn(
                         modifier = Modifier.padding(48.dp),
-                        columns = GridCells.Fixed(2),
                         content = {
-                            items(listOf(1,2,3)){ cal ->
-
+                            items(categoryList){ category ->
+                                Text(category.name, fontSize = 32.sp)
                             }
                         }
                     )
@@ -69,15 +90,7 @@ fun ContractGuidePage(navController: NavController) {
                     Modifier
                         .fillMaxHeight()
                         .fillMaxSize()) {
-                    LazyVerticalGrid(
-                        modifier = Modifier.padding(48.dp),
-                        columns = GridCells.Fixed(2),
-                        content = {
-                            items(listOf(1,2,3)){ cal ->
 
-                            }
-                        }
-                    )
                 }
             }
         }
