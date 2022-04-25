@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonElevation
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +17,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import com.fagougou.xiaoben.utils.MMKV.clearStack
+import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Time.timeText
+import com.fagougou.xiaoben.utils.Tips.toast
 
 @Composable
 fun HomeButton(
@@ -127,11 +131,24 @@ fun HomePage(navController:NavController) {
                     contentId = R.drawable.home_about_us)
             }
         }
-        Text(
-            modifier = Modifier.padding(vertical = 24.dp),
-            text = "技术支持：法狗狗人工智能 v2.0",
-            fontSize = 24.sp,
-            color = Color.White
+        Button(
+            onClick = {
+                clearStack++
+                if (clearStack>5){
+                    kv.remove("contractToken")
+                    toast("登出成功")
+                }
+            },
+            content = {
+                Text(
+                    modifier = Modifier.padding(vertical = 24.dp),
+                    text = "技术支持：法狗狗人工智能 v2.0",
+                    fontSize = 24.sp,
+                    color = Color.White
+                )
+            },
+            colors = ButtonDefaults.buttonColors(Color.Transparent),
+            elevation = ButtonDefaults.elevation(0.dp)
         )
     }
 }

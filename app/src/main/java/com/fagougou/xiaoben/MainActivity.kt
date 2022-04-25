@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fagougou.xiaoben.SafeBack.safeBack
 import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
 import com.fagougou.xiaoben.chatPage.ChatPage
@@ -27,6 +28,7 @@ import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
+import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -56,6 +58,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+object SafeBack{
+    var lastBackTime = 0L
+    fun NavController.safeBack(){
+        val deltaTime = System.currentTimeMillis() - lastBackTime
+        if (deltaTime>800) {
+            lastBackTime = System.currentTimeMillis()
+            this.popBackStack()
+        }
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Main() {
@@ -70,9 +83,10 @@ fun Main() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        val contractToken = kv.decodeString("contractToken","")
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = if(contractToken.isNullOrBlank()) "login" else "home",
             modifier = Modifier.fillMaxHeight()
         ) {
             composable("login") { LoginPage(navController) }
@@ -93,7 +107,8 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
-                .height(96.dp).padding(top = 6.dp)
+                .height(96.dp)
+                .padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +117,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
                 elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
                 onClick = {
                     onBack.invoke()
-                    navController.popBackStack()
+                    navController.safeBack()
                 },
                 content = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -120,7 +135,8 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
         }
         Row(
             modifier = Modifier
-                .height(96.dp).padding(top = 6.dp)
+                .height(96.dp)
+                .padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,

@@ -29,6 +29,7 @@ class CommonInterceptor : Interceptor {
         val requestBuilder = original.newBuilder()
             .addHeader("Referer","https://www.fagougou.com/pc/?mkt=fefil0763c92e")
             .addHeader("Authorization", kv.decodeString("token") ?: "")
+            .addHeader("inner-token",kv.decodeString("contractToken") ?: "")
             .method(original.method, original.body)
         val request = requestBuilder.build()
         return chain.proceed(request)

@@ -1,6 +1,7 @@
 package com.fagougou.xiaoben.repo
 
 import com.fagougou.xiaoben.model.*
+import okhttp3.Response
 import retrofit2.Call
 import retrofit2.http.*
 
