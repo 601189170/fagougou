@@ -15,11 +15,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.model.About
-import com.fagougou.xiaoben.repo.Client
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.statisticPage.Statistic.allNumber
 import com.fagougou.xiaoben.statisticPage.Statistic.monthNumber
 
@@ -30,7 +30,7 @@ object Statistic{
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = Client.retrofitClient.aboutRobot().execute()
+            val response = apiService.aboutRobot().execute()
             val body = response.body() ?: About()
             allNumber.value = body.aboutData.aboutFirm.allNumber
             monthNumber.value = body.aboutData.aboutFirm.monthNumber

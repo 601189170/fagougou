@@ -6,7 +6,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -33,7 +32,7 @@ import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatPage.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
-import com.fagougou.xiaoben.repo.Client.retrofitClient
+import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
@@ -105,7 +104,7 @@ object ChatPage {
         TTS.stopSpeaking()
         CoroutineScope(Dispatchers.IO).launch {
             val response =
-                retrofitClient.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+                apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return@launch
             sessionId = body.chatData.queryId
             addChatData(body.chatData)
@@ -113,15 +112,17 @@ object ChatPage {
     }
 
     fun nextChat(message: String) {
-        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
         TTS.stopSpeaking()
+        if(message.isBlank())return
+        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
             listState.scrollToItem(history.lastIndex)
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = retrofitClient.nextChat(sessionId, ChatRequest(message)).execute()
+                val fixMessage = if (message.last()=='。')message.dropLast(1) else message
+                val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
             } catch (e: Exception) {
@@ -132,7 +133,7 @@ object ChatPage {
 
     fun getRelate(queryRecordItemId: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = retrofitClient.relateQuestion(queryRecordItemId).execute()
+            val response = apiService.relateQuestion(queryRecordItemId).execute()
             val body = response.body() ?: return@launch
             for (say in body.data.says) history.add(
                 Message(
@@ -147,7 +148,9 @@ object ChatPage {
     }
 
     fun getComplex(attachmentId:String){
-
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.attachment(attachmentId).execute()
+        }
     }
 }
 
@@ -175,8 +178,8 @@ fun BotMenu() {
         for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
             HomeButton(
                 modifier = Modifier
-                    .width(182.dp)
-                    .height(228.dp),
+                    .width(136.dp)
+                    .height(171.dp),
                 onClick = {
                     selectedChatBot.value = bot.first
                     startChat()
@@ -189,7 +192,7 @@ fun BotMenu() {
 }
 
 @Composable
-fun LawExpend(message: Message) {
+fun LawExpend(message: Message,index: Int) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -207,7 +210,7 @@ fun LawExpend(message: Message) {
                 fontSize = 22.sp
             )
         } else Button(
-            onClick = { message.isExpend = true },
+            onClick = { history[index] = message.copy(isExpend = true) },
             content = {
                 Row {
                     Text(
@@ -231,6 +234,7 @@ fun LawExpend(message: Message) {
 @Composable
 fun MessageRect(
     message: Message,
+    index:Int,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
 ) {
@@ -239,7 +243,7 @@ fun MessageRect(
         color = backgroundColor,
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 message.content,
@@ -252,14 +256,14 @@ fun MessageRect(
                 thickness = 2.dp,
                 startIndent = 10.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message)
+            if (message.laws.isNotEmpty()) LawExpend(message,index)
         }
     }
 }
 
 
 @Composable
-fun MessageItem(message: Message, scope: CoroutineScope, listState: LazyListState) {
+fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: LazyListState) {
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
@@ -267,14 +271,14 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState: LazyListStat
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { MessageRect(message) }
+        ) { MessageRect(message,index) }
         Speaker.USER -> Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-        ) { MessageRect(message, Dodgerblue, Color.White) }
+        ) { MessageRect(message,index, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -293,7 +297,9 @@ fun MessageItem(message: Message, scope: CoroutineScope, listState: LazyListStat
                         colors = ButtonDefaults.buttonColors(Color.Transparent),
                         elevation = ButtonDefaults.elevation(0.dp)
                     ) else Button(
-                        onClick = { message.isExpend = true },
+                        onClick = {
+                            history[index] = message.copy(isExpend = true)
+                                  },
                         content = {
                             Row {
                                 Image(painterResource(R.drawable.ic_relate_question), null)
@@ -359,7 +365,7 @@ fun ChatPage(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
-            items(history) { message -> MessageItem(message, scope, listState) }
+            items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
             item{
                 Row(modifier = Modifier.fillMaxWidth().height(300.dp)){}
             }

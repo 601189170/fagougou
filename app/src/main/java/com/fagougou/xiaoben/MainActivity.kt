@@ -24,6 +24,7 @@ import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatGuidePage
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.homePage.HomePage
+import com.fagougou.xiaoben.loginPage.LoginPage
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.fagougou.xiaoben.webViewPage.WebViewPage
@@ -71,9 +72,10 @@ fun Main() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "login",
             modifier = Modifier.fillMaxHeight()
         ) {
+            composable("login") { LoginPage(navController) }
             composable("home") { HomePage(navController) }
             composable("contract") { ContractGuidePage(navController) }
             composable("guide") { ChatGuidePage(navController) }

@@ -22,4 +22,7 @@ interface ApiService {
 
     @GET("/v1/qritem/{queryRecordItemId}/related-qas")
     fun relateQuestion(@Path("queryRecordItemId")queryRecordItemId:String): Call<RelateResponse>
+
+    @GET("/v1/attachment/{attachmentId}")
+    fun attachment(@Path("attachmentId")attachmentId:String): Call<AttachmentResponse>
 }
