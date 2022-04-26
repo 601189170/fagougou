@@ -41,20 +41,22 @@ import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.IFly.UNWAKE_TEXT
+import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
 import com.fagougou.xiaoben.utils.TTS.mTts
+import com.fagougou.xiaoben.utils.Tunnel
 import kotlinx.coroutines.*
 import org.libpag.PAGFile
 import org.libpag.PAGView
 
 object ChatPage {
     val history = mutableStateListOf<Message>()
+    val ioState = mutableStateOf(false)
     val selectedChatBot = mutableStateOf("小笨")
     var sessionId = ""
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     var tempQueryId = ""
-    val ioState = mutableStateOf(false)
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {
@@ -108,8 +110,10 @@ object ChatPage {
     fun startChat() {
         TTS.stopSpeaking()
         CoroutineScope(Dispatchers.IO).launch {
-            val response =
-                apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+            val tokenResponse = apiService.auth(AuthRequest()).execute()
+            val tokenBody = tokenResponse.body() ?: Auth()
+            MMKV.kv.encode("token",tokenBody.data.token)
+            val response = apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return@launch
             sessionId = body.chatData.queryId
             addChatData(body.chatData)
@@ -117,24 +121,25 @@ object ChatPage {
     }
 
     fun nextChat(message: String) {
-        ioState.value = true
         TTS.stopSpeaking()
         if(message.isBlank())return
         if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
         history.add(Message(Speaker.USER, message))
-        CoroutineScope(Dispatchers.Main).launch {
-            listState.scrollToItem(history.lastIndex)
-        }
+        ioState.value = true
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val fixMessage = if (message.last()=='。')message.dropLast(1) else message
                 val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
-                ioState.value = false
             } catch (e: Exception) {
                 Log.e(TAG,e.stackTraceToString())
+            } finally {
+                ioState.value = false
             }
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            listState.scrollToItem(history.lastIndex)
         }
     }
 
@@ -374,9 +379,8 @@ fun ChatPage(navController: NavController) {
             "智能咨询(${selectedChatBot.value})",
             navController,
             onBack = {
-                IFly.isEnable = false
+                IFly.onResetTunnel(Tunnel.NULL)
                 mTts.stopSpeaking()
-                history.clear()
             }
         )
         BotMenu()
