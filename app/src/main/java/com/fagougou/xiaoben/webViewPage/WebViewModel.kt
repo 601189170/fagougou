@@ -1,8 +1,8 @@
 package com.fagougou.xiaoben.webViewPage
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.context
+import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.webViewPage.WebViewModel.WebViewUrl
 
@@ -26,11 +26,11 @@ fun WebViewPage(navController: NavController) {
         AndroidView(
             modifier = Modifier.fillMaxHeight().fillMaxWidth(),
             factory = {
-                WebView(context).apply {
+                WebView(activityContext).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     setInitialScale(144)
                     settings.javaScriptEnabled = true
-                    webViewClient = WebViewClient()
+                    webChromeClient = WebChromeClient()
                     loadUrl(WebViewUrl)
                 }
             }

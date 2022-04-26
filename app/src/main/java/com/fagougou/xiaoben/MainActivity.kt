@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.SafeBack.safeBack
 import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
@@ -35,6 +36,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activityContext = this
         hideSystemUI()
         setContent {
             XiaoBenTheme {

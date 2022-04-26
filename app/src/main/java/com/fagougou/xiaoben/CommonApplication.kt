@@ -2,6 +2,7 @@ package com.fagougou.xiaoben
 
 import android.app.Application
 import android.content.Context
+import androidx.activity.ComponentActivity
 import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
 import com.fagougou.xiaoben.model.Auth
 import com.fagougou.xiaoben.model.AuthRequest
@@ -18,6 +19,7 @@ import kotlin.properties.Delegates
 class CommonApplication: Application(){
     companion object {
         var context: Context by Delegates.notNull()
+        lateinit var activityContext: ComponentActivity
         const val TAG = "FaGouGou@XiaoBen"
     }
 
