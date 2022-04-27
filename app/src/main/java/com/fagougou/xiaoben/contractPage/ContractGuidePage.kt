@@ -7,11 +7,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
@@ -28,6 +25,7 @@ import com.fagougou.xiaoben.contractPage.Contract.categoryList
 import com.fagougou.xiaoben.model.ContractCategory
 import com.fagougou.xiaoben.model.ContractCategoryResponse
 import com.fagougou.xiaoben.repo.Client.contractService
+import com.fagougou.xiaoben.webViewPage.WebViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +49,15 @@ fun ContractGuidePage(navController: NavController) {
         verticalArrangement = Arrangement.Top,
     ) {
         Headder(title = "合同文库", navController = navController)
+        Button(
+            onClick = {
+                WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fcontract-template-1254426977.cos.ap-guangzhou.myqcloud.com%2Fdocx%2FopjQgAwlpkeQe42T2aDofSqQ.docx%3Fq-sign-algorithm%3Dsha1%26q-ak%3DAKIDY0eYMzOkqlolZDS1BAya2MYYN1Unr62r%26q-sign-time%3D1651027428%3B1651027728%26q-key-time%3D1651027428%3B1651027728%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D07ad1d9e85ef1adcbca3b7d8a14f4b2af8437a69"
+                navController.navigate("WebView")
+                      },
+            content = {
+                Text("快速访问")
+            }
+        )
         Surface(
             modifier = Modifier
                 .height(392.dp)
@@ -94,4 +101,5 @@ fun ContractGuidePage(navController: NavController) {
             }
         }
     }
+
 }
