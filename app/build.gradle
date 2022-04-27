@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.bugsnag.android.gradle'
 }
 
 android {
@@ -8,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.fagougou.xiaoben"
-        minSdk 24
+        minSdk 25
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -74,4 +75,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
     implementation 'io.coil-kt:coil-compose:2.0.0-rc01'
     implementation 'com.tencent.tav:libpag:3.2.7.34'
+    implementation 'com.bugsnag:bugsnag-android:5.+'
 }

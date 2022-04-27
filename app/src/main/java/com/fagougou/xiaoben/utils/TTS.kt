@@ -101,7 +101,8 @@ object TTS {
     }
 
     fun speak(text:String) {
-        TTSQueue.add(text)
+        val regex = Regex("[a-zA-Z]")
+        TTSQueue.add(text.replace(regex,""))
     }
 
 }

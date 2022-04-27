@@ -37,10 +37,12 @@ import com.fagougou.xiaoben.chatPage.ChatPage.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client.apiService
+import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.IFly.UNWAKE_TEXT
+import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
 import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.*
@@ -109,11 +111,17 @@ object ChatPage {
         TTS.stopSpeaking()
         history.clear()
         CoroutineScope(Dispatchers.IO).launch {
-            val response =
-                apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
-            val body = response.body() ?: return@launch
-            sessionId = body.chatData.queryId
-            addChatData(body.chatData)
+            try {
+                val tokenResponse = apiService.auth(AuthRequest()).execute()
+                val tokenBody = tokenResponse.body() ?: Auth()
+                MMKV.kv.encode("token", tokenBody.data.token)
+                val response = apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+                val body = response.body() ?: return@launch
+                sessionId = body.chatData.queryId
+                addChatData(body.chatData)
+            }catch (e:Exception){
+                handleException(e)
+            }
         }
     }
 

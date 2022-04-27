@@ -2,6 +2,7 @@ package com.fagougou.xiaoben.repo
 
 import android.net.ParseException
 import android.util.Log
+import com.bugsnag.android.Bugsnag
 import com.fagougou.xiaoben.CommonApplication.Companion.TAG
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Tips.toast
@@ -115,6 +116,7 @@ object Client {
             is NumberFormatException -> ex = Exception("数字格式化异常")
             else -> {
                 ex = t as Exception
+                Bugsnag.notify(ex)
             }
         }
         CoroutineScope(Dispatchers.Main).launch{
