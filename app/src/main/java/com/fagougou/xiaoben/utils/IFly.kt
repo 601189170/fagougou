@@ -140,11 +140,11 @@ object IFly {
 
     fun recognizeMode(){
         if(isEnable) { CoroutineScope(Dispatchers.Default).launch {
-            delay(1000)
             Log.d(TAG, "Wake Up")
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()
+            delay(1000)
             mIat.startListening(mRecognizerListener)
         } }
     }
