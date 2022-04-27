@@ -117,7 +117,6 @@ object ChatPage {
     }
 
     fun nextChat(message: String) {
-        ioState.value = true
         TTS.stopSpeaking()
         if(message.isBlank())return
         if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
@@ -127,13 +126,15 @@ object ChatPage {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                ioState.value = true
                 val fixMessage = if (message.last()=='。')message.dropLast(1) else message
                 val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
-                ioState.value = false
             } catch (e: Exception) {
                 Log.e(TAG,e.stackTraceToString())
+            }finally {
+                ioState.value = false
             }
         }
     }
