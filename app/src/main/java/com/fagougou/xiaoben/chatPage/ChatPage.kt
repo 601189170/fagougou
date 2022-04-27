@@ -268,7 +268,7 @@ fun MessageRect(
                 color = textColor,
             )
             if (message.laws.isNotEmpty()) Divider(
-                modifier = Modifier.padding(18.dp),
+                modifier = Modifier.padding(horizontal = 18.dp),
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
                 startIndent = 10.dp
@@ -298,7 +298,6 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
         ) { MessageRect(message,index, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(vertical = 12.dp),
         ) {
             Surface(
@@ -319,7 +318,6 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                                 Text(modifier = Modifier.padding(start = 16.dp),text = "相关问题", fontSize = 28.sp)
                             }
                         }
-                        if (index != 1)Divider(thickness = 2.dp)
                         for (question in message.recommends) Button(
                             onClick = { nextChat(question) },
                             content = { Text("·$question", fontSize = 28.sp, color = Dodgerblue) },
@@ -329,7 +327,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                     } else Button(
                         onClick = {
                             history[index] = message.copy(isExpend = true)
-                                  },
+                        },
                         content = {
                             Row {
                                 Image(painterResource(R.drawable.ic_relate_question), null)

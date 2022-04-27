@@ -21,7 +21,7 @@ data class ChatRequest(
 
 data class ChatResponse(
     @SerializedName("data")
-    val chatData:ChatData = ChatData()
+    val chatData:ChatData = ChatData(),
 )
 
 data class ChatData(

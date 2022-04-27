@@ -10,6 +10,10 @@ import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
 import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -135,13 +139,14 @@ object IFly {
     }
 
     fun recognizeMode(){
-        if(isEnable) {
+        if(isEnable) { CoroutineScope(Dispatchers.Default).launch {
+            delay(1000)
             Log.d(TAG, "Wake Up")
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()
             mIat.startListening(mRecognizerListener)
-        }
+        } }
     }
 
     fun parseIatResult(json: String): String {
