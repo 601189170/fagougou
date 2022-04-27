@@ -29,6 +29,7 @@ import com.fagougou.xiaoben.webViewPage.WebViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 object Contract{
     val categoryList = mutableStateListOf<ContractCategory>()
@@ -51,7 +52,9 @@ fun ContractGuidePage(navController: NavController) {
         Headder(title = "合同文库", navController = navController)
         Button(
             onClick = {
-                WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fcontract-template-1254426977.cos.ap-guangzhou.myqcloud.com%2Fdocx%2FopjQgAwlpkeQe42T2aDofSqQ.docx%3Fq-sign-algorithm%3Dsha1%26q-ak%3DAKIDY0eYMzOkqlolZDS1BAya2MYYN1Unr62r%26q-sign-time%3D1651027428%3B1651027728%26q-key-time%3D1651027428%3B1651027728%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D07ad1d9e85ef1adcbca3b7d8a14f4b2af8437a69"
+                val rawUrl = "https://contract-template-1254426977.cos.ap-guangzhou.myqcloud.com/docx/i64g9JuABuFT7-RYY0MlX.docx?q-sign-algorithm=sha1&q-ak=AKIDY0eYMzOkqlolZDS1BAya2MYYN1Unr62r&q-sign-time=1651028204;1651028504&q-key-time=1651028204;1651028504&q-header-list=&q-url-param-list=&q-signature=25dd6ea837dfb54358a18dc13826dba1f50f4f30"
+                val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
+                WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                 navController.navigate("WebView")
                       },
             content = {
