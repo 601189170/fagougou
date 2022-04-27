@@ -230,10 +230,10 @@ fun ContractGuidePage(navController: NavController) {
 //
                                 if (!weburl.value.equals("")&&!isfirst){
                                     isfirst=true
-                                    WebViewModel.WebViewUrl = weburl.value
+
                                     val rawUrl =  weburl.value
                                     val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
-                                    WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                                    WebViewModel.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                                     navController.navigate("WebView")
 
                                 }
