@@ -75,5 +75,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
     implementation 'io.coil-kt:coil-compose:2.0.0-rc01'
     implementation 'com.tencent.tav:libpag:3.2.7.34'
+    implementation 'com.alibaba:fastjson:1.1.68.android'
     implementation 'com.bugsnag:bugsnag-android:5.+'
 }

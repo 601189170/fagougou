@@ -1,5 +1,7 @@
 package com.fagougou.xiaoben.contractPage
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,31 +18,79 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.contractPage.Contract.HTLists
 import com.fagougou.xiaoben.contractPage.Contract.categoryList
-import com.fagougou.xiaoben.model.ContractCategory
-import com.fagougou.xiaoben.model.ContractCategoryResponse
+import com.fagougou.xiaoben.contractPage.Contract.getHTLIST
+import com.fagougou.xiaoben.contractPage.Contract.getTemplate
+import com.fagougou.xiaoben.contractPage.Contract.isfirst
+
+import com.fagougou.xiaoben.contractPage.Contract.weburl
+import com.fagougou.xiaoben.model.*
+import com.fagougou.xiaoben.repo.Client
 import com.fagougou.xiaoben.repo.Client.contractService
+
 import com.fagougou.xiaoben.webViewPage.WebViewModel
-import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import java.net.URLEncoder
 
+
 object Contract{
-    val categoryList = mutableStateListOf<ContractCategory>()
+    val categoryList = mutableStateListOf<ContractCategoryResponse2.Data>()
+    val HTLists = mutableStateListOf<HTList.DataB>()
+
+
+    var weburl =mutableStateOf("")
+    var isfirst=false;
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
             val response = contractService.listCategory().execute()
-            val body = response.body() ?: ContractCategoryResponse()
-            categoryList.addAll(body.categorys)
+            val body = response.body()
+            if (body!=null){
+                categoryList.addAll(body.data)
+            }
         }
+
+    }
+
+
+    fun  getHTLIST(folder:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val map = mutableMapOf<String, String>()
+            map["name"] = ""
+            map["folder"] = folder
+            map["limit"] = "20"
+            map["skip"] = "0"
+
+            val  req=
+                RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(),com.alibaba.fastjson.JSON.toJSONString(map))
+            val response = Client.contractService.getHtlist(req).execute()
+            val body = response.body() ?: return@launch
+            HTLists.clear()
+            HTLists.addAll(body.data.list)
+        }
+
+    }
+
+    fun  getTemplate(fileid:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = Client.contractService.template(fileid).execute()
+            val body = response.body() ?: return@launch
+            weburl.value=body.data
+
+        }
+
     }
 }
 
+@SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun ContractGuidePage(navController: NavController) {
     Column(
@@ -47,18 +98,6 @@ fun ContractGuidePage(navController: NavController) {
         verticalArrangement = Arrangement.Top,
     ) {
         Headder(title = "合同文库", navController = navController)
-        Button(
-            onClick = {
-                val rawUrl = "https://contract-template-1254426977.cos.ap-guangzhou.myqcloud.com/docx/i64g9JuABuFT7-RYY0MlX.docx?q-sign-algorithm=sha1&q-ak=AKIDY0eYMzOkqlolZDS1BAya2MYYN1Unr62r&q-sign-time=1651028204;1651028504&q-key-time=1651028204;1651028504&q-header-list=&q-url-param-list=&q-signature=25dd6ea837dfb54358a18dc13826dba1f50f4f30"
-                val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
-                webViewTitle = "合同文库"
-                WebViewModel.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                navController.navigate("WebView")
-                      },
-            content = {
-                Text("快速访问")
-            }
-        )
         Surface(
             modifier = Modifier
                 .height(392.dp)
@@ -82,13 +121,78 @@ fun ContractGuidePage(navController: NavController) {
                         .fillMaxHeight()
                         .fillMaxSize(0.4f),
                 ) {
+
                     LazyColumn(
+
                         modifier = Modifier.padding(48.dp),
+
                         content = {
-                            items(categoryList){ category ->
-                                Text(category.name, fontSize = 32.sp)
+
+                            items(categoryList){
+                                    category ->
+                                    Button(
+                                        content = {
+                                            Text(
+//                                                modifier = Modifier.padding(end = 24.dp),
+                                                text = category.name,
+                                                fontSize = 32.sp,
+                                                color = Color.Black
+
+                                            )
+
+                                        },
+                                        onClick = {
+
+                                                getHTLIST(category.id)
+
+                                        }
+                                    )
+                                for (child in category.children) {
+                                    Button(
+                                        content = {
+                                            Text(
+//                                                modifier = Modifier.padding(end = 24.dp),
+                                                text = child.name,
+                                                fontSize = 32.sp,
+                                                color = Color.Black
+
+                                            )
+
+                                        },
+                                        onClick = {
+
+                                                getHTLIST(child.id)
+
+                                        }
+                                    )
+                                    for (child in child.children) {
+                                        Button(
+                                            content = {
+                                                Text(
+//                                                    modifier = Modifier.padding(end = 24.dp),
+                                                    text = child.name,
+                                                    fontSize = 32.sp,
+                                                    color = Color.Black
+
+
+                                                )
+
+                                            },
+                                            onClick = {
+
+                                                    getHTLIST(child.id)
+
+                                            }
+                                        )
+                                    }
+                                }
+
                             }
+
+
+
                         }
+
                     )
                 }
             }
@@ -97,10 +201,57 @@ fun ContractGuidePage(navController: NavController) {
                     Modifier
                         .fillMaxHeight()
                         .fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier.padding(48.dp),
+                        content = {
+                            items(HTLists){
+                                    category ->
+                                Button(
+                                    content = {
+                                        Text(
+                                            text = category.name,
+                                            fontSize = 32.sp,
+                                            color = Color.Black
+                                        )
+                                    },
+                                    onClick = {
+                                        getTemplate(category.fileid)
+
+//                                        WebViewModel.WebViewUrl = weburl.value
+//                                        Log.e("TAG", "WebViewUrl: "+weburl.value )
+//                                        navController.navigate("WebView")
+
+                                    }
+
+                                )
+                            }
+
+                            item(weburl.value){
+//
+                                if (!weburl.value.equals("")&&!isfirst){
+                                    isfirst=true
+                                    WebViewModel.WebViewUrl = weburl.value
+                                    val rawUrl =  weburl.value
+                                    val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
+                                    WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                                    navController.navigate("WebView")
+
+                                }
+
+                            }
+                        }
+
+
+
+                    )
 
                 }
+
             }
+
         }
+
     }
+
 
 }
