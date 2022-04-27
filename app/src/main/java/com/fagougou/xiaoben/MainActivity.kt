@@ -1,5 +1,6 @@
 package com.fagougou.xiaoben
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -22,8 +23,8 @@ import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.SafeBack.safeBack
 import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
-import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatGuidePage
+import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
@@ -32,6 +33,7 @@ import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +46,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) { Main() }
+            }
+        }
+        CoroutineScope(Dispatchers.Default).launch {
+            if(4==2) withContext(Dispatchers.Main){
+                val intent = Intent(this@MainActivity,UpdateActivity::class.java)
+                intent.putExtra("downloadUrl","URL")
+                startActivity(intent)
             }
         }
     }

@@ -15,9 +15,12 @@
         android:roundIcon="@drawable/fagougou"
         android:supportsRtl="true"
         android:theme="@style/Theme.XiaoBen">
-        <meta-data
-            android:name="com.bugsnag.android.API_KEY"
-            android:value="d8b721d631e0b6baa472c549795e5780"/>
+        <activity
+            android:name=".UpdateActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.bugsnag.android.API_KEY"
+            android:value="d8b721d631e0b6baa472c549795e5780" />
     </application>
 
 </manifest>
