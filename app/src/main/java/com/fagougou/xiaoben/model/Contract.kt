@@ -6,7 +6,7 @@ data class ContractCategoryResponse(
     @SerializedName("data")
     val categorys: List<ContractCategory> = listOf(),
 )
-{
+
 data class ContractCategory(
     @SerializedName("_id")
     val id: String = "",
@@ -18,6 +18,4 @@ data class ContractCategory(
     val isRoot: String = "",
     @SerializedName("parentId")
     val parentId: String = "",
-
 )
-}
