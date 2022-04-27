@@ -61,7 +61,8 @@ class ParametersIntercept : Interceptor {
 
 object Client {
     const val url = "https://api.fagougou.com"
-    const val contractUrl = "https://products.fagougou.com"
+//    const val contractUrl = "https://products.fagougou.com"
+    const val contractUrl = "https://law-system.fagougou-law.com"
     const val loginUrl = "https://a.fagougou.com"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
