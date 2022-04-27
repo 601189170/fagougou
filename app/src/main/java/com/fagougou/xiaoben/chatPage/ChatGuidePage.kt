@@ -14,11 +14,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.chatPage.ChatPage.history
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
 import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.utils.IFly
-import com.fagougou.xiaoben.utils.Tunnel
 
 @Composable
 fun ChatGuidePage(navController: NavController) {
@@ -65,9 +63,8 @@ fun ChatGuidePage(navController: NavController) {
                                 .width(218.dp)
                                 .height(272.dp),
                             onClick = {
+                                IFly.isEnable = true
                                 selectedChatBot.value = bot.first
-                                history.clear()
-                                IFly.onResetTunnel(Tunnel.CHAT_PAGE)
                                 navController.navigate("chat")
                             },
                             contentId = bot.second

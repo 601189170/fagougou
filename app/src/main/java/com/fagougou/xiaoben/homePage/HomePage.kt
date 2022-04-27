@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.utils.MMKV.clearStack
@@ -134,9 +135,10 @@ fun HomePage(navController:NavController) {
         Button(
             onClick = {
                 clearStack++
-                if (clearStack>5){
-                    kv.remove("contractToken")
+                if (clearStack>8){
+                    kv.remove("canLogin")
                     toast("登出成功")
+                    activityContext.finish()
                 }
             },
             content = {

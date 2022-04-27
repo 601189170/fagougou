@@ -85,10 +85,10 @@ fun Main() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        val contractToken = kv.decodeString("contractToken","")
+        val canLogin = kv.decodeBool("canLogin",false)
         NavHost(
             navController = navController,
-            startDestination = if(contractToken.isNullOrBlank()) "login" else "home",
+            startDestination = if(canLogin) "home" else "login",
             modifier = Modifier.fillMaxHeight()
         ) {
             composable("login") { LoginPage(navController) }

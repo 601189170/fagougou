@@ -107,6 +107,7 @@ object ChatPage {
 
     fun startChat() {
         TTS.stopSpeaking()
+        history.clear()
         CoroutineScope(Dispatchers.IO).launch {
             val response =
                 apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
@@ -299,12 +300,25 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 Column(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    if (message.isExpend) for (question in message.recommends) Button(
-                        onClick = { nextChat(question) },
-                        content = { Text(question, fontSize = 28.sp, color = Dodgerblue) },
-                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-                        elevation = ButtonDefaults.elevation(0.dp)
-                    ) else Button(
+                    if (message.isExpend){
+                        Row(
+                            modifier = Modifier.padding(start = 16.dp,bottom = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            if (index == 1) Text("大家都在问:", fontSize = 28.sp)
+                            else {
+                                Image(painterResource(R.drawable.ic_relate_question),null)
+                                Text(modifier = Modifier.padding(start = 16.dp),text = "相关问题", fontSize = 28.sp)
+                            }
+                        }
+                        if (index != 1)Divider(thickness = 2.dp)
+                        for (question in message.recommends) Button(
+                            onClick = { nextChat(question) },
+                            content = { Text("·$question", fontSize = 28.sp, color = Dodgerblue) },
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                            elevation = ButtonDefaults.elevation(0.dp)
+                        )
+                    } else Button(
                         onClick = {
                             history[index] = message.copy(isExpend = true)
                                   },
@@ -324,7 +338,6 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                     )
                 }
             }
-
         }
         Speaker.OPTIONS -> Row(
             modifier = Modifier

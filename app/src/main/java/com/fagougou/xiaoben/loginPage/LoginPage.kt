@@ -17,25 +17,27 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
+import com.fagougou.xiaoben.MainActivity
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.loginPage.LoginPage.login
 import com.fagougou.xiaoben.loginPage.LoginPage.password
 import com.fagougou.xiaoben.loginPage.LoginPage.state
 import com.fagougou.xiaoben.loginPage.LoginPage.userName
+import com.fagougou.xiaoben.model.User
 import com.fagougou.xiaoben.repo.Client.handleException
-import com.fagougou.xiaoben.repo.Client.okHttpClient
+import com.fagougou.xiaoben.repo.Client.mainLogin
 import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Time
 import com.fagougou.xiaoben.utils.Tips.toast
+import com.google.gson.stream.MalformedJsonException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.Request
-import okhttp3.RequestBody
+import org.json.JSONException
 import java.lang.Exception
 
 object LoginPage {
@@ -46,27 +48,13 @@ object LoginPage {
         state.value = "登录中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val body = RequestBody.create(
-                    "application/json".toMediaType(),
-                    "{\"phone\": \"${userName.value}\", \"password\": \"${password.value}\"}"
-                )
-                val request =
-                    Request.Builder().url("https://products.fagougou.com/api/login").post(body)
-                        .build()
-                val response = okHttpClient.newCall(request).execute()
-                var contractToken = ""
-                for (header in response.headers) {
-                    if (header.second.contains("token=")) {
-                        contractToken = header.second.replace("token=", "")
-                        kv.encode("contractToken", contractToken)
-                        withContext(Dispatchers.Main) {
-                            navController.navigate("home")
-                        }
-                        return@launch
-                    }
-                }
+                mainLogin.login(User(userName.value, password.value)).execute().body()
+                kv.encode("canLogin",true)
+                (activityContext as MainActivity).hideSystemUI()
+                withContext(Dispatchers.Main) { navController.navigate("home") }
+            }catch (e:MalformedJsonException){
                 toast("用户名或密码错误")
-            }catch (e:Exception){
+            } catch (e:Exception){
                 handleException(e)
             }finally {
                 state.value = "登录"

@@ -61,6 +61,7 @@ class ParametersIntercept : Interceptor {
 object Client {
     const val url = "https://api.fagougou.com"
     const val contractUrl = "https://products.fagougou.com"
+    const val loginUrl = "https://a.fagougou.com"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -90,6 +91,15 @@ object Client {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ContractService::class.java)
+    }
+
+    val mainLogin: MainLogin by lazy {
+        Retrofit.Builder()
+            .baseUrl(loginUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MainLogin::class.java)
     }
 
     fun handleException(t: Throwable) {
