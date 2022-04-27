@@ -233,8 +233,9 @@ fun ContractGuidePage(navController: NavController) {
 
                                     val rawUrl =  weburl.value
                                     val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
-                                    WebViewModel.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                                    navController.navigate("WebView")
+                                    ContractWebView.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                                    ContractWebView.codeUrl = rawUrl
+                                    navController.navigate("contractWebView")
 
                                 }
 
