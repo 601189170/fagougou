@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.utils.IFly.TAG
+import com.fagougou.xiaoben.utils.IFly.mIat
+import com.fagougou.xiaoben.utils.IFly.mRecognizerListener
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import kotlinx.coroutines.*
@@ -12,6 +14,7 @@ import java.util.*
 object TTS {
     val TTSQueue = ArrayDeque<String>()
     var SpeakingProcess = 100
+    var lastWord = ""
     private val mTtsInitListener = InitListener { code ->
         Log.d( TAG,"InitListener init() code = $code")
         if (code != ErrorCode.SUCCESS) toast("初始化失败,错误码：$code")
@@ -89,6 +92,10 @@ object TTS {
                     delay(50)
                     mTts.startSpeaking(text, mTtsListener)
                     Log.d(TAG, "Speak $text")
+                    lastWord = text
+                }else if(SpeakingProcess==100 && lastWord=="您请说"){
+                    lastWord = ""
+                    mIat.startListening(mRecognizerListener)
                 }
             }
         }

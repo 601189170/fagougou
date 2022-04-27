@@ -139,14 +139,11 @@ object IFly {
     }
 
     fun recognizeMode(){
-        if(isEnable) { CoroutineScope(Dispatchers.Default).launch {
-            Log.d(TAG, "Wake Up")
+        if(isEnable) { Log.d(TAG, "Wake Up")
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()
-            delay(1000)
-            mIat.startListening(mRecognizerListener)
-        } }
+        }
     }
 
     fun parseIatResult(json: String): String {
