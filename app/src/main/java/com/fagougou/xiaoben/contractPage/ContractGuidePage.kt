@@ -3,12 +3,8 @@ package com.fagougou.xiaoben.contractPage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
@@ -26,6 +22,7 @@ import com.fagougou.xiaoben.model.ContractCategory
 import com.fagougou.xiaoben.model.ContractCategoryResponse
 import com.fagougou.xiaoben.repo.Client.contractService
 import com.fagougou.xiaoben.webViewPage.WebViewModel
+import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,7 +51,8 @@ fun ContractGuidePage(navController: NavController) {
             onClick = {
                 val rawUrl = "https://contract-template-1254426977.cos.ap-guangzhou.myqcloud.com/docx/i64g9JuABuFT7-RYY0MlX.docx?q-sign-algorithm=sha1&q-ak=AKIDY0eYMzOkqlolZDS1BAya2MYYN1Unr62r&q-sign-time=1651028204;1651028504&q-key-time=1651028204;1651028504&q-header-list=&q-url-param-list=&q-signature=25dd6ea837dfb54358a18dc13826dba1f50f4f30"
                 val encodedUrl = URLEncoder.encode(rawUrl,"UTF-8")
-                WebViewModel.WebViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                webViewTitle = "合同文库"
+                WebViewModel.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                 navController.navigate("WebView")
                       },
             content = {

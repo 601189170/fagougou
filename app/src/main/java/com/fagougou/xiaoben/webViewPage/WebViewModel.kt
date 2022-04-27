@@ -13,16 +13,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.Headder
-import com.fagougou.xiaoben.webViewPage.WebViewModel.WebViewUrl
+import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewTitle
+import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewUrl
 
 object WebViewModel{
-    var WebViewUrl = ""
+    var webViewTitle = ""
+    var webViewUrl = ""
 }
 
 @Composable
 fun WebViewPage(navController: NavController) {
     Column {
-        Headder("法律计算器", navController)
+        Headder(webViewTitle, navController)
         AndroidView(
             modifier = Modifier.fillMaxHeight().fillMaxWidth(),
             factory = {
@@ -31,7 +33,7 @@ fun WebViewPage(navController: NavController) {
                     setInitialScale(144)
                     settings.javaScriptEnabled = true
                     webChromeClient = WebChromeClient()
-                    loadUrl(WebViewUrl)
+                    loadUrl(webViewUrl)
                 }
             }
         )

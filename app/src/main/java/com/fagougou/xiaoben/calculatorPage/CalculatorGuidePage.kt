@@ -15,7 +15,8 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.homePage.HomeButton
-import com.fagougou.xiaoben.webViewPage.WebViewModel.WebViewUrl
+import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewTitle
+import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewUrl
 
 @Composable
 fun CalculatorGuidePage(navController: NavController) {
@@ -68,7 +69,8 @@ fun CalculatorGuidePage(navController: NavController) {
                                 .width(472.dp)
                                 .height(160.dp),
                             onClick = {
-                                WebViewUrl = calUrlMap[cal.first] ?: ""
+                                webViewTitle = "法律计算器"
+                                webViewUrl = calUrlMap[cal.first] ?: ""
                                 navController.navigate("WebView")
                             },
                             contentId = cal.second
