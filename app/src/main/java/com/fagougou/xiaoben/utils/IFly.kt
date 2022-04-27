@@ -10,19 +10,23 @@ import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
 import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
 import java.lang.Exception
 
+enum class Tunnel{ NULL,CHAT_PAGE}
 object IFly {
     const val UNWAKE_TEXT = "请说,你好小笨"
-    const val WAKE_TEXT = "请说出您的问题"
+    const val WAKED_TEXT = "请说出您的问题"
     val TAG = javaClass.simpleName
-    var isEnable = false
+    var tunnel = Tunnel.NULL
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
-    val volumeState = mutableStateOf("=")
 
     var mIatResults = mutableMapOf<String, String>()
     val mInitListener = InitListener { code ->
@@ -32,16 +36,14 @@ object IFly {
         override fun onVolumeChanged(volume: Int, data: ByteArray) {
             val stringBuilder = StringBuilder(volume+3)
             for (i in 0..volume+3)stringBuilder.append('=')
-            volumeState.value = stringBuilder.toString()
         }
 
         override fun onBeginOfSpeech() {
-            recognizeResult.value = WAKE_TEXT
+            recognizeResult.value = WAKED_TEXT
         }
 
         override fun onEndOfSpeech() {
-            volumeState.value = ""
-            wakeMode()
+            Log.d(TAG,"Recog Finish")
         }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
@@ -73,7 +75,7 @@ object IFly {
                 val result = resultBuilder.toString()
                 ChatPage.nextChat(result)
                 mIatResults.clear()
-                recognizeResult.value = UNWAKE_TEXT
+                wakeMode()
             }
             resultBuilder.clear()
         }
@@ -101,6 +103,7 @@ object IFly {
         override fun onVolumeChanged(volume: Int) { }
 
     }
+
     val mIat = SpeechRecognizer.createRecognizer(context, mInitListener)
     val mIvw = VoiceWakeuper.createWakeuper(context, mInitListener)
 
@@ -108,9 +111,9 @@ object IFly {
         // 设置动态修正
         mIat.setParameter("dwa", "wpgs")
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS,"3000")
+        mIat.setParameter(SpeechConstant.VAD_BOS,"2000")
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS,"2800")
+        mIat.setParameter(SpeechConstant.VAD_EOS,"2000")
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
@@ -126,16 +129,27 @@ object IFly {
             SpeechConstant.IVW_RES_PATH,
             ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/33b963d0.jet")
         )
-        mIvw.startListening(mWakeuperListener)
+    }
+
+    fun onResetTunnel(tunnel: Tunnel){
+        IFly.tunnel = tunnel
+        mIvw.stopListening()
+        mIat.stopListening()
+        recognizeResult.value = UNWAKE_TEXT
+        when(tunnel){
+            Tunnel.NULL -> {}
+            Tunnel.CHAT_PAGE-> wakeMode()
+        }
     }
 
     fun wakeMode(){
+        recognizeResult.value = UNWAKE_TEXT
         mIat.stopListening()
         mIvw.startListening(mWakeuperListener)
     }
 
     fun recognizeMode(){
-        if(isEnable) {
+        if(tunnel == Tunnel.CHAT_PAGE) {
             Log.d(TAG, "Wake Up")
             TTS.stopSpeaking()
             TTS.speak("您请说")
