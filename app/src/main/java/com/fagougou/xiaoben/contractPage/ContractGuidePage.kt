@@ -58,11 +58,11 @@ object Contract{
     }
 
     fun  getHTLIST(folder:String,searchName:String = "") {
+        HTLists.clear()
         CoroutineScope(Dispatchers.IO).launch {
             if (searchName!="")selectedId.value = ""
             val response = contractService.getHtlist(HTListRequest(folder = folder, name = searchName)).execute()
             val body = response.body() ?: return@launch
-            HTLists.clear()
             HTLists.addAll(body.data.list)
         }
     }
@@ -79,6 +79,53 @@ object Contract{
             }
         }
     }
+}
+
+@Composable
+fun Contract(navController: NavController,category: DataB){
+    Button(
+        modifier = Modifier.padding(vertical = 8.dp),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        elevation = ButtonDefaults.elevation(0.dp),
+        content = {
+            Column{
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+                    Image(painterResource(R.drawable.icon_hti_head), null)
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        fontWeight= FontWeight.Bold,
+                        text = category.name,
+                        fontSize = 28.sp,
+                        color = Color.Black
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = category.howToUse ?: "暂无数据",
+                    fontSize = 24.sp,
+                    color = Color.Black
+                )
+                Row(
+                    modifier = Modifier.padding(top = 12.dp),
+                ) {
+                    Text(
+                        maxLines=1,
+                        text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
+                        fontSize = 20.sp,
+                        color = Color.Gray
+                    )
+                    Text(
+                        maxLines=1,
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = "更新时间："+ category.updatedAt,
+                        fontSize = 20.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+        },
+        onClick = { getTemplate(category.fileid, navController) }
+    )
 }
 
 @SuppressLint("ComposableDestinationInComposeScope")
@@ -188,62 +235,17 @@ fun ContractGuidePage(navController: NavController) {
                 }
             }
             Surface(color = Color(0xFFFFFFFF)) {
-                Column(
-                    Modifier
+                LazyColumn(
+                    modifier = Modifier
                         .fillMaxHeight()
                         .fillMaxSize()
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.padding(48.dp),
-                        content = {
-                            items(HTLists){ category ->
-                                Button(
-                                    modifier = Modifier.padding(vertical = 8.dp),
-                                    colors = ButtonDefaults.buttonColors(Color.Transparent),
-                                    elevation = ButtonDefaults.elevation(0.dp),
-                                    content = {
-                                          Column{
-                                              Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-                                                  Image(painterResource(R.drawable.icon_hti_head), null)
-                                                  Text(
-                                                      modifier = Modifier.padding(start = 8.dp),
-                                                      fontWeight= FontWeight.Bold,
-                                                      text = category.name,
-                                                      fontSize = 28.sp,
-                                                      color = Color.Black
-                                                  )
-                                              }
-                                              Text(
-                                                  modifier = Modifier.padding(top = 12.dp),
-                                                  text = category.howToUse.replace("\n",""),
-                                                  fontSize = 24.sp,
-                                                  color = Color.Black
-                                              )
-                                              Row(
-                                                  modifier = Modifier.padding(top = 12.dp),
-                                              ) {
-                                                  Text(
-                                                      maxLines=1,
-                                                      text = "行业类型："+ category.folder.name,
-                                                      fontSize = 20.sp,
-                                                      color = Color.Gray
-                                                  )
-                                                  Text(
-                                                      maxLines=1,
-                                                      modifier = Modifier.padding(start = 8.dp),
-                                                      text = "更新时间："+ category.updatedAt,
-                                                      fontSize = 20.sp,
-                                                      color = Color.Gray
-                                                  )
-                                              }
-                                          }
-                                    },
-                                    onClick = { getTemplate(category.fileid, navController) }
-                                )
-                            }
+                        .padding(48.dp),
+                    content = {
+                        items(HTLists){ category ->
+                            Contract(navController, category)
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     }

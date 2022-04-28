@@ -23,8 +23,8 @@ data class Data(
 
 data class DataB(
     val fileid: String = "",
-    val folder: Folder = Folder(),
-    val howToUse: String = "",
+    val folder: Folder? = Folder(),
+    val howToUse: String? = "",
     val name: String = "",
     val updatedAt: String = ""
 )

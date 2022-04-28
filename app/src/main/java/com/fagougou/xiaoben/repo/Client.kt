@@ -47,10 +47,13 @@ class ParametersIntercept : Interceptor {
         if(response.code == 200 && response.body!=null){
             try{
                 var bodyString = response.body!!.string()
-                bodyString = bodyString.replace(",\"option\":[]","")
-                bodyString = bodyString.replace("\"option\":[{\"title\"","\"option\":{\"title\"")
-                bodyString = bodyString.replace("\"}]},\"isAnswered\"","\"}},\"isAnswered\"")
-                bodyString = bodyString.replace("\"}]}}],\"bestScore\"","\"}}}],\"bestScore\"")
+                bodyString = bodyString
+                    .replace(",\"option\":[]","")
+                    .replace("\"option\":[{\"title\"","\"option\":{\"title\"")
+                    .replace("\"}]},\"isAnswered\"","\"}},\"isAnswered\"")
+                    .replace("\"}]}}],\"bestScore\"","\"}}}],\"bestScore\"")
+                    .replace(" ","")
+                    .replace("\n","")
                 val contentType = response.body!!.contentType()
                 val body = ResponseBody.create(contentType,bodyString)
                 return response.newBuilder().body(body).build()
