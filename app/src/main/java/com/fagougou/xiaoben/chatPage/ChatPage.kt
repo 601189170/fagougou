@@ -38,7 +38,7 @@ import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.repo.Client.handleException
-import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.IFly.UNWAKE_TEXT
@@ -57,6 +57,7 @@ object ChatPage {
     val listState = LazyListState()
     var tempQueryId = ""
     val ioState = mutableStateOf(false)
+    var wechatAddress = ""
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {
@@ -256,7 +257,7 @@ fun MessageRect(
     textColor: Color = Color.Black,
 ) {
     Surface(
-        shape = RoundedCornerShape(CORNER_PERCENT),
+        shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
         Column(
@@ -301,7 +302,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 .padding(vertical = 12.dp),
         ) {
             Surface(
-                shape = RoundedCornerShape(CORNER_PERCENT),
+                shape = RoundedCornerShape(CORNER_FLOAT),
                 color = Color.White,
             ) {
                 Column(

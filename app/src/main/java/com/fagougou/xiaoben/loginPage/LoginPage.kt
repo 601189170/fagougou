@@ -27,7 +27,7 @@ import com.fagougou.xiaoben.loginPage.LoginPage.userName
 import com.fagougou.xiaoben.model.User
 import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.repo.Client.mainLogin
-import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Time
@@ -37,7 +37,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONException
 import java.lang.Exception
 
 object LoginPage {
@@ -109,7 +108,7 @@ fun LoginPage(navController: NavController){
             onValueChange = {userName.value = it},
             textStyle = TextStyle(color = Color.White, fontSize = 42.sp),
             placeholder = {Text("请输入账号",color = Color.Gray, fontSize = 42.sp)},
-            shape = RoundedCornerShape(CORNER_PERCENT),
+            shape = RoundedCornerShape(CORNER_FLOAT),
             colors = textFieldColors,
             leadingIcon = { Image(painterResource(R.drawable.ic_login_user), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
@@ -123,7 +122,7 @@ fun LoginPage(navController: NavController){
             placeholder = {Text("请输入密码",color = Color.Gray, fontSize = 42.sp)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
-            shape = RoundedCornerShape(CORNER_PERCENT),
+            shape = RoundedCornerShape(CORNER_FLOAT),
             colors = textFieldColors,
             leadingIcon = { Image(painterResource(R.drawable.ic_login_password), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )

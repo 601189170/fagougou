@@ -11,5 +11,5 @@ val Shapes = Shapes(
     large = RoundedCornerShape(0.dp)
 )
 
-const val CORNER_PERCENT = 12f
+const val CORNER_FLOAT = 12f
 

@@ -7,6 +7,8 @@ data class HTListRequest(
     val folder: String = "",
     @SerializedName("limit")
     val limit: String = "20",
+    @SerializedName("name")
+    val name: String = "",
 )
 
 data class HTList(

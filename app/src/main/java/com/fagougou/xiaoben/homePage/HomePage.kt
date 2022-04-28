@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ButtonElevation
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.ui.theme.CORNER_PERCENT
+import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.utils.MMKV.clearStack
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Time.timeText
@@ -31,7 +30,7 @@ fun HomeButton(
 ) {
     Button(
         modifier = modifier,
-        shape = RoundedCornerShape(CORNER_PERCENT),
+        shape = RoundedCornerShape(CORNER_FLOAT),
         contentPadding = PaddingValues(0.dp),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent),
