@@ -2,16 +2,20 @@ package com.fagougou.xiaoben
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.RoundedCorner
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,13 +29,18 @@ import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
 import com.fagougou.xiaoben.chatPage.ChatGuidePage
 import com.fagougou.xiaoben.chatPage.ChatPage
+import com.fagougou.xiaoben.chatPage.ChatPage.chatIoState
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.contractPage.ContractWebView
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
+import com.fagougou.xiaoben.repo.Client.globalLoading
 import com.fagougou.xiaoben.statisticPage.StatisticPage
+import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.fagougou.xiaoben.utils.MMKV.kv
+import com.fagougou.xiaoben.utils.Wechat.showQrCode
+import com.fagougou.xiaoben.utils.Wechat.wechatBitmap
 import com.fagougou.xiaoben.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
@@ -46,7 +55,11 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ) { Main() }
+                ) { 
+                    Main()
+                    WeChat()
+                    Loading()
+                }
             }
         }
         CoroutineScope(Dispatchers.Default).launch {
@@ -116,6 +129,53 @@ fun Main() {
 }
 
 @Composable
+fun Loading(){
+    if(globalLoading.value>0 && !chatIoState.value) Surface(color = Color.Transparent) {
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Surface(
+                modifier = Modifier
+                    .width(256.dp)
+                    .height(256.dp),
+                shape = RoundedCornerShape(CORNER_FLOAT),
+                color = Color(0x33000000)
+            ) {
+                CircularProgressIndicator(modifier = Modifier.padding(48.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun WeChat(){
+    if(showQrCode.value) Surface(color = Color(0x33000000)) {
+        Button(
+            onClick = { showQrCode.value = false },
+            content = {
+                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Surface(
+                        modifier = Modifier
+                            .width(272.dp)
+                            .height(320.dp),
+                        shape = RoundedCornerShape(CORNER_FLOAT),
+                        color = Color(0xFFFFFFFF)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Image(wechatBitmap().asImageBitmap(),null)
+                            Text("微信扫码咨询", fontSize = 28.sp, modifier = Modifier.padding(16.dp))
+                        }
+                    }
+                    Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)
+                }
+            },
+            colors = ButtonDefaults.buttonColors(Color.Transparent),
+            elevation = ButtonDefaults.elevation(0.dp)
+        )
+    }
+}
+
+@Composable
 fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
@@ -123,7 +183,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
                 .height(96.dp)
                 .padding(top = 6.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Button(
@@ -146,20 +206,30 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             )
-        }
-        Row(
-            modifier = Modifier
-                .height(96.dp)
-                .padding(top = 6.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
             Text(
                 title,
                 color = Color.White,
                 fontSize = 30.sp
             )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(painterResource(id = R.drawable.icon_vxzx), null)
+                Button(
+
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(topEnd = CORNER_FLOAT, bottomEnd = CORNER_FLOAT),
+
+                    elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
+                    content = {
+                        Text(
+                            modifier = Modifier.padding(vertical = 3.dp),
+                            text = "微信咨询",
+                            fontSize = 26.sp,
+                            color = Color.White
+                        )
+                    },
+                    onClick = { showQrCode.value = true }
+                )
+            }
         }
     }
 }

@@ -120,6 +120,7 @@ fun ContractGuidePage(navController: NavController) {
                         placeholder = {Text("输入关键词搜索",color = Color.Gray, fontSize = 32.sp)},
                         colors = textFieldColors,
                         shape = RoundedCornerShape(topStart = CORNER_FLOAT, bottomStart = CORNER_FLOAT),
+                        maxLines = 1
                     )
                     Button(
                         modifier = Modifier.width(160.dp),

@@ -12,4 +12,11 @@ data class User(
 data class UserResult(
     @SerializedName("_id")
     val id: String = "",
+    @SerializedName("channels")
+    val channels: List<UserChannel> = listOf(),
+)
+
+data class UserChannel(
+    @SerializedName("url")
+    val url: String = "",
 )

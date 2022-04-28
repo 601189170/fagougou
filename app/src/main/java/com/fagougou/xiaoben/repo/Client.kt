@@ -2,8 +2,10 @@ package com.fagougou.xiaoben.repo
 
 import android.net.ParseException
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
 import com.fagougou.xiaoben.CommonApplication.Companion.TAG
+import com.fagougou.xiaoben.repo.Client.globalLoading
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.google.gson.JsonParseException
@@ -23,7 +25,6 @@ import java.net.UnknownServiceException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
-
 class CommonInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
@@ -39,8 +40,10 @@ class CommonInterceptor : Interceptor {
 
 class ParametersIntercept : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+        globalLoading.value++
         val request: Request = chain.request()
         val response = chain.proceed(request)
+        globalLoading.value--
         if(response.code == 200 && response.body!=null){
             try{
                 var bodyString = response.body!!.string()
@@ -53,6 +56,8 @@ class ParametersIntercept : Interceptor {
                 return response.newBuilder().body(body).build()
             }catch (e:Exception){
                 Log.e(TAG,e.message ?: "")
+            }finally {
+                Log.d("OkHttpClient","Loading:${globalLoading.value}")
             }
         }
         return response
@@ -60,6 +65,7 @@ class ParametersIntercept : Interceptor {
 }
 
 object Client {
+    var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com"
     const val contractUrl = "https://law-system.fagougou-law.com"
     const val loginUrl = "https://a.fagougou.com"

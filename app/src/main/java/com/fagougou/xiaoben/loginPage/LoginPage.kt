@@ -25,6 +25,7 @@ import com.fagougou.xiaoben.loginPage.LoginPage.password
 import com.fagougou.xiaoben.loginPage.LoginPage.state
 import com.fagougou.xiaoben.loginPage.LoginPage.userName
 import com.fagougou.xiaoben.model.User
+import com.fagougou.xiaoben.model.UserResult
 import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.repo.Client.mainLogin
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
@@ -47,10 +48,18 @@ object LoginPage {
         state.value = "登录中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                mainLogin.login(User(userName.value, password.value)).execute().body()
+                val response = mainLogin.login(User(userName.value, password.value)).execute()
+                val body = response.body() ?: UserResult()
+                if (body.id ==""){
+                    toast("用户名或密码错误")
+                    return@launch
+                }
                 kv.encode("canLogin",true)
-                (activityContext as MainActivity).hideSystemUI()
-                withContext(Dispatchers.Main) { navController.navigate("home") }
+                kv.encode("wechatUrl",body.channels.firstOrNull()?.url ?: "null")
+                withContext(Dispatchers.Main) {
+                    (activityContext as MainActivity).hideSystemUI()
+                    navController.navigate("home")
+                }
             }catch (e:MalformedJsonException){
                 toast("用户名或密码错误")
             } catch (e:Exception){

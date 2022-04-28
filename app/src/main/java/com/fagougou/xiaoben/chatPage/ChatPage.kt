@@ -29,7 +29,7 @@ import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
 import com.fagougou.xiaoben.chatPage.ChatPage.history
-import com.fagougou.xiaoben.chatPage.ChatPage.ioState
+import com.fagougou.xiaoben.chatPage.ChatPage.chatIoState
 import com.fagougou.xiaoben.chatPage.ChatPage.listState
 import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
 import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
@@ -56,7 +56,7 @@ object ChatPage {
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     var tempQueryId = ""
-    val ioState = mutableStateOf(false)
+    val chatIoState = mutableStateOf(false)
     var wechatAddress = ""
 
     suspend fun addChatData(chatData: ChatData) {
@@ -136,15 +136,22 @@ object ChatPage {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ioState.value = true
-                val fixMessage = if (message.last()=='。')message.dropLast(1) else message
+                chatIoState.value = true
+                var fixMessage = if (message.last()=='。')message.dropLast(1) else message
+                fixMessage = fixMessage
+                    .replace("嗯，","")
+                    .replace("额，","")
+                    .replace("嗯","")
+                    .replace("额","")
+                    .replace("啊","")
+                    .replace(" ","")
                 val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
             } catch (e: Exception) {
                 Log.e(TAG,e.stackTraceToString())
             }finally {
-                ioState.value = false
+                chatIoState.value = false
             }
         }
     }
@@ -269,7 +276,7 @@ fun MessageRect(
                 color = textColor,
             )
             if (message.laws.isNotEmpty()) Divider(
-                modifier = Modifier.padding(horizontal = 18.dp),
+                modifier = Modifier.padding(vertical = 18.dp),
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
                 startIndent = 10.dp
@@ -410,7 +417,7 @@ fun ChatPage(navController: NavController) {
             state = listState,
         ) {
             items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
-            if(ioState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState) }
+            if(chatIoState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState) }
             item{
                 Row(modifier = Modifier
                     .fillMaxWidth()
