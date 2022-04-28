@@ -11,12 +11,12 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.substring
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -24,12 +24,12 @@ import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.contractPage.Contract.HTLists
 import com.fagougou.xiaoben.contractPage.Contract.categoryList
+import com.fagougou.xiaoben.contractPage.Contract.currentSelect
 import com.fagougou.xiaoben.contractPage.Contract.getHTLIST
 import com.fagougou.xiaoben.contractPage.Contract.getTemplate
 import com.fagougou.xiaoben.contractPage.ContractWebView.codeUrl
 import com.fagougou.xiaoben.model.ContractCategory
 import com.fagougou.xiaoben.model.DataB
-import com.fagougou.xiaoben.model.HTList
 import com.fagougou.xiaoben.model.HTListRequest
 import com.fagougou.xiaoben.repo.Client.contractService
 import kotlinx.coroutines.CoroutineScope
@@ -42,12 +42,14 @@ import java.net.URLEncoder
 object Contract{
     val categoryList = mutableStateListOf<ContractCategory>()
     val HTLists = mutableStateListOf<DataB>()
+    var currentSelect = mutableStateOf(0)
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
             val response = contractService.listCategory().execute()
             val body = response.body()
             if (body!=null) categoryList.addAll(body.categorys)
+            getHTLIST(categoryList.firstOrNull()?.id ?: return@launch)
         }
     }
 
@@ -106,22 +108,30 @@ fun ContractGuidePage(navController: NavController) {
                         .fillMaxSize(0.4f),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.padding(48.dp),
+                        modifier = Modifier.padding(vertical = 36.dp),
                         content = {
-                            items(categoryList){ category ->
-                                Button(
-                                    colors = ButtonDefaults.buttonColors(Color.Transparent),
-                                    elevation = ButtonDefaults.elevation(0.dp),
-                                    content = {
-                                        Text(
-                                            modifier = Modifier.padding(vertical = 8.dp),
-                                            text = category.name,
-                                            fontSize = 32.sp,
-                                            color = Color.Black
-                                        )
-                                    },
-                                    onClick = { getHTLIST(category.id) }
-                                )
+                            items(categoryList.size){ index ->
+                                Surface(
+                                    color = if(currentSelect.value==index)Color(0xFFBBCCEE) else Color(0xFFEEEEEE)
+                                ) {
+                                    Button(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                                        elevation = ButtonDefaults.elevation(0.dp),
+                                        content = {
+                                            Text(
+                                                modifier = Modifier.padding(vertical = 8.dp),
+                                                text = categoryList[index].name,
+                                                fontSize = 28.sp,
+                                                color = Color.Black
+                                            )
+                                        },
+                                        onClick = {
+                                            currentSelect.value = index
+                                            getHTLIST(categoryList[index].id)
+                                        }
+                                    )
+                                }
                             }
                         }
                     )
