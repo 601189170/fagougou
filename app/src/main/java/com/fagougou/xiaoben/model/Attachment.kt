@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class AttachmentResponse(
     @SerializedName("data")
-    val attachmentData:AttachmentData = AttachmentData()
+    val data:AttachmentData = AttachmentData()
 )
 
 data class AttachmentData(

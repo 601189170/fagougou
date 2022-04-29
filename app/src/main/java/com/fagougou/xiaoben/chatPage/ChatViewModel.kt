@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client
 import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
+import com.fagougou.xiaoben.webViewPage.WebViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -131,10 +133,14 @@ object ChatViewModel {
         }
     }
 
-    fun getComplex(attachmentId:String){
+    fun getComplex(attachmentId:String,navController: NavController){
         CoroutineScope(Dispatchers.IO).launch {
-            Client.apiService.attachment(attachmentId).execute()
-            history.add(Message(Speaker.COMPLEX,))
+            val response = Client.apiService.attachment(attachmentId).execute()
+            val body = response.body() ?: AttachmentResponse()
+            WebViewModel.title = body.data.title
+            WebViewModel.data = body.data.content.body.firstOrNull()?.content ?: ""
+            WebViewModel.urlAddress = ""
+            withContext(Dispatchers.Main){ navController.navigate("WebView") }
         }
     }
 }

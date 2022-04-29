@@ -1,5 +1,6 @@
 package com.fagougou.xiaoben.chatPage
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.xiaoben.CommonApplication.Companion.TAG
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatViewModel.botQueryIdMap
@@ -147,6 +149,7 @@ fun ComplexRect(
     index:Int,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
+    navController: NavController
 ) {
     Surface(
         shape = RoundedCornerShape(CORNER_FLOAT),
@@ -183,7 +186,7 @@ fun ComplexRect(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
-                    .clickable { getComplex(message.complex.attachmentId) },
+                    .clickable { getComplex(message.complex.attachmentId, navController) },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -194,7 +197,7 @@ fun ComplexRect(
 }
 
 @Composable
-fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: LazyListState) {
+fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: LazyListState,navController: NavController) {
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
@@ -286,7 +289,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { ComplexRect(message,index) }
+        ) { ComplexRect(message,index, navController = navController) }
     }
 }
 
@@ -317,8 +320,8 @@ fun ChatPage(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
-            items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
-            if(chatIoState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState) }
+            items(history.size) { index -> MessageItem(history[index],index, scope, listState, navController) }
+            if(chatIoState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState, navController) }
             item{
                 Row(
                     modifier = Modifier
@@ -339,6 +342,6 @@ fun ChatPage(navController: NavController) {
         }
     }
     BackHandler(enabled = true) {
-        
+        Log.d(TAG,"Back")
     }
 }
