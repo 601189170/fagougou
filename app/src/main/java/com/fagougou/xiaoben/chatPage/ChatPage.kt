@@ -1,9 +1,8 @@
 package com.fagougou.xiaoben.chatPage
 
-import android.util.Log
-import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,8 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,163 +18,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.TAG
-import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
-import com.fagougou.xiaoben.chatPage.ChatPage.history
-import com.fagougou.xiaoben.chatPage.ChatPage.chatIoState
-import com.fagougou.xiaoben.chatPage.ChatPage.listState
-import com.fagougou.xiaoben.chatPage.ChatPage.nextChat
-import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
-import com.fagougou.xiaoben.chatPage.ChatPage.startChat
+import com.fagougou.xiaoben.chatPage.ChatViewModel.botQueryIdMap
+import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
+import com.fagougou.xiaoben.chatPage.ChatViewModel.getComplex
+import com.fagougou.xiaoben.chatPage.ChatViewModel.history
+import com.fagougou.xiaoben.chatPage.ChatViewModel.listState
+import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
+import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
+import com.fagougou.xiaoben.chatPage.ChatViewModel.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
-import com.fagougou.xiaoben.model.*
-import com.fagougou.xiaoben.repo.Client.apiService
-import com.fagougou.xiaoben.repo.Client.handleException
+import com.fagougou.xiaoben.model.Message
+import com.fagougou.xiaoben.model.Speaker
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
-import com.fagougou.xiaoben.utils.IFly.UNWAKE_TEXT
-import com.fagougou.xiaoben.utils.MMKV
-import com.fagougou.xiaoben.utils.TTS
 import com.fagougou.xiaoben.utils.TTS.mTts
-import kotlinx.coroutines.*
-import org.libpag.PAGFile
-import org.libpag.PAGView
-
-object ChatPage {
-    val history = mutableStateListOf<Message>()
-    val selectedChatBot = mutableStateOf("小笨")
-    var sessionId = ""
-    var botQueryIdMap = mutableMapOf<String, String>()
-    val listState = LazyListState()
-    var tempQueryId = ""
-    val chatIoState = mutableStateOf(false)
-    var wechatAddress = ""
-
-    suspend fun addChatData(chatData: ChatData) {
-        for (say in chatData.botSays) {
-            val content = say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
-            when (say.type) {
-                "text" -> {
-                    history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
-                    TTS.speak(content)
-                }
-                "hyperlink" -> {
-                    history.add(
-                        Message(
-                            Speaker.ROBOT,
-                            content = say.content.description + say.content.url
-                        )
-                    )
-                    TTS.speak(say.content.description)
-                }
-                "complex" -> {
-                    history.add(Message(Speaker.COMPLEX, content = content, complex = say.content))
-                    TTS.speak(content)
-                    getComplex(say.content.attachmentId)
-                }
-            }
-            if (say.recommends.isNotEmpty()) history.add(
-                Message(
-                    Speaker.RECOMMEND,
-                    recommends = say.recommends,
-                    isExpend = true
-                )
-            )
-            if (say.content.queryRecordItemId != "") {
-                tempQueryId = say.content.queryRecordItemId
-                if (say.content.title == "相关问题" || say.isAnswered) {
-                    getRelate(say.content.queryRecordItemId)
-                }
-            }
-        }
-        if (chatData.option.items.isNotEmpty()) history.add(
-            Message(
-                Speaker.OPTIONS,
-                option = chatData.option,
-                isExpend = true
-            )
-        )
-        withContext(Dispatchers.Main) {
-            listState.scrollToItem(history.lastIndex)
-        }
-    }
-
-    fun startChat() {
-        TTS.stopSpeaking()
-        history.clear()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val tokenResponse = apiService.auth(AuthRequest()).execute()
-                val tokenBody = tokenResponse.body() ?: Auth()
-                MMKV.kv.encode("token", tokenBody.data.token)
-                val response = apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
-                val body = response.body() ?: return@launch
-                sessionId = body.chatData.queryId
-                addChatData(body.chatData)
-            }catch (e:Exception){
-                handleException(e)
-            }
-        }
-    }
-
-    fun nextChat(message: String) {
-        TTS.stopSpeaking()
-        if(message.isBlank())return
-        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
-        history.add(Message(Speaker.USER, message))
-        CoroutineScope(Dispatchers.Main).launch {
-            listState.scrollToItem(history.lastIndex)
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                chatIoState.value = true
-                var fixMessage = if (message.last()=='。')message.dropLast(1) else message
-                fixMessage = fixMessage
-                    .replace("嗯，","")
-                    .replace("额，","")
-                    .replace("嗯","")
-                    .replace("额","")
-                    .replace("啊","")
-                    .replace(" ","")
-                val response = apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
-                val body = response.body() ?: return@launch
-                addChatData(body.chatData)
-            } catch (e: Exception) {
-                Log.e(TAG,e.stackTraceToString())
-            }finally {
-                chatIoState.value = false
-            }
-        }
-    }
-
-    fun getRelate(queryRecordItemId: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiService.relateQuestion(queryRecordItemId).execute()
-            val body = response.body() ?: return@launch
-            for (say in body.data.says) history.add(
-                Message(
-                    Speaker.RECOMMEND,
-                    recommends = say.content.questions
-                )
-            )
-            withContext(Dispatchers.Main) {
-                listState.scrollToItem(history.lastIndex)
-            }
-        }
-    }
-
-    fun getComplex(attachmentId:String){
-        CoroutineScope(Dispatchers.IO).launch {
-            apiService.attachment(attachmentId).execute()
-        }
-    }
-}
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun BotMenu() {
@@ -234,25 +93,21 @@ fun LawExpend(message: Message,index: Int) {
                 color = Color(0xFF666666),
                 fontSize = 22.sp
             )
-        } else Button(
-            onClick = { history[index] = message.copy(isExpend = true) },
-            content = {
-                Row {
-                    Text(
-                        modifier = Modifier.padding(end = 24.dp),
-                        text = "点击查看法律依据",
-                        fontSize = 28.sp,
-                        color = Dodgerblue
-                    )
-                    Image(
-                        painterResource(R.drawable.ic_expend),
-                        null
-                    )
-                }
-            },
-            colors = ButtonDefaults.buttonColors(Color.Transparent),
-            elevation = ButtonDefaults.elevation(0.dp)
-        )
+        } else Row(
+            modifier = Modifier
+                .clickable { history[index] = message.copy(isExpend = true) }
+        ) {
+            Text(
+                modifier = Modifier.padding(end = 24.dp),
+                text = "点击查看法律依据",
+                fontSize = 28.sp,
+                color = Dodgerblue
+            )
+            Image(
+                painterResource(R.drawable.ic_expend),
+                null
+            )
+        }
     }
 }
 
@@ -286,6 +141,57 @@ fun MessageRect(
     }
 }
 
+@Composable
+fun ComplexRect(
+    message: Message,
+    index:Int,
+    backgroundColor: Color = Color.White,
+    textColor: Color = Color.Black,
+) {
+    Surface(
+        shape = RoundedCornerShape(CORNER_FLOAT),
+        color = backgroundColor,
+    ) {
+        Column{
+            Surface( color = Dodgerblue ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        message.complex.title,
+                        fontSize = 28.sp,
+                        color = Color.White,
+                    )
+                }
+            }
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = message.content+message.complex.explanation,
+                fontSize = 28.sp,
+                color = textColor,
+            )
+            Divider(
+                color = Color(0xFFCCCCCC),
+                thickness = 2.dp
+            )
+            if (message.laws.isNotEmpty()) LawExpend(message,index)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .clickable { getComplex(message.complex.attachmentId) },
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("点击查看更多",fontSize = 21.sp,)
+            }
+        }
+    }
+}
 
 @Composable
 fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: LazyListState) {
@@ -332,24 +238,18 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
                             elevation = ButtonDefaults.elevation(0.dp)
                         )
-                    } else Button(
-                        onClick = {
-                            history[index] = message.copy(isExpend = true)
-                        },
-                        content = {
-                            Row {
-                                Image(painterResource(R.drawable.ic_relate_question), null)
-                                Text(
-                                    modifier = Modifier.padding(start = 24.dp),
-                                    text = "点击查看与您情况相关的问题",
-                                    fontSize = 28.sp,
-                                    color = Dodgerblue
-                                )
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-                        elevation = ButtonDefaults.elevation(0.dp)
-                    )
+                    } else Row(
+                        modifier = Modifier
+                            .clickable { history[index] = message.copy(isExpend = true) }
+                    ) {
+                        Image(painterResource(R.drawable.ic_relate_question), null)
+                        Text(
+                            modifier = Modifier.padding(start = 24.dp),
+                            text = "点击查看与您情况相关的问题",
+                            fontSize = 28.sp,
+                            color = Dodgerblue
+                        )
+                    }
                 }
             }
         }
@@ -386,7 +286,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { MessageRect(message,index) }
+        ) { ComplexRect(message,index) }
     }
 }
 
@@ -403,6 +303,7 @@ fun ChatPage(navController: NavController) {
             navController,
             onBack = {
                 IFly.isEnable = false
+                IFly.wakeMode()
                 mTts.stopSpeaking()
                 history.clear()
             }
@@ -419,9 +320,11 @@ fun ChatPage(navController: NavController) {
             items(history.size) { index -> MessageItem(history[index],index, scope, listState) }
             if(chatIoState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState) }
             item{
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)){}
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                ){}
             }
         }
         Column(
@@ -435,68 +338,7 @@ fun ChatPage(navController: NavController) {
             PAG()
         }
     }
-}
-
-@Composable
-fun PAG(){
-    Surface(color = Color.Transparent) {
-        AndroidView(
-            modifier = Modifier
-                .height(128.dp)
-                .width(512.dp),
-            factory = {
-                PAGView(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    val pagFile = PAGFile.Load(context.assets, "chat_unwaked.pag")
-                    composition = pagFile
-                    setRepeatCount(0)
-                    play()
-                    val it = this
-                    CoroutineScope(Dispatchers.Default).launch {
-                        var alpha = 0
-                        while (true) {
-                            delay(50)
-                            when (IFly.recognizeResult.value) {
-                                UNWAKE_TEXT -> if(alpha<100)alpha+=10
-                                else -> if (alpha>1)alpha-=10
-                            }
-                            it.alpha = alpha.toFloat() / 100f
-                        }
-                    }
-                }
-            }
-        )
-        AndroidView(
-            modifier = Modifier
-                .height(128.dp)
-                .width(512.dp),
-            factory = {
-                PAGView(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    val pagFile = PAGFile.Load(context.assets, "chat_waked.pag")
-                    composition = pagFile
-                    setRepeatCount(0)
-                    play()
-                    val it = this
-                    CoroutineScope(Dispatchers.Default).launch {
-                        var alpha = 0
-                        while (true) {
-                            delay(50)
-                            when (IFly.recognizeResult.value) {
-                                UNWAKE_TEXT -> if(alpha>1)alpha-=10
-                                else -> if (alpha<100)alpha+=10
-                            }
-                            it.alpha = alpha.toFloat() / 100f
-                        }
-                    }
-                }
-            }
-        )
+    BackHandler(enabled = true) {
+        
     }
 }

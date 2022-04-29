@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
-import com.fagougou.xiaoben.chatPage.ChatPage.botQueryIdMap
+import com.fagougou.xiaoben.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.xiaoben.model.Auth
 import com.fagougou.xiaoben.model.AuthRequest
 import com.fagougou.xiaoben.model.BotList

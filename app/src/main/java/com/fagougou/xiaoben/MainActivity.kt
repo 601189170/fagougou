@@ -29,7 +29,7 @@ import com.fagougou.xiaoben.aboutUsPage.AboutUs
 import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
 import com.fagougou.xiaoben.chatPage.ChatGuidePage
 import com.fagougou.xiaoben.chatPage.ChatPage
-import com.fagougou.xiaoben.chatPage.ChatPage.chatIoState
+import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.contractPage.ContractWebView
 import com.fagougou.xiaoben.homePage.HomePage

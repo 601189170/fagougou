@@ -21,8 +21,6 @@ data class AttachmentContent(
     val chart:AttachmentChart = AttachmentChart(),
     @SerializedName("cases")
     val cases:List<AttachmentCases> = listOf(),
-    @SerializedName("laws")
-    val laws:List<AttachmentLaws> = listOf(),
     @SerializedName("body")
     val body:List<AttachmentBody> = listOf()
 )

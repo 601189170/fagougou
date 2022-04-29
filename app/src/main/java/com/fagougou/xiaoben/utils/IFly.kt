@@ -4,16 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
-import com.fagougou.xiaoben.chatPage.ChatPage
-import com.fagougou.xiaoben.chatPage.ChatPage.selectedChatBot
+import com.fagougou.xiaoben.chatPage.ChatViewModel
+import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
 import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -45,7 +41,6 @@ object IFly {
 
         override fun onEndOfSpeech() {
             volumeState.value = ""
-            wakeMode()
         }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
@@ -75,9 +70,9 @@ object IFly {
             recognizeResult.value = resultBuilder.toString()
             if(isLast && selectedChatBot.value!="小笨") {
                 val result = resultBuilder.toString()
-                ChatPage.nextChat(result)
+                ChatViewModel.nextChat(result)
                 mIatResults.clear()
-                recognizeResult.value = UNWAKE_TEXT
+                wakeMode()
             }
             resultBuilder.clear()
         }
@@ -135,6 +130,7 @@ object IFly {
 
     fun wakeMode(){
         mIat.stopListening()
+        recognizeResult.value = UNWAKE_TEXT
         mIvw.startListening(mWakeuperListener)
     }
 

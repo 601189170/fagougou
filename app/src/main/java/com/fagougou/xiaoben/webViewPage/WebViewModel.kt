@@ -13,18 +13,28 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
 import com.fagougou.xiaoben.Headder
-import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewTitle
-import com.fagougou.xiaoben.webViewPage.WebViewModel.webViewUrl
+import com.fagougou.xiaoben.webViewPage.WebViewModel.data
+import com.fagougou.xiaoben.webViewPage.WebViewModel.title
+import com.fagougou.xiaoben.webViewPage.WebViewModel.urlAddress
 
 object WebViewModel{
-    var webViewTitle = ""
-    var webViewUrl = ""
+    var title = ""
+    var urlAddress = ""
+    var data = ""
 }
 
 @Composable
 fun WebViewPage(navController: NavController) {
     Column {
-        Headder(webViewTitle, navController)
+        Headder(
+            title,
+            navController,
+            onBack = {
+                title = ""
+                urlAddress = ""
+                data = ""
+            }
+        )
         AndroidView(
             modifier = Modifier.fillMaxHeight().fillMaxWidth(),
             factory = {
@@ -33,7 +43,8 @@ fun WebViewPage(navController: NavController) {
                     setInitialScale(144)
                     settings.javaScriptEnabled = true
                     webChromeClient = WebChromeClient()
-                    loadUrl(webViewUrl)
+                    if(data!="")loadData(data,"text/html", "utf-8")
+                    else if(urlAddress!="")loadUrl(urlAddress)
                 }
             }
         )

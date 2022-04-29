@@ -54,6 +54,8 @@ object LoginPage {
                     toast("用户名或密码错误")
                     return@launch
                 }
+                userName.value = ""
+                password.value = ""
                 kv.encode("canLogin",true)
                 kv.encode("wechatUrl",body.channels.firstOrNull()?.url ?: "null")
                 withContext(Dispatchers.Main) {
