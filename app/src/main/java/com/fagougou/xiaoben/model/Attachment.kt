@@ -54,6 +54,8 @@ data class AttachmentCases(
     val name:String = "",
     @SerializedName("caseNumber")
     val number:String = "",
+    @SerializedName("serial")
+    val serial:String = ""
 )
 
 data class AttachmentLaws(

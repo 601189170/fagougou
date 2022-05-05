@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,18 +23,25 @@ import com.fagougou.xiaoben.chatPage.Complex.caseList
 import com.fagougou.xiaoben.chatPage.Complex.selectPage
 import com.fagougou.xiaoben.model.AttachmentBody
 import com.fagougou.xiaoben.model.AttachmentCases
+import com.fagougou.xiaoben.model.CaseResponse
+import com.fagougou.xiaoben.repo.ApiService
+import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.webViewPage.WebView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object Complex{
     val selectPage = mutableStateOf("body")
-    var bodyList = mutableListOf<AttachmentBody>()
-    val caseList = mutableListOf<AttachmentCases>()
+    var bodyList = mutableStateListOf<AttachmentBody>()
+    val caseList = mutableStateListOf<AttachmentCases>()
 }
 
 @Composable
-fun Case(case: AttachmentCases){
+fun CaseButton(case: AttachmentCases,navController: NavController){
     Button(
         modifier = Modifier.padding(vertical = 8.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -45,8 +53,8 @@ fun Case(case: AttachmentCases){
                     .border(2.dp, Color(0x33000000), RoundedCornerShape(CORNER_FLOAT))
             ){
                 Row(
-                    modifier = Modifier.fillMaxWidth(0.75f),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.fillMaxWidth(0.97f),
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
                         modifier = Modifier.padding(16.dp),
@@ -58,7 +66,9 @@ fun Case(case: AttachmentCases){
                 }
                 Divider()
                 Row(
-                    modifier = Modifier.padding(12.dp).fillMaxWidth(0.75f),
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .fillMaxWidth(0.94f),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -77,7 +87,16 @@ fun Case(case: AttachmentCases){
                 }
             }
         },
-        onClick = {  }
+        onClick = {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = apiService.case(case.serial).execute()
+                val body = response.body() ?: CaseResponse()
+                Case.data = body.data
+                withContext(Dispatchers.Main){
+                    navController.navigate("case")
+                }
+            }
+        }
     )
 }
 
@@ -108,10 +127,9 @@ fun ComplexPage(navController: NavController) {
             Column(modifier = Modifier.verticalScroll(ScrollState(0))) {
                 when (selectPage.value) {
                     "body" -> for(body in bodyList)if(body.content != "")WebView("", body.content)
-                    "case" -> for(case in caseList) Case(case)
+                    "case" -> for(case in caseList) CaseButton(case,navController)
                 }
             }
         }
     }
 }
-

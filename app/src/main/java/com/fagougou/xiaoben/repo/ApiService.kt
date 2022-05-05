@@ -25,4 +25,7 @@ interface ApiService {
 
     @GET("/v1/attachment/{attachmentId}")
     fun attachment(@Path("attachmentId")attachmentId:String): Call<AttachmentResponse>
+
+    @GET("/v1/case-origin/{serial}")
+    fun case(@Path("serial")serial:String): Call<CaseResponse>
 }
