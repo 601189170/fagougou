@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 enum class Speaker { ROBOT, USER, RECOMMEND, OPTIONS, COMPLEX }
 
 data class Message(
-    val speaker: Speaker,
+    val speaker: Speaker = Speaker.USER,
     val content:String = "",
     val recommends: List<String> = listOf(),
     val laws: List<Law> = listOf(),

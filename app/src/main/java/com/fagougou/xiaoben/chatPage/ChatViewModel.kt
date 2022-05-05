@@ -22,6 +22,8 @@ object ChatViewModel {
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     val chatIoState = mutableStateOf(false)
+    var needAddressNow = mutableStateOf(false)
+    var currentProvince = mutableStateOf("")
 
     suspend fun addChatData(chatData: ChatData) {
         val defRegex = Regex("#def::.*?#")
@@ -59,6 +61,13 @@ object ChatViewModel {
             }
         }
         if (chatData.option.items.isNotEmpty()) history.add(
+            Message(
+                Speaker.OPTIONS,
+                option = chatData.option,
+                isExpend = true
+            )
+        )
+        if (chatData.option.type=="address-with-search") history.add(
             Message(
                 Speaker.OPTIONS,
                 option = chatData.option,

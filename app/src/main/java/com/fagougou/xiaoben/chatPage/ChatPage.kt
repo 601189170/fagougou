@@ -25,13 +25,16 @@ import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
+import com.fagougou.xiaoben.chatPage.ChatViewModel.currentProvince
 import com.fagougou.xiaoben.chatPage.ChatViewModel.getComplex
 import com.fagougou.xiaoben.chatPage.ChatViewModel.history
 import com.fagougou.xiaoben.chatPage.ChatViewModel.listState
+import com.fagougou.xiaoben.chatPage.ChatViewModel.needAddressNow
 import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatViewModel.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
+import com.fagougou.xiaoben.model.CityMap
 import com.fagougou.xiaoben.model.Message
 import com.fagougou.xiaoben.model.Speaker
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
@@ -288,7 +291,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                     }
                 }
                 "address-with-search" -> {
-
+                    needAddressNow.value = true
                 }
             }
         }
@@ -336,7 +339,26 @@ fun ChatPage(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
-                ){}
+                ){
+                    if(needAddressNow.value){
+                        if(currentProvince.value == "") for (province in CityMap.provinceList.keys)
+                            Button(
+                                onClick = {
+                                    currentProvince.value = province
+                                },
+                                content = {Text(province)}
+                            )
+                        else for(city in CityMap.provinceList[currentProvince.value] ?: listOf())
+                            Button(
+                                onClick = {
+                                    nextChat(currentProvince.value+"-$city")
+                                    currentProvince.value = ""
+                                    needAddressNow.value = false
+                                },
+                                content = {Text(city)}
+                            )
+                    }
+                }
             }
             item{
                 Text(
