@@ -96,18 +96,17 @@ fun LawExpend(message: Message,index: Int) {
             )
         } else Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
                 .clickable { history[index] = message.copy(isExpend = true) }
         ) {
             Text(
+                modifier = Modifier.padding(end = 12.dp),
                 text = "点击查看法律依据",
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 color = Dodgerblue
             )
-            Image(
-                painterResource(R.drawable.ic_expend),
-                null
-            )
+            Image( painterResource(R.drawable.ic_expend), null )
         }
     }
 }
@@ -181,12 +180,16 @@ fun ComplexRect(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .padding(16.dp)
                     .clickable { getComplex(message.complex.attachmentId, navController) },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("点击查看更多",fontSize = 21.sp,)
+                Text(
+                    modifier = Modifier.padding(end = 12.dp),
+                    text="点击查看更多",
+                    fontSize = 24.sp,)
+                Image( painterResource(R.drawable.ic_expend), null )
             }
         }
     }
@@ -211,7 +214,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
         ) { MessageRect(message,index, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
-                .padding(vertical = 12.dp),
+                .padding(vertical = 18.dp),
         ) {
             Surface(
                 shape = RoundedCornerShape(CORNER_FLOAT),
@@ -252,27 +255,37 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 }
             }
         }
-        Speaker.OPTIONS -> Row(
+        Speaker.OPTIONS -> Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(vertical = 18.dp)
         ) {
             when (message.option.type) {
                 "radio" -> {
-                    for (item in message.option.items) Button(
-                        onClick = { nextChat(item) },
-                        content = {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = item,
-                                fontSize = 30.sp,
-                                color = Color.White
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(Dodgerblue)
-                    )
+                    val lastIndex = message.option.items.lastIndex
+                    for (y in 0..lastIndex step 4) Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        for (x in 0..3){
+                            val i = y+x
+                            if(i<=lastIndex){
+                                val item = message.option.items[i]
+                                Button(
+                                    modifier = Modifier.height(80.dp).width(225.dp),
+                                    onClick = { nextChat(item) },
+                                    content = {
+                                        Text(
+                                            text = item,
+                                            fontSize = 24.sp,
+                                            color = Color.White
+                                        )
+                                    },
+                                    colors = ButtonDefaults.buttonColors(Dodgerblue)
+                                )
+                            }
+                        }
+                    }
                 }
                 "address-with-search" -> {
 

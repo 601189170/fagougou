@@ -104,20 +104,20 @@ fun CaseButton(case: AttachmentCases,navController: NavController){
 fun ComplexPage(navController: NavController) {
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column {
-            Headder("详细分析", navController)
+            Headder("详细分析", navController, onBack = {selectPage.value = "body"})
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(
+                if(bodyList.isNotEmpty())Button(
                     onClick = { selectPage.value = "body" },
                     content = { Text("法律建议", color = Dodgerblue) },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = BorderStroke(2.dp, Dodgerblue)
                 )
-                Button(
+                if(caseList.isNotEmpty())Button(
                     onClick = { selectPage.value = "case" },
                     content = { Text("判决案例", color = Dodgerblue) },
                     colors = ButtonDefaults.buttonColors(Color.White),

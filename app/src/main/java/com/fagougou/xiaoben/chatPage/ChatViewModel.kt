@@ -24,9 +24,10 @@ object ChatViewModel {
     val chatIoState = mutableStateOf(false)
 
     suspend fun addChatData(chatData: ChatData) {
+        val defRegex = Regex("#def::.*?#")
+
         for (say in chatData.botSays) {
-            val content =
-                say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
+            val content =say.content.body.replace(defRegex, "")
             when (say.type) {
                 "text" -> {
                     history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
