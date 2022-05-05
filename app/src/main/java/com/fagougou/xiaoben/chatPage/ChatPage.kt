@@ -74,7 +74,6 @@ fun BotMenu() {
             )
         }
     }
-    startChat()
 }
 
 @Composable
@@ -86,7 +85,7 @@ fun LawExpend(message: Message,index: Int) {
         if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
             Text(
                 (i + 1).toString() + "." + law.name + law.position + ":",
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(16.dp),
                 fontSize = 25.sp
             )
             Text(
@@ -96,11 +95,11 @@ fun LawExpend(message: Message,index: Int) {
                 fontSize = 22.sp
             )
         } else Row(
-            modifier = Modifier
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
                 .clickable { history[index] = message.copy(isExpend = true) }
         ) {
             Text(
-                modifier = Modifier.padding(end = 24.dp),
                 text = "点击查看法律依据",
                 fontSize = 28.sp,
                 color = Dodgerblue
@@ -124,19 +123,16 @@ fun MessageRect(
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column{
             Text(
-                message.content+message.complex.explanation,
+                modifier = Modifier.padding(16.dp),
+                text = message.content+message.complex.explanation,
                 fontSize = 28.sp,
                 color = textColor,
             )
             if (message.laws.isNotEmpty()) Divider(
-                modifier = Modifier.padding(vertical = 18.dp),
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
-                startIndent = 10.dp
             )
             if (message.laws.isNotEmpty()) LawExpend(message,index)
         }
@@ -328,6 +324,18 @@ fun ChatPage(navController: NavController) {
                         .fillMaxWidth()
                         .height(300.dp)
                 ){}
+            }
+            item{
+                Text(
+                    modifier = Modifier.clickable { nextChat("预测起诉离婚的成功率和查看相关案例") },
+                    text = "预测离婚"
+                )
+            }
+            item{
+                Text(
+                    modifier = Modifier.clickable { nextChat("北京市") },
+                    text = "北京市"
+                )
             }
         }
         Column(

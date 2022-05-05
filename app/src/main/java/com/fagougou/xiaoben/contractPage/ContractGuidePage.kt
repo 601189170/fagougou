@@ -237,7 +237,6 @@ fun ContractGuidePage(navController: NavController) {
             Surface(color = Color(0xFFFFFFFF)) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxHeight()
                         .fillMaxSize()
                         .padding(48.dp),
                     content = {

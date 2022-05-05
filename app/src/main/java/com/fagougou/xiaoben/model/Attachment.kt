@@ -49,11 +49,11 @@ data class AttachmentCases(
     @SerializedName("judgmentDate")
     val date:String = "",
     @SerializedName("courtName")
-    val courtName:String = "",
+    val court:String = "",
     @SerializedName("caseName")
-    val caseName:String = "",
+    val name:String = "",
     @SerializedName("caseNumber")
-    val caseNumber:String = "",
+    val number:String = "",
 )
 
 data class AttachmentLaws(

@@ -65,6 +65,7 @@ fun ChatGuidePage(navController: NavController) {
                             onClick = {
                                 IFly.isEnable = true
                                 selectedChatBot.value = bot.first
+                                ChatViewModel.startChat()
                                 navController.navigate("chat")
                             },
                             contentId = bot.second

@@ -72,9 +72,6 @@ data class BotSaysContent(
     @SerializedName("attachmentId")
     val attachmentId:String = "",
 
-    @SerializedName("attachmentType")
-    val attachmentType:String = "",
-
     @SerializedName("explanation")
     val explanation:String = "",
 )

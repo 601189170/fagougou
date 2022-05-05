@@ -30,6 +30,7 @@ import com.fagougou.xiaoben.calculatorPage.CalculatorGuidePage
 import com.fagougou.xiaoben.chatPage.ChatGuidePage
 import com.fagougou.xiaoben.chatPage.ChatPage
 import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
+import com.fagougou.xiaoben.chatPage.ComplexPage
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.contractPage.ContractWebView
 import com.fagougou.xiaoben.homePage.HomePage
@@ -119,6 +120,7 @@ fun Main() {
             composable("contract") { ContractGuidePage(navController) }
             composable("guide") { ChatGuidePage(navController) }
             composable("chat") { ChatPage(navController) }
+            composable("complex") { ComplexPage(navController) }
             composable("statistic") { StatisticPage(navController) }
             composable("calculator") { CalculatorGuidePage(navController) }
             composable("contractWebView") { ContractWebView(navController) }

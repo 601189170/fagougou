@@ -10,7 +10,6 @@ import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client
 import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
-import com.fagougou.xiaoben.webViewPage.WebViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +25,8 @@ object ChatViewModel {
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {
-            val content = say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
+            val content =
+                say.content.body.replace("question::", "").replace("def::", "").replace("#", "")
             when (say.type) {
                 "text" -> {
                     history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
@@ -77,11 +77,13 @@ object ChatViewModel {
                 val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
                 val tokenBody = tokenResponse.body() ?: Auth()
                 MMKV.kv.encode("token", tokenBody.data.token)
-                val response = Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+                val response =
+                    Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "")
+                        .execute()
                 val body = response.body() ?: return@launch
                 sessionId = body.chatData.queryId
                 addChatData(body.chatData)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Client.handleException(e)
             }
         }
@@ -89,7 +91,7 @@ object ChatViewModel {
 
     fun nextChat(message: String) {
         TTS.stopSpeaking()
-        if(message.isBlank())return
+        if (message.isBlank()) return
         if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
@@ -98,19 +100,20 @@ object ChatViewModel {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 chatIoState.value = true
-                var fixMessage = if (message.last()=='。')message.dropLast(1) else message
+                var fixMessage = if (message.last() == '。') message.dropLast(1) else message
                 fixMessage = fixMessage
-                    .replace("嗯，","")
-                    .replace("额，","")
-                    .replace("嗯","")
-                    .replace("额","")
-                    .replace("啊","")
-                    .replace(" ","")
-                val response = Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
+                    .replace("嗯，", "")
+                    .replace("额，", "")
+                    .replace("嗯", "")
+                    .replace("额", "")
+                    .replace("啊", "")
+                    .replace(" ", "")
+                val response =
+                    Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
                 val body = response.body() ?: return@launch
                 addChatData(body.chatData)
             } catch (e: Exception) {
-                Log.e(CommonApplication.TAG,e.stackTraceToString())
+                Log.e(CommonApplication.TAG, e.stackTraceToString())
             } finally {
                 chatIoState.value = false
             }
@@ -133,14 +136,16 @@ object ChatViewModel {
         }
     }
 
-    fun getComplex(attachmentId:String,navController: NavController){
+    fun getComplex(attachmentId: String, navController: NavController) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = Client.apiService.attachment(attachmentId).execute()
-            val body = response.body() ?: AttachmentResponse()
-            WebViewModel.title = body.data.title
-            WebViewModel.data = body.data.content.body.firstOrNull()?.content ?: ""
-            WebViewModel.urlAddress = ""
-            withContext(Dispatchers.Main){ navController.navigate("WebView") }
+            val outerBody = response.body() ?: AttachmentResponse()
+            val content = outerBody.data.content
+            Complex.bodyList.clear()
+            Complex.bodyList.addAll(content.body)
+            Complex.caseList.clear()
+            Complex.caseList.addAll(content.cases)
+            withContext(Dispatchers.Main) { navController.navigate("complex") }
         }
     }
 }

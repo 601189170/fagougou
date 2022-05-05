@@ -35,18 +35,23 @@ fun WebViewPage(navController: NavController) {
                 data = ""
             }
         )
-        AndroidView(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth(),
-            factory = {
-                WebView(activityContext).apply {
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    setInitialScale(144)
-                    settings.javaScriptEnabled = true
-                    webChromeClient = WebChromeClient()
-                    if(data!="")loadData(data,"text/html", "utf-8")
-                    else if(urlAddress!="")loadUrl(urlAddress)
-                }
-            }
-        )
+        WebView(urlAddress,data)
     }
+}
+
+@Composable
+fun WebView(urlAddress:String,data:String){
+    AndroidView(
+        modifier = Modifier.fillMaxHeight().fillMaxWidth(),
+        factory = {
+            WebView(activityContext).apply {
+                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                setInitialScale(144)
+                settings.javaScriptEnabled = true
+                webChromeClient = WebChromeClient()
+                if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")
+                else if(urlAddress!="")loadUrl(urlAddress)
+            }
+        }
+    )
 }
