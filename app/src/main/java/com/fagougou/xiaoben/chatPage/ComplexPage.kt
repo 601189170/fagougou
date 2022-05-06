@@ -115,13 +115,13 @@ fun ComplexPage(navController: NavController) {
                     onClick = { selectPage.value = "body" },
                     content = { Text("法律建议", color = if(selectPage.value == "body")Dodgerblue else Color.Gray) },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Dodgerblue)
+                    border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)
                 )
                 if(caseList.isNotEmpty())Button(
                     onClick = { selectPage.value = "case" },
                     content = { Text("判决案例", color = if(selectPage.value == "case")Dodgerblue else Color.Gray) },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Dodgerblue)
+                    border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)
                 )
             }
             Column(modifier = Modifier.verticalScroll(ScrollState(0))) {

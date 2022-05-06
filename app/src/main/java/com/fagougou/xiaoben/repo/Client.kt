@@ -1,11 +1,10 @@
 package com.fagougou.xiaoben.repo
 
 import android.net.ParseException
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
-import com.fagougou.xiaoben.CommonApplication.Companion.TAG
 import com.fagougou.xiaoben.repo.Client.globalLoading
+import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.google.gson.JsonParseException
@@ -58,9 +57,7 @@ class ParametersIntercept : Interceptor {
                 val body = ResponseBody.create(contentType,bodyString)
                 return response.newBuilder().body(body).build()
             }catch (e:Exception){
-                Log.e(TAG,e.message ?: "")
-            }finally {
-                Log.d("OkHttpClient","Loading:${globalLoading.value}")
+                handleException(e)
             }
         }
         return response
@@ -78,10 +75,10 @@ object Client {
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(ParametersIntercept())
             .addInterceptor(CommonInterceptor())
-            .callTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .callTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
             .build()
     }
 
@@ -113,6 +110,7 @@ object Client {
     }
 
     fun handleException(t: Throwable) {
+        globalLoading.value--
         val ex: Exception
         when (t) {
             is HttpException -> ex = Exception("服务器错误")

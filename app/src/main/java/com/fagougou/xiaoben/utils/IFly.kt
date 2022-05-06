@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.xiaoben.CommonApplication.Companion.context
-import com.fagougou.xiaoben.chatPage.ChatViewModel
+import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
 import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -70,7 +73,7 @@ object IFly {
             recognizeResult.value = resultBuilder.toString()
             if(isLast && selectedChatBot.value!="小笨") {
                 val result = resultBuilder.toString()
-                ChatViewModel.nextChat(result)
+                CoroutineScope(Dispatchers.IO).launch { nextChat(result) }
                 mIatResults.clear()
                 wakeMode()
             }

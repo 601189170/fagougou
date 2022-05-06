@@ -1,21 +1,20 @@
 package com.fagougou.xiaoben.chatPage
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client
+import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.utils.InlineRecommend.getInline
+import com.fagougou.xiaoben.utils.InlineRecommend.removeInline
 import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.fagougou.xiaoben.utils.InlineRecommend.removeInline
 
 object ChatViewModel {
     val history = mutableStateListOf<Message>()
@@ -32,7 +31,14 @@ object ChatViewModel {
             val inlineRecommend = say.content.body.getInline()
             when (say.type) {
                 "text" -> {
-                    history.add(Message(Speaker.ROBOT, inlineRecommend = inlineRecommend, content = content, laws = say.content.laws))
+                    history.add(
+                        Message(
+                            Speaker.ROBOT,
+                            inlineRecommend = inlineRecommend,
+                            content = content,
+                            laws = say.content.laws
+                        )
+                    )
                     TTS.speak(content)
                 }
                 "hyperlink" -> {
@@ -67,7 +73,7 @@ object ChatViewModel {
                 isExpend = true
             )
         )
-        if (chatData.option.type=="address-with-search") history.add(
+        if (chatData.option.type == "address-with-search") history.add(
             Message(
                 Speaker.OPTIONS,
                 option = chatData.option,
@@ -79,70 +85,62 @@ object ChatViewModel {
         }
     }
 
-    fun startChat() {
+    suspend fun startChat() {
         TTS.stopSpeaking()
         history.clear()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
-                val tokenBody = tokenResponse.body() ?: Auth()
-                MMKV.kv.encode("token", tokenBody.data.token)
-                val response =
-                    Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "")
-                        .execute()
-                val body = response.body() ?: return@launch
-                sessionId = body.chatData.queryId
-                addChatData(body.chatData)
-            } catch (e: Exception) {
-                Client.handleException(e)
-            }
+        try {
+            val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
+            val tokenBody = tokenResponse.body() ?: Auth()
+            MMKV.kv.encode("token", tokenBody.data.token)
+            val response =
+                Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "")
+                    .execute()
+            val body = response.body() ?: return
+            sessionId = body.chatData.queryId
+            addChatData(body.chatData)
+        } catch (e: Exception) {
+            Client.handleException(e)
         }
     }
 
-    fun nextChat(message: String) {
+    suspend fun nextChat(message: String) {
         TTS.stopSpeaking()
         if (message.isBlank()) return
-        history.lastOrNull()?.let{ if (it.speaker == Speaker.OPTIONS) history.removeLast() }
+        history.lastOrNull()?.let { if (it.speaker == Speaker.OPTIONS) history.removeLast() }
         history.add(Message(Speaker.USER, message))
-        CoroutineScope(Dispatchers.Main).launch {
-            listState.scrollToItem(history.lastIndex)
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                chatIoState.value = true
-                var fixMessage = if (message.last() == '。') message.dropLast(1) else message
-                fixMessage = fixMessage
-                    .replace("嗯，", "")
-                    .replace("额，", "")
-                    .replace("嗯", "")
-                    .replace("额", "")
-                    .replace("啊", "")
-                    .replace(" ", "")
-                val response =
-                    Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
-                val body = response.body() ?: return@launch
-                addChatData(body.chatData)
-            } catch (e: Exception) {
-                Log.e(CommonApplication.TAG, e.stackTraceToString())
-            } finally {
-                chatIoState.value = false
-            }
+        withContext(Dispatchers.Main) { listState.scrollToItem(history.lastIndex) }
+        try {
+            chatIoState.value = true
+            var fixMessage = if (message.last() == '。') message.dropLast(1) else message
+            fixMessage = fixMessage
+                .replace("嗯，", "")
+                .replace("额，", "")
+                .replace("嗯", "")
+                .replace("额", "")
+                .replace("啊", "")
+                .replace(" ", "")
+            val response =
+                Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
+            val body = response.body() ?: return
+            addChatData(body.chatData)
+        } catch (e: Exception) {
+            handleException(e)
+        } finally {
+            chatIoState.value = false
         }
     }
 
-    fun getRelate(queryRecordItemId: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = Client.apiService.relateQuestion(queryRecordItemId).execute()
-            val body = response.body() ?: return@launch
-            for (say in body.data.says) history.add(
-                Message(
-                    Speaker.RECOMMEND,
-                    recommends = say.content.questions
-                )
+    suspend fun getRelate(queryRecordItemId: String) {
+        val response = Client.apiService.relateQuestion(queryRecordItemId).execute()
+        val body = response.body() ?: return
+        for (say in body.data.says) history.add(
+            Message(
+                Speaker.RECOMMEND,
+                recommends = say.content.questions
             )
-            withContext(Dispatchers.Main) {
-                listState.scrollToItem(history.lastIndex)
-            }
+        )
+        withContext(Dispatchers.Main) {
+            listState.scrollToItem(history.lastIndex)
         }
     }
 

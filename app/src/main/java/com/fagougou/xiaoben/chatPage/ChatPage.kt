@@ -41,9 +41,13 @@ import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun BotMenu() {
+    val scope = rememberCoroutineScope()
     val botResMap = mapOf(
         Pair("婚姻家事", R.drawable.bot_small_marry),
         Pair("员工纠纷", R.drawable.bot_small_employee),
@@ -70,7 +74,7 @@ fun BotMenu() {
                     .height(171.dp),
                 onClick = {
                     selectedChatBot.value = bot.first
-                    startChat()
+                    scope.launch(Dispatchers.IO) { startChat() }
                 },
                 contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
             )
@@ -117,6 +121,7 @@ fun LawExpend(message: Message, index: Int) {
 fun MessageRect(
     message: Message,
     index: Int,
+    scope: CoroutineScope,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
 ) {
@@ -133,7 +138,9 @@ fun MessageRect(
             )
             for(question in message.inlineRecommend){
                 Text(
-                    modifier = Modifier.padding(bottom = 16.dp,start = 16.dp).clickable { nextChat(question) },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp, start = 16.dp)
+                        .clickable { scope.launch(Dispatchers.IO) { nextChat(question) } },
                     text = question,
                     fontSize = 28.sp,
                     color = Dodgerblue,
@@ -206,7 +213,7 @@ fun ComplexRect(
 }
 
 @Composable
-fun MessageItem(message: Message, index: Int, navController: NavController) {
+fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navController: NavController) {
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
@@ -214,14 +221,14 @@ fun MessageItem(message: Message, index: Int, navController: NavController) {
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { MessageRect(message, index) }
+        ) { MessageRect(message, index,scope) }
         Speaker.USER -> Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-        ) { MessageRect(message, index, Dodgerblue, Color.White) }
+        ) { MessageRect(message, index,scope, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
                 .padding(vertical = 18.dp),
@@ -249,7 +256,7 @@ fun MessageItem(message: Message, index: Int, navController: NavController) {
                             }
                         }
                         for (question in message.recommends) Button(
-                            onClick = { nextChat(question) },
+                            onClick = { scope.launch(Dispatchers.IO){ nextChat(question) } },
                             content = { Text("·$question", fontSize = 28.sp, color = Dodgerblue) },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
                             elevation = ButtonDefaults.elevation(0.dp)
@@ -291,7 +298,7 @@ fun MessageItem(message: Message, index: Int, navController: NavController) {
                                     modifier = Modifier
                                         .height(80.dp)
                                         .width(225.dp),
-                                    onClick = { nextChat(item) },
+                                    onClick = { scope.launch(Dispatchers.IO){nextChat(item)} },
                                     content = { Text(item, fontSize = 24.sp, color = Color.White) },
                                     colors = ButtonDefaults.buttonColors(Dodgerblue)
                                 )
@@ -346,8 +353,10 @@ fun MessageItem(message: Message, index: Int, navController: NavController) {
                                             .height(75.dp)
                                             .width(150.dp),
                                         onClick = {
-                                            nextChat(currentProvince.value + "-${cityList[i]}")
-                                            currentProvince.value = ""
+                                            scope.launch(Dispatchers.IO){
+                                                nextChat(currentProvince.value + "-${cityList[i]}")
+                                                currentProvince.value = ""
+                                            }
                                         },
                                         content = {
                                             Text(
@@ -378,6 +387,7 @@ fun MessageItem(message: Message, index: Int, navController: NavController) {
 
 @Composable
 fun ChatPage(navController: NavController) {
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxHeight(),
@@ -406,6 +416,7 @@ fun ChatPage(navController: NavController) {
                 MessageItem(
                     history[index],
                     index,
+                    scope,
                     navController
                 )
             }
@@ -413,6 +424,7 @@ fun ChatPage(navController: NavController) {
                 MessageItem(
                     Message(Speaker.ROBOT, content = ". . ."),
                     -1,
+                    scope,
                     navController
                 )
             }
@@ -425,7 +437,7 @@ fun ChatPage(navController: NavController) {
             }
             item {
                 Text(
-                    modifier = Modifier.clickable { nextChat("预测起诉离婚的成功率和查看相关案例") },
+                    modifier = Modifier.clickable { scope.launch(Dispatchers.IO){ nextChat("预测起诉离婚的成功率和查看相关案例")} },
                     text = "预测离婚"
                 )
             }

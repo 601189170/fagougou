@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,11 +16,15 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
+import com.fagougou.xiaoben.chatPage.ChatViewModel.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.utils.IFly
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChatGuidePage(navController: NavController) {
+    val scope = rememberCoroutineScope()
     val botResMap = mapOf(
         Pair("婚姻家事", R.drawable.bot_marry),
         Pair("员工纠纷", R.drawable.bot_employee),
@@ -55,7 +60,9 @@ fun ChatGuidePage(navController: NavController) {
             columns = GridCells.Fixed(4),
             content = {
                 items(botResMap.toList()){ bot ->
-                    Column(modifier= Modifier.fillMaxSize().height(292.dp),
+                    Column(modifier= Modifier
+                        .fillMaxSize()
+                        .height(292.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally){
                         HomeButton(
@@ -65,7 +72,7 @@ fun ChatGuidePage(navController: NavController) {
                             onClick = {
                                 IFly.isEnable = true
                                 selectedChatBot.value = bot.first
-                                ChatViewModel.startChat()
+                                scope.launch(Dispatchers.IO) { startChat() }
                                 navController.navigate("chat")
                             },
                             contentId = bot.second
