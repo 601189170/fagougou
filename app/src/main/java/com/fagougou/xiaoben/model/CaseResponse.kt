@@ -19,5 +19,5 @@ data class CaseData(
     @SerializedName("裁判日期")
     val 裁判日期: String = "",
     @SerializedName("DocContent")
-    val DocContent: String = "",
+    var DocContent: String = "",
 )

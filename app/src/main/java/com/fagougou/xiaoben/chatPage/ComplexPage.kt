@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +25,6 @@ import com.fagougou.xiaoben.chatPage.Complex.selectPage
 import com.fagougou.xiaoben.model.AttachmentBody
 import com.fagougou.xiaoben.model.AttachmentCases
 import com.fagougou.xiaoben.model.CaseResponse
-import com.fagougou.xiaoben.repo.ApiService
 import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
@@ -41,7 +41,7 @@ object Complex{
 }
 
 @Composable
-fun CaseButton(case: AttachmentCases,navController: NavController){
+fun CaseButton(case: AttachmentCases,scope: CoroutineScope,navController: NavController){
     Button(
         modifier = Modifier.padding(vertical = 8.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -88,9 +88,10 @@ fun CaseButton(case: AttachmentCases,navController: NavController){
             }
         },
         onClick = {
-            CoroutineScope(Dispatchers.IO).launch {
+            scope.launch(Dispatchers.IO) {
                 val response = apiService.case(case.serial).execute()
                 val body = response.body() ?: CaseResponse()
+                body.data.DocContent = body.data.DocContent.replace("\n","<br>")
                 Case.data = body.data
                 withContext(Dispatchers.Main){
                     navController.navigate("case")
@@ -102,6 +103,7 @@ fun CaseButton(case: AttachmentCases,navController: NavController){
 
 @Composable
 fun ComplexPage(navController: NavController) {
+    val scope = rememberCoroutineScope()
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column {
             Headder("详细分析", navController, onBack = {selectPage.value = "body"})
@@ -111,23 +113,25 @@ fun ComplexPage(navController: NavController) {
                     .padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                if(bodyList.isNotEmpty())Button(
-                    onClick = { selectPage.value = "body" },
-                    content = { Text("法律建议", color = if(selectPage.value == "body")Dodgerblue else Color.Gray) },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)
-                )
-                if(caseList.isNotEmpty())Button(
-                    onClick = { selectPage.value = "case" },
-                    content = { Text("判决案例", color = if(selectPage.value == "case")Dodgerblue else Color.Gray) },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)
-                )
+                if(bodyList.isNotEmpty() && caseList.isNotEmpty()){
+                    Button(
+                        onClick = { selectPage.value = "body" },
+                        content = { Text("法律建议", color = if(selectPage.value == "body")Dodgerblue else Color.Gray) },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, if(selectPage.value == "body")Dodgerblue else Color.Gray)
+                    )
+                    Button(
+                        onClick = { selectPage.value = "case" },
+                        content = { Text("判决案例", color = if(selectPage.value == "case")Dodgerblue else Color.Gray) },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)
+                    )
+                }
             }
             Column(modifier = Modifier.verticalScroll(ScrollState(0))) {
                 when (selectPage.value) {
-                    "body" -> for(body in bodyList)if(body.content != "")WebView("", body.content)
-                    "case" -> for(case in caseList) CaseButton(case,navController)
+                    "body" -> for(body in bodyList)if(body.content != "")WebView("", body.content.replace("\n",""))
+                    "case" -> for(case in caseList) CaseButton(case,scope,navController)
                 }
             }
         }

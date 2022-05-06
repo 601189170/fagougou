@@ -85,34 +85,44 @@ fun BotMenu() {
 @Composable
 fun LawExpend(message: Message, index: Int) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
-            Text(
-                (i + 1).toString() + "." + law.name + law.position + ":",
-                modifier = Modifier.padding(16.dp),
-                fontSize = 25.sp
-            )
-            Text(
-                law.content,
-                modifier = Modifier.padding(12.dp),
-                color = Color(0xFF666666),
-                fontSize = 22.sp
-            )
-        } else Row(
+        Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
-                .padding(16.dp)
-                .clickable { history[index] = message.copy(isExpend = true) }
+                .fillMaxWidth()
+                .clickable {
+                    val isExpend = !message.isExpend
+                    history[index] = message.copy(isExpend = isExpend)
+                }
         ) {
             Text(
-                modifier = Modifier.padding(end = 12.dp),
-                text = "点击查看法律依据",
+                modifier = Modifier.padding(16.dp),
+                text = "法律依据",
                 fontSize = 24.sp,
                 color = Dodgerblue
             )
-            Image(painterResource(R.drawable.ic_expend), null)
+            val svg = if (message.isExpend)R.drawable.ic_flod else R.drawable.ic_expend
+            Image(painterResource(svg), null)
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ){
+            if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
+                Text(
+                    (i + 1).toString() + "." + law.name + law.position + ":",
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 26.sp
+                )
+                Text(
+                    law.content,
+                    modifier = Modifier.padding(12.dp),
+                    color = Color(0xFF666666),
+                    fontSize = 22.sp
+                )
+            }
         }
     }
 }
@@ -134,6 +144,7 @@ fun MessageRect(
                 modifier = Modifier.padding(16.dp),
                 text = message.content + message.complex.explanation,
                 fontSize = 28.sp,
+                lineHeight = 40.sp,
                 color = textColor,
             )
             for(question in message.inlineRecommend){
@@ -167,7 +178,12 @@ fun ComplexRect(
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .clickable {
+                    getComplex(message.complex.attachmentId, navController)
+                }
+        ) {
             Surface(color = Dodgerblue) {
                 Row(
                     modifier = Modifier
@@ -187,6 +203,7 @@ fun ComplexRect(
                 modifier = Modifier.padding(16.dp),
                 text = message.content + message.complex.explanation,
                 fontSize = 28.sp,
+                lineHeight = 40.sp,
                 color = textColor,
             )
             Divider(
@@ -197,8 +214,7 @@ fun ComplexRect(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable { getComplex(message.complex.attachmentId, navController) },
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -267,7 +283,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     ) {
                         Image(painterResource(R.drawable.ic_relate_question), null)
                         Text(
-                            modifier = Modifier.padding(start = 24.dp),
+                            modifier = Modifier.padding(start = 16.dp),
                             text = "点击查看与您情况相关的问题",
                             fontSize = 28.sp,
                             color = Dodgerblue
