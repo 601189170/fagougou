@@ -113,13 +113,13 @@ fun ComplexPage(navController: NavController) {
             ) {
                 if(bodyList.isNotEmpty())Button(
                     onClick = { selectPage.value = "body" },
-                    content = { Text("法律建议", color = Dodgerblue) },
+                    content = { Text("法律建议", color = if(selectPage.value == "body")Dodgerblue else Color.Gray) },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = BorderStroke(2.dp, Dodgerblue)
                 )
                 if(caseList.isNotEmpty())Button(
                     onClick = { selectPage.value = "case" },
-                    content = { Text("判决案例", color = Dodgerblue) },
+                    content = { Text("判决案例", color = if(selectPage.value == "case")Dodgerblue else Color.Gray) },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = BorderStroke(2.dp, Dodgerblue)
                 )

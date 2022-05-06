@@ -29,7 +29,6 @@ import com.fagougou.xiaoben.chatPage.ChatViewModel.currentProvince
 import com.fagougou.xiaoben.chatPage.ChatViewModel.getComplex
 import com.fagougou.xiaoben.chatPage.ChatViewModel.history
 import com.fagougou.xiaoben.chatPage.ChatViewModel.listState
-import com.fagougou.xiaoben.chatPage.ChatViewModel.needAddressNow
 import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatViewModel.startChat
@@ -80,7 +79,7 @@ fun BotMenu() {
 }
 
 @Composable
-fun LawExpend(message: Message,index: Int) {
+fun LawExpend(message: Message, index: Int) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -109,7 +108,7 @@ fun LawExpend(message: Message,index: Int) {
                 fontSize = 24.sp,
                 color = Dodgerblue
             )
-            Image( painterResource(R.drawable.ic_expend), null )
+            Image(painterResource(R.drawable.ic_expend), null)
         }
     }
 }
@@ -117,7 +116,7 @@ fun LawExpend(message: Message,index: Int) {
 @Composable
 fun MessageRect(
     message: Message,
-    index:Int,
+    index: Int,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
 ) {
@@ -125,18 +124,26 @@ fun MessageRect(
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column{
+        Column {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = message.content+message.complex.explanation,
+                text = message.content + message.complex.explanation,
                 fontSize = 28.sp,
                 color = textColor,
             )
+            for(question in message.inlineRecommend){
+                Text(
+                    modifier = Modifier.padding(bottom = 16.dp,start = 16.dp).clickable { nextChat(question) },
+                    text = question,
+                    fontSize = 28.sp,
+                    color = Dodgerblue,
+                )
+            }
             if (message.laws.isNotEmpty()) Divider(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
             )
-            if (message.laws.isNotEmpty()) LawExpend(message,index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index)
         }
     }
 }
@@ -144,7 +151,7 @@ fun MessageRect(
 @Composable
 fun ComplexRect(
     message: Message,
-    index:Int,
+    index: Int,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
     navController: NavController
@@ -153,8 +160,8 @@ fun ComplexRect(
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column{
-            Surface( color = Dodgerblue ) {
+        Column {
+            Surface(color = Dodgerblue) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -171,7 +178,7 @@ fun ComplexRect(
             }
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = message.content+message.complex.explanation,
+                text = message.content + message.complex.explanation,
                 fontSize = 28.sp,
                 color = textColor,
             )
@@ -179,7 +186,7 @@ fun ComplexRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message,index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -190,16 +197,16 @@ fun ComplexRect(
             ) {
                 Text(
                     modifier = Modifier.padding(end = 12.dp),
-                    text="点击查看更多",
-                    fontSize = 24.sp,)
-                Image( painterResource(R.drawable.ic_expend), null )
+                    text = "点击查看更多",
+                    fontSize = 24.sp,
+                )
             }
         }
     }
 }
 
 @Composable
-fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: LazyListState,navController: NavController) {
+fun MessageItem(message: Message, index: Int, navController: NavController) {
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
@@ -207,14 +214,14 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { MessageRect(message,index) }
+        ) { MessageRect(message, index) }
         Speaker.USER -> Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-        ) { MessageRect(message,index, Dodgerblue, Color.White) }
+        ) { MessageRect(message, index, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
                 .padding(vertical = 18.dp),
@@ -226,15 +233,19 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 Column(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    if (message.isExpend){
+                    if (message.isExpend) {
                         Row(
-                            modifier = Modifier.padding(start = 16.dp,bottom = 12.dp),
+                            modifier = Modifier.padding(start = 16.dp, bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
-                        ){
+                        ) {
                             if (index == 1) Text("大家都在问:", fontSize = 28.sp)
                             else {
-                                Image(painterResource(R.drawable.ic_relate_question),null)
-                                Text(modifier = Modifier.padding(start = 16.dp),text = "相关问题", fontSize = 28.sp)
+                                Image(painterResource(R.drawable.ic_relate_question), null)
+                                Text(
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    text = "相关问题",
+                                    fontSize = 28.sp
+                                )
                             }
                         }
                         for (question in message.recommends) Button(
@@ -267,23 +278,21 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 "radio" -> {
                     val lastIndex = message.option.items.lastIndex
                     for (y in 0..lastIndex step 4) Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        for (x in 0..3){
-                            val i = y+x
-                            if(i<=lastIndex){
+                        for (x in 0..3) {
+                            val i = y + x
+                            if (i <= lastIndex) {
                                 val item = message.option.items[i]
                                 Button(
-                                    modifier = Modifier.height(80.dp).width(225.dp),
+                                    modifier = Modifier
+                                        .height(80.dp)
+                                        .width(225.dp),
                                     onClick = { nextChat(item) },
-                                    content = {
-                                        Text(
-                                            text = item,
-                                            fontSize = 24.sp,
-                                            color = Color.White
-                                        )
-                                    },
+                                    content = { Text(item, fontSize = 24.sp, color = Color.White) },
                                     colors = ButtonDefaults.buttonColors(Dodgerblue)
                                 )
                             }
@@ -291,7 +300,69 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                     }
                 }
                 "address-with-search" -> {
-                    needAddressNow.value = true
+                    if (currentProvince.value == "") {
+                        val provinceList = CityMap.provinceList.keys.toList()
+                        val lastIndex = provinceList.lastIndex
+                        for (y in 0..lastIndex step 6) Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            for (x in 0..5) {
+                                val i = y + x
+                                if (y + x <= lastIndex) {
+                                    Button(
+                                        modifier = Modifier
+                                            .height(50.dp)
+                                            .width(150.dp),
+                                        onClick = { currentProvince.value = provinceList[i] },
+                                        content = {
+                                            Text(
+                                                provinceList[i],
+                                                fontSize = 24.sp,
+                                                color = Color.White
+                                            )
+                                        },
+                                        colors = ButtonDefaults.buttonColors(Dodgerblue)
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        val cityList = CityMap.provinceList[currentProvince.value] ?: listOf()
+                        val lastIndex = cityList.lastIndex
+                        for (y in 0..lastIndex step 6) Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            for (x in 0..5) {
+                                val i = y + x
+                                if (i <= lastIndex) {
+                                    Button(
+                                        modifier = Modifier
+                                            .height(75.dp)
+                                            .width(150.dp),
+                                        onClick = {
+                                            nextChat(currentProvince.value + "-${cityList[i]}")
+                                            currentProvince.value = ""
+                                        },
+                                        content = {
+                                            Text(
+                                                cityList[i],
+                                                fontSize = 21.sp,
+                                                color = Color.White
+                                            )
+                                        },
+                                        colors = ButtonDefaults.buttonColors(Dodgerblue),
+                                        contentPadding = PaddingValues(4.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -301,7 +372,7 @@ fun MessageItem(message: Message,index:Int, scope: CoroutineScope, listState: La
                 .padding(vertical = 18.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { ComplexRect(message,index, navController = navController) }
+        ) { ComplexRect(message, index, navController = navController) }
     }
 }
 
@@ -324,7 +395,6 @@ fun ChatPage(navController: NavController) {
             }
         )
         BotMenu()
-        val scope = rememberCoroutineScope()
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight(0.8f)
@@ -332,44 +402,31 @@ fun ChatPage(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
-            items(history.size) { index -> MessageItem(history[index],index, scope, listState, navController) }
-            if(chatIoState.value) item { MessageItem(Message(Speaker.ROBOT, content = ". . ."),-1, scope, listState, navController) }
-            item{
+            items(history.size) { index ->
+                MessageItem(
+                    history[index],
+                    index,
+                    navController
+                )
+            }
+            if (chatIoState.value) item {
+                MessageItem(
+                    Message(Speaker.ROBOT, content = ". . ."),
+                    -1,
+                    navController
+                )
+            }
+            item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
-                ){
-                    if(needAddressNow.value){
-                        if(currentProvince.value == "") for (province in CityMap.provinceList.keys)
-                            Button(
-                                onClick = {
-                                    currentProvince.value = province
-                                },
-                                content = {Text(province)}
-                            )
-                        else for(city in CityMap.provinceList[currentProvince.value] ?: listOf())
-                            Button(
-                                onClick = {
-                                    nextChat(currentProvince.value+"-$city")
-                                    currentProvince.value = ""
-                                    needAddressNow.value = false
-                                },
-                                content = {Text(city)}
-                            )
-                    }
-                }
+                ) {}
             }
-            item{
+            item {
                 Text(
                     modifier = Modifier.clickable { nextChat("预测起诉离婚的成功率和查看相关案例") },
                     text = "预测离婚"
-                )
-            }
-            item{
-                Text(
-                    modifier = Modifier.clickable { nextChat("北京市") },
-                    text = "北京市"
                 )
             }
         }
@@ -380,11 +437,12 @@ fun ChatPage(navController: NavController) {
                 modifier = Modifier.padding(vertical = 32.dp),
                 text = IFly.recognizeResult.value,
                 fontSize = 32.sp,
-                color = Color.White)
+                color = Color.White
+            )
             PAG()
         }
     }
     BackHandler(enabled = true) {
-        Log.d(TAG,"Back")
+        Log.d(TAG, "Back")
     }
 }

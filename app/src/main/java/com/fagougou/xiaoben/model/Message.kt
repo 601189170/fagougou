@@ -7,6 +7,7 @@ enum class Speaker { ROBOT, USER, RECOMMEND, OPTIONS, COMPLEX }
 data class Message(
     val speaker: Speaker = Speaker.USER,
     val content:String = "",
+    val inlineRecommend:List<String> = listOf(),
     val recommends: List<String> = listOf(),
     val laws: List<Law> = listOf(),
     val option: Option = Option(),

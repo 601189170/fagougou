@@ -8,12 +8,14 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication
 import com.fagougou.xiaoben.model.*
 import com.fagougou.xiaoben.repo.Client
+import com.fagougou.xiaoben.utils.InlineRecommend.getInline
 import com.fagougou.xiaoben.utils.MMKV
 import com.fagougou.xiaoben.utils.TTS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.fagougou.xiaoben.utils.InlineRecommend.removeInline
 
 object ChatViewModel {
     val history = mutableStateListOf<Message>()
@@ -22,17 +24,15 @@ object ChatViewModel {
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
     val chatIoState = mutableStateOf(false)
-    var needAddressNow = mutableStateOf(false)
     var currentProvince = mutableStateOf("")
 
     suspend fun addChatData(chatData: ChatData) {
-        val defRegex = Regex("#def::.*?#")
-
         for (say in chatData.botSays) {
-            val content =say.content.body.replace(defRegex, "")
+            val content = say.content.body.removeInline()
+            val inlineRecommend = say.content.body.getInline()
             when (say.type) {
                 "text" -> {
-                    history.add(Message(Speaker.ROBOT, content = content, laws = say.content.laws))
+                    history.add(Message(Speaker.ROBOT, inlineRecommend = inlineRecommend, content = content, laws = say.content.laws))
                     TTS.speak(content)
                 }
                 "hyperlink" -> {
@@ -102,7 +102,7 @@ object ChatViewModel {
     fun nextChat(message: String) {
         TTS.stopSpeaking()
         if (message.isBlank()) return
-        if (history.lastOrNull()?.speaker == Speaker.OPTIONS) history.removeLastOrNull()
+        history.lastOrNull()?.let{ if (it.speaker == Speaker.OPTIONS) history.removeLast() }
         history.add(Message(Speaker.USER, message))
         CoroutineScope(Dispatchers.Main).launch {
             listState.scrollToItem(history.lastIndex)
