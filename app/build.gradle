@@ -19,11 +19,30 @@ android {
             useSupportLibrary true
         }
     }
-
+    signingConfigs {
+        debug {
+            storeFile file('../KeyOfFagougou')
+            storePassword "QnRdaSDjHSh87zCK"
+            keyAlias "Fagougou"
+            keyPassword "QnRdaSDjHSh87zCK"
+        }
+        release {
+            storeFile file('../KeyOfFagougou')
+            storePassword 'QnRdaSDjHSh87zCK'
+            keyAlias 'Fagougou'
+            keyPassword 'QnRdaSDjHSh87zCK'
+        }
+    }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     sourceSets {

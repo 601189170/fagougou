@@ -36,7 +36,11 @@ import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.contractPage.ContractWebView
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
+import com.fagougou.xiaoben.model.UpdateInfo
+import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.repo.Client.globalLoading
+import com.fagougou.xiaoben.repo.Client.handleException
+import com.fagougou.xiaoben.repo.Client.updateService
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
@@ -46,11 +50,14 @@ import com.fagougou.xiaoben.utils.Wechat.wechatBitmap
 import com.fagougou.xiaoben.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
+import java.lang.Exception
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityContext = this
+        val sevenDays = (7L*24L*60L*60L*1000L)
+        if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
         hideSystemUI()
         setContent {
             XiaoBenTheme {
@@ -64,11 +71,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        CoroutineScope(Dispatchers.Default).launch {
-            if(4==2) withContext(Dispatchers.Main){
-                val intent = Intent(this@MainActivity,UpdateActivity::class.java)
-                intent.putExtra("downloadUrl","URL")
-                startActivity(intent)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = updateService.updateInfo().execute()
+                val body = response.body() ?: UpdateInfo()
+                val currentCode = packageManager.getPackageInfo(packageName,0).versionCode
+                if(body.code>currentCode) withContext(Dispatchers.Main){
+                    val intent = Intent(this@MainActivity,UpdateActivity::class.java)
+                    intent.putExtra("downloadUrl",body.url)
+                    startActivity(intent)
+                }
+            }catch (e:Exception){
+                handleException(e)
             }
         }
     }

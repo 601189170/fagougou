@@ -69,6 +69,7 @@ object Client {
     const val url = "https://api.fagougou.com"
     const val contractUrl = "https://law-system.fagougou-law.com"
     const val loginUrl = "https://a.fagougou.com"
+    const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -107,6 +108,15 @@ object Client {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MainLogin::class.java)
+    }
+
+    val updateService: UpdateService by lazy {
+        Retrofit.Builder()
+            .baseUrl(updateUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(UpdateService::class.java)
     }
 
     fun handleException(t: Throwable) {
