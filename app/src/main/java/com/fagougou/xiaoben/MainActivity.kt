@@ -2,8 +2,6 @@ package com.fagougou.xiaoben
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.RoundedCorner
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +42,7 @@ import com.fagougou.xiaoben.repo.Client.updateService
 import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
+import com.fagougou.xiaoben.utils.IFly.routeMirror
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Wechat.showQrCode
 import com.fagougou.xiaoben.utils.Wechat.wechatBitmap
@@ -113,6 +113,12 @@ object SafeBack{
 @Composable
 fun Main() {
     val navController = rememberNavController()
+    LaunchedEffect("UpdateNavContent"){
+        while (true){
+            delay(200)
+            routeMirror = navController.currentDestination?.route ?: ""
+        }
+    }
     Image(
         modifier = Modifier.fillMaxSize(),
         painter = painterResource(R.drawable.home_background),

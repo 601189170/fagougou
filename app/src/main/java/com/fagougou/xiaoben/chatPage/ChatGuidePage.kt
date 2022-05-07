@@ -70,7 +70,6 @@ fun ChatGuidePage(navController: NavController) {
                                 .width(218.dp)
                                 .height(272.dp),
                             onClick = {
-                                IFly.isEnable = true
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }
                                 navController.navigate("chat")

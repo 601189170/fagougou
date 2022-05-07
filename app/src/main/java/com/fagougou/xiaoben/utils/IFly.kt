@@ -3,6 +3,7 @@ package com.fagougou.xiaoben.utils
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import com.bugsnag.android.Bugsnag
 import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
@@ -22,7 +23,7 @@ object IFly {
     const val UNWAKE_TEXT = "请说,你好小笨"
     const val WAKE_TEXT = "请说出您的问题"
     val TAG = javaClass.simpleName
-    var isEnable = false
+    var routeMirror = ""
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
     val volumeState = mutableStateOf("=")
@@ -116,7 +117,7 @@ object IFly {
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
-        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:1300")
+        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:1000")
         // 设置唤醒模式
         mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup")
         // 设置持续进行唤醒
@@ -138,7 +139,7 @@ object IFly {
     }
 
     fun recognizeMode(){
-        if(isEnable) { Log.d(TAG, "Wake Up")
+        if(routeMirror == "chat") {
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()
@@ -158,7 +159,7 @@ object IFly {
                 ret.append(obj.getString("w"))
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Bugsnag.notify(e)
         }
         return ret.toString()
     }

@@ -38,7 +38,6 @@ import com.fagougou.xiaoben.model.Speaker
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
-import com.fagougou.xiaoben.utils.IFly.isEnable
 import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -192,7 +191,6 @@ fun ComplexRect(
         Column(
             modifier = Modifier
                 .clickable {
-                    isEnable = false
                     getComplex(message.complex.attachmentId, navController)
                 }
         ) {
@@ -426,7 +424,6 @@ fun ChatPage(navController: NavController) {
             "智能咨询(${selectedChatBot.value})",
             navController,
             onBack = {
-                IFly.isEnable = false
                 IFly.wakeMode()
                 mTts.stopSpeaking()
                 history.clear()
@@ -464,12 +461,6 @@ fun ChatPage(navController: NavController) {
                         .fillMaxWidth()
                         .height(300.dp)
                 ) {}
-            }
-            item {
-                Text(
-                    modifier = Modifier.clickable { scope.launch(Dispatchers.IO){ nextChat("预测起诉离婚的成功率和查看相关案例")} },
-                    text = "预测离婚"
-                )
             }
         }
         Column(
