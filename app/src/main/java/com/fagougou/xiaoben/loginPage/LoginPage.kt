@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.MainActivity
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.loginPage.LoginPage.login
@@ -59,7 +59,7 @@ object LoginPage {
                 kv.encode("canLogin",true)
                 kv.encode("wechatUrl",body.channels.firstOrNull()?.url ?: "null")
                 withContext(Dispatchers.Main) {
-                    (activityContext as MainActivity).hideSystemUI()
+                    (activity as MainActivity).hideSystemUI()
                     navController.navigate("home")
                 }
             }catch (e:MalformedJsonException){

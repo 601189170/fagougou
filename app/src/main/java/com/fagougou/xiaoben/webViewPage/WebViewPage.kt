@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.webViewPage.WebViewModel.data
 import com.fagougou.xiaoben.webViewPage.WebViewModel.title
@@ -44,7 +44,7 @@ fun WebView(urlAddress:String,data:String){
     AndroidView(
         modifier = Modifier.fillMaxHeight().fillMaxWidth(),
         factory = {
-            WebView(activityContext).apply {
+            WebView(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                 setInitialScale(144)
                 settings.javaScriptEnabled = true

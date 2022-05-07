@@ -1,8 +1,8 @@
 package com.fagougou.xiaoben.utils
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.utils.IFly.TAG
 import com.fagougou.xiaoben.utils.IFly.mIat
 import com.fagougou.xiaoben.utils.IFly.mRecognizerListener
@@ -20,7 +20,7 @@ object TTS {
         if (code != ErrorCode.SUCCESS) toast("初始化失败,错误码：$code")
     }
     // 初始化合成对象
-    val mTts = SpeechSynthesizer.createSynthesizer(context, mTtsInitListener)
+    lateinit var mTts : SpeechSynthesizer
     private val mTtsListener: SynthesizerListener = object : SynthesizerListener {
         override fun onSpeakBegin() {
             Log.d(TAG, "开始播放：" + System.currentTimeMillis())
@@ -80,7 +80,8 @@ object TTS {
         mTts.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true")
     }
 
-    init {
+    fun init(context: Context) {
+        mTts = SpeechSynthesizer.createSynthesizer(context, mTtsInitListener)
         // 设置参数
         setParam()
         CoroutineScope(Dispatchers.Default).launch{

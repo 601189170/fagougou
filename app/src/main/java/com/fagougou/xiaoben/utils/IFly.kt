@@ -1,10 +1,10 @@
 package com.fagougou.xiaoben.utils
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
-import com.fagougou.xiaoben.CommonApplication.Companion.context
 import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.utils.Tips.toast
@@ -104,10 +104,12 @@ object IFly {
         override fun onVolumeChanged(volume: Int) { }
 
     }
-    val mIat = SpeechRecognizer.createRecognizer(context, mInitListener)
-    val mIvw = VoiceWakeuper.createWakeuper(context, mInitListener)
+    lateinit var mIat : SpeechRecognizer
+    lateinit var mIvw : VoiceWakeuper
 
-    init {
+    fun init(context: Context) {
+        mIat = SpeechRecognizer.createRecognizer(context, mInitListener)
+        mIvw = VoiceWakeuper.createWakeuper(context, mInitListener)
         // 设置动态修正
         mIat.setParameter("dwa", "wpgs")
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理

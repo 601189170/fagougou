@@ -1,7 +1,7 @@
 package com.fagougou.xiaoben.utils
 
 import android.widget.Toast
-import com.fagougou.xiaoben.CommonApplication.Companion.context
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,6 +13,6 @@ object Tips {
             if (str == lastDisplayString && System.currentTimeMillis() < lastDisplayTime) return@launch
             lastDisplayString = str
             lastDisplayTime = System.currentTimeMillis() + 4000
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, str, Toast.LENGTH_SHORT).show()
     } }
 }

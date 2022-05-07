@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.fagougou.xiaoben.CommonApplication
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.chatPage.PAG.unwakePAGView
 import com.fagougou.xiaoben.chatPage.PAG.wakedPAGView
 import com.fagougou.xiaoben.utils.IFly
@@ -46,7 +47,7 @@ fun PAG(){
                 .height(128.dp)
                 .width(512.dp),
             factory = {
-                PAGView(CommonApplication.context).apply {
+                PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
@@ -64,7 +65,7 @@ fun PAG(){
                 .height(128.dp)
                 .width(512.dp),
             factory = {
-                PAGView(CommonApplication.context).apply {
+                PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT

@@ -10,19 +10,19 @@ import com.fagougou.xiaoben.model.AuthRequest
 import com.fagougou.xiaoben.model.BotList
 import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.repo.Client.handleException
+import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.MMKV.kv
+import com.fagougou.xiaoben.utils.TTS
 import com.iflytek.cloud.SpeechUtility
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import kotlin.properties.Delegates
 
 class CommonApplication: Application(){
     companion object {
-        var context: Context by Delegates.notNull()
-        lateinit var activityContext: ComponentActivity
+        lateinit var activity: ComponentActivity
         const val TAG = "FaGouGou@XiaoBen"
     }
 
@@ -32,10 +32,11 @@ class CommonApplication: Application(){
 
     override fun onCreate() {
         super.onCreate()
-        context = this
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
         Bugsnag.start(this)
+        IFly.init(this)
+        TTS.init(this)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val tokenResponse = apiService.auth(AuthRequest()).execute()

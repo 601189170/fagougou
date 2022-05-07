@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.contractPage.ContractWebView.codeBitmap
 import com.fagougou.xiaoben.contractPage.ContractWebView.webViewUrl
@@ -38,7 +38,7 @@ fun ContractWebView(navController: NavController) {
                 .fillMaxHeight()
                 .fillMaxWidth(0.75f),
             factory = {
-                WebView(activityContext).apply {
+                WebView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     setInitialScale(100)
                     settings.javaScriptEnabled = true

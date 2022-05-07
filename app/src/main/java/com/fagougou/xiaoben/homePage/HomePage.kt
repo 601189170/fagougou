@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.CommonApplication.Companion.activityContext
+import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.utils.MMKV.clearStack
@@ -137,7 +137,7 @@ fun HomePage(navController:NavController) {
                 if (clearStack>8){
                     kv.remove("canLogin")
                     toast("登出成功")
-                    activityContext.finish()
+                    activity.finish()
                 }
             },
             content = {
