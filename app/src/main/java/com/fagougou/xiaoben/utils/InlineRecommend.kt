@@ -8,7 +8,10 @@ object InlineRecommend {
     val sharpRegex = Regex("#[\n]*")
 
     fun String.removeInline():String{
-        return replace(defRegex,"").replace(questionRegex,"").replace(sharpRegex,"")
+        return replace(defRegex,"")
+            .replace(questionRegex,"")
+            .replace(sharpRegex,"")
+            .replace("%||%","\n")
     }
 
     fun String.getInline():List<String>{
