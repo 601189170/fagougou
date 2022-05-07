@@ -33,12 +33,14 @@ import com.fagougou.xiaoben.model.ContractCategory
 import com.fagougou.xiaoben.model.DataB
 import com.fagougou.xiaoben.model.HTListRequest
 import com.fagougou.xiaoben.repo.Client.contractService
+import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.net.URLEncoder
 
 object Contract{
@@ -61,10 +63,14 @@ object Contract{
     fun  getHTLIST(folder:String,searchName:String = "") {
         HTLists.clear()
         CoroutineScope(Dispatchers.IO).launch {
-            if (searchName!="")selectedId.value = ""
-            val response = contractService.getHtlist(HTListRequest(folder = folder, name = searchName)).execute()
-            val body = response.body() ?: return@launch
-            HTLists.addAll(body.data.list)
+            try {
+                if (searchName!="")selectedId.value = ""
+                val response = contractService.getHtlist(HTListRequest(folder = folder, name = searchName)).execute()
+                val body = response.body() ?: return@launch
+                HTLists.addAll(body.data.list)
+            }catch (e:Exception){
+                handleException(e)
+            }
         }
     }
 
@@ -90,9 +96,9 @@ fun Contract(navController: NavController,category: DataB){
             .clickable { getTemplate(category.fileid, navController) }
     ){
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-            Image(painterResource(R.drawable.icon_hti_head), null)
+            Image(painterResource(R.drawable.ic_word), null)
             Text(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = 8.dp,top = 4.dp),
                 fontWeight= FontWeight.Bold,
                 text = category.name,
                 fontSize = 28.sp,
@@ -106,7 +112,7 @@ fun Contract(navController: NavController,category: DataB){
             color = Color.Black
         )
         Text(
-            maxLines=1,
+            modifier = Modifier.padding(top = 12.dp),
             text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
             fontSize = 20.sp,
             color = Color.Gray
@@ -178,7 +184,7 @@ fun ContractGuidePage(navController: NavController) {
                 Column(
                     Modifier
                         .fillMaxHeight()
-                        .fillMaxWidth(0.36f),
+                        .fillMaxWidth(0.33f),
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 36.dp),
@@ -187,33 +193,27 @@ fun ContractGuidePage(navController: NavController) {
                                 Surface(
                                     color = if(category.id== selectedId.value)Color(0xFFBBCCEE) else Color(0xFFEEEEEE)
                                 ) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-                                        elevation = ButtonDefaults.elevation(0.dp),
-                                        content = {
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.Start,
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Image(
-                                                    painter = painterResource(R.drawable.icon_cates),
-                                                    contentDescription = null,
-                                                    modifier = Modifier.padding(start = 16.dp))
-                                                Text(
-                                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                                    text = category.name,
-                                                    fontSize = 28.sp,
-                                                    color = Color.Black
-                                                )
-                                            }
-                                        },
-                                        onClick = {
-                                            selectedId.value = category.id
-                                            getHTLIST(selectedId.value)
-                                        }
-                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                selectedId.value = category.id
+                                                getHTLIST(selectedId.value)
+                                            },
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Image(
+                                            painter = if(category.id== selectedId.value) painterResource(R.drawable.ic_cates) else painterResource(R.drawable.ic_cates_unselected),
+                                            contentDescription = null,
+                                            modifier = Modifier.padding(start = 24.dp))
+                                        Text(
+                                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                            text = category.name,
+                                            fontSize = 28.sp,
+                                            color = Color.Black
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ fun ContractGuidePage(navController: NavController) {
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ){
                                     Image(painterResource(R.drawable.ic_no_contract),"No Content")
-                                    Text("暂无相关内容",fontSize = 28.sp,color = Color.Gray)
+                                    Text(text = "暂无相关内容",fontSize = 28.sp,color = Color.Gray)
                                 }
                             }
                         }

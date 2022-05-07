@@ -113,11 +113,11 @@ object IFly {
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mIat.setParameter(SpeechConstant.VAD_BOS,"3000")
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS,"2800")
+        mIat.setParameter(SpeechConstant.VAD_EOS,"2500")
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
-        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:1000")
+        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:600")
         // 设置唤醒模式
         mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup")
         // 设置持续进行唤醒

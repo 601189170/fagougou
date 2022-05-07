@@ -240,7 +240,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},nee
                 ) {
                     if (needWechat) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(painterResource(id = R.drawable.icon_vxzx), null)
+                        Image(painterResource(id = R.drawable.ic_wechat), null)
                         Button(
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
                             shape = RoundedCornerShape(
