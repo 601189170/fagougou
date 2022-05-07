@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -39,11 +38,11 @@ import com.fagougou.xiaoben.model.Speaker
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
 import com.fagougou.xiaoben.utils.IFly
+import com.fagougou.xiaoben.utils.IFly.isEnable
 import com.fagougou.xiaoben.utils.TTS.mTts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun BotMenu() {
@@ -193,6 +192,7 @@ fun ComplexRect(
         Column(
             modifier = Modifier
                 .clickable {
+                    isEnable = false
                     getComplex(message.complex.attachmentId, navController)
                 }
         ) {

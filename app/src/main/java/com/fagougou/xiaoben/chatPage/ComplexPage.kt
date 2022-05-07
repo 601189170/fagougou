@@ -28,6 +28,7 @@ import com.fagougou.xiaoben.model.CaseResponse
 import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.Dodgerblue
+import com.fagougou.xiaoben.utils.IFly.isEnable
 import com.fagougou.xiaoben.webViewPage.WebView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -106,7 +107,12 @@ fun ComplexPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column {
-            Headder("详细分析", navController, onBack = {selectPage.value = "body"})
+            Headder("详细分析", navController,
+                onBack = {
+                    isEnable = true
+                    selectPage.value = "body"
+                }
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

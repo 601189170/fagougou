@@ -37,7 +37,6 @@ import com.fagougou.xiaoben.contractPage.ContractWebView
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
 import com.fagougou.xiaoben.model.UpdateInfo
-import com.fagougou.xiaoben.repo.Client.apiService
 import com.fagougou.xiaoben.repo.Client.globalLoading
 import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.repo.Client.updateService
