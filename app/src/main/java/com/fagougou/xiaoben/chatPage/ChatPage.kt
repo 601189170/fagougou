@@ -68,16 +68,28 @@ fun BotMenu() {
             .padding(16.dp)
     ) {
         for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
-            HomeButton(
-                modifier = Modifier
-                    .width(136.dp)
-                    .height(171.dp),
-                onClick = {
-                    selectedChatBot.value = bot.first
-                    scope.launch(Dispatchers.IO) { startChat() }
-                },
-                contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
-            )
+            Surface(color = Color.Transparent) {
+                HomeButton(
+                    modifier = Modifier
+                        .width(136.dp)
+                        .height(171.dp),
+                    onClick = {
+                        selectedChatBot.value = bot.first
+                        scope.launch(Dispatchers.IO) { startChat() }
+                    },
+                    contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
+                )
+                if(selectedChatBot.value == bot.first)Column(
+                    modifier = Modifier
+                        .width(136.dp)
+                        .height(171.dp)
+                        .padding(top = 1.dp),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    Image(painter = painterResource(R.drawable.ic_select_note), null)
+                }
+            }
         }
     }
 }
@@ -418,7 +430,9 @@ fun ChatPage(navController: NavController) {
                 IFly.wakeMode()
                 mTts.stopSpeaking()
                 history.clear()
-            }
+                currentProvince.value = ""
+            },
+            true
         )
         BotMenu()
         LazyColumn(

@@ -194,7 +194,7 @@ fun WeChat(){
 }
 
 @Composable
-fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
+fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},needWechat:Boolean = false){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
@@ -229,24 +229,32 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
                 color = Color.White,
                 fontSize = 30.sp
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painterResource(id = R.drawable.icon_vxzx), null)
-                Button(
-
-                    colors = ButtonDefaults.buttonColors(Color.Transparent),
-                    shape = RoundedCornerShape(topEnd = CORNER_FLOAT, bottomEnd = CORNER_FLOAT),
-
-                    elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
-                    content = {
-                        Text(
-                            modifier = Modifier.padding(vertical = 3.dp),
-                            text = "微信咨询",
-                            fontSize = 26.sp,
-                            color = Color.White
+                Surface(
+                    modifier = Modifier.width(192.dp),
+                    color = Color.Transparent
+                ) {
+                    if (needWechat) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(painterResource(id = R.drawable.icon_vxzx), null)
+                        Button(
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                            shape = RoundedCornerShape(
+                                topEnd = CORNER_FLOAT,
+                                bottomEnd = CORNER_FLOAT
+                            ),
+                            elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
+                            content = {
+                                Text(
+                                    modifier = Modifier.padding(vertical = 3.dp),
+                                    text = "微信咨询",
+                                    fontSize = 26.sp,
+                                    color = Color.White
+                                )
+                            },
+                            onClick = { showQrCode.value = true }
                         )
-                    },
-                    onClick = { showQrCode.value = true }
-                )
+                    }
+                }
             }
         }
     }

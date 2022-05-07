@@ -2,6 +2,7 @@ package com.fagougou.xiaoben.contractPage
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -83,49 +84,34 @@ object Contract{
 
 @Composable
 fun Contract(navController: NavController,category: DataB){
-    Button(
-        modifier = Modifier.padding(vertical = 8.dp),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
-        elevation = ButtonDefaults.elevation(0.dp),
-        content = {
-            Column{
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-                    Image(painterResource(R.drawable.icon_hti_head), null)
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        fontWeight= FontWeight.Bold,
-                        text = category.name,
-                        fontSize = 28.sp,
-                        color = Color.Black
-                    )
-                }
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = category.howToUse ?: "暂无数据",
-                    fontSize = 24.sp,
-                    color = Color.Black
-                )
-                Row(
-                    modifier = Modifier.padding(top = 12.dp),
-                ) {
-                    Text(
-                        maxLines=1,
-                        text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
-                        fontSize = 20.sp,
-                        color = Color.Gray
-                    )
-                    Text(
-                        maxLines=1,
-                        modifier = Modifier.padding(start = 8.dp),
-                        text = "更新时间："+ category.updatedAt,
-                        fontSize = 20.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-        },
-        onClick = { getTemplate(category.fileid, navController) }
-    )
+    Column(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .clickable { getTemplate(category.fileid, navController) }
+    ){
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+            Image(painterResource(R.drawable.icon_hti_head), null)
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                fontWeight= FontWeight.Bold,
+                text = category.name,
+                fontSize = 28.sp,
+                color = Color.Black
+            )
+        }
+        Text(
+            modifier = Modifier.padding(top = 12.dp),
+            text = category.howToUse ?: "暂无数据",
+            fontSize = 24.sp,
+            color = Color.Black
+        )
+        Text(
+            maxLines=1,
+            text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
+            fontSize = 20.sp,
+            color = Color.Gray
+        )
+    }
 }
 
 @SuppressLint("ComposableDestinationInComposeScope")
@@ -192,7 +178,7 @@ fun ContractGuidePage(navController: NavController) {
                 Column(
                     Modifier
                         .fillMaxHeight()
-                        .fillMaxSize(0.4f),
+                        .fillMaxWidth(0.36f),
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 36.dp),
@@ -242,6 +228,20 @@ fun ContractGuidePage(navController: NavController) {
                     content = {
                         items(HTLists){ category ->
                             Contract(navController, category)
+                        }
+                        item{
+                            if(HTLists.isEmpty()){
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(512.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ){
+                                    Image(painterResource(R.drawable.ic_no_contract),"No Content")
+                                    Text("暂无相关内容",fontSize = 28.sp,color = Color.Gray)
+                                }
+                            }
                         }
                     }
                 )

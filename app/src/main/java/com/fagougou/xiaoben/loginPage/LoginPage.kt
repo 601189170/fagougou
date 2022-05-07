@@ -152,5 +152,15 @@ fun LoginPage(navController: NavController){
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
+
+
+        Text(
+            modifier = Modifier.padding(top = 450.dp),
+
+            text = "技术支持：法狗狗人工智能 v2.0",
+            fontSize = 24.sp,
+
+            color = Color.White
+        )
     }
 }

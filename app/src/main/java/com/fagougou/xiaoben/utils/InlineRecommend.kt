@@ -3,11 +3,12 @@ package com.fagougou.xiaoben.utils
 import java.lang.StringBuilder
 
 object InlineRecommend {
-    val questionRegex = Regex("[\n]*#question::.*?#[\n]*")
-    val defRegex = Regex("[\n]*#def::.*?#[\n]*")
+    val questionRegex = Regex("[\n]*#question::")
+    val defRegex = Regex("[\n]*#def::")
+    val sharpRegex = Regex("#[\n]*")
 
     fun String.removeInline():String{
-        return replace(defRegex,"").replace(questionRegex,"")
+        return replace(defRegex,"").replace(questionRegex,"").replace(sharpRegex,"")
     }
 
     fun String.getInline():List<String>{

@@ -26,7 +26,6 @@ data class DataB(
     val folder: Folder? = Folder(),
     val howToUse: String? = "",
     val name: String = "",
-    val updatedAt: String = ""
 )
 
 data class Query(

@@ -15,8 +15,8 @@ object Time {
             while (true){
                 delay(2000)
                 val time = System.currentTimeMillis()
-                val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.getDefault())
-                timeText.value = simpleDateFormat.format(time)
+                val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
+                timeText.value = simpleDateFormat.format(time).replace("周","星期")
             }
         }
     }

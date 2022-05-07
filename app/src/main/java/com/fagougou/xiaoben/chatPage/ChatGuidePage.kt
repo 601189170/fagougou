@@ -41,7 +41,7 @@ fun ChatGuidePage(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Headder(title = "智能咨询", navController = navController)
+        Headder(title = "智能咨询", navController = navController,needWechat = true)
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "智能咨询",

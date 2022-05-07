@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class AuthRequest(
     @SerializedName("appid")
-    val appId: String = "fggcc163120c487778",
+    val appId: String = "fgg10819e3417bf1a8",
 
     @SerializedName("appsec")
-    val appSec: String = "cc163152002111ec90984d720c487778",
+    val appSec: String = "175646a001a211e897e52593417bf1a8",
 )
 
 data class Auth(
