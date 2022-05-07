@@ -119,7 +119,7 @@ object IFly {
         // 清空参数
         mIvw.setParameter(SpeechConstant.PARAMS, null)
         // 唤醒门限值，根据资源携带的唤醒词个数按照“id:门限;id:门限”的格式传入
-        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:600")
+        mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:1100")
         // 设置唤醒模式
         mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup")
         // 设置持续进行唤醒
