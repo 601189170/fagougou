@@ -187,7 +187,7 @@ fun WeChat(){
                             modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween
                         ) {
                             Image(wechatBitmap().asImageBitmap(),null)
-                            Text("微信扫码咨询", fontSize = 28.sp, modifier = Modifier.padding(16.dp))
+                            Text("微信扫码咨询", fontSize = 28.sp, modifier = Modifier.padding(8.dp))
                         }
                     }
                     Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)
