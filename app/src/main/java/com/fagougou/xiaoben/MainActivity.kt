@@ -224,7 +224,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},nee
                             painter = painterResource(R.drawable.ic_back),
                             contentDescription = "Back"
                         )
-                        Text("返回", fontSize = 26.sp, color = Color.White)
+                        Text("返回", fontSize = 24.sp, color = Color.White)
                     }
 
                 },
@@ -233,7 +233,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},nee
             Text(
                 title,
                 color = Color.White,
-                fontSize = 30.sp
+                fontSize = 32.sp
             )
                 Surface(
                     modifier = Modifier.width(192.dp),

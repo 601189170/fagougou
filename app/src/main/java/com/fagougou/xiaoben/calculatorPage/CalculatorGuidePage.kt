@@ -21,19 +21,19 @@ import com.fagougou.xiaoben.webViewPage.WebViewModel
 fun CalculatorGuidePage(navController: NavController) {
     val calResMap = mapOf(
         Pair("律师费", R.drawable.cal_lawyer),
-        Pair("诉讼费", R.drawable.cal_litigation),
         Pair("司法鉴定", R.drawable.cal_judicial),
-        Pair("逾期利息", R.drawable.cal_interest),
         Pair("公证费", R.drawable.cal_notary),
+        Pair("诉讼费", R.drawable.cal_litigation),
+        Pair("逾期利息", R.drawable.cal_interest),
         Pair("违约金", R.drawable.cal_damage),
         Pair("仲裁费", R.drawable.cal_arbitration),
     )
     val calUrlMap = mapOf(
         Pair("律师费", "https://www.fagougou.com/homepage/m/legalTools/Legalfee.html"),
-        Pair("诉讼费", "https://www.fagougou.com/homepage/m/legalTools/Litigation.html"),
         Pair("司法鉴定", "https://www.fagougou.com/homepage/m/legalTools/Attorneys.html"),
-        Pair("逾期利息", "https://www.fagougou.com/homepage/m/legalTools/OverdueInterest.html"),
         Pair("公证费", "https://www.fagougou.com/homepage/m/legalTools/Notarial.html"),
+        Pair("诉讼费", "https://www.fagougou.com/homepage/m/legalTools/Litigation.html"),
+        Pair("逾期利息", "https://www.fagougou.com/homepage/m/legalTools/OverdueInterest.html"),
         Pair("违约金", "https://www.fagougou.com/homepage/m/legalTools/Breach.html"),
         Pair("仲裁费", "https://www.fagougou.com/homepage/m/legalTools/Arbitration.html"),
     )
@@ -45,19 +45,19 @@ fun CalculatorGuidePage(navController: NavController) {
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "法律计算器",
-            fontSize = 45.sp,
+            fontSize = 32.sp,
             color = Color.White
         )
         Text(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 8.dp),
             text = "快速智能，助您计算相关费用",
-            fontSize = 28.sp,
+            fontSize = 24.sp,
             color = Color.White
         )
         LazyVerticalGrid(
             userScrollEnabled = false,
-            modifier = Modifier.padding(48.dp),
-            columns = GridCells.Fixed(2),
+            modifier = Modifier.padding(40.dp),
+            columns = GridCells.Fixed(3),
             content = {
                 items(calResMap.toList()){ cal ->
                     Column(modifier= Modifier.fillMaxSize().height(184.dp),

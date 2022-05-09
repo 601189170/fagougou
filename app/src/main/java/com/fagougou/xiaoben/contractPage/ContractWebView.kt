@@ -49,7 +49,7 @@ fun ContractWebView(navController: NavController) {
         )
         Surface(modifier = Modifier.fillMaxHeight().width(2.dp),color = ComposeColor(0xFFEEEEEE)){}
         Surface(color = ComposeColor.White){ Column(
-            modifier = Modifier.fillMaxSize().padding(top = 96.dp),
+            modifier = Modifier.fillMaxSize().padding(top = 12.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ){

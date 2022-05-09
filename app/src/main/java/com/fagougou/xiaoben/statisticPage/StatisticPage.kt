@@ -50,17 +50,17 @@ fun StatisticPage(navController:NavController){
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "咨询数据统计",
-            fontSize = 45.sp,
+            fontSize = 32.sp,
             color = Color.White
         )
         Text(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 8.dp),
             text = "为您统计每月和历史所有咨询数据",
-            fontSize = 28.sp,
+            fontSize = 24.sp,
             color = Color.White
         )
         Row(
-            modifier = Modifier.padding(top = 64.dp),
+            modifier = Modifier.padding(top = 40.dp),
         ) {
             Surface(
                 modifier = Modifier
@@ -84,7 +84,7 @@ fun StatisticPage(navController:NavController){
                     )
                     Text(
                         text = monthNumber.value.toString(),
-                        fontSize = 38.sp,
+                        fontSize = 48.sp,
                         color = Color.White
                     )
                 }
@@ -110,7 +110,7 @@ fun StatisticPage(navController:NavController){
                     )
                     Text(
                         text = allNumber.value.toString(),
-                        fontSize = 38.sp,
+                        fontSize = 48.sp,
                         color = Color.White
                     )
                 }
