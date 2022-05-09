@@ -26,15 +26,15 @@ import kotlinx.coroutines.launch
 fun ChatGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     val botResMap = mapOf(
+        Pair("公司财税", R.drawable.bot_tax),
+        Pair("交通事故", R.drawable.bot_traffic),
         Pair("婚姻家事", R.drawable.bot_marry),
         Pair("员工纠纷", R.drawable.bot_employee),
-        Pair("交通事故", R.drawable.bot_traffic),
-        Pair("企业人事", R.drawable.bot_employer),
-        Pair("民间借贷", R.drawable.bot_loan),
-        Pair("公司财税", R.drawable.bot_tax),
-        Pair("房产纠纷", R.drawable.bot_house),
         Pair("知识产权", R.drawable.bot_knowledge),
         Pair("刑事犯罪", R.drawable.bot_crime),
+        Pair("房产纠纷", R.drawable.bot_house),
+        Pair("企业人事", R.drawable.bot_employer),
+        Pair("民间借贷", R.drawable.bot_loan),
         Pair("消费维权", R.drawable.bot_consumer),
     )
     Column(
@@ -45,19 +45,19 @@ fun ChatGuidePage(navController: NavController) {
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "智能咨询",
-            fontSize = 45.sp,
+            fontSize = 32.sp,
             color = Color.White
         )
         Text(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 8.dp),
             text = "秒问秒答，快速解答法律疑惑",
-            fontSize = 28.sp,
+            fontSize = 24.sp,
             color = Color.White
         )
         LazyVerticalGrid(
             userScrollEnabled = false,
-            modifier = Modifier.padding(64.dp),
-            columns = GridCells.Fixed(4),
+            modifier = Modifier.padding(top = 40.dp ).padding(horizontal = 130.dp),
+            columns = GridCells.Fixed(5),
             content = {
                 items(botResMap.toList()){ bot ->
                     Column(modifier= Modifier

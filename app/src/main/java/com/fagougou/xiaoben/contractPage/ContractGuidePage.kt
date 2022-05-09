@@ -112,7 +112,7 @@ fun Contract(navController: NavController,category: DataB){
             color = Color.Black
         )
         Text(
-            modifier = Modifier.padding(top = 12.dp),
+            modifier = Modifier.padding(top = 16.dp),
             text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
             fontSize = 20.sp,
             color = Color.Gray
@@ -130,18 +130,18 @@ fun ContractGuidePage(navController: NavController) {
         Headder(title = "合同文库", navController = navController)
         Surface(
             modifier = Modifier
-                .height(392.dp)
-                .width(1080.dp)
+                .height(364.dp)
+                .fillMaxWidth()
         ) {
             Image(painterResource(id = R.drawable.contract_banner),null)
             Column(
                 modifier = Modifier
-                    .height(392.dp)
-                    .width(1080.dp),
+                    .height(364.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "海量合同文库", fontSize = 72.sp, color = Color.White,fontWeight = FontWeight.Bold)
+                Text(text = "海量文库", fontSize = 40.sp, color = Color.White,fontWeight = FontWeight.Bold)
                 Row(
 
                     verticalAlignment = Alignment.CenterVertically
@@ -152,17 +152,17 @@ fun ContractGuidePage(navController: NavController) {
                         focusedIndicatorColor = Color.Transparent,
                     )
                     TextField(
-                        modifier = Modifier.width(640.dp),
+                        modifier = Modifier.width(568.dp),
                         value =searchWord.value,
                         onValueChange = { searchWord.value = it },
-                        textStyle = TextStyle(color = Color.Gray, fontSize = 32.sp),
-                        placeholder = {Text("输入关键词搜索",color = Color.Gray, fontSize = 32.sp)},
+                        textStyle = TextStyle(color = Color.Gray, fontSize = 24.sp),
+                        placeholder = {Text("输入关键词搜索",color = Color.Gray, fontSize = 24.sp)},
                         colors = textFieldColors,
                         shape = RoundedCornerShape(topStart = CORNER_FLOAT, bottomStart = CORNER_FLOAT),
                         maxLines = 1
                     )
                     Button(
-                        modifier = Modifier.width(160.dp),
+                        modifier = Modifier.width(152.dp),
                         colors = ButtonDefaults.buttonColors(Dodgerblue),
                         shape = RoundedCornerShape(topEnd = CORNER_FLOAT, bottomEnd = CORNER_FLOAT),
                         elevation = ButtonDefaults.elevation(0.dp),
@@ -170,7 +170,7 @@ fun ContractGuidePage(navController: NavController) {
                             Text(
                                 modifier = Modifier.padding(vertical = 8.dp),
                                 text = "搜索",
-                                fontSize = 32.sp,
+                                fontSize = 24.sp,
                                 color = Color.White
                             )
                         },
@@ -180,18 +180,19 @@ fun ContractGuidePage(navController: NavController) {
             }
         }
         Row(Modifier.fillMaxSize()) {
-            Surface(color = Color(0xFFEEEEEE)) {
+            Surface(color = Color(0xFFFFFFFF)) {
                 Column(
                     Modifier
                         .fillMaxHeight()
-                        .fillMaxWidth(0.33f),
+                        .fillMaxWidth(0.3f),
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 36.dp),
+                        verticalArrangement = Arrangement.spacedBy(36.dp),
                         content = {
                             items(categoryList){ category ->
                                 Surface(
-                                    color = if(category.id== selectedId.value)Color(0xFFBBCCEE) else Color(0xFFEEEEEE)
+                                    color = if(category.id== selectedId.value)Color(0xFFBBCCEE) else Color(0xFFFFFFFF)
                                 ) {
                                     Row(
                                         modifier = Modifier
@@ -210,7 +211,7 @@ fun ContractGuidePage(navController: NavController) {
                                         Text(
                                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                             text = category.name,
-                                            fontSize = 28.sp,
+                                            fontSize = 24.sp,
                                             color = Color.Black
                                         )
                                     }
@@ -225,6 +226,7 @@ fun ContractGuidePage(navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(48.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
                     content = {
                         items(HTLists){ category ->
                             Contract(navController, category)
