@@ -43,7 +43,7 @@ import java.lang.Exception
 object LoginPage {
     val userName = mutableStateOf("")
     val password = mutableStateOf("")
-    val state = mutableStateOf("登录")
+    val state = mutableStateOf("立即登录")
     fun login(navController: NavController){
         state.value = "登录中..."
         CoroutineScope(Dispatchers.IO).launch {
@@ -67,7 +67,7 @@ object LoginPage {
             } catch (e:Exception){
                 handleException(e)
             }finally {
-                state.value = "登录"
+                state.value = "立即登录"
             }
         }
     }
@@ -101,9 +101,9 @@ fun LoginPage(navController: NavController){
         }
         Text(
             modifier = Modifier.padding(top = 192.dp),
-            text = "登录账号",
+            text = "智能法律服务系统",
             color = Color.White,
-            fontSize = 56.sp
+            fontSize = 32.sp
         )
         val textFieldColors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color(0x44FFFFFF),
@@ -113,24 +113,24 @@ fun LoginPage(navController: NavController){
         )
         TextField(
             modifier = Modifier
-                .padding(top = 64.dp)
-                .width(720.dp),
+                .padding(top = 40.dp)
+                .width(480.dp),
             value = userName.value,
             onValueChange = {userName.value = it},
-            textStyle = TextStyle(color = Color.White, fontSize = 42.sp),
-            placeholder = {Text("请输入账号",color = Color.Gray, fontSize = 42.sp)},
+            textStyle = TextStyle(color = Color.White, fontSize = 28.sp),
+            placeholder = {Text("请输入账号",color = Color.Gray, fontSize = 28.sp)},
             shape = RoundedCornerShape(CORNER_FLOAT),
             colors = textFieldColors,
             leadingIcon = { Image(painterResource(R.drawable.ic_login_user), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
         TextField(
             modifier = Modifier
-                .padding(top = 48.dp)
-                .width(720.dp),
+                .padding(top = 24.dp)
+                .width(480.dp),
             value = password.value,
             onValueChange = { password.value = it},
-            textStyle = TextStyle(color = Color.White, fontSize = 42.sp),
-            placeholder = {Text("请输入密码",color = Color.Gray, fontSize = 42.sp)},
+            textStyle = TextStyle(color = Color.White, fontSize = 28.sp),
+            placeholder = {Text("请输入密码",color = Color.Gray, fontSize = 28.sp)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
             shape = RoundedCornerShape(CORNER_FLOAT),
@@ -139,15 +139,15 @@ fun LoginPage(navController: NavController){
         )
         Button(
             modifier = Modifier
-                .padding(top = 48.dp)
-                .width(720.dp)
-                .height(100.dp),
-            onClick = { if(state.value=="登录")login(navController) },
+                .padding(top = 24.dp)
+                .width(480.dp)
+                .height(80.dp),
+            onClick = { if(state.value=="立即登录")login(navController) },
             content = {
                 Text(
                     text = state.value,
                     color = Color.White,
-                    fontSize = 42.sp
+                    fontSize = 28.sp
                 )
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
@@ -155,10 +155,10 @@ fun LoginPage(navController: NavController){
 
 
         Text(
-            modifier = Modifier.padding(top = 450.dp),
+            modifier = Modifier.padding(top = 290.dp),
 
             text = "技术支持：法狗狗人工智能 v2.0",
-            fontSize = 24.sp,
+            fontSize = 20.sp,
 
             color = Color.White
         )

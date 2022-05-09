@@ -80,13 +80,13 @@ fun HomePage(navController:NavController) {
             Text(
                 modifier = Modifier.padding(bottom = 48.dp),
                 text = "欢迎使用",
-                fontSize = 48.sp,
+                fontSize = 20.sp,
                 color = Color.White
             )
             Text(
                 modifier = Modifier.padding(bottom = 72.dp),
                 text = "智能法律服务系统",
-                fontSize = 56.sp,
+                fontSize = 27.sp,
                 color = Color.White
             )
             Row(

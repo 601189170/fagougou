@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
                     Main()
                     WeChat()
                     Loading()
+
                 }
             }
         }
@@ -148,6 +149,7 @@ fun Main() {
             composable("WebView") { WebViewPage(navController) }
             composable("about") { AboutUs(navController) }
         }
+
     }
 }
 

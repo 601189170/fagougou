@@ -21,7 +21,7 @@ fun AboutUs(navController: NavController) {
         Column(modifier = Modifier.padding(horizontal = 40.dp)) {
             Image(
                 modifier = Modifier.padding(top = 40.dp),
-                painter = painterResource(R .drawable.about_robot ),
+                painter = painterResource(R.drawable.about_robot),
                 contentDescription = null
             )
             Text(
