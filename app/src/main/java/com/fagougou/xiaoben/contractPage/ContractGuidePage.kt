@@ -113,7 +113,7 @@ fun Contract(navController: NavController,category: DataB){
             color = Color.Black
         )
         Text(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(top = 12.dp),
             text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
             fontSize = 20.sp,
             color = Color.Gray
@@ -131,18 +131,16 @@ fun ContractGuidePage(navController: NavController) {
         Headder(title = "合同文库", navController = navController)
         Surface(
             modifier = Modifier
-                .height(364.dp)
-                .fillMaxWidth()
+                .height(265.dp)
+                .width(1280.dp)
         ) {
             Image(painterResource(id = R.drawable.contract_banner),null)
             Column(
-                modifier = Modifier
-                    .height(364.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "海量文库", fontSize = 40.sp, color = Color.White,fontWeight = FontWeight.Bold)
+                Text(text = "海量合同文库", fontSize = 48 .sp, color = Color.White,fontWeight = FontWeight.Bold)
                 Row(
 
                     verticalAlignment = Alignment.CenterVertically
@@ -189,7 +187,7 @@ fun ContractGuidePage(navController: NavController) {
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 36.dp),
-                        verticalArrangement = Arrangement.spacedBy(36.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                         content = {
                             items(categoryList){ category ->
                                 Surface(
