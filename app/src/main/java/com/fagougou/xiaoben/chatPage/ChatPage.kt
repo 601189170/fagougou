@@ -63,14 +63,13 @@ fun BotMenu() {
     Row(
         modifier = Modifier
             .horizontalScroll(scrollState)
-            .padding(16.dp)
     ) {
         for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
             Surface(color = Color.Transparent) {
                 HomeButton(
                     modifier = Modifier
-                        .width(136.dp)
-                        .height(171.dp),
+                        .width(108.dp)
+                        .height(132.dp),
                     onClick = {
                         selectedChatBot.value = bot.first
                         scope.launch(Dispatchers.IO) { startChat() }
@@ -79,9 +78,7 @@ fun BotMenu() {
                 )
                 if(selectedChatBot.value == bot.first)Column(
                     modifier = Modifier
-                        .width(136.dp)
-                        .height(171.dp)
-                        .padding(top = 1.dp),
+                        .width(107.dp),
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top
                 ) {
@@ -108,9 +105,9 @@ fun LawExpend(message: Message, index: Int) {
                 }
         ) {
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(12.dp),
                 text = "法律依据",
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 color = Dodgerblue
             )
             val svg = if (message.isExpend)R.drawable.ic_flod else R.drawable.ic_expend
@@ -123,14 +120,14 @@ fun LawExpend(message: Message, index: Int) {
             if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
                 Text(
                     (i + 1).toString() + "." + law.name + law.position + ":",
-                    modifier = Modifier.padding(16.dp),
-                    fontSize = 26.sp
+                    modifier = Modifier.padding(12.dp),
+                    fontSize = 24.sp
                 )
                 Text(
                     law.content,
                     modifier = Modifier.padding(12.dp),
                     color = Color(0xFF666666),
-                    fontSize = 22.sp
+                    fontSize = 20.sp
                 )
             }
         }
@@ -151,19 +148,19 @@ fun MessageRect(
     ) {
         Column {
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(12.dp),
                 text = message.content + message.complex.explanation,
-                fontSize = 28.sp,
-                lineHeight = 40.sp,
+                fontSize = 24.sp,
+                lineHeight = 32.sp,
                 color = textColor,
             )
             for(question in message.inlineRecommend){
                 Text(
                     modifier = Modifier
-                        .padding(bottom = 16.dp, start = 16.dp)
+                        .padding(bottom = 12.dp, start = 12.dp)
                         .clickable { scope.launch(Dispatchers.IO) { nextChat(question) } },
                     text = question,
-                    fontSize = 28.sp,
+                    fontSize = 24.sp,
                     color = Dodgerblue,
                 )
             }
@@ -198,22 +195,22 @@ fun ComplexRect(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
+                        .height(48.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
                         message.complex.title,
-                        fontSize = 28.sp,
+                        fontSize = 24.sp,
                         color = Color.White,
                     )
                 }
             }
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(12.dp),
                 text = message.content + message.complex.explanation,
-                fontSize = 28.sp,
-                lineHeight = 40.sp,
+                fontSize = 24.sp,
+                lineHeight = 32.sp,
                 color = textColor,
             )
             Divider(
@@ -224,14 +221,14 @@ fun ComplexRect(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(12.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = Modifier.padding(end = 12.dp),
                     text = "点击查看更多",
-                    fontSize = 24.sp,
+                    fontSize = 20.sp,
                 )
             }
         }
@@ -244,46 +241,46 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         Speaker.ROBOT -> Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 18.dp),
+                .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) { MessageRect(message, index,scope) }
         Speaker.USER -> Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 18.dp),
+                .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) { MessageRect(message, index,scope, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
-                .padding(vertical = 18.dp),
+                .padding(vertical = 12.dp),
         ) {
             Surface(
                 shape = RoundedCornerShape(CORNER_FLOAT),
                 color = Color.White,
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.padding(12.dp)
                 ) {
                     if (message.isExpend) {
                         Row(
-                            modifier = Modifier.padding(start = 16.dp, bottom = 12.dp),
+                            modifier = Modifier.padding(start = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            if (index == 1) Text("大家都在问:", fontSize = 28.sp)
+                            if (index == 1) Text("大家都在问:", fontSize = 24.sp)
                             else {
                                 Image(painterResource(R.drawable.ic_relate_question), null)
                                 Text(
-                                    modifier = Modifier.padding(start = 16.dp),
+                                    modifier = Modifier.padding(start = 12.dp),
                                     text = "相关问题",
-                                    fontSize = 28.sp
+                                    fontSize = 24.sp
                                 )
                             }
                         }
                         for (question in message.recommends) Button(
                             onClick = { scope.launch(Dispatchers.IO){ nextChat(question) } },
-                            content = { Text("·$question", fontSize = 28.sp, color = Dodgerblue) },
+                            content = { Text("·$question", fontSize = 24.sp, color = Dodgerblue) },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
                             elevation = ButtonDefaults.elevation(0.dp)
                         )
@@ -293,9 +290,9 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     ) {
                         Image(painterResource(R.drawable.ic_relate_question), null)
                         Text(
-                            modifier = Modifier.padding(start = 16.dp),
+                            modifier = Modifier.padding(start = 12.dp),
                             text = "点击查看与您情况相关的问题",
-                            fontSize = 28.sp,
+                            fontSize = 24.sp,
                             color = Dodgerblue
                         )
                     }
@@ -305,7 +302,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         Speaker.OPTIONS -> Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 18.dp)
+                .padding(vertical = 16.dp)
         ) {
             when (message.option.type) {
                 "radio" -> {
@@ -322,8 +319,8 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                 val item = message.option.items[i]
                                 Button(
                                     modifier = Modifier
-                                        .height(80.dp)
-                                        .width(225.dp),
+                                        .height(60.dp)
+                                        .width(180.dp),
                                     onClick = { scope.launch(Dispatchers.IO){nextChat(item)} },
                                     content = { Text(item, fontSize = 24.sp, color = Color.White) },
                                     colors = ButtonDefaults.buttonColors(Dodgerblue)
@@ -376,7 +373,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                 if (i <= lastIndex) {
                                     Button(
                                         modifier = Modifier
-                                            .height(75.dp)
+                                            .height(50.dp)
                                             .width(150.dp),
                                         onClick = {
                                             scope.launch(Dispatchers.IO){
@@ -387,7 +384,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                         content = {
                                             Text(
                                                 cityList[i],
-                                                fontSize = 21.sp,
+                                                fontSize = 20.sp,
                                                 color = Color.White
                                             )
                                         },
@@ -404,7 +401,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         Speaker.COMPLEX -> Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 18.dp),
+                .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) { ComplexRect(message, index, navController = navController) }
@@ -434,8 +431,8 @@ fun ChatPage(navController: NavController) {
         BotMenu()
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.8f)
-                .padding(horizontal = 36.dp),
+                .fillMaxHeight(0.78f)
+                .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
@@ -459,7 +456,7 @@ fun ChatPage(navController: NavController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp)
+                        .height(160.dp)
                 ) {}
             }
         }
@@ -467,9 +464,9 @@ fun ChatPage(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier.padding(vertical = 32.dp),
+                modifier = Modifier.padding(vertical = 18.dp),
                 text = IFly.recognizeResult.value,
-                fontSize = 32.sp,
+                fontSize = 24.sp,
                 color = Color.White
             )
             PAG()

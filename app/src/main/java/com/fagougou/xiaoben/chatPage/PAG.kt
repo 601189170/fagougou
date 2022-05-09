@@ -44,8 +44,8 @@ fun PAG(){
     Surface(color = Color.Transparent) {
         AndroidView(
             modifier = Modifier
-                .height(128.dp)
-                .width(512.dp),
+                .height(100.dp)
+                .width(400.dp),
             factory = {
                 PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(
@@ -62,8 +62,8 @@ fun PAG(){
         )
         AndroidView(
             modifier = Modifier
-                .height(128.dp)
-                .width(512.dp),
+                .height(100.dp)
+                .width(400.dp),
             factory = {
                 PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(

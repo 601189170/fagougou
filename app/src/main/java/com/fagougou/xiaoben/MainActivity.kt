@@ -67,7 +67,6 @@ class MainActivity : ComponentActivity() {
                     Main()
                     WeChat()
                     Loading()
-
                 }
             }
         }
@@ -205,7 +204,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},nee
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
-                .height(96.dp)
+                .height(64.dp)
                 .padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
