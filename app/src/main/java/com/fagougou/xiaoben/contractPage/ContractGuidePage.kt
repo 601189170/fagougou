@@ -70,6 +70,7 @@ object Contract{
                 HTLists.addAll(body.data.list)
             }catch (e:Exception){
                 handleException(e)
+
             }
         }
     }
