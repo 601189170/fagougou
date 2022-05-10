@@ -56,19 +56,19 @@ fun ChatGuidePage(navController: NavController) {
         )
         LazyVerticalGrid(
             userScrollEnabled = false,
-            modifier = Modifier.padding(top = 40.dp ).padding(horizontal = 130.dp),
+            modifier = Modifier.padding(top = 40.dp ).padding(horizontal = 100.dp),
             columns = GridCells.Fixed(5),
             content = {
                 items(botResMap.toList()){ bot ->
                     Column(modifier= Modifier
                         .fillMaxSize()
-                        .height(292.dp),
+                        .height(250.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally){
                         HomeButton(
                             modifier= Modifier
-                                .width(218.dp)
-                                .height(272.dp),
+                                .width(184.dp)
+                                .height(224.dp),
                             onClick = {
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }

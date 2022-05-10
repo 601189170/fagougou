@@ -94,21 +94,21 @@ fun HomePage(navController:NavController) {
             ) {
                 HomeButton(
                     modifier = Modifier
-                        .width(472.dp)
-                        .height(320.dp),
+                        .width(424.dp)
+                        .height(264.dp),
                     onClick = { navController.navigate("chatGuide") },
                     contentId = R.drawable.home_law_ask)
                 HomeButton(
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
-                        .width(224.dp)
-                        .height(320.dp),
+                        .width(200.dp)
+                        .height(264.dp),
                     onClick = { navController.navigate("contract") },
                     contentId = R.drawable.home_document)
                 HomeButton(
                     modifier = Modifier
-                        .width(224.dp)
-                        .height(320.dp),
+                        .width(200.dp)
+                        .height(264.dp),
                     onClick = { navController.navigate("statistic") },
                     contentId = R.drawable.home_statistic)
             }
@@ -118,15 +118,15 @@ fun HomePage(navController:NavController) {
                 HomeButton(
                     modifier = Modifier
                         .padding(end = 12.dp)
-                        .width(472.dp)
-                        .height(168.dp),
+                        .width(424.dp)
+                        .height(120.dp),
                     onClick = {  navController.navigate("calculator")  },
                     contentId = R.drawable.home_law_calculator)
                 HomeButton(
                     modifier = Modifier
                         .padding(start = 12.dp)
-                        .width(472.dp)
-                        .height(168.dp),
+                        .width(424.dp)
+                        .height(120.dp),
                     onClick = { navController.navigate("about") },
                     contentId = R.drawable.home_about_us)
             }

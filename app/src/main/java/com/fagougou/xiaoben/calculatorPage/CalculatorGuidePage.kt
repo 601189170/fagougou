@@ -56,17 +56,17 @@ fun CalculatorGuidePage(navController: NavController) {
         )
         LazyVerticalGrid(
             userScrollEnabled = false,
-            modifier = Modifier.padding(40.dp),
+            modifier = Modifier.padding(start = 100.dp,end = 100.dp),
             columns = GridCells.Fixed(3),
             content = {
                 items(calResMap.toList()){ cal ->
-                    Column(modifier= Modifier.fillMaxSize().height(184.dp),
+                    Column(modifier= Modifier.fillMaxSize().height(160.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally){
                         HomeButton(
                             modifier= Modifier
-                                .width(472.dp)
-                                .height(160.dp),
+                                .width(320.dp)
+                                .height(120.dp),
                             onClick = {
                                 WebViewModel.title = "法律计算器"
                                 WebViewModel.data = ""
