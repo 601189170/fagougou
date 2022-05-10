@@ -138,7 +138,7 @@ fun Main() {
             composable("login") { LoginPage(navController) }
             composable("home") { HomePage(navController) }
             composable("contract") { ContractGuidePage(navController) }
-            composable("guide") { ChatGuidePage(navController) }
+            composable("chatGuide") { ChatGuidePage(navController) }
             composable("chat") { ChatPage(navController) }
             composable("complex") { ComplexPage(navController) }
             composable("case") { CasePage(navController) }
@@ -200,7 +200,7 @@ fun WeChat(){
 }
 
 @Composable
-fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},needWechat:Boolean = false){
+fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
@@ -239,7 +239,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {},nee
                     modifier = Modifier.width(192.dp),
                     color = Color.Transparent
                 ) {
-                    if (needWechat) {
+                    if (navController.currentDestination?.route?.contains("chat") == true) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painterResource(id = R.drawable.ic_wechat), null)
                         Button(
