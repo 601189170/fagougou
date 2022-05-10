@@ -425,8 +425,7 @@ fun ChatPage(navController: NavController) {
                 mTts.stopSpeaking()
                 history.clear()
                 currentProvince.value = ""
-            },
-            true
+            }
         )
         BotMenu()
         LazyColumn(

@@ -96,7 +96,7 @@ fun HomePage(navController:NavController) {
                     modifier = Modifier
                         .width(472.dp)
                         .height(320.dp),
-                    onClick = { navController.navigate("guide") },
+                    onClick = { navController.navigate("chatGuide") },
                     contentId = R.drawable.home_law_ask)
                 HomeButton(
                     modifier = Modifier
