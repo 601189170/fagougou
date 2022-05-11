@@ -14,11 +14,11 @@ import com.fagougou.xiaoben.utils.IFly
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.TTS
 import com.iflytek.cloud.SpeechUtility
+import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class CommonApplication: Application(){
     companion object {
@@ -35,6 +35,10 @@ class CommonApplication: Application(){
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
         Bugsnag.start(this)
+//        IFly.init(this)
+//        TTS.init(this)
+        //初始化YKFUtils
+        YKFUtils.init(this)
         IFly.init(this)
         TTS.init(this)
         CoroutineScope(Dispatchers.IO).launch {

@@ -44,6 +44,8 @@ import com.fagougou.xiaoben.statisticPage.StatisticPage
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.ui.theme.XiaoBenTheme
 import com.fagougou.xiaoben.utils.IFly.routeMirror
+import com.fagougou.xiaoben.utils.ImSdkUtils
+import com.fagougou.xiaoben.utils.ImSdkUtils.helper
 import com.fagougou.xiaoben.utils.MMKV.kv
 import com.fagougou.xiaoben.utils.Wechat.showQrCode
 import com.fagougou.xiaoben.utils.Wechat.wechatBitmap
@@ -258,7 +260,12 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                     color = Color.White
                                 )
                             },
-                            onClick = { showQrCode.value = true }
+                            onClick = {
+                                showQrCode.value = true
+
+                                ImSdkUtils.initKfHelper()
+                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
+                            }
                         )
                     }
                 }
