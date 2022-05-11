@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.fagougou.xiaoben">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,12 +10,13 @@
 
     <application
         android:name=".CommonApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/fagougou"
         android:label="@string/app_name"
         android:roundIcon="@drawable/fagougou"
         android:supportsRtl="true"
-        android:theme="@style/Theme.XiaoBen">
+        android:theme="@style/Theme.XiaoBen"
+        tools:replace="android:icon,android:label,android:theme,android:allowBackup">
         <activity
             android:name=".UpdateActivity"
             android:exported="true"

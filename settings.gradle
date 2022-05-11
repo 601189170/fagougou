@@ -3,6 +3,10 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        // 华为开源镜像：https://mirrors.huaweicloud.com
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
     }
 }
 dependencyResolutionManagement {
@@ -10,7 +14,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        // 华为开源镜像：https://mirrors.huaweicloud.com
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
     }
 }
 rootProject.name = "XiaoBen"
 include ':app'
+include ':ykfsdk'
