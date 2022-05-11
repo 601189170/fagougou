@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.MainActivity
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.loginPage.LoginPage.login
 import com.fagougou.xiaoben.loginPage.LoginPage.password
 import com.fagougou.xiaoben.loginPage.LoginPage.state
@@ -60,7 +61,7 @@ object LoginPage {
                 kv.encode("wechatUrl",body.channels.firstOrNull()?.url ?: "null")
                 withContext(Dispatchers.Main) {
                     (activity as MainActivity).hideSystemUI()
-                    navController.navigate("home")
+                    navController.navigate(Router.home)
                 }
             }catch (e:MalformedJsonException){
                 toast("用户名或密码错误")

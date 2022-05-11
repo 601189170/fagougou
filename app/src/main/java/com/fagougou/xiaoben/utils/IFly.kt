@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.chatPage.ChatViewModel.nextChat
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.utils.Tips.toast
@@ -75,7 +76,7 @@ object IFly {
             if(isLast && selectedChatBot.value!="小笨") {
                 val result = resultBuilder.toString()
                 CoroutineScope(Dispatchers.IO).launch {
-                    if(routeMirror == "chat") nextChat(result)
+                    if(routeMirror == Router.chat) nextChat(result)
                 }
                 mIatResults.clear()
                 wakeMode()
@@ -143,7 +144,7 @@ object IFly {
     }
 
     fun recognizeMode(){
-        if(routeMirror == "chat") {
+        if(routeMirror == Router.chat) {
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()

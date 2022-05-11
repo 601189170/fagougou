@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.contractPage.Contract.HTLists
 import com.fagougou.xiaoben.contractPage.Contract.categoryList
 import com.fagougou.xiaoben.contractPage.Contract.searchWord
@@ -83,7 +84,7 @@ object Contract{
                 codeUrl = body.data
                 val encodedUrl = URLEncoder.encode(codeUrl,"UTF-8")
                 ContractWebView.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                navController.navigate("contractWebView")
+                navController.navigate(Router.contractWebView)
             }
         }
     }

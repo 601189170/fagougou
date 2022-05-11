@@ -132,21 +132,21 @@ fun Main() {
         val canLogin = kv.decodeBool("canLogin",false)
         NavHost(
             navController = navController,
-            startDestination = if(canLogin) "home" else "login",
+            startDestination = if(canLogin) Router.home else Router.login,
             modifier = Modifier.fillMaxHeight()
         ) {
-            composable("login") { LoginPage(navController) }
-            composable("home") { HomePage(navController) }
-            composable("contract") { ContractGuidePage(navController) }
-            composable("chatGuide") { ChatGuidePage(navController) }
-            composable("chat") { ChatPage(navController) }
-            composable("complex") { ComplexPage(navController) }
-            composable("case") { CasePage(navController) }
-            composable("statistic") { StatisticPage(navController) }
-            composable("calculator") { CalculatorGuidePage(navController) }
-            composable("contractWebView") { ContractWebView(navController) }
-            composable("WebView") { WebViewPage(navController) }
-            composable("about") { AboutUs(navController) }
+            composable(Router.login) { LoginPage(navController) }
+            composable(Router.home) { HomePage(navController) }
+            composable(Router.contract) { ContractGuidePage(navController) }
+            composable(Router.chatGuide) { ChatGuidePage(navController) }
+            composable(Router.chat) { ChatPage(navController) }
+            composable(Router.complex) { ComplexPage(navController) }
+            composable(Router.case) { CasePage(navController) }
+            composable(Router.statistic) { StatisticPage(navController) }
+            composable(Router.calculator) { CalculatorGuidePage(navController) }
+            composable(Router.contractWebView) { ContractWebView(navController) }
+            composable(Router.webView) { WebViewPage(navController) }
+            composable(Router.about) { AboutUs(navController) }
         }
 
     }
@@ -204,7 +204,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
-                .height(64.dp)
+                .height(72.dp)
                 .padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -233,7 +233,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
             Text(
                 title,
                 color = Color.White,
-                fontSize = 32.sp
+                fontSize = 24.sp
             )
                 Surface(
                     modifier = Modifier.width(192.dp),
@@ -253,7 +253,7 @@ fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
                                 Text(
                                     modifier = Modifier.padding(vertical = 3.dp),
                                     text = "微信咨询",
-                                    fontSize = 26.sp,
+                                    fontSize = 24.sp,
                                     color = Color.White
                                 )
                             },

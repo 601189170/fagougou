@@ -46,7 +46,7 @@ fun WebView(urlAddress:String,data:String){
         factory = {
             WebView(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                setInitialScale(144)
+                setInitialScale(100)
                 settings.javaScriptEnabled = true
                 webChromeClient = WebChromeClient()
                 if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")

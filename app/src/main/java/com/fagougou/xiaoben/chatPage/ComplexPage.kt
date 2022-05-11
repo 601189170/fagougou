@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.chatPage.Complex.bodyList
 import com.fagougou.xiaoben.chatPage.Complex.caseList
 import com.fagougou.xiaoben.chatPage.Complex.selectPage
@@ -94,7 +95,7 @@ fun CaseButton(case: AttachmentCases,scope: CoroutineScope,navController: NavCon
                 body.data.DocContent = body.data.DocContent.replace("\n","<br>")
                 Case.data = body.data
                 withContext(Dispatchers.Main){
-                    navController.navigate("case")
+                    navController.navigate(Router.case)
                 }
             }
         }

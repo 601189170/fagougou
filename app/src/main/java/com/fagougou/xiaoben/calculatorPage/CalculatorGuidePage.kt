@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.Headder
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.homePage.HomeButton
 import com.fagougou.xiaoben.webViewPage.WebViewModel
 
@@ -71,7 +72,7 @@ fun CalculatorGuidePage(navController: NavController) {
                                 WebViewModel.title = "法律计算器"
                                 WebViewModel.data = ""
                                 WebViewModel.urlAddress = calUrlMap[cal.first] ?: ""
-                                navController.navigate("WebView")
+                                navController.navigate(Router.webView)
                             },
                             contentId = cal.second
                         )

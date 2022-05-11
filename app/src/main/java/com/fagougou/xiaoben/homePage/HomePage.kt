@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activity
 import com.fagougou.xiaoben.R
+import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
 import com.fagougou.xiaoben.utils.MMKV.clearStack
 import com.fagougou.xiaoben.utils.MMKV.kv
@@ -96,20 +97,20 @@ fun HomePage(navController:NavController) {
                     modifier = Modifier
                         .width(424.dp)
                         .height(264.dp),
-                    onClick = { navController.navigate("chatGuide") },
+                    onClick = { navController.navigate(Router.chatGuide) },
                     contentId = R.drawable.home_law_ask)
                 HomeButton(
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
                         .width(200.dp)
                         .height(264.dp),
-                    onClick = { navController.navigate("contract") },
+                    onClick = { navController.navigate(Router.contract) },
                     contentId = R.drawable.home_document)
                 HomeButton(
                     modifier = Modifier
                         .width(200.dp)
                         .height(264.dp),
-                    onClick = { navController.navigate("statistic") },
+                    onClick = { navController.navigate(Router.statistic) },
                     contentId = R.drawable.home_statistic)
             }
             Row(
@@ -120,14 +121,14 @@ fun HomePage(navController:NavController) {
                         .padding(end = 12.dp)
                         .width(424.dp)
                         .height(120.dp),
-                    onClick = {  navController.navigate("calculator")  },
+                    onClick = {  navController.navigate(Router.calculator)  },
                     contentId = R.drawable.home_law_calculator)
                 HomeButton(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .width(424.dp)
                         .height(120.dp),
-                    onClick = { navController.navigate("about") },
+                    onClick = { navController.navigate(Router.about) },
                     contentId = R.drawable.home_about_us)
             }
         }
