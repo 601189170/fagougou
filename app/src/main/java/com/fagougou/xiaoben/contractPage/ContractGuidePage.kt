@@ -31,8 +31,8 @@ import com.fagougou.xiaoben.contractPage.Contract.getTemplate
 import com.fagougou.xiaoben.contractPage.Contract.selectedId
 import com.fagougou.xiaoben.contractPage.ContractWebView.codeUrl
 import com.fagougou.xiaoben.model.ContractCategory
-import com.fagougou.xiaoben.model.DataB
-import com.fagougou.xiaoben.model.HTListRequest
+import com.fagougou.xiaoben.model.ContractData
+import com.fagougou.xiaoben.model.ContractListRequest
 import com.fagougou.xiaoben.repo.Client.contractService
 import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
@@ -46,7 +46,7 @@ import java.net.URLEncoder
 
 object Contract{
     val categoryList = mutableStateListOf<ContractCategory>()
-    val HTLists = mutableStateListOf<DataB>()
+    val HTLists = mutableStateListOf<ContractData>()
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
 
@@ -66,7 +66,7 @@ object Contract{
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (searchName!="")selectedId.value = ""
-                val response = contractService.getHtlist(HTListRequest(folder = folder, name = searchName)).execute()
+                val response = contractService.getHtlist(ContractListRequest(folder = folder, name = searchName)).execute()
                 val body = response.body() ?: return@launch
                 HTLists.addAll(body.data.list)
             }catch (e:Exception){
@@ -91,7 +91,7 @@ object Contract{
 }
 
 @Composable
-fun Contract(navController: NavController,category: DataB){
+fun Contract(navController: NavController,category: ContractData){
     Column(
         modifier = Modifier
             .padding(vertical = 8.dp)

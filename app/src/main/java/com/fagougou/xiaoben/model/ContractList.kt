@@ -2,7 +2,7 @@ package com.fagougou.xiaoben.model
 
 import com.google.gson.annotations.SerializedName
 
-data class HTListRequest(
+data class ContractListRequest(
     @SerializedName("folder")
     val folder: String = "",
     @SerializedName("limit")
@@ -11,24 +11,24 @@ data class HTListRequest(
     val name: String = "",
 )
 
-data class HTList(
-    val `data`: Data = Data(),
+data class ContractList(
+    val `data`: ContractListData = ContractListData(),
 )
 
-data class Data(
+data class ContractListData(
     val count: Int = 0,
-    val list: List<DataB> = listOf(),
-    val query: Query = Query()
+    val list: List<ContractData> = listOf(),
+    val query: ContractQuery = ContractQuery()
 )
 
-data class DataB(
+data class ContractData(
     val fileid: String = "",
-    val folder: Folder? = Folder(),
+    val folder: ContractFolder? = ContractFolder(),
     val howToUse: String? = "",
     val name: String = "",
 )
 
-data class Query(
+data class ContractQuery(
     val folder: String = "",
     val folderName: String = "",
     val limit: Int = 20,
@@ -36,6 +36,6 @@ data class Query(
     val skip: Int = 0
 )
 
-data class Folder(
+data class ContractFolder(
     val name: String = ""
 )

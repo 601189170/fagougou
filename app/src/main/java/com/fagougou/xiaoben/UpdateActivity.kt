@@ -27,9 +27,7 @@ class UpdateActivity : AppCompatActivity() {
             val currProgress = (progress * 1.0f / total * 100.0f).toInt()
             tvProgress.text ="正在下载$currProgress%"
             progressBar.progress = currProgress
-        } else {
-            tvProgress.text = "正在获取下载数据"
-        }
+        } else tvProgress.text = "正在获取下载数据"
     }
     private fun update() {
         val config = UpdateConfig()

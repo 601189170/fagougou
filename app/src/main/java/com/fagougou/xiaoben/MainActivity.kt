@@ -33,6 +33,7 @@ import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
 import com.fagougou.xiaoben.chatPage.ComplexPage
 import com.fagougou.xiaoben.contractPage.ContractGuidePage
 import com.fagougou.xiaoben.contractPage.ContractWebView
+import com.fagougou.xiaoben.generateContract.GenerateContract
 import com.fagougou.xiaoben.homePage.HomePage
 import com.fagougou.xiaoben.loginPage.LoginPage
 import com.fagougou.xiaoben.model.UpdateInfo
@@ -138,6 +139,7 @@ fun Main() {
             composable(Router.login) { LoginPage(navController) }
             composable(Router.home) { HomePage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
+            composable(Router.generateContract) { GenerateContract(navController) }
             composable(Router.chatGuide) { ChatGuidePage(navController) }
             composable(Router.chat) { ChatPage(navController) }
             composable(Router.complex) { ComplexPage(navController) }
@@ -148,7 +150,6 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
         }
-
     }
 }
 

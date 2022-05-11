@@ -1,8 +1,6 @@
 package com.fagougou.xiaoben.repo
 
 import com.fagougou.xiaoben.model.*
-import okhttp3.RequestBody
-import okhttp3.Response
 import retrofit2.Call
 import retrofit2.http.*
 import retrofit2.http.Query
@@ -13,7 +11,7 @@ interface ContractService {
 
 
     @POST("/contractTemplate/list")
-    fun getHtlist(@Body hTListRequest:HTListRequest): Call<HTList>
+    fun getHtlist(@Body hTListRequest:ContractListRequest): Call<ContractList>
 
 
     @GET("/contractTemplate/downloadLink")
