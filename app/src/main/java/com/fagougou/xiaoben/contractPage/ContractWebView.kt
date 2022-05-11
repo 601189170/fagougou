@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activity
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.contractPage.ContractWebView.codeBitmap
 import com.fagougou.xiaoben.contractPage.ContractWebView.webViewUrl
 import com.king.zxing.util.CodeUtils.createQRCode
@@ -57,5 +57,5 @@ fun ContractWebView(navController: NavController) {
             Text("扫码保存到手机", fontSize = 24.sp)
         }}
     }
-    Headder("合同文库", navController)
+    Header("合同文库", navController)
 }

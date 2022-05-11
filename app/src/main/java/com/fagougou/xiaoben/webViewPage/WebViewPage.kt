@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.activity
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.webViewPage.WebViewModel.data
 import com.fagougou.xiaoben.webViewPage.WebViewModel.title
 import com.fagougou.xiaoben.webViewPage.WebViewModel.urlAddress
@@ -26,7 +26,7 @@ object WebViewModel{
 @Composable
 fun WebViewPage(navController: NavController) {
     Column {
-        Headder(
+        Header(
             title,
             navController,
             onBack = {
@@ -46,7 +46,7 @@ fun WebView(urlAddress:String,data:String){
         factory = {
             WebView(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                setInitialScale(100)
+                setInitialScale(80)
                 settings.javaScriptEnabled = true
                 webChromeClient = WebChromeClient()
                 if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")

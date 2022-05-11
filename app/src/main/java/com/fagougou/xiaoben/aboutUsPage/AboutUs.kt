@@ -10,14 +10,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
-import com.fagougou.xiaoben.homePage.HomeButton
 
 @Composable
 fun AboutUs(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Headder(title = "关于我们", navController = navController)
+        Header(title = "关于我们", navController = navController)
         Column(modifier = Modifier.padding(horizontal = 100.dp)) {
             Image(
                 modifier = Modifier.padding(top = 40.dp),

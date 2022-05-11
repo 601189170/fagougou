@@ -13,12 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.xiaoben.chatPage.ChatViewModel.startChat
 import com.fagougou.xiaoben.homePage.HomeButton
-import com.fagougou.xiaoben.utils.IFly
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -41,7 +40,7 @@ fun ChatGuidePage(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Headder(title = "智能咨询", navController = navController)
+        Header(title = "智能咨询", navController = navController)
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "智能咨询",

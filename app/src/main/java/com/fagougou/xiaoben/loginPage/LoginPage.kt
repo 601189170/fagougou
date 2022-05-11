@@ -1,5 +1,6 @@
 package com.fagougou.xiaoben.loginPage
 
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,8 +26,8 @@ import com.fagougou.xiaoben.loginPage.LoginPage.login
 import com.fagougou.xiaoben.loginPage.LoginPage.password
 import com.fagougou.xiaoben.loginPage.LoginPage.state
 import com.fagougou.xiaoben.loginPage.LoginPage.userName
-import com.fagougou.xiaoben.model.User
-import com.fagougou.xiaoben.model.UserResult
+import com.fagougou.xiaoben.model.SerialLoginRequest
+import com.fagougou.xiaoben.model.SerialLoginRespon
 import com.fagougou.xiaoben.repo.Client.handleException
 import com.fagougou.xiaoben.repo.Client.mainLogin
 import com.fagougou.xiaoben.ui.theme.CORNER_FLOAT
@@ -49,16 +50,16 @@ object LoginPage {
         state.value = "登录中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = mainLogin.login(User(userName.value, password.value)).execute()
-                val body = response.body() ?: UserResult()
-                if (body.id ==""){
+                val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                val body = response.body() ?: SerialLoginRespon()
+                if (!body.canlogin){
                     toast("用户名或密码错误")
                     return@launch
                 }
                 userName.value = ""
                 password.value = ""
                 kv.encode("canLogin",true)
-                kv.encode("wechatUrl",body.channels.firstOrNull()?.url ?: "null")
+                kv.encode("wechatUrl","null")
                 withContext(Dispatchers.Main) {
                     (activity as MainActivity).hideSystemUI()
                     navController.navigate(Router.home)
@@ -153,14 +154,10 @@ fun LoginPage(navController: NavController){
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
-
-
         Text(
             modifier = Modifier.padding(top = 290.dp),
-
             text = "技术支持：法狗狗人工智能 v2.0",
             fontSize = 20.sp,
-
             color = Color.White
         )
     }

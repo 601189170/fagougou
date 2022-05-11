@@ -201,7 +201,7 @@ fun WeChat(){
 }
 
 @Composable
-fun Headder(title:String,navController: NavController,onBack:() -> Unit = {}){
+fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier

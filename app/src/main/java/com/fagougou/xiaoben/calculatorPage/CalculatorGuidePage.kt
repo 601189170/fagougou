@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.homePage.HomeButton
@@ -42,7 +42,7 @@ fun CalculatorGuidePage(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Headder(title = "法律计算器", navController = navController)
+        Header(title = "法律计算器", navController = navController)
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "法律计算器",

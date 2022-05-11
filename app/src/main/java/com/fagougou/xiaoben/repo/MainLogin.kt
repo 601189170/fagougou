@@ -10,5 +10,5 @@ interface MainLogin {
     fun register(@Body request: SerialRegiterRequest): Call<SerialRegisterRespon>
 
     @POST("/login")
-    fun login(@Body request: SerialLoginRespon): Call<SerialLoginRespon>
+    fun login(@Body request: SerialLoginRequest): Call<SerialLoginRespon>
 }

@@ -110,7 +110,7 @@ fun HomePage(navController:NavController) {
                     modifier = Modifier
                         .width(200.dp)
                         .height(264.dp),
-                    onClick = { navController.navigate(Router.statistic) },
+                    onClick = { navController.navigate(Router.generateContract) },
                     contentId = R.drawable.home_statistic)
             }
             Row(

@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.chatPage.Case.data
 import com.fagougou.xiaoben.model.CaseData
 import com.fagougou.xiaoben.webViewPage.WebView
@@ -23,7 +23,7 @@ object Case{
 fun CasePage(navController: NavController) {
     Surface(color = Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Headder(title = "相关案例", navController = navController)
+            Header(title = "相关案例", navController = navController)
             Text(modifier = Modifier.padding(top = 16.dp),text = data.案件名称,fontSize = 28.sp)
             Row(
                 modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(0.8f),

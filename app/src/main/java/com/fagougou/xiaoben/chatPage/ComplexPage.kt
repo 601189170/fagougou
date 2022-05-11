@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.chatPage.Complex.bodyList
 import com.fagougou.xiaoben.chatPage.Complex.caseList
@@ -107,7 +107,7 @@ fun ComplexPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column {
-            Headder("详细分析", navController,
+            Header("详细分析", navController,
                 onBack = {
                     selectPage.value = "body"
                 }

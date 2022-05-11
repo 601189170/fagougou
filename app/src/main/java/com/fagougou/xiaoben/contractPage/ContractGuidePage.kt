@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.contractPage.Contract.HTLists
@@ -129,7 +129,7 @@ fun ContractGuidePage(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
     ) {
-        Headder(title = "合同文库", navController = navController)
+        Header(title = "合同文库", navController = navController)
         Surface(
             modifier = Modifier
                 .height(265.dp)

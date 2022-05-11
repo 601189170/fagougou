@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.xiaoben.CommonApplication.Companion.TAG
-import com.fagougou.xiaoben.Headder
+import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.xiaoben.chatPage.ChatViewModel.chatIoState
@@ -417,7 +417,7 @@ fun ChatPage(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Headder(
+        Header(
             "智能咨询(${selectedChatBot.value})",
             navController,
             onBack = {
