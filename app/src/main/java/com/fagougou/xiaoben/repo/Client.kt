@@ -39,10 +39,8 @@ class CommonInterceptor : Interceptor {
 
 class ParametersIntercept : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        globalLoading.value++
         val request: Request = chain.request()
         val response = chain.proceed(request)
-        globalLoading.value--
         if(response.code == 200 && response.body!=null){
             try{
                 var bodyString = response.body!!.string()
@@ -64,16 +62,28 @@ class ParametersIntercept : Interceptor {
     }
 }
 
+class BlockIntercept : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        globalLoading.value++
+        val request: Request = chain.request()
+        val response = chain.proceed(request)
+        globalLoading.value--
+        return response
+    }
+}
+
 object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com"
-    const val contractUrl = "https://law-system.fagougou-law.com"
+    const val contractUrl = "https://law-system.fagougou-law.com/"
     const val loginUrl = "https://a.fagougou.com"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com"
+    const val generateUrl = "https://products.fagougou.com/api/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(BlockIntercept())
             .addInterceptor(ParametersIntercept())
             .addInterceptor(CommonInterceptor())
             .callTimeout(12, TimeUnit.SECONDS)
@@ -117,6 +127,15 @@ object Client {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(UpdateService::class.java)
+    }
+
+    val generateService: GenerateService by lazy {
+        Retrofit.Builder()
+            .baseUrl(generateUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(GenerateService::class.java)
     }
 
     fun handleException(t: Throwable) {

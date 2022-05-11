@@ -66,7 +66,7 @@ object Contract{
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (searchName!="")selectedId.value = ""
-                val response = contractService.getHtlist(ContractListRequest(folder = folder, name = searchName)).execute()
+                val response = contractService.getContractList(ContractListRequest(folder = folder, name = searchName)).execute()
                 val body = response.body() ?: return@launch
                 HTLists.addAll(body.data.list)
             }catch (e:Exception){
@@ -78,7 +78,7 @@ object Contract{
 
     fun  getTemplate(fileid:String,navController: NavController) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.template(fileid).execute()
+            val response = contractService.getTemplate(fileid).execute()
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
                 codeUrl = body.data

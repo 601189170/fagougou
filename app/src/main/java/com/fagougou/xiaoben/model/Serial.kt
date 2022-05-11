@@ -6,7 +6,8 @@ data class SerialRegiterRequest(
 )
 
 data class SerialRegisterRespon(
-    val balance: String = ""
+    val balance: String = "",
+    val errorMessage: String = ""
 )
 
 data class SerialLoginRequest(
@@ -15,4 +16,5 @@ data class SerialLoginRequest(
 
 data class SerialLoginRespon(
     val canlogin: Boolean = false,
+    val errorMessage: String = ""
 )

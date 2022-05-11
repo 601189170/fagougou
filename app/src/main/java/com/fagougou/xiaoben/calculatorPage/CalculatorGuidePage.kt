@@ -16,7 +16,7 @@ import com.fagougou.xiaoben.Header
 import com.fagougou.xiaoben.R
 import com.fagougou.xiaoben.Router
 import com.fagougou.xiaoben.homePage.HomeButton
-import com.fagougou.xiaoben.webViewPage.WebViewModel
+import com.fagougou.xiaoben.webViewPage.WebViewPageModel
 
 @Composable
 fun CalculatorGuidePage(navController: NavController) {
@@ -69,9 +69,9 @@ fun CalculatorGuidePage(navController: NavController) {
                                 .width(320.dp)
                                 .height(120.dp),
                             onClick = {
-                                WebViewModel.title = "法律计算器"
-                                WebViewModel.data = ""
-                                WebViewModel.urlAddress = calUrlMap[cal.first] ?: ""
+                                WebViewPageModel.title = "法律计算器"
+                                WebViewPageModel.data = ""
+                                WebViewPageModel.urlAddress = calUrlMap[cal.first] ?: ""
                                 navController.navigate(Router.webView)
                             },
                             contentId = cal.second

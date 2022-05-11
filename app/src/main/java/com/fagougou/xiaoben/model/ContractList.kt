@@ -1,13 +1,8 @@
 package com.fagougou.xiaoben.model
 
-import com.google.gson.annotations.SerializedName
-
 data class ContractListRequest(
-    @SerializedName("folder")
     val folder: String = "",
-    @SerializedName("limit")
     val limit: String = "20",
-    @SerializedName("name")
     val name: String = "",
 )
 
@@ -38,4 +33,9 @@ data class ContractQuery(
 
 data class ContractFolder(
     val name: String = ""
+)
+
+data class TemplateBean(
+    val code: Int,
+    val `data`: String
 )

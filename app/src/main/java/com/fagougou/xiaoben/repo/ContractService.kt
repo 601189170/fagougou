@@ -6,14 +6,15 @@ import retrofit2.http.*
 import retrofit2.http.Query
 
 interface ContractService {
-    @GET("/contractTemplateCates")
+    @GET("contractTemplateCates")
     fun listCategory(): Call<ContractCategoryResponse>
 
 
-    @POST("/contractTemplate/list")
-    fun getHtlist(@Body hTListRequest:ContractListRequest): Call<ContractList>
+    @POST("contractTemplate/list")
+    fun getContractList(@Body request:ContractListRequest): Call<ContractList>
 
 
-    @GET("/contractTemplate/downloadLink")
-    fun template(@Query("fileid") fileid :String): Call<TemplateBean>
+    @GET("contractTemplate/downloadLink")
+    fun getTemplate(@Query("fileid") fileid :String): Call<TemplateBean>
+
 }
