@@ -8,7 +8,7 @@ interface GenerateService {
     @POST("contractTemplateBycategory")
     fun getGeneratelist(@Body request: GenerateListRequest): Call<GenerateContractListResponse>
 
-    @GET("contractTemplate/{id}")
+    @GET("getTemplate/{id}")
     fun getGenrateTemplete(@Path("id") id :String): Call<GenerateContractTempleteResponse>
 
     @GET("getTemplateForms/{id}")

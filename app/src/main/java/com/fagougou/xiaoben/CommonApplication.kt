@@ -35,12 +35,9 @@ class CommonApplication: Application(){
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
         Bugsnag.start(this)
-//        IFly.init(this)
-//        TTS.init(this)
-        //初始化YKFUtils
-        YKFUtils.init(this)
         IFly.init(this)
         TTS.init(this)
+        YKFUtils.init(this)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val tokenResponse = apiService.auth(AuthRequest()).execute()
