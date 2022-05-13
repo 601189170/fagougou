@@ -23,6 +23,7 @@ import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.utils.Handlebars
 import com.fagougou.government.utils.IFly.routeMirror
+import com.fagougou.government.utils.Time
 import com.fagougou.government.webViewPage.WebView
 import kotlinx.coroutines.*
 
@@ -32,7 +33,7 @@ object GenerateContract {
     var template = ""
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
-    var lastModifier = ""
+    var lastModifier = Time.stamp
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -42,10 +43,17 @@ object GenerateContract {
         }
         CoroutineScope(Dispatchers.Default).launch {
             while(true){
-                delay(500)
+                delay(750)
                 if(routeMirror == Router.generateContract)updateContent()
             }
         }
+    }
+
+    fun clear(){
+        content.value = ""
+        template = ""
+        formList.clear()
+        lastModifier = Time.stamp
     }
 
     suspend fun getGenerateForm(id:String){
@@ -97,8 +105,7 @@ object GenerateContract {
             val result = Handlebars.templete
                 .replace("{{TemplateHook}}", template)
                 .replace("{{DataHook}}",builder.toString())
-                .replace("{{$lastModifier}}","<mark>{{$lastModifier}}</mark>")
-
+                .replace("class=\"$lastModifier","style=\"background-color: yellow;\" class=\"$lastModifier")
             content.value = result
         }
     }
@@ -113,11 +120,16 @@ fun GenerateContract(navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
         ) {
-            Header(title = "合同生成", navController = navController)
+            Header(
+                title = "合同生成",
+                navController = navController,
+                onBack = { GenerateContract.clear() }
+            )
             Row(modifier = Modifier.fillMaxWidth()) {
                 for (item in contractList) {
                     Button(
                         onClick = {
+                            GenerateContract.clear()
                             scope.launch {
                                 getGenerateTemplete(item.id)
                             }
@@ -155,11 +167,11 @@ fun GenerateContract(navController: NavController) {
                                                 Row {
                                                     Checkbox(
                                                         checked = i in child.selected,
-                                                        onCheckedChange = { it->
+                                                        onCheckedChange = {
                                                             if(it) child.selected.add(i)
                                                             else child.selected.remove(i)
                                                             lastModifier = child.variable
-                                                            notifier.value = System.currentTimeMillis().toString()
+                                                            notifier.value = Time.stamp
                                                         }
                                                     )
                                                     Text(option)
@@ -177,7 +189,7 @@ fun GenerateContract(navController: NavController) {
                                                             child.selected.clear()
                                                             child.selected.add(i)
                                                             lastModifier = child.variable
-                                                            notifier.value = System.currentTimeMillis().toString()
+                                                            notifier.value = Time.stamp
                                                         }
                                                     )
                                                     Text(option)
@@ -191,7 +203,7 @@ fun GenerateContract(navController: NavController) {
                                         onValueChange = { str ->
                                             child.input = str
                                             lastModifier = child.variable
-                                            notifier.value = System.currentTimeMillis().toString()
+                                            notifier.value = Time.stamp
                                         },
                                         placeholder = {
                                             if (child.input == "")Text(child.comment)
