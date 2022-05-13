@@ -36,8 +36,8 @@ class CommonApplication: Application(){
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
         Bugsnag.start(this)
-        IFly.init(this)
-        TTS.init(this)
+//        IFly.init(this)
+//        TTS.init(this)
         GenerateContract.init(this)
         YKFUtils.init(this)
         CoroutineScope(Dispatchers.IO).launch {

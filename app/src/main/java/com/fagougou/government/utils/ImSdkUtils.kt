@@ -1,5 +1,9 @@
 package com.fagougou.government.utils
 
+import android.content.Context
+import android.content.Intent
+import com.fagougou.xiaoben.consult.ChooseDomainActivity
+import com.fagougou.xiaoben.consult.TouristsLoginActivity
 import com.m7.imkfsdk.KfStartHelper
 import com.moor.imkf.IMChatManager
 import com.moor.imkf.requesturl.RequestUrl
@@ -17,6 +21,14 @@ object ImSdkUtils {
 
     //用户id
      val userId = "用户id"
+
+    fun startAc(context: Context){
+        val intent =
+            Intent(context, ChooseDomainActivity::class.java)
+//            Intent(context, TouristsLoginActivity::class.java)
+
+        context.startActivity(intent)
+    }
      fun initKfHelper() {
         //设置sdk 显示语言版本
 //        initLanguage();

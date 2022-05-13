@@ -53,10 +53,12 @@ import com.effective.android.panel.view.panel.PanelView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.m7.imkfsdk.KfStartHelper;
+
 import com.m7.imkfsdk.MoorWebCenter;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.chat.adapter.ChatTagLabelsAdapter;
+import com.m7.imkfsdk.chat.dialog.BaseDialog;
 import com.m7.imkfsdk.chat.dialog.BottomSheetLogisticsInfoDialog;
 import com.m7.imkfsdk.chat.dialog.BottomSheetLogisticsProgressDialog;
 import com.m7.imkfsdk.chat.dialog.BottomTabQuestionDialog;
@@ -64,6 +66,8 @@ import com.m7.imkfsdk.chat.dialog.BottomXbotFormDialog;
 import com.m7.imkfsdk.chat.dialog.CommonBottomSheetDialog;
 import com.m7.imkfsdk.chat.dialog.InvestigateDialog;
 import com.m7.imkfsdk.chat.dialog.LoadingFragmentDialog;
+import com.m7.imkfsdk.chat.dialog.TimeoDiallog;
+import com.m7.imkfsdk.chat.dialog.TimeoDialogListener;
 import com.m7.imkfsdk.chat.emotion.EmotionPagerView;
 import com.m7.imkfsdk.chat.emotion.Emotions;
 import com.m7.imkfsdk.chat.listener.ChatListClickListener;
@@ -200,7 +204,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     private static final int HANDLER_WRITING = 0x1200;
     private static final int HANDLER_NO_WRITING = 0x1300;
     private String left_text;//注销按钮文案
-    private boolean show_emoji = true;//是否显示emoji按钮
+    private boolean show_emoji = false;//是否显示emoji按钮
     private boolean isRobot = false;
     private String type = "";
     private String scheduleId = "";
@@ -915,7 +919,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }
 
         if (show_emoji) {
-            mChatEmojiNormal.setVisibility(View.VISIBLE);
+//            mChatEmojiNormal.setVisibility(View.VISIBLE);
+            mChatEmojiNormal.setVisibility(View.GONE);
+
         } else {
             mChatEmojiNormal.setVisibility(View.GONE);
         }
@@ -938,7 +944,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                     // beginSession();
                     startReStartDialog();
                 } else {
-                    mChatEmojiNormal.setVisibility(View.VISIBLE);
+//                    mChatEmojiNormal.setVisibility(View.VISIBLE);
+                    mChatEmojiNormal.setVisibility(View.GONE);
                     mChatEmojiNormal.setSelected(false);
                 }
             }
@@ -1069,7 +1076,18 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.chat_tv_back) {//断开长连接
-            handleLogOutOrBackPressed();
+            new TimeoDiallog(this, "结束咨询？", new TimeoDialogListener() {
+                @Override
+                public void Confirm() {
+                    handleLogOutOrBackPressed();
+                }
+
+                @Override
+                public void Cancle() {
+
+                }
+            }).show();
+//            handleLogOutOrBackPressed();
         } else if (id == R.id.chat_tv_convert) {
             if (MoorAntiShakeUtils.getInstance().check()) {
                 return;
@@ -1193,7 +1211,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         mChatSend.setVisibility(View.GONE);
         mChatMore.setVisibility(View.VISIBLE);
         mRecorderButton.setVisibility(View.VISIBLE);
-        mChatEmojiNormal.setVisibility(View.VISIBLE);
+//        mChatEmojiNormal.setVisibility(View.VISIBLE);
+        mChatEmojiNormal.setVisibility(View.GONE);
+
     }
 
     /**
@@ -3208,7 +3228,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         ll_invite = panelView.findViewById(R.id.ll_invite);
         LinearLayout ll_question = panelView.findViewById(R.id.ll_question);
         LinearLayout ll_video = panelView.findViewById(R.id.ll_video);
-        ll_photo.setOnClickListener(new View.OnClickListener() {
+        ll_photo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 PermissionXUtil.checkPermission(ChatActivity.this, new OnRequestCallback() {
@@ -3226,7 +3246,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 }, PermissionConstants.STORE);
             }
         });
-        ll_file.setOnClickListener(new View.OnClickListener() {
+        ll_file.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 PermissionXUtil.checkPermission(ChatActivity.this, new OnRequestCallback() {
@@ -3244,7 +3264,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 }, PermissionConstants.STORE);
             }
         });
-        ll_invite.setOnClickListener(new View.OnClickListener() {
+        ll_invite.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
@@ -3257,7 +3277,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 openInvestigateDialog(true, YKFConstants.INVESTIGATE_TYPE_IN, null, false);
             }
         });
-        ll_question.setOnClickListener(new View.OnClickListener() {
+        ll_question.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
@@ -3291,6 +3311,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         } else {
             ll_video.setVisibility(View.GONE);
         }
+        ll_video.setVisibility(View.VISIBLE);
         ll_video.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

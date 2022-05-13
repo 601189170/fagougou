@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Government" parent="android:Theme.Holo.NoActionBar.Fullscreen">
-        <item name="android:statusBarColor">@color/purple_700</item>
+    <style name="Theme.Government" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
-        val sevenDays = (7L*24L*60L*60L*1000L)
+        val sevenDays = (31L*24L*60L*60L*1000L)
         if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
         hideSystemUI()
         setContent {
@@ -262,8 +262,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                             onClick = {
                                 showQrCode.value = true
 
-                                ImSdkUtils.initKfHelper()
-                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
+                                ImSdkUtils.startAc(activity)
                             }
                         )
                     }

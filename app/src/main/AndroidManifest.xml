@@ -18,6 +18,13 @@
         android:theme="@style/Theme.Government"
         tools:replace="android:icon,android:label,android:theme,android:allowBackup">
         <activity
+            android:name="com.fagougou.xiaoben.consult.TouristsLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.fagougou.xiaoben.consult.ChooseDomainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
             android:name="com.fagougou.government.UpdateActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
