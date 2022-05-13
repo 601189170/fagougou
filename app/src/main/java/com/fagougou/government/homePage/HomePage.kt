@@ -1,6 +1,5 @@
 package com.fagougou.government.homePage
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,7 +50,6 @@ fun HomePage(navController:NavController) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
-
     ) {
         Row(
             modifier = Modifier
@@ -99,20 +97,23 @@ fun HomePage(navController:NavController) {
                         .width(424.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.chatGuide) },
-                    contentId = R.drawable.home_law_ask)
+                    contentId = R.drawable.home_law_ask
+                )
                 HomeButton(
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
                         .width(200.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.contract) },
-                    contentId = R.drawable.home_document)
+                    contentId = R.drawable.home_document
+                )
                 HomeButton(
                     modifier = Modifier
                         .width(200.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.generateContract) },
-                    contentId = R.drawable.home_statistic)
+                    contentId = R.drawable.home_statistic
+                )
             }
             Row(
                 modifier = Modifier.padding(vertical = 12.dp)
@@ -123,14 +124,16 @@ fun HomePage(navController:NavController) {
                         .width(424.dp)
                         .height(120.dp),
                     onClick = {  navController.navigate(Router.calculator)  },
-                    contentId = R.drawable.home_law_calculator)
+                    contentId = R.drawable.home_law_calculator
+                )
                 HomeButton(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .width(424.dp)
                         .height(120.dp),
                     onClick = { navController.navigate(Router.about) },
-                    contentId = R.drawable.home_about_us)
+                    contentId = R.drawable.home_about_us
+                )
             }
         }
         Button(

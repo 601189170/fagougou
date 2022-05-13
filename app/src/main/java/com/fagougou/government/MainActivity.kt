@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
-        val sevenDays = (7L*24L*60L*60L*1000L)
+        val sevenDays = (31L*24L*60L*60L*1000L)
         if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
         hideSystemUI()
         setContent {
@@ -134,7 +134,7 @@ fun Main() {
         val canLogin = kv.decodeBool("canLogin",false)
         NavHost(
             navController = navController,
-            startDestination = Router.home,//if(canLogin) Router.home else Router.login,
+            startDestination = if(canLogin) Router.home else Router.login,
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.login) { LoginPage(navController) }

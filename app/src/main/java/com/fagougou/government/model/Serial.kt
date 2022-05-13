@@ -2,11 +2,12 @@ package com.fagougou.government.model
 
 data class SerialRegiterRequest(
     val serial: String = "",
-    val register: String =""
+    val register: String ="",
+    val machineType: String = "一体机"
 )
 
 data class SerialRegisterRespon(
-    val balance: String = "",
+    val balance: Int = -1,
     val errorMessage: String = ""
 )
 
