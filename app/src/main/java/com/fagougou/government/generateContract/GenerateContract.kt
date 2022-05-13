@@ -40,7 +40,7 @@ object GenerateContract {
         }
         CoroutineScope(Dispatchers.Default).launch {
             while(true){
-                delay(800)
+                delay(500)
                 if(routeMirror == Router.generateContract)updateContent()
             }
         }
@@ -60,13 +60,12 @@ object GenerateContract {
             formList.clear()
             val response = generateService.getGenrateTemplete(id).execute()
             val body = response.body()?.data ?: GenerateContractTemplete()
-            template = body.content.replace("___","")
+            template = body.content
         }
     }
 
     suspend fun updateContent(){
         withContext(Dispatchers.Default){
-            content.value = ""
             val builder = StringBuilder()
             for(item in formList) {
                 for (child in item.children) {

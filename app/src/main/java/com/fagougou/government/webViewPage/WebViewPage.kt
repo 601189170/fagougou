@@ -67,11 +67,10 @@ fun WebView(data: MutableState<String>){
                 setInitialScale(80)
                 settings.javaScriptEnabled = true
                 webChromeClient = WebChromeClient()
-                loadData(data.value,"text/html; charset=utf-8", "utf-8")
             }
         },
         update = {
-            it.loadData(data.value,"text/html; charset=utf-8", "utf-8")
+            it.loadDataWithBaseURL(null,data.value,"text/html; charset=utf-8", "utf-8",null)
         }
     )
 }
