@@ -1,5 +1,6 @@
 package com.fagougou.government.generateContract
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.Header
 import com.fagougou.government.Router
-import com.fagougou.government.generateContract.GenerateContract.content
+import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
@@ -21,21 +22,24 @@ import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.utils.Handlebars
 import com.fagougou.government.utils.IFly.routeMirror
 import com.fagougou.government.utils.Time
 import com.fagougou.government.webViewPage.WebView
 import kotlinx.coroutines.*
+import java.io.InputStreamReader
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
-    val content = mutableStateOf("")
+    var baseHtml = ""
     var template = ""
+    val data = mutableStateOf("")
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
     var lastModifier = Time.stamp
 
-    init {
+    fun init(context: Context) {
+        val file = context.assets.open("generateContract.html")
+        baseHtml = InputStreamReader(file,"UTF-8").readText()
         CoroutineScope(Dispatchers.IO).launch {
             val response = generateService.getGeneratelist(GenerateListRequest()).execute()
             val body = response.body()?.data ?: GenerateContractListResponse().data
@@ -50,8 +54,8 @@ object GenerateContract {
     }
 
     fun clear(){
-        content.value = ""
         template = ""
+        data.value = ""
         formList.clear()
         lastModifier = Time.stamp
     }
@@ -102,11 +106,11 @@ object GenerateContract {
                     }
                 }
             }
-            val result = Handlebars.templete
+            val result = baseHtml
                 .replace("{{TemplateHook}}", template)
                 .replace("{{DataHook}}",builder.toString())
                 .replace("class=\"$lastModifier","style=\"background-color: yellow;\" class=\"$lastModifier")
-            content.value = result
+            data.value = result
         }
     }
 }
@@ -220,7 +224,7 @@ fun GenerateContract(navController: NavController) {
                         .fillMaxHeight()
                         .fillMaxWidth()
                 ) {
-                    WebView(content)
+                    WebView(data)
                 }
             }
         }

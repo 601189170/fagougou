@@ -7,14 +7,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 object MMKV {
-    var clearStack = 0
+    var clearStack = 8
     val kv = MMKV.defaultMMKV()
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
             while (true) {
                 delay(1000)
-                if (clearStack > 0) clearStack--
+                if (clearStack < 8) clearStack++
             }
         }
     }

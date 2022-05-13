@@ -135,8 +135,8 @@ fun HomePage(navController:NavController) {
         }
         Button(
             onClick = {
-                clearStack++
-                if (clearStack>8){
+                clearStack--
+                if (clearStack<=0){
                     kv.remove("canLogin")
                     toast("登出成功")
                     activity.finish()

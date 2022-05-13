@@ -1,5 +1,6 @@
 package com.fagougou.government.webViewPage
 
+import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -17,6 +18,7 @@ import com.fagougou.government.Header
 import com.fagougou.government.webViewPage.WebViewPageModel.data
 import com.fagougou.government.webViewPage.WebViewPageModel.title
 import com.fagougou.government.webViewPage.WebViewPageModel.urlAddress
+import kotlinx.coroutines.*
 
 object WebViewPageModel{
     var title = ""
@@ -70,7 +72,13 @@ fun WebView(data: MutableState<String>){
             }
         },
         update = {
-            it.loadDataWithBaseURL(null,data.value,"text/html; charset=utf-8", "utf-8",null)
+            it.loadDataWithBaseURL(null, data.value, "text/html; charset=utf-8", "utf-8", null)
+            CoroutineScope(Dispatchers.Default).launch {
+                delay(100)
+                withContext(Dispatchers.Main){
+                    it.evaluateJavascript("javascript:getHtml()",{ Log.i("html",it)})
+                }
+            }
         }
     )
 }
