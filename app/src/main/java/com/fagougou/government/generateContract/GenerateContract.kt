@@ -17,6 +17,7 @@ import com.fagougou.government.generateContract.GenerateContract.content
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
+import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
@@ -31,6 +32,7 @@ object GenerateContract {
     var template = ""
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
+    var lastModifier = ""
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -95,6 +97,8 @@ object GenerateContract {
             val result = Handlebars.templete
                 .replace("{{TemplateHook}}", template)
                 .replace("{{DataHook}}",builder.toString())
+                .replace("{{$lastModifier}}","<mark>{{$lastModifier}}</mark>")
+
             content.value = result
         }
     }
@@ -154,6 +158,7 @@ fun GenerateContract(navController: NavController) {
                                                         onCheckedChange = { it->
                                                             if(it) child.selected.add(i)
                                                             else child.selected.remove(i)
+                                                            lastModifier = child.variable
                                                             notifier.value = System.currentTimeMillis().toString()
                                                         }
                                                     )
@@ -171,6 +176,7 @@ fun GenerateContract(navController: NavController) {
                                                         onClick = {
                                                             child.selected.clear()
                                                             child.selected.add(i)
+                                                            lastModifier = child.variable
                                                             notifier.value = System.currentTimeMillis().toString()
                                                         }
                                                     )
@@ -184,6 +190,7 @@ fun GenerateContract(navController: NavController) {
                                         value = child.input,
                                         onValueChange = { str ->
                                             child.input = str
+                                            lastModifier = child.variable
                                             notifier.value = System.currentTimeMillis().toString()
                                         },
                                         placeholder = {
