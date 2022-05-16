@@ -1,6 +1,6 @@
 package com.fagougou.government.homePage
 
-import android.content.Intent
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +8,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,11 +20,19 @@ import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
+import com.fagougou.government.model.SerialLoginRequest
+import com.fagougou.government.model.SerialLoginResponse
+import com.fagougou.government.repo.Client.handleException
+import com.fagougou.government.repo.Client.mainLogin
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.MMKV.clearStack
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Time.timeText
 import com.fagougou.government.utils.Tips.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 @Composable
 fun HomeButton(
@@ -47,11 +57,28 @@ fun HomeButton(
 
 @Composable
 fun HomePage(navController:NavController) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        scope.launch{
+            var body = SerialLoginResponse()
+            withContext(Dispatchers.IO){
+                try {
+                    val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    body = response.body() ?: SerialLoginResponse()
+                }catch (e:Exception){
+                    handleException(e)
+                }
+            }
+            if(!body.canLogin){ withContext(Dispatchers.Main){
+                navController.navigate(Router.login)
+                toast(body.errorMessage)
+            } }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
-
     ) {
         Row(
             modifier = Modifier
@@ -99,20 +126,23 @@ fun HomePage(navController:NavController) {
                         .width(424.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.chatGuide) },
-                    contentId = R.drawable.home_law_ask)
+                    contentId = R.drawable.home_law_ask
+                )
                 HomeButton(
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
                         .width(200.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.contract) },
-                    contentId = R.drawable.home_document)
+                    contentId = R.drawable.home_document
+                )
                 HomeButton(
                     modifier = Modifier
                         .width(200.dp)
                         .height(264.dp),
                     onClick = { navController.navigate(Router.generateContract) },
-                    contentId = R.drawable.home_statistic)
+                    contentId = R.drawable.home_statistic
+                )
             }
             Row(
                 modifier = Modifier.padding(vertical = 12.dp)
@@ -123,14 +153,16 @@ fun HomePage(navController:NavController) {
                         .width(424.dp)
                         .height(120.dp),
                     onClick = {  navController.navigate(Router.calculator)  },
-                    contentId = R.drawable.home_law_calculator)
+                    contentId = R.drawable.home_law_calculator
+                )
                 HomeButton(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .width(424.dp)
                         .height(120.dp),
                     onClick = { navController.navigate(Router.about) },
-                    contentId = R.drawable.home_about_us)
+                    contentId = R.drawable.home_about_us
+                )
             }
         }
         Button(

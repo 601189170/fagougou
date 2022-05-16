@@ -1,10 +1,9 @@
 package com.fagougou.government.utils
 
+import android.view.View
 import androidx.compose.runtime.mutableStateOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.fagougou.government.CommonApplication.Companion.activity
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,7 +18,21 @@ object Time {
                 stamp = time.toString()
                 val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
                 timeText.value = simpleDateFormat.format(time).replace("周","星期")
+                withContext(Dispatchers.Main){
+                    hideSystemUI()
+                }
             }
         }
+    }
+
+    fun hideSystemUI() {
+        activity.window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_IMMERSIVE or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_FULLSCREEN
+        )
     }
 }
