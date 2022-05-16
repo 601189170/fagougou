@@ -8,6 +8,7 @@ import com.bugsnag.android.Bugsnag
 import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel.nextChat
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
+import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -144,7 +145,7 @@ object IFly {
     }
 
     fun recognizeMode(){
-        if(routeMirror == Router.chat) {
+        if(routeMirror == Router.chat && voiceInputMode.value) {
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()

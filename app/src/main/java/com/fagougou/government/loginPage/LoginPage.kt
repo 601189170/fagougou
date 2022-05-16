@@ -55,7 +55,6 @@ object LoginPage {
                 kv.encode("canLogin",true)
                 kv.encode("wechatUrl","null")
                 withContext(Dispatchers.Main) {
-                    (activity as MainActivity).hideSystemUI()
                     navController.navigate(Router.home)
                 }
             } catch (e:Exception){

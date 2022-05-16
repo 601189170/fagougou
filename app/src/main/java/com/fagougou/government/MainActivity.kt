@@ -58,14 +58,6 @@ class MainActivity : ComponentActivity() {
         activity = this
         val sevenDays = (31L*24L*60L*60L*1000L)
         if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
-        CoroutineScope(Dispatchers.Default).launch {
-            while(true){
-                delay(200)
-                withContext(Dispatchers.Main){
-                    hideSystemUI()
-                }
-            }
-        }
         setContent {
             GovernmentTheme {
                 Surface(
@@ -94,16 +86,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun hideSystemUI() {
-        window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_IMMERSIVE
-            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_FULLSCREEN
-        )
-    }
+
 }
 
 object SafeBack{
