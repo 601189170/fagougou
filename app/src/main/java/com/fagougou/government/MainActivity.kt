@@ -45,7 +45,6 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.IFly.routeMirror
 import com.fagougou.government.utils.ImSdkUtils
-import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
 import com.fagougou.government.webViewPage.WebViewPage
@@ -162,8 +161,12 @@ fun Main() {
 
 @Composable
 fun Loading(){
-    if(globalLoading.value>0 && !chatIoState.value) Surface(color = Color.Transparent) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    if (globalLoading.value > 0 && !chatIoState.value) Surface(color = Color.Transparent) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Surface(
                 modifier = Modifier
                     .width(256.dp)
@@ -243,12 +246,9 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                 color = Color.White,
                 fontSize = 24.sp
             )
-                Surface(
-                    modifier = Modifier.width(192.dp),
-                    color = Color.Transparent
-                ) {
-                    if (navController.currentDestination?.route?.contains("chat") == true) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+            Surface( color = Color.Transparent ) {
+                if (navController.currentDestination?.route?.contains("chat") == true) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painterResource(id = R.drawable.ic_wechat), null)
                         Button(
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -260,7 +260,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                             content = {
                                 Text(
                                     modifier = Modifier.padding(vertical = 3.dp),
-                                    text = "微信咨询",
+                                    text = "微信",
                                     fontSize = 24.sp,
                                     color = Color.White
                                 )
@@ -268,6 +268,29 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                             onClick = {
                                 showQrCode.value = true
 
+                                ImSdkUtils.initKfHelper()
+                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Image(painterResource(id = R.drawable.ic_human), null)
+                        Button(
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                            shape = RoundedCornerShape(
+                                topEnd = CORNER_FLOAT,
+                                bottomEnd = CORNER_FLOAT
+                            ),
+                            elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
+                            content = {
+                                Text(
+                                    modifier = Modifier.padding(vertical = 3.dp),
+                                    text = "人工",
+                                    fontSize = 24.sp,
+                                    color = Color.White
+                                )
+                            },
+                            onClick = {
+                                showQrCode.value = true
                                 ImSdkUtils.initKfHelper()
                                 ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
                             }

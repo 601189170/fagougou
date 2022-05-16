@@ -14,6 +14,7 @@ import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.TTS
+import com.fagougou.government.utils.Tips
 import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
@@ -33,6 +34,7 @@ class CommonApplication: Application(){
 
     override fun onCreate() {
         super.onCreate()
+        Tips.init(this)
         SpeechUtility.createUtility(this, "appid=33b963d0")
         MMKV.initialize(this)
         Bugsnag.start(this)

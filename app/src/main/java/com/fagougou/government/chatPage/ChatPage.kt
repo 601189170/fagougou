@@ -1,6 +1,5 @@
 package com.fagougou.government.chatPage
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication.Companion.TAG
 import com.fagougou.government.Header
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
@@ -33,7 +32,9 @@ import com.fagougou.government.chatPage.ChatViewModel.history
 import com.fagougou.government.chatPage.ChatViewModel.listState
 import com.fagougou.government.chatPage.ChatViewModel.nextChat
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
+import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.chatPage.ChatViewModel.startChat
+import com.fagougou.government.chatPage.ChatViewModel.textInputContent
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
@@ -65,8 +66,7 @@ fun BotMenu() {
     val botList = botQueryIdMap.toList()
     val scrollState = rememberScrollState()
     Row(
-        modifier = Modifier
-            .horizontalScroll(scrollState)
+        modifier = Modifier.horizontalScroll(scrollState)
     ) {
         for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
             Surface(color = Color.Transparent) {
@@ -413,116 +413,160 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
 }
 
 @Composable
+fun inputBox(scope: CoroutineScope){
+    if(voiceInputMode.value) Surface(
+        modifier = Modifier
+            .height(180.dp)
+            .width(480.dp)
+            .padding(8.dp),
+        color = Color(0x33FFFFFF),
+        shape = RoundedCornerShape(CORNER_FLOAT)
+    ){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Image(
+                    modifier = Modifier.clickable {
+                        if(IFly.recognizeResult.value != IFly.UNWAKE_TEXT)return@clickable
+                        voiceInputMode.value = false
+                    },
+                    painter = painterResource(id = R.drawable.ic_keyboard),
+                    contentDescription = null)
+                Text(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    text = IFly.recognizeResult.value,
+                    fontSize = 21.sp,
+                    color = Color.White
+                )
+                Image(
+                    modifier = Modifier.clickable { showBotMenu.value = !showBotMenu.value },
+                    painter = painterResource(id = R.drawable.ic_squad),
+                    contentDescription = null)
+            }
+            PAG()
+        }
+    } else Column(
+        modifier = Modifier.height(80.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            TextField(
+                modifier = Modifier.fillMaxWidth(0.82f),
+                value = textInputContent.value,
+                onValueChange = {
+                    textInputContent.value = it
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.White,
+                    backgroundColor = Color(0x33FFFFFF),
+                    cursorColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(fontSize = 21.sp),
+                shape = RoundedCornerShape(CORNER_FLOAT),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                keyboardActions = KeyboardActions(
+                    onSend = {
+                        val content = textInputContent.value
+                        textInputContent.value = ""
+                        scope.launch(Dispatchers.IO) { nextChat(content) }
+                    }
+                )
+            )
+            Button(
+                modifier = Modifier.padding(start = 24.dp),
+                content = { Image(painterResource(R.drawable.ic_microphone),null) },
+                onClick = { voiceInputMode.value = true },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
+                shape = RoundedCornerShape(50)
+            )
+            Button(
+                modifier = Modifier.padding(start = 24.dp),
+                content = { Image(painterResource(R.drawable.ic_squad),null) },
+                onClick = { showBotMenu.value = !showBotMenu.value },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
+                shape = RoundedCornerShape(50)
+            )
+        }
+    }
+}
+
+@Composable
 fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     Column(
-        modifier = Modifier
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Top,
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header(
-            "智能咨询(${selectedChatBot.value})",
-            navController,
-            onBack = {
-                IFly.wakeMode()
-                mTts.stopSpeaking()
-                history.clear()
-                currentProvince.value = ""
-            }
-        )
-        BotMenu()
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight(0.75f)
-                .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Top,
-            state = listState,
+        Column(
+            verticalArrangement = Arrangement.Top
         ) {
-            items(history.size) { index ->
-                MessageItem(
-                    history[index],
-                    index,
-                    scope,
-                    navController
-                )
-            }
-            if (chatIoState.value) item {
-                MessageItem(
-                    Message(Speaker.ROBOT, content = ". . ."),
-                    -1,
-                    scope,
-                    navController
-                )
-            }
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                ) {}
+            Header(
+                "智能咨询(${selectedChatBot.value})",
+                navController,
+                onBack = {
+                    IFly.wakeMode()
+                    mTts.stopSpeaking()
+                    textInputContent.value = ""
+                    history.clear()
+                    currentProvince.value = ""
+                }
+            )
+            var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
+            lazyHeight -= if(voiceInputMode.value) 100 else 0
+            LazyColumn(
+                modifier = Modifier
+                    .height(lazyHeight.dp)
+                    .padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.Top,
+                state = listState,
+            ) {
+                items(history.size) { index ->
+                    MessageItem(
+                        history[index],
+                        index,
+                        scope,
+                        navController
+                    )
+                }
+                if (chatIoState.value) item {
+                    MessageItem(
+                        Message(Speaker.ROBOT, content = ". . ."),
+                        -1,
+                        scope,
+                        navController
+                    )
+                }
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                    ) {}
+                }
             }
         }
-        if(voiceInputMode.value) Surface(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .fillMaxHeight()
-                .width(480.dp),
-            color = Color(0x33FFFFFF),
-            shape = RoundedCornerShape(CORNER_FLOAT)
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    horizontalArrangement = Arrangement.Start
-                ){
-                    Image(
-                        modifier = Modifier.clickable {
-                            if(IFly.recognizeResult.value != IFly.UNWAKE_TEXT)return@clickable
-                            voiceInputMode.value = false
-                            IFly.recognizeResult.value = ""
-                        },
-                        painter = painterResource(id = R.drawable.ic_keyboard),
-                        contentDescription = null)
-                }
-                Text(
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    text = IFly.recognizeResult.value,
-                    fontSize = 20.sp,
-                    color = Color.White
-                )
-                PAG()
-            }
-        } else Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                TextField(
-                    value = IFly.recognizeResult.value,
-                    onValueChange = {
-                        IFly.recognizeResult.value = it
-                    },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                    keyboardActions = KeyboardActions(
-                        onSend = {
-                            scope.launch {
-                                nextChat(IFly.recognizeResult.value)
-                                IFly.recognizeResult.value = ""
-                            }
-                        }
-                    )
-                )
-            }
+            inputBox(scope)
+            if(showBotMenu.value) BotMenu()
         }
     }
     BackHandler(enabled = true) {
-        Log.d(TAG, "Back")
     }
 }

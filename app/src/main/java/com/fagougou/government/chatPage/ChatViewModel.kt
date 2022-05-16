@@ -25,6 +25,8 @@ object ChatViewModel {
     val chatIoState = mutableStateOf(false)
     var currentProvince = mutableStateOf("")
     val voiceInputMode = mutableStateOf(true)
+    val textInputContent = mutableStateOf("")
+    val showBotMenu = mutableStateOf(false)
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {

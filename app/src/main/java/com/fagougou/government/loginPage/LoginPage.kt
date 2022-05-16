@@ -133,7 +133,7 @@ fun LoginPage(navController: NavController){
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
         Text(
-            modifier = Modifier.padding(top = 290.dp),
+            modifier = Modifier.padding(top = 400.dp),
             text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
             fontSize = 20.sp,
             color = Color.White
