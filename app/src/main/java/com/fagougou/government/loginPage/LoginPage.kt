@@ -1,6 +1,7 @@
 package com.fagougou.government.loginPage
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,10 +23,8 @@ import com.fagougou.government.Router
 import com.fagougou.government.loginPage.LoginPage.login
 import com.fagougou.government.loginPage.LoginPage.register
 import com.fagougou.government.loginPage.LoginPage.state
-import com.fagougou.government.model.SerialLoginRequest
-import com.fagougou.government.model.SerialLoginRespon
-import com.fagougou.government.model.SerialRegisterRespon
-import com.fagougou.government.model.SerialRegiterRequest
+import com.fagougou.government.model.SerialRegisterResponse
+import com.fagougou.government.model.SerialRegisterRequest
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainLogin
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -46,8 +45,8 @@ object LoginPage {
         state.value = "绑定中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = mainLogin.register(SerialRegiterRequest(Build.SERIAL,register.value)).execute()
-                val body = response.body() ?: SerialRegisterRespon()
+                val response = mainLogin.register(SerialRegisterRequest(Build.SERIAL,register.value)).execute()
+                val body = response.body() ?: SerialRegisterResponse()
                 if (body.balance<0){
                     toast(body.errorMessage)
                     return@launch
@@ -139,5 +138,8 @@ fun LoginPage(navController: NavController){
             fontSize = 20.sp,
             color = Color.White
         )
+    }
+    BackHandler {
+
     }
 }

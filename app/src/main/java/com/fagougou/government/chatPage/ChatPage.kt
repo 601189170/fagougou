@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -16,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -31,6 +34,7 @@ import com.fagougou.government.chatPage.ChatViewModel.listState
 import com.fagougou.government.chatPage.ChatViewModel.nextChat
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.startChat
+import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
@@ -430,7 +434,7 @@ fun ChatPage(navController: NavController) {
         BotMenu()
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.78f)
+                .fillMaxHeight(0.75f)
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
@@ -455,20 +459,67 @@ fun ChatPage(navController: NavController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(160.dp)
+                        .height(120.dp)
                 ) {}
             }
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        if(voiceInputMode.value) Surface(
+            modifier = Modifier
+                .padding(vertical = 12.dp)
+                .fillMaxHeight()
+                .width(480.dp),
+            color = Color(0x33FFFFFF),
+            shape = RoundedCornerShape(CORNER_FLOAT)
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    Image(
+                        modifier = Modifier.clickable {
+                            if(IFly.recognizeResult.value != IFly.UNWAKE_TEXT)return@clickable
+                            voiceInputMode.value = false
+                            IFly.recognizeResult.value = ""
+                        },
+                        painter = painterResource(id = R.drawable.ic_keyboard),
+                        contentDescription = null)
+                }
+                Text(
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    text = IFly.recognizeResult.value,
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
+                PAG()
+            }
+        } else Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Text(
-                modifier = Modifier.padding(vertical = 18.dp),
-                text = IFly.recognizeResult.value,
-                fontSize = 24.sp,
-                color = Color.White
-            )
-            PAG()
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(12.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TextField(
+                    value = IFly.recognizeResult.value,
+                    onValueChange = {
+                        IFly.recognizeResult.value = it
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                    keyboardActions = KeyboardActions(
+                        onSend = {
+                            scope.launch {
+                                nextChat(IFly.recognizeResult.value)
+                                IFly.recognizeResult.value = ""
+                            }
+                        }
+                    )
+                )
+            }
         }
     }
     BackHandler(enabled = true) {

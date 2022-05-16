@@ -24,6 +24,7 @@ object ChatViewModel {
     val listState = LazyListState()
     val chatIoState = mutableStateOf(false)
     var currentProvince = mutableStateOf("")
+    val voiceInputMode = mutableStateOf(true)
 
     suspend fun addChatData(chatData: ChatData) {
         for (say in chatData.botSays) {

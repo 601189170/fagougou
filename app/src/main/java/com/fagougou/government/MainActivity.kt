@@ -59,7 +59,14 @@ class MainActivity : ComponentActivity() {
         activity = this
         val sevenDays = (31L*24L*60L*60L*1000L)
         if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
-        hideSystemUI()
+        CoroutineScope(Dispatchers.Default).launch {
+            while(true){
+                delay(200)
+                withContext(Dispatchers.Main){
+                    hideSystemUI()
+                }
+            }
+        }
         setContent {
             GovernmentTheme {
                 Surface(
@@ -131,10 +138,9 @@ fun Main() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        val canLogin = kv.decodeBool("canLogin",false)
         NavHost(
             navController = navController,
-            startDestination = if(canLogin) Router.home else Router.login,
+            startDestination = Router.home,
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.login) { LoginPage(navController) }

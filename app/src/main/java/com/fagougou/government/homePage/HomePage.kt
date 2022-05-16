@@ -1,5 +1,6 @@
 package com.fagougou.government.homePage
 
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,6 +8,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,11 +20,19 @@ import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
+import com.fagougou.government.model.SerialLoginRequest
+import com.fagougou.government.model.SerialLoginResponse
+import com.fagougou.government.repo.Client.handleException
+import com.fagougou.government.repo.Client.mainLogin
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.MMKV.clearStack
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Time.timeText
 import com.fagougou.government.utils.Tips.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 @Composable
 fun HomeButton(
@@ -46,6 +57,24 @@ fun HomeButton(
 
 @Composable
 fun HomePage(navController:NavController) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        scope.launch{
+            var body = SerialLoginResponse()
+            withContext(Dispatchers.IO){
+                try {
+                    val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    body = response.body() ?: SerialLoginResponse()
+                }catch (e:Exception){
+                    handleException(e)
+                }
+            }
+            if(!body.canLogin){ withContext(Dispatchers.Main){
+                navController.navigate(Router.login)
+                toast(body.errorMessage)
+            } }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
