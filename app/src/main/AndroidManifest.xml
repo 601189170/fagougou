@@ -16,7 +16,7 @@
         android:roundIcon="@drawable/fagougou"
         android:supportsRtl="true"
         android:theme="@style/Theme.Government"
-        tools:replace="android:icon,android:label,android:theme,android:allowBackup">
+        tools:replace="android:label,android:theme,android:allowBackup">
         <activity
             android:name="com.fagougou.xiaoben.consult.TouristsLoginActivity"
             android:exported="false" />

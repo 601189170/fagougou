@@ -260,7 +260,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-                                showQrCode.value = true
+//                                showQrCode.value = true
 
                                 ImSdkUtils.startAc(activity)
                             }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- 应用主题色 -->
     <color name="ykfsdk_ykf_color_default">#0081FF</color>
     <color name="ykfsdk_ykf_color_default_light_1">#ECF6FF</color>
@@ -102,4 +102,6 @@
     <color name="ykfsdk_default_menu_text">#000000</color>
     <color name="ykfsdk_voice_tv">#7390A0</color>
     <color name="ykfsdk_selected_color">#459AE9</color>
+    <color name="dialog_bg_wihte" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="dialog_bg_blue" tools:ignore="ResourceName">#007BFF</color>
 </resources>

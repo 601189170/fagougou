@@ -5,55 +5,59 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/ykfsdk_ykf_theme_chat_activity_bg_default">
+    android:background="@drawable/home_background">
     <!--titlebar-->
-    <RelativeLayout
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/chat_title"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentLeft="true"-->
+<!--        android:layout_alignParentTop="true">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/chat_tv_back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:text="@string/ykfsdk_logout"-->
+<!--            android:textColor="?attr/ykfsdk_ykf_theme_color_default"-->
+<!--            android:textSize="16sp" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/other_name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:ellipsize="end"-->
+<!--            android:maxEms="14"-->
+<!--            android:maxLines="1"-->
+<!--            android:text="@string/ykfsdk_wait_link"-->
+<!--            android:textColor="@color/ykfsdk_all_black"-->
+<!--            android:textSize="16sp"-->
+<!--            tools:text="容联七陌科技有限公司欢迎您使用在线客服" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/chat_tv_convert"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginRight="15dp"-->
+<!--            android:text="@string/ykfsdk_topeople"-->
+<!--            android:textColor="?attr/ykfsdk_ykf_theme_color_default"-->
+<!--            android:textSize="16sp"-->
+<!--            android:visibility="gone" />-->
+
+<!--    </RelativeLayout>-->
+    <include
         android:id="@+id/chat_title"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/ykfsdk_all_white">
+        layout="@layout/layout_chat_title">
 
-        <TextView
-            android:id="@+id/chat_tv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="@string/ykfsdk_logout"
-            android:textColor="?attr/ykfsdk_ykf_theme_color_default"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/other_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:ellipsize="end"
-            android:maxEms="14"
-            android:maxLines="1"
-            android:text="@string/ykfsdk_wait_link"
-            android:textColor="@color/ykfsdk_all_black"
-            android:textSize="16sp"
-            tools:text="容联七陌科技有限公司欢迎您使用在线客服" />
-
-        <TextView
-            android:id="@+id/chat_tv_convert"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="@string/ykfsdk_topeople"
-            android:textColor="?attr/ykfsdk_ykf_theme_color_default"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+    </include>
 
     <com.effective.android.panel.view.PanelSwitchLayout
         android:id="@+id/panel_switch_layout"
@@ -70,7 +74,6 @@
             android:id="@+id/content_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/ykfsdk_ykf_theme_chat_activity_bg_default"
             android:orientation="vertical"
             app:edit_view="@id/chat_input">
 
@@ -121,28 +124,22 @@
                 <LinearLayout
                     android:id="@+id/rl_bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:background="#F6F6F6"
+                    android:layout_height="112dp"
+
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp">
 
-                    <Button
-                        android:id="@+id/chat_set_mode_voice"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/ykfsdk_kf_icon_chat_voice"
-                        android:visibility="visible" />
+<!--                    <Button-->
+<!--                        android:id="@+id/chat_set_mode_voice"-->
+<!--                        android:layout_width="30dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:layout_marginLeft="10dp"-->
+<!--                        android:background="@drawable/ykfsdk_kf_icon_chat_voice"-->
+<!--                        android:visibility="visible" />-->
 
-                    <Button
-                        android:id="@+id/chat_set_mode_keyboard"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/ykfsdk_kf_chatting_setmode_keyboard_btn_normal"
-                        android:visibility="gone" />
+
 
                     <com.m7.imkfsdk.recordbutton.AudioRecorderButton
                         android:id="@+id/chat_press_to_speak"
@@ -169,50 +166,91 @@
                         android:id="@+id/chat_edittext_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="30dp"
                         android:layout_marginRight="6dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ykfsdk_kf_chat_input_bg"
+                        android:background="@drawable/ykfsdk_kf_chat_input_bg2"
                         android:gravity="bottom">
 
                         <EditText
                             android:id="@+id/chat_input"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginRight="42dp"
                             android:background="@null"
+                            android:hint="请输入问题.."
                             android:imeOptions="flagNoExtractUi"
                             android:maxLines="4"
-                            android:textCursorDrawable="@drawable/ykfsdk_bg_edittext"
                             android:minHeight="40dp"
-                            android:paddingLeft="1dp"
+                            android:paddingLeft="30dp"
                             android:paddingTop="3dp"
                             android:paddingRight="1dp"
                             android:paddingBottom="3dp"
-                            android:textColor="@color/ykfsdk_all_black"
+                            android:textColor="#C0C6CC"
+                            android:textColorHint="#C0C6CC"
+                            android:textCursorDrawable="@drawable/ykfsdk_bg_edittext"
                             android:textSize="16sp" />
 
 
                         <ImageView
+                            android:visibility="gone"
                             android:id="@+id/chat_emoji_normal"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:padding="20dp"
                             android:layout_alignParentRight="true"
                            android:layout_centerVertical="true"
                             android:layout_marginRight="8dp"
                             android:src="@drawable/ykfsdk_selector_emoji_focus" />
 
                     </RelativeLayout>
-
-                    <Button
-                        android:id="@+id/chat_more"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                <FrameLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/bottom_chat_bg"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_chat_voice"
+                        android:id="@+id/chat_set_mode_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                         />
+                    <ImageView
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:id="@+id/chat_set_mode_keyboard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_chat_input"
+                         />
+                </FrameLayout>
+                    <FrameLayout
                         android:layout_marginLeft="6dp"
                         android:layout_marginRight="12dp"
+                        android:background="@drawable/bottom_chat_bg"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp">
+                    <Button
+                        android:layout_gravity="center"
+                        android:id="@+id/chat_more"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/ykfsdk_selector_more_focus" />
+                    </FrameLayout>
+<!--                    <Button-->
+<!--                        android:visibility="gone"-->
+<!--                        android:id="@+id/chat_more"-->
+<!--                        android:layout_width="30dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:layout_marginLeft="6dp"-->
+<!--                        android:layout_marginRight="12dp"-->
+<!--                        android:background="@drawable/ykfsdk_selector_more_focus" />-->
 
                     <Button
                         android:id="@+id/chat_send"
@@ -249,7 +287,7 @@
                 android:id="@+id/panel_addition"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:panel_layout="@layout/ykfsdk_panel_add_layout"
+                app:panel_layout="@layout/ykfsdk_panel_add_layout2"
                 app:panel_trigger="@id/chat_more" />
 
         </com.effective.android.panel.view.panel.PanelContainer>

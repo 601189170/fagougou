@@ -20,9 +20,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -44,6 +46,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.effective.android.panel.PanelSwitchHelper;
 import com.effective.android.panel.interfaces.ContentScrollMeasurer;
 import com.effective.android.panel.interfaces.listener.OnEditFocusChangeListener;
@@ -133,6 +137,7 @@ import com.moor.imkf.utils.NullUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -160,8 +165,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
     private boolean isListBottom = false;//list是否在底部
     private ChatListView mChatList;
-    private Button mChatSend, mChatSetModeVoice,
-            mChatSetModeKeyboard;
+    private Button mChatSend;
+    private ImageView mChatSetModeVoice;
+    private ImageView mChatSetModeKeyboard;
     TextView chat_tv_back, chat_tv_convert;
     private EditText mChatInput;
     private ChatAdapter chatAdapter;
@@ -280,6 +286,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     private String exten;
     private String userName;
     private String userIcon;
+    private LinearLayout layoutPhone;
+    private LinearLayout layoutVideo;
+
 
     /**
      * Handler改为静态内部类
@@ -852,7 +861,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     }
 
     // 初始化bottomList
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "WrongViewCast"})
     public void initBottomList() {
         //底部推荐标签
         rvTagLabel = findViewById(R.id.rv_tag_label);
@@ -878,6 +887,58 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
             }
         });
         rvTagLabel.setVisibility(View.GONE);//默认不展示滑动list
+        //修改ui
+        layoutPhone = (LinearLayout) this.findViewById(R.id.layout_phone);
+        layoutVideo = (LinearLayout) this.findViewById(R.id.layout_video);
+        layoutPhone.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (IMChatManager.getInstance().isManual) {
+                    PermissionXUtil.checkPermission(ChatActivity.this, new OnRequestCallback() {
+                                @Override
+                                public void requestSuccess() {
+                                    if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
+                                            !WebSocketHandler.getDefault().isConnect()) {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.ykfsdk_ykf_not_netwokr_error), Toast.LENGTH_SHORT).show();
+                                        LogUtils.aTag("chat_morebreak");
+                                        startReStartDialog3();
+                                        return;
+                                    }
+                                        openVideo2(1);
+
+                                }
+                            }, PermissionConstants.CAMERA
+                            , PermissionConstants.RECORD_AUDIO);
+                } else {
+                    ToastUtils.showShort(ChatActivity.this, getString(R.string.ykfsdk_ykf_starting_video_tips));
+                }
+            }
+        });
+        layoutVideo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (IMChatManager.getInstance().isManual) {
+                    PermissionXUtil.checkPermission(ChatActivity.this, new OnRequestCallback() {
+                                @Override
+                                public void requestSuccess() {
+                                    if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
+                                            !WebSocketHandler.getDefault().isConnect()) {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.ykfsdk_ykf_not_netwokr_error), Toast.LENGTH_SHORT).show();
+                                        LogUtils.aTag("chat_morebreak");
+                                        startReStartDialog3();
+                                        return;
+                                    }
+                                        openVideo2(0);
+
+                                }
+                            }, PermissionConstants.CAMERA
+                            , PermissionConstants.RECORD_AUDIO);
+                } else {
+                    ToastUtils.showShort(ChatActivity.this, getString(R.string.ykfsdk_ykf_starting_video_tips));
+                }
+            }
+        });
+        //修改ui
 
         mChatSend = (Button) this.findViewById(R.id.chat_send);
         chat_tv_back = (TextView) this.findViewById(R.id.chat_tv_back);
@@ -891,8 +952,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //删除表情按钮
         ivDeleteEmoji = findViewById(R.id.iv_delete_emoji);
         mChatMore = findViewById(R.id.chat_more);
-        mChatSetModeVoice = (Button) this.findViewById(R.id.chat_set_mode_voice);
-        mChatSetModeKeyboard = (Button) this.findViewById(R.id.chat_set_mode_keyboard);
+        mChatSetModeVoice = findViewById(R.id.chat_set_mode_voice);
+        mChatSetModeKeyboard = (ImageView) this.findViewById(R.id.chat_set_mode_keyboard);
         //转人工服务按钮，判断是否需要显示
         chat_tv_convert = (TextView) this.findViewById(R.id.chat_tv_convert);
         chat_queue_ll = (LinearLayout) findViewById(R.id.chat_queue_ll);
@@ -913,7 +974,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }
 
         if (TextUtils.isEmpty(left_text)) {
-            chat_tv_back.setText(getString(R.string.ykfsdk_logout));
+            chat_tv_back.setText("退出");
         } else {
             chat_tv_back.setText(left_text);
         }
@@ -927,29 +988,29 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }
 
 
-        mChatInput.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
-                        !WebSocketHandler.getDefault().isConnect()) {
-//                    Toast.makeText(getApplicationContext(), "检测到您网络异常啦~", Toast.LENGTH_SHORT).show();
-                    LogUtils.aTag("第五个地方break");
-                    startReStartDialog3();
-                    return;
-                }
-
-                if (IMChatManager.getInstance().isFinishWhenReConnect) {
-                    // beginSession();
-                    startReStartDialog();
-                } else {
-//                    mChatEmojiNormal.setVisibility(View.VISIBLE);
-                    mChatEmojiNormal.setVisibility(View.GONE);
-                    mChatEmojiNormal.setSelected(false);
-                }
-            }
-        });
+//        mChatInput.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
+//                        !WebSocketHandler.getDefault().isConnect()) {
+////                    Toast.makeText(getApplicationContext(), "检测到您网络异常啦~", Toast.LENGTH_SHORT).show();
+//                    LogUtils.aTag("第五个地方break");
+//                    startReStartDialog3();
+//                    return;
+//                }
+//
+//                if (IMChatManager.getInstance().isFinishWhenReConnect) {
+//                    // beginSession();
+//                    startReStartDialog();
+//                } else {
+////                    mChatEmojiNormal.setVisibility(View.VISIBLE);
+//                    mChatEmojiNormal.setVisibility(View.GONE);
+//                    mChatEmojiNormal.setSelected(false);
+//                }
+//            }
+//        });
 
         // 监听文字框
 
@@ -1205,9 +1266,12 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         if (mHelper != null && mHelper.hookSystemBackByPanelSwitcher()) {
         }
 
+
         mChatEdittextLayout.setVisibility(View.GONE);
+
         mChatSetModeVoice.setVisibility(View.GONE);
         mChatSetModeKeyboard.setVisibility(View.VISIBLE);
+
         mChatSend.setVisibility(View.GONE);
         mChatMore.setVisibility(View.VISIBLE);
         mRecorderButton.setVisibility(View.VISIBLE);
@@ -3130,6 +3194,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                     .addEditTextFocusChangeListener(new OnEditFocusChangeListener() {
                         @Override
                         public void onFocusChange(@Nullable View view, boolean hasFocus) {
+                            Log.e("TAG", "onFocusChange: " );
                             if (hasFocus) {
                                 scrollToBottom();
                             }
@@ -3149,6 +3214,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                     .addPanelChangeListener(new OnPanelChangeListener() {
                         @Override
                         public void onKeyboard() {
+                            Log.e("TAG", "onKeyboard: " );
+
                             scrollToBottom();
                             mChatEmojiNormal.setSelected(false);
                             mChatMore.setSelected(false);
@@ -3156,12 +3223,16 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
                         @Override
                         public void onNone() {
+                            Log.e("TAG", "onNone: " );
+
                             mChatEmojiNormal.setSelected(false);
                             mChatMore.setSelected(false);
                         }
 
                         @Override
                         public void onPanel(IPanelView view) {
+                            Log.e("TAG", "onPanel: " );
+
                             scrollToBottom();
                             if (view instanceof PanelView) {
                                 boolean selected1 = ((PanelView) view).getId() == R.id.panel_emotion;
@@ -3180,6 +3251,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
                         @Override
                         public void onPanelSizeChange(IPanelView panelView, boolean portrait, int oldWidth, int oldHeight, int width, int height) {
+                            Log.e("TAG", "onPanelSizeChange: " );
+
                             if (panelView instanceof PanelView) {
                                 if (((PanelView) panelView).getId() == R.id.panel_emotion) {
                                     int viewPagerSize = height - DensityUtil.dp2px(20f);
@@ -3187,7 +3260,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                                             mChatInput,
                                             Emotions.getEmotions(), width, viewPagerSize);
                                 } else if (((PanelView) panelView).getId() == R.id.panel_addition) {
-                                    dealAddMoreViewClickEvent((PanelView) panelView);
+//                                    dealAddMoreViewClickEvent((PanelView) panelView);
+                                    dealAddMoreViewClickEvent2((PanelView) panelView);
                                 }
                             }
                         }
@@ -3337,6 +3411,46 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         });
 
     }
+    private void dealAddMoreViewClickEvent2(PanelView panelView) {
+        ll_invite = panelView.findViewById(R.id.ll_invite);
+        RecyclerView  recycler_view = panelView.findViewById(R.id.recycler_view);
+        recycler_view.setLayoutManager(new GridLayoutManager(this,6));
+        recycler_view.setAdapter(adapter);
+        photos.add(R.drawable.icon_s1);
+        photos.add(R.drawable.icon_s2);
+        photos.add(R.drawable.icon_s3);
+        photos.add(R.drawable.icon_s4);
+        photos.add(R.drawable.icon_s5);
+        photos.add(R.drawable.icon_s6);
+        photos.add(R.drawable.icon_s7);
+        photos.add(R.drawable.icon_s8);
+        photos.add(R.drawable.icon_s9);
+        photos.add(R.drawable.icon_s10);
+        strs.add("公司财税");
+        strs.add("交通事故");
+        strs.add("婚姻家事");
+        strs.add("员工纠纷");
+        strs.add("知识产权");
+        strs.add("刑事犯罪");
+        strs.add("房产纠纷");
+        strs.add("企业人事");
+        strs.add("消费维权");
+        strs.add("民间借贷");
+        adapter.setList(photos);
+
+    }
+    List photos=new ArrayList();
+
+    List strs=new ArrayList();
+
+
+    BaseQuickAdapter adapter = new BaseQuickAdapter<Integer, BaseViewHolder>(R.layout.layout_addmore_item) {
+        @Override
+        protected void convert(@NotNull BaseViewHolder baseViewHolder,Integer id ) { ;
+            baseViewHolder.setImageResource(R.id.img,id);
+            baseViewHolder.setText(R.id.name,strs.get(getItemPosition(id))+"");
+        }
+    };
 
     /**
      * 开启视频
@@ -3368,7 +3482,18 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         });
         videoOrVoiceDialog.show(getSupportFragmentManager(), "");
     }
+    /**
+     * 开启视频
+     */
+    private void openVideo2(int type) {
+        YKFCallInfoBean callInfoBean = new YKFCallInfoBean();
+        callInfoBean.setUserName(userName)
+                .setUserIcon(userIcon)
+                .setVideo(0 == type)
+                .setExten(exten);
+        YKFCallHelper.openCall(callInfoBean);
 
+    }
     /**
      * 打开本地相册
      */

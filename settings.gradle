@@ -7,6 +7,8 @@ pluginManagement {
         maven { url 'https://maven.aliyun.com/repository/google' }
         // 华为开源镜像：https://mirrors.huaweicloud.com
         maven { url 'https://repo.huaweicloud.com/repository/maven' }
+        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
+
     }
 }
 dependencyResolutionManagement {
@@ -18,6 +20,8 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/google' }
         // 华为开源镜像：https://mirrors.huaweicloud.com
         maven { url 'https://repo.huaweicloud.com/repository/maven' }
+        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
+
     }
 }
 rootProject.name = "Government"

@@ -7,7 +7,7 @@ android {
     }
     resourcePrefix "ykfsdk_"
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 7
         versionName "4.1.0"
@@ -30,6 +30,10 @@ dependencies {
     api 'com.github.bumptech.glide:glide:4.9.0'
 
     api 'com.github.7moor-tech:7moor_visitorIm_sdk:4.1.0'
+
+    api 'com.github.7moor-tech:sdk_video_jitsi:1.0.5'
+    //万能适配器
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 }
 
 configurations.all {

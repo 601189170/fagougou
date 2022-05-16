@@ -26,7 +26,7 @@ import com.m7.imkfsdk.R;
 
 public class BaseDialog extends Dialog implements DialogInterface.OnDismissListener {
     Activity activity;
-    int endTime = 1 * 60;
+    int endTime = 1 * 30;
     public boolean isTimerClost;
     Handler claseHandler = new Handler(Looper.myLooper()){
         @Override

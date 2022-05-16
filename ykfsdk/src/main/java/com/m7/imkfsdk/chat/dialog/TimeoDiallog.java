@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -19,8 +21,9 @@ public class TimeoDiallog extends BaseDialog {
     Context context;
 
     String str="";
-    Button btn_confirm;
-    Button btn_cancle;
+    TextView btn_confirm;
+    TextView btn_cancle;
+    ImageView close;
     TimeoDialogListener listener;
     public TimeoDiallog(@NonNull Context context, int theme) {
         super(context, theme);
@@ -44,8 +47,9 @@ public class TimeoDiallog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.big_msg_layout);
-        btn_confirm=findViewById(R.id.btn_confirm);
-        btn_cancle=findViewById(R.id.btn_cancle);
+        btn_confirm=findViewById(R.id.left_btn);
+        btn_cancle=findViewById(R.id.right_btn);
+        close=findViewById(R.id.close);
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +69,12 @@ public class TimeoDiallog extends BaseDialog {
                 cancel();
             }
         });
-
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancel();
+            }
+        });
 
     }
 

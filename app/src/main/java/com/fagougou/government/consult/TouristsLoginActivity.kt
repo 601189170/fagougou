@@ -1,28 +1,36 @@
 package com.fagougou.xiaoben.consult
 
+
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
+import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.MMKV.kv
-
-
-
 import org.json.JSONException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TouristsLoginActivity : Activity() {
+class TouristsLoginActivity : AppCompatActivity() {
     var sdk: EsSdtSdk? = null
     var isStart = false
-
+    private var binding: ActivityReadCardMsgBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_read_card_msg)
+
+
+        binding = ActivityReadCardMsgBinding.inflate(getLayoutInflater());
+        if (binding!=null){
+            val rootView: View = binding!!.root
+            setContentView(rootView)
+            binding!!.text.text="ss"
+        }
+
         //初始化读卡
         sdk = EsSdtSdk.getInst()
         onBtnStart()

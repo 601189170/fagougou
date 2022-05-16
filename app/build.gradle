@@ -9,14 +9,18 @@ android {
 
     defaultConfig {
         applicationId "com.fagougou.government"
-        minSdk 25
-        targetSdk 32
+        minSdk 21
+        targetSdk 30
         versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi-v7a','arm64-v8a'
         }
     }
     signingConfigs {
@@ -63,6 +67,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+    buildFeatures {
+        viewBinding true
+    }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -76,6 +83,7 @@ android {
 
 dependencies {
     implementation files('libs/Msc.jar')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation "androidx.compose.ui:ui:$compose_version"
