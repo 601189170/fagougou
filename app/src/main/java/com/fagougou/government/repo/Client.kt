@@ -143,11 +143,11 @@ object Client {
         when (t) {
             is HttpException -> ex = Exception("服务器错误")
             is JsonParseException, is JSONException, is ParseException -> ex = Exception("解析错误")
-            is SocketException -> ex = Exception("网络连接错误，请重试")
+            is SocketException -> ex = Exception("无网络连接")
             is SocketTimeoutException -> ex = Exception("网络连接超时")
             is SSLHandshakeException -> ex = Exception("证书验证失败")
-            is UnknownHostException -> ex = Exception("网络错误，请切换网络重试")
-            is UnknownServiceException -> ex = Exception("网络错误，请切换网络重试")
+            is UnknownHostException -> ex = Exception("无网络连接")
+            is UnknownServiceException -> ex = Exception("无网络连接")
             is NumberFormatException -> ex = Exception("数字格式化异常")
             else -> {
                 ex = t as Exception

@@ -30,10 +30,12 @@ import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
+import java.lang.Exception
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
@@ -53,9 +55,13 @@ object GenerateContract {
         val file = context.assets.open("generateContract.html")
         baseHtml = InputStreamReader(file,"UTF-8").readText()
         CoroutineScope(Dispatchers.IO).launch {
-            val response = generateService.getGeneratelist(GenerateListRequest()).execute()
-            val body = response.body()?.data ?: GenerateContractListResponse().data
-            contractList.addAll(body.list)
+            try{
+                val response = generateService.getGeneratelist(GenerateListRequest()).execute()
+                val body = response.body()?.data ?: GenerateContractListResponse().data
+                contractList.addAll(body.list)
+            } catch (e:Exception) {
+                handleException(e)
+            }
         }
         CoroutineScope(Dispatchers.Default).launch {
             while(true){
@@ -76,18 +82,26 @@ object GenerateContract {
     suspend fun getGenerateForm(id:String){
         withContext(Dispatchers.IO){
             formList.clear()
-            val response = generateService.getGenrateForm(id).execute()
-            val body = response.body()?.data ?: GenerateData()
-            formList.addAll(body.forms)
+            try{
+                val response = generateService.getGenrateForm(id).execute()
+                val body = response.body()?.data ?: GenerateData()
+                formList.addAll(body.forms)
+            }catch (e:Exception){
+                handleException(e)
+            }
         }
     }
 
     suspend fun getGenerateTemplete(id:String){
         withContext(Dispatchers.IO){
-            formList.clear()
-            val response = generateService.getGenrateTemplete(id).execute()
-            val body = response.body()?.data ?: GenerateContractTemplete()
-            template = body.content
+            template = ""
+            try {
+                val response = generateService.getGenrateTemplete(id).execute()
+                val body = response.body()?.data ?: GenerateContractTemplete()
+                template = body.content
+            }catch (e:Exception){
+                handleException(e)
+            }
         }
     }
 
