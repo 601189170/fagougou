@@ -3,6 +3,7 @@ package com.fagougou.government
 
 object Router {
     const val login = "login"
+    const val registerResult = "registerResult"
     const val home ="home"
     const val contract ="contract"
     const val generateContract = "generateContract"
@@ -15,4 +16,10 @@ object Router {
     const val contractWebView ="contractWebView"
     const val webView ="webView"
     const val about ="about"
+
+    var routeMirror = ""
+    val noLoadingPages = listOf(
+        login,
+        chat
+    )
 }

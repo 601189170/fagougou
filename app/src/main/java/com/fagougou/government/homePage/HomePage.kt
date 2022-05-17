@@ -47,12 +47,7 @@ fun HomeButton(
         contentPadding = PaddingValues(0.dp),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent),
-        content = {
-            Image(
-                painter = painterResource(contentId),
-                contentDescription = "HomeButton"
-            )
-        }
+        content = { Image( painterResource(contentId), "HomeButton" ) }
     )
 }
 
@@ -79,7 +74,6 @@ fun HomePage(navController:NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
             modifier = Modifier
@@ -99,77 +93,69 @@ fun HomePage(navController:NavController) {
                 fontSize = 24.sp
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.padding(top = 84.dp),
-                text = "欢迎使用",
-                fontSize = 24.sp,
-                color = Color.White
+        Text(
+            modifier = Modifier.padding(top = 84.dp),
+            text = "欢迎使用",
+            fontSize = 24.sp,
+            color = Color.White
+        )
+        Text(
+            modifier = Modifier.padding(top = 48.dp),
+            text = "智能法律服务系统",
+            fontSize = 28.sp,
+            color = Color.White
+        )
+        Row( modifier = Modifier.padding(top = 48.dp) ) {
+            HomeButton(
+                modifier = Modifier
+                    .width(432.dp)
+                    .height(264.dp),
+                onClick = { navController.navigate(Router.chatGuide) },
+                contentId = R.drawable.home_ask
             )
-            Text(
-                modifier = Modifier.padding(top = 48.dp),
-                text = "智能法律服务系统",
-                fontSize = 28.sp,
-                color = Color.White
+            HomeButton(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .width(216.dp)
+                    .height(264.dp),
+                onClick = { navController.navigate(Router.contract) },
+                contentId = R.drawable.home_document
             )
-            Row( modifier = Modifier.padding(top = 48.dp) ) {
-                HomeButton(
-                    modifier = Modifier
-                        .width(432.dp)
-                        .height(264.dp),
-                    onClick = { navController.navigate(Router.chatGuide) },
-                    contentId = R.drawable.home_ask
-                )
-                HomeButton(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .width(216.dp)
-                        .height(264.dp),
-                    onClick = { navController.navigate(Router.contract) },
-                    contentId = R.drawable.home_document
-                )
-                HomeButton(
-                    modifier = Modifier
-                        .width(216.dp)
-                        .height(264.dp),
-                    onClick = { navController.navigate(Router.generateContract) },
-                    contentId = R.drawable.home_generate_contract
-                )
-            }
-            Row( modifier = Modifier.padding(top = 24.dp) ) {
-                HomeButton(
-                    modifier = Modifier
-                        .width(288.dp)
-                        .height(120.dp),
-                    onClick = {  navController.navigate(Router.calculator)  },
-                    contentId = R.drawable.home_calculator
-                )
-                HomeButton(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .width(288.dp)
-                        .height(120.dp),
-                    onClick = { navController.navigate(Router.statistic) },
-                    contentId = R.drawable.home_statistic
-                )
-                HomeButton(
-                    modifier = Modifier
-                        .width(288.dp)
-                        .height(120.dp),
-                    onClick = { navController.navigate(Router.about) },
-                    contentId = R.drawable.home_about
-                )
-            }
+            HomeButton(
+                modifier = Modifier
+                    .width(216.dp)
+                    .height(264.dp),
+                onClick = { navController.navigate(Router.generateContract) },
+                contentId = R.drawable.home_generate_contract
+            )
+        }
+        Row( modifier = Modifier.padding(top = 24.dp) ) {
+            HomeButton(
+                modifier = Modifier
+                    .width(288.dp)
+                    .height(120.dp),
+                onClick = {  navController.navigate(Router.calculator)  },
+                contentId = R.drawable.home_calculator
+            )
+            HomeButton(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .width(288.dp)
+                    .height(120.dp),
+                onClick = { navController.navigate(Router.statistic) },
+                contentId = R.drawable.home_statistic
+            )
+            HomeButton(
+                modifier = Modifier
+                    .width(288.dp)
+                    .height(120.dp),
+                onClick = { navController.navigate(Router.about) },
+                contentId = R.drawable.home_about
+            )
         }
         Text(
             modifier = Modifier
-                .padding(vertical = 24.dp)
+                .padding(top = 225.dp)
                 .clickable {
                     clearStack--
                     if (clearStack<=0){

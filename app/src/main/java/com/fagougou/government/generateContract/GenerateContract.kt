@@ -22,7 +22,7 @@ import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.utils.IFly.routeMirror
+import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.utils.Time
 import com.fagougou.government.webViewPage.WebView
 import kotlinx.coroutines.*

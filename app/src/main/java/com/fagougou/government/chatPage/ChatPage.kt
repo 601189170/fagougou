@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import com.fagougou.government.Header
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
-import com.fagougou.government.chatPage.ChatViewModel.chatIoState
 import com.fagougou.government.chatPage.ChatViewModel.currentProvince
 import com.fagougou.government.chatPage.ChatViewModel.getComplex
 import com.fagougou.government.chatPage.ChatViewModel.history
@@ -535,28 +534,12 @@ fun ChatPage(navController: NavController) {
                 state = listState,
             ) {
                 items(history.size) { index ->
-                    MessageItem(
-                        history[index],
-                        index,
-                        scope,
-                        navController
-                    )
+                    MessageItem(history[index], index, scope, navController)
                 }
-                if (chatIoState.value) item {
-                    MessageItem(
-                        Message(Speaker.ROBOT, content = ". . ."),
-                        -1,
-                        scope,
-                        navController
-                    )
+                if (history.lastOrNull()?.speaker==Speaker.USER) item {
+                    MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController)
                 }
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(20.dp)
-                    ) {}
-                }
+                item { Row(Modifier.fillMaxWidth().height(20.dp)) {} }
             }
         }
         Column(
