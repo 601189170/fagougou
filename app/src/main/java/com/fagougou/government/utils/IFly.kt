@@ -9,6 +9,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel.nextChat
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
+import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -25,7 +26,6 @@ object IFly {
     const val UNWAKE_TEXT = "请说,你好小笨"
     const val WAKE_TEXT = "请说出您的问题"
     val TAG = javaClass.simpleName
-    var routeMirror = ""
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
     val volumeState = mutableStateOf("=")

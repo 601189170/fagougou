@@ -22,7 +22,6 @@ object ChatViewModel {
     var sessionId = ""
     var botQueryIdMap = mutableMapOf<String, String>()
     val listState = LazyListState()
-    val chatIoState = mutableStateOf(false)
     var currentProvince = mutableStateOf("")
     val voiceInputMode = mutableStateOf(true)
     val textInputContent = mutableStateOf("")
@@ -112,7 +111,6 @@ object ChatViewModel {
         history.add(Message(Speaker.USER, message))
         withContext(Dispatchers.Main) { listState.scrollToItem(history.lastIndex) }
         try {
-            chatIoState.value = true
             var fixMessage = if (message.last() == '。') message.dropLast(1) else message
             fixMessage = fixMessage
                 .replace("嗯，", "")
@@ -127,8 +125,6 @@ object ChatViewModel {
             addChatData(body.chatData)
         } catch (e: Exception) {
             handleException(e)
-        } finally {
-            chatIoState.value = false
         }
     }
 

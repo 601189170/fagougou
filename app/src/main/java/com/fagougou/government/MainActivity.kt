@@ -2,10 +2,10 @@ package com.fagougou.government
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,13 +23,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.Router.noLoadingPages
 import com.fagougou.government.SafeBack.safeBack
 import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.CasePage
 import com.fagougou.government.chatPage.ChatGuidePage
 import com.fagougou.government.chatPage.ChatPage
-import com.fagougou.government.chatPage.ChatViewModel.chatIoState
 import com.fagougou.government.chatPage.ComplexPage
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
@@ -43,8 +43,9 @@ import com.fagougou.government.repo.Client.updateService
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
-import com.fagougou.government.utils.IFly.routeMirror
 import com.fagougou.government.utils.ImSdkUtils
+import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.loginPage.RegisterResultPage
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
 import com.fagougou.government.webViewPage.WebViewPage
@@ -126,6 +127,7 @@ fun Main() {
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.login) { LoginPage(navController) }
+            composable(Router.registerResult) { RegisterResultPage(navController)}
             composable(Router.home) { HomePage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateContract) { GenerateContract(navController) }
@@ -144,7 +146,9 @@ fun Main() {
 
 @Composable
 fun Loading(){
-    if (globalLoading.value > 0 && !chatIoState.value) Surface(color = Color.Transparent) {
+    if(routeMirror in noLoadingPages) return
+    if(globalLoading.value <= 0) return
+    Surface(color = Color.Transparent) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -204,32 +208,24 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Button(
-                modifier = Modifier.fillMaxHeight(),
-                elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
-                onClick = {
-                    onBack.invoke()
-                    navController.safeBack()
-                },
-                content = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            modifier = Modifier.padding(start = 24.dp, end = 12.dp),
-                            painter = painterResource(R.drawable.ic_back),
-                            contentDescription = "Back"
-                        )
-                        Text("返回", fontSize = 24.sp, color = Color.White)
-                    }
-
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-            )
-            Text(
-                title,
-                color = Color.White,
-                fontSize = 24.sp
-            )
-            Surface( color = Color.Transparent ) {
+            Row(
+                modifier = Modifier
+                    .width(230.dp)
+                    .clickable {
+                        onBack.invoke()
+                        navController.safeBack()
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.padding(start = 24.dp, end = 12.dp),
+                    painter = painterResource(R.drawable.ic_back),
+                    contentDescription = "Back"
+                )
+                Text("返回", fontSize = 24.sp, color = Color.White)
+            }
+            Text( title, color = Color.White, fontSize = 24.sp )
+            Surface( Modifier.width(230.dp), color = Color.Transparent ) {
                 if (navController.currentDestination?.route?.contains("chat") == true) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painterResource(id = R.drawable.ic_wechat), null)
@@ -248,11 +244,9 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                     color = Color.White
                                 )
                             },
-                            onClick = {
-                                showQrCode.value = true
-                            }
+                            onClick = { showQrCode.value = true }
                         )
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
                         Image(painterResource(id = R.drawable.ic_human), null)
                         Button(
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -270,10 +264,8 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-                                showQrCode.value = true
-                                ImSdkUtils.startAc(activity)
-
-
+                                ImSdkUtils.initKfHelper()
+                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
                             }
                         )
                     }
