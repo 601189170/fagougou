@@ -6,6 +6,7 @@ object Router {
     const val registerResult = "registerResult"
     const val home ="home"
     const val contract ="contract"
+    const val generateGuide = "generateGuide"
     const val generateContract = "generateContract"
     const val chatGuide ="chatGuide"
     const val chat ="chat"

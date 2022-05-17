@@ -1,6 +1,12 @@
 package com.fagougou.government.generateContract
 
 import android.content.Context
+import android.util.Log
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.widget.LinearLayout
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,33 +15,39 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.Header
+import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.generateContract.GenerateContract.data
-import com.fagougou.government.generateContract.GenerateContract.contractList
-import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
-import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
-import com.fagougou.government.webViewPage.WebView
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
+    val currentContractId = mutableStateOf("")
     var baseHtml = ""
     var template = ""
     val data = mutableStateOf("")
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
     var lastModifier = Time.stamp
+    val updateContractList = listOf(
+        Router.generateContract,
+        Router.generateGuide
+    )
 
     fun init(context: Context) {
         val file = context.assets.open("generateContract.html")
@@ -48,12 +60,13 @@ object GenerateContract {
         CoroutineScope(Dispatchers.Default).launch {
             while(true){
                 delay(750)
-                if(routeMirror == Router.generateContract)updateContent()
+                if(routeMirror in updateContractList)updateContent()
             }
         }
     }
 
     fun clear(){
+        currentContractId.value = ""
         template = ""
         data.value = ""
         formList.clear()
@@ -116,8 +129,36 @@ object GenerateContract {
 }
 
 @Composable
+fun ContractWebView(data: MutableState<String>){
+    AndroidView(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(0.88f),
+        factory = {
+            WebView(CommonApplication.activity).apply {
+                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                setInitialScale(80)
+                settings.javaScriptEnabled = true
+                isVerticalScrollBarEnabled = false
+                isClickable = false
+                isLongClickable = false
+                webChromeClient = WebChromeClient()
+            }
+        },
+        update = {
+            it.loadDataWithBaseURL(null, data.value, "text/html; charset=utf-8", "utf-8", null)
+            CoroutineScope(Dispatchers.Default).launch {
+                delay(100)
+                withContext(Dispatchers.Main){
+                    it.evaluateJavascript("javascript:getHtml()",{ Log.i("html",it)})
+                }
+            }
+        }
+    )
+}
+
+@Composable
 fun GenerateContract(navController: NavController) {
-    val scope = rememberCoroutineScope()
     Surface(color = Color.White) {
         Text(notifier.value)
         Column(
@@ -129,41 +170,90 @@ fun GenerateContract(navController: NavController) {
                 navController = navController,
                 onBack = { GenerateContract.clear() }
             )
-            Row(modifier = Modifier.fillMaxWidth()) {
-                for (item in contractList) {
-                    Button(
-                        onClick = {
-                            GenerateContract.clear()
-                            scope.launch {
-                                getGenerateTemplete(item.id)
-                            }
-                            scope.launch {
-                                getGenerateForm(item.id)
-                            }
-                        },
-                        content = { Text(item.name) }
-                    )
-                }
-            }
             Row(modifier = Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
+                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Column(
+                        Modifier.fillMaxHeight(0.88f)
+                    ){
+                        ContractWebView(data)
+                    }
+                    Row(
+                        Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Button(
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(200.dp),
+                            onClick = { },
+                            content = {
+                                  Row( verticalAlignment = Alignment.CenterVertically ){
+                                      Image(painterResource(R.drawable.ic_wechat),null)
+                                      Text(
+                                          modifier = Modifier.padding(start = 16.dp),
+                                          text = "微信查看",
+                                          color = Color.White,
+                                          fontSize = 21.sp)
+                                  }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Dodgerblue
+                            )
+                        )
+                        Button(
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(200.dp),
+                            onClick = { },
+                            content = {
+                                Row( verticalAlignment = Alignment.CenterVertically ){
+                                    Image(painterResource(R.drawable.ic_painter),null)
+                                    Text(
+                                        modifier = Modifier.padding(start = 16.dp),
+                                        text = "打印合同",
+                                        color = Color.White,
+                                        fontSize = 21.sp)
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Dodgerblue
+                            )
+                        )
+                    }
+                }
+                Divider(modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp))
+                Column(
                     modifier = Modifier
-                        .padding(start = 32.dp)
                         .fillMaxHeight()
-                        .fillMaxWidth(0.6f)
+                        .fillMaxWidth()
                         .verticalScroll(scrollState),
                 ) {
                     for (item in GenerateContract.formList) {
-                        Text(item.label,fontSize = 24.sp)
+                        Text(
+                            modifier = Modifier.padding(top = 24.dp,start = 16.dp),
+                            text = item.label,
+                            fontSize = 24.sp
+                        )
                         for (child in item.children) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    modifier = Modifier.width(256.dp),
-                                    text = child.label
-                                )
+                            Column(Modifier.padding(horizontal = 16.dp)) {
+                                Row(Modifier.padding(top = 20.dp,bottom = 12.dp)){
+                                    Surface(
+                                        Modifier
+                                            .height(20.dp)
+                                            .width(4.dp),color = Dodgerblue) { }
+                                    Text(
+                                        modifier = Modifier.padding(start = 12.dp),
+                                        text = child.label,
+                                        fontSize = 18.sp
+                                    )
+                                }
                                 when(child.type){
                                     "checkbox" -> {
                                         Column {
@@ -202,29 +292,20 @@ fun GenerateContract(navController: NavController) {
                                         }
                                     }
                                     else -> TextField(
-                                        modifier = Modifier.width(512.dp),
+                                        modifier = Modifier.fillMaxWidth(),
                                         value = child.input,
                                         onValueChange = { str ->
                                             child.input = str
                                             lastModifier = child.variable
                                             notifier.value = Time.stamp
                                         },
-                                        placeholder = {
-                                            if (child.input == "")Text(child.comment)
-                                        }
+                                        placeholder = { if (child.input == "")Text(child.comment) }
                                     )
                                 }
                             }
-                            Divider(thickness = 2.dp)
+                            Divider(modifier = Modifier.padding(top = 12.dp),thickness = 2.dp)
                         }
                     }
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                ) {
-                    WebView(data)
                 }
             }
         }

@@ -22,6 +22,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.loginPage.LoginPageViewModel.login
 import com.fagougou.government.loginPage.LoginPageViewModel.registerCode
 import com.fagougou.government.loginPage.LoginPageViewModel.registerAction
+import com.fagougou.government.loginPage.LoginPageViewModel.registerBalance
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
@@ -29,34 +30,35 @@ import com.fagougou.government.repo.Client.mainLogin
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 @Composable
 fun LoginPage(navController: NavController){
     val scope = rememberCoroutineScope()
-    LaunchedEffect(null){ scope.launch(Dispatchers.IO){ while(true){
-        delay(1000)
-        var body = SerialLoginResponse()
-        try {
-            val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
-            body = response.body() ?: SerialLoginResponse()
-        }catch (e:Exception){
-            handleException(e)
-        }
-        if(body.canLogin){
-            withContext(Dispatchers.Main){
-                navController.navigate(Router.home)
+    LaunchedEffect(null){
+        scope.launch(Dispatchers.IO){
+            while(isActive){
+                delay(3000)
+                var body = SerialLoginResponse()
+                try {
+                    val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    body = response.body() ?: SerialLoginResponse()
+                }catch (e:Exception){
+                    handleException(e)
+                }
+                if(body.canLogin){
+                    if(registerBalance.value < 0) withContext(Dispatchers.Main){
+                        navController.navigate(Router.home)
+                    }
+                    break
+                }
             }
         }
-    } } }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-
         ) {
         Row(
             modifier = Modifier

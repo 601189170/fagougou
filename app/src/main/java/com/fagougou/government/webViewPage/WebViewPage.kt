@@ -43,7 +43,7 @@ fun WebViewPage(navController: NavController) {
 }
 
 @Composable
-fun WebView(urlAddress:String,data:String){
+fun WebView(urlAddress:String, data:String){
     AndroidView(
         modifier = Modifier.fillMaxHeight().fillMaxWidth(),
         factory = {
@@ -54,30 +54,6 @@ fun WebView(urlAddress:String,data:String){
                 webChromeClient = WebChromeClient()
                 if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")
                 else if(urlAddress!="")loadUrl(urlAddress)
-            }
-        }
-    )
-}
-
-@Composable
-fun WebView(data: MutableState<String>){
-    AndroidView(
-        modifier = Modifier.fillMaxHeight().fillMaxWidth(),
-        factory = {
-            WebView(activity).apply {
-                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                setInitialScale(80)
-                settings.javaScriptEnabled = true
-                webChromeClient = WebChromeClient()
-            }
-        },
-        update = {
-            it.loadDataWithBaseURL(null, data.value, "text/html; charset=utf-8", "utf-8", null)
-            CoroutineScope(Dispatchers.Default).launch {
-                delay(100)
-                withContext(Dispatchers.Main){
-                    it.evaluateJavascript("javascript:getHtml()",{ Log.i("html",it)})
-                }
             }
         }
     )
