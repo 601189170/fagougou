@@ -229,7 +229,10 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                 color = Color.White,
                 fontSize = 24.sp
             )
-            Surface( color = Color.Transparent ) {
+            Surface(
+                modifier = Modifier.width(180.dp),
+                color = Color.Transparent
+            ) {
                 if (navController.currentDestination?.route?.contains("chat") == true) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painterResource(id = R.drawable.ic_wechat), null)
@@ -249,9 +252,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-//                                showQrCode.value = true
-
-                                ImSdkUtils.startAc(activity)
+                                showQrCode.value = true
                             }
                         )
                         Spacer(modifier = Modifier.width(16.dp))
@@ -272,7 +273,6 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-                                showQrCode.value = true
                                 ImSdkUtils.initKfHelper()
                                 ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
                             }

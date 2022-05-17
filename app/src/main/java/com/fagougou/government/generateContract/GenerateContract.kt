@@ -125,7 +125,7 @@ fun GenerateContract(navController: NavController) {
             verticalArrangement = Arrangement.Top,
         ) {
             Header(
-                title = "合同生成",
+                title = "智能文书",
                 navController = navController,
                 onBack = { GenerateContract.clear() }
             )
