@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/home_background"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/top_layout"
+        layout="@layout/layout_top_titile">
+
+    </include>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/top_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="256dp"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:text="目前咨询坐席繁忙，请您耐心等待，前面还有0人"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

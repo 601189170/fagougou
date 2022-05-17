@@ -2,13 +2,15 @@ package com.fagougou.government.utils
 
 import android.content.Context
 import android.content.Intent
-import com.fagougou.xiaoben.consult.ChooseDomainActivity
+import android.text.TextUtils
 import com.fagougou.xiaoben.consult.TouristsLoginActivity
 import com.m7.imkfsdk.KfStartHelper
 import com.moor.imkf.IMChatManager
 import com.moor.imkf.requesturl.RequestUrl
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 object ImSdkUtils {
      var helper: KfStartHelper? = null
@@ -17,15 +19,18 @@ object ImSdkUtils {
      val accessId = "90d8c6e0-d0d5-11ec-94aa-a36b72b57644"
 
     //用户名
-     val userName = "用户名"
+    var userName = "用户名"
 
     //用户id
-     val userId = "用户id"
+    var userId = "用户id"
+
+
 
     fun startAc(context: Context){
         val intent =
-            Intent(context, ChooseDomainActivity::class.java)
+//            Intent(context, ChooseDomainActivity::class.java)
 //            Intent(context, TouristsLoginActivity::class.java)
+            Intent(context, TouristsLoginActivity::class.java)
 
         context.startActivity(intent)
     }
@@ -101,4 +106,8 @@ object ImSdkUtils {
             e.printStackTrace()
         }
     }
+
+
+
+
 }

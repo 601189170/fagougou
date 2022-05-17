@@ -3,7 +3,6 @@ package com.m7.imkfsdk.chat.dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +15,7 @@ import com.m7.imkfsdk.R;
  * Created by Hao on 2017/11/29.
  */
 
-public class TimeoDiallog extends BaseDialog {
+public class SelectRuleDiallog extends BaseDialog {
 
     Context context;
 
@@ -25,18 +24,18 @@ public class TimeoDiallog extends BaseDialog {
     TextView btn_cancle;
     ImageView close;
     TimeoDialogListener listener;
-    public TimeoDiallog(@NonNull Context context, int theme) {
+    public SelectRuleDiallog(@NonNull Context context, int theme) {
         super(context, theme);
     }
 
 
-    public TimeoDiallog(@NonNull Context context, String str) {
+    public SelectRuleDiallog(@NonNull Context context, String str) {
         this(context, R.style.shareDialog);
         this.context = context;
         this.str = str;
 
     }
-    public TimeoDiallog(@NonNull Context context, String str,TimeoDialogListener listener) {
+    public SelectRuleDiallog(@NonNull Context context, String str, TimeoDialogListener listener) {
         this(context, R.style.shareDialog);
         this.context = context;
         this.str = str;
@@ -46,7 +45,7 @@ public class TimeoDiallog extends BaseDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.big_msg_layout);
+        setContentView(R.layout.select_rule_layout);
         btn_confirm=findViewById(R.id.right_btn);
         btn_cancle=findViewById(R.id.left_btn);
         close=findViewById(R.id.close);

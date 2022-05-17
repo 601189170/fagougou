@@ -19,6 +19,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +48,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.effective.android.panel.PanelSwitchHelper;
 import com.effective.android.panel.interfaces.ContentScrollMeasurer;
@@ -70,6 +74,7 @@ import com.m7.imkfsdk.chat.dialog.BottomXbotFormDialog;
 import com.m7.imkfsdk.chat.dialog.CommonBottomSheetDialog;
 import com.m7.imkfsdk.chat.dialog.InvestigateDialog;
 import com.m7.imkfsdk.chat.dialog.LoadingFragmentDialog;
+import com.m7.imkfsdk.chat.dialog.SelectRuleDiallog;
 import com.m7.imkfsdk.chat.dialog.TimeoDiallog;
 import com.m7.imkfsdk.chat.dialog.TimeoDialogListener;
 import com.m7.imkfsdk.chat.emotion.EmotionPagerView;
@@ -88,6 +93,7 @@ import com.m7.imkfsdk.utils.DensityUtil;
 import com.m7.imkfsdk.utils.FileUtils;
 import com.m7.imkfsdk.utils.PickUtils;
 import com.m7.imkfsdk.utils.RegexUtils;
+import com.m7.imkfsdk.utils.SpacesItemDecoration;
 import com.m7.imkfsdk.utils.ToastUtils;
 import com.m7.imkfsdk.utils.permission.PermissionConstants;
 import com.m7.imkfsdk.utils.permission.PermissionXUtil;
@@ -1011,7 +1017,33 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 //                }
 //            }
 //        });
+        mChatInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //这里注意要做判断处理，ActionDown、ActionUp都会回调到这里，不做处理的话就会调用两次
+                if (KeyEvent.KEYCODE_ENTER == keyCode && KeyEvent.ACTION_DOWN == event.getAction()) {
+                    //处理事件
+                    String txt = mChatInput.getText().toString();
+                    //发送的时候校验一次
+                    if (!MoorUtils.isNetWorkConnected(IMChatManager.getInstance().getAppContext()) &&
+                            !WebSocketHandler.getDefault().isConnect()) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.ykfsdk_ykf_not_netwokr_error), Toast.LENGTH_SHORT).show();
+                        LogUtils.aTag("第四个地方break");
+                        startReStartDialog3();
+                    }else {
+                        if (IMChatManager.getInstance().isFinishWhenReConnect) {
+                            startReStartDialog();//并且弹框提示开始新会话
+                        } else {
+                            ll_hintView.setVisibility(View.GONE);
+                            sendTextMsg(txt);
+                        }
+                    }
 
+                    return true;
+                }
+                return false;
+            }
+        });
         // 监听文字框
 
         mChatInput.addTextChangedListener(new TextWatcher() {
@@ -1021,7 +1053,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                                       int count) {
                 if (!TextUtils.isEmpty(s)) {
                     mChatMore.setVisibility(View.GONE);
-                    mChatSend.setVisibility(View.VISIBLE);
+//                    mChatSend.setVisibility(View.VISIBLE);
+                    mChatSend.setVisibility(View.GONE);
                 } else {
                     mChatMore.setVisibility(View.VISIBLE);
                     mChatSend.setVisibility(View.GONE);
@@ -1141,6 +1174,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 @Override
                 public void Confirm() {
                     handleLogOutOrBackPressed();
+                    eventtpye=0;
+
                 }
 
                 @Override
@@ -1198,7 +1233,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 mChatSend.setVisibility(View.GONE);
             } else {
                 mChatMore.setVisibility(View.GONE);
-                mChatSend.setVisibility(View.VISIBLE);
+//                mChatSend.setVisibility(View.VISIBLE);
+                mChatSend.setVisibility(View.GONE);
             }
 
 
@@ -1684,7 +1720,11 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
     @Override
     protected void onDestroy() {
-
+        if (eventtpye==0){
+            EventBus.getDefault().post(new MessageEvent("1"));
+        }else {
+            EventBus.getDefault().post(new MessageEvent("2"));
+        }
         if (mHashSet.size() > 0) {
             Iterator<String> iterator = mHashSet.iterator();
             while (iterator.hasNext()) {
@@ -3415,6 +3455,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         ll_invite = panelView.findViewById(R.id.ll_invite);
         RecyclerView  recycler_view = panelView.findViewById(R.id.recycler_view);
         recycler_view.setLayoutManager(new GridLayoutManager(this,6));
+        recycler_view.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(25f)));
         recycler_view.setAdapter(adapter);
         photos.add(R.drawable.icon_s1);
         photos.add(R.drawable.icon_s2);
@@ -3437,11 +3478,30 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         strs.add("消费维权");
         strs.add("民间借贷");
         adapter.setList(photos);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                new SelectRuleDiallog(ChatActivity.this, "", new TimeoDialogListener() {
+                    @Override
+                    public void Confirm() {
+                        handleLogOutOrBackPressed();
+                        eventtpye=1;
 
+                    }
+
+                    @Override
+                    public void Cancle() {
+
+                    }
+                }).show();
+            }
+        });
     }
     List photos=new ArrayList();
 
     List strs=new ArrayList();
+
+    public int eventtpye=0;
 
 
     BaseQuickAdapter adapter = new BaseQuickAdapter<Integer, BaseViewHolder>(R.layout.layout_addmore_item) {

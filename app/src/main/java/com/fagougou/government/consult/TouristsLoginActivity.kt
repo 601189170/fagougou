@@ -2,16 +2,25 @@ package com.fagougou.xiaoben.consult
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
+import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
+import com.fagougou.government.utils.MessageCheckUtils
+import com.fagougou.government.utils.Wechat
+import com.fagougou.government.utils.Wechat.showQrCode
 import org.json.JSONException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,6 +28,8 @@ import java.util.*
 class TouristsLoginActivity : AppCompatActivity() {
     var sdk: EsSdtSdk? = null
     var isStart = false
+    var sex=""
+
     private var binding: ActivityReadCardMsgBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +39,110 @@ class TouristsLoginActivity : AppCompatActivity() {
         if (binding!=null){
             val rootView: View = binding!!.root
             setContentView(rootView)
-            binding!!.text.text="ss"
         }
+
 
         //初始化读卡
         sdk = EsSdtSdk.getInst()
         onBtnStart()
+        initView();
+    }
+    fun initView(){
+        setSelectSexBg(0)
+        binding!!.edName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                isPost();
+            }
+        })
+        binding!!.edPhone.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                isPost();
+            }
+        })
+        binding!!.edCard.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                isPost();
+            }
+        })
+
+        binding!!.fgMan.setOnClickListener { setSelectSexBg(0) }
+        binding!!.fgWoman.setOnClickListener { setSelectSexBg(1) }
+        binding!!.btnPost.setOnClickListener {
+            PostMsg();
+        }
+
+        binding!!.topLayout.tvBack.setOnClickListener { finish() }
+        binding!!.topLayout.tvWechat.setOnClickListener {showQrCode.value = true }
+    }
+    fun isPost(){
+        var  name=binding!!.edName.text.toString().trim();
+        var  phone=binding!!.edPhone.text.toString().trim()
+        var  cardNo=binding!!.edCard.text.toString().trim()
+        if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(cardNo)){
+            binding!!.btnPost.background=this.resources.getDrawable(R.drawable.tourists_btn_bg_nomal)
+        }else{
+            binding!!.btnPost.background=this.resources.getDrawable(R.drawable.tourists_btn_bg_true)
+        }
+
+    }
+    fun PostMsg() {
+       var  name=binding!!.edName.text.toString().trim();
+       var  phone=binding!!.edPhone.text.toString().trim()
+       var  cardNo=binding!!.edCard.text.toString().trim()
+
+        if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(cardNo)){
+            ToastUtils.showShort("请填完信息")
+            return
+        }
+        if (!MessageCheckUtils.isLegalName(name)){
+            ToastUtils.showShort("请输入正确的名字")
+            return
+        }
+        if (!MessageCheckUtils.checkPhone(phone)){
+            ToastUtils.showShort("请输入正确的手机号")
+            return
+        }
+        if (!MessageCheckUtils.isLegalPattern(cardNo)){
+            ToastUtils.showShort("请输入正确的身份证")
+            return
+        }
+        ImSdkUtils.userName=name;
+        ImSdkUtils.userId=phone;
+        val intent = Intent(this, ChooseDomainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+    }
+
+    fun setSelectSexBg(type: Int){
+        binding!!.fgMan.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_nomal)
+        binding!!.fgWoman.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_nomal)
+        binding!!.imgMan.background=this.resources.getDrawable(R.drawable.ic_icon_man)
+        binding!!.imgWoman.background=this.resources.getDrawable(R.drawable.ic_icon_woman)
+        binding!!.tvMan.setTextColor(this.resources.getColor(R.color.black303))
+        binding!!.tvWoman.setTextColor(this.resources.getColor(R.color.black303))
+        binding!!.imgMarkMan.visibility=View.GONE
+        binding!!.imgMarkWoman.visibility=View.GONE
+        if (type==0){
+            sex="0"
+            binding!!.imgMarkMan.visibility=View.VISIBLE
+            binding!!.fgMan.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_true)
+            binding!!.imgMan.background=this.resources.getDrawable(R.drawable.ic_icon_man2)
+            binding!!.tvMan.setTextColor(this.resources.getColor(R.color.blue007))
+        }else{
+            sex="1"
+            binding!!.imgMarkWoman.visibility=View.VISIBLE
+            binding!!.fgWoman.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_true)
+            binding!!.imgWoman.background=this.resources.getDrawable(R.drawable.ic_icon_woman2)
+            binding!!.tvWoman.setTextColor(this.resources.getColor(R.color.blue007))
+        }
+
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -56,9 +165,7 @@ class TouristsLoginActivity : AppCompatActivity() {
         sdk!!.SetReadDelay(1)
         if (sdk!!.Start(this, sdtCB, logCB, sdtStatusCB)) {
             isStart = true
-//            btStart.setText("停止读证")
         }
-//        btStart.setEnabled(true)
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -85,50 +192,18 @@ class TouristsLoginActivity : AppCompatActivity() {
                 mSuccessTime = System.currentTimeMillis()
                 Handler(Looper.getMainLooper()).post {
                     try {
-//                        // info.getString("classify"): ESIDCARD_CLASSIFY_IDCARD(实体证件) | ESIDCARD_CLASSIFY_EID(电子标识)
-//                        // info.getString("idType"): ESIDCARD_IDTYPE_N(常规身份证) | ESIDCARD_IDTYPE_J(港澳台居民居住证) | ESIDCARD_IDTYPE_I(外国人永久居留证)
-//                        (findViewById<View>(R.id.tvName) as TextView).text =
-//                            "姓名：" + info.getString("name")
-//                        if (info.getString("idType") == SdtCode.SDT_IDTYPE_J) {
-//                            // 港澳台居民居住证，显示通行证号码
-//                            (findViewById<View>(R.id.tvCard) as TextView).text =
-//                                """
-//                                      号码：${info.getString("idnum")}
-//                                      通行证：
-//                                      """.trimIndent() + info.getString(
-//                                    "otherIdNum"
-//                                )
-//                            (findViewById<View>(R.id.tvNation) as TextView).visibility =
-//                                View.GONE
-//                        } else {
-//                            (findViewById<View>(R.id.tvCard) as TextView).text =
-//                                "号码：" + info.getString("idnum")
-//                            (findViewById<View>(R.id.tvNation) as TextView).text =
-//                                "民族：" + info.getString("nation")
-//                            (findViewById<View>(R.id.tvNation) as TextView).visibility =
-//                                View.VISIBLE
-//                        }
-//                        (findViewById<View>(R.id.tvAddress) as TextView).text =
-//                            "地址：" + info.getString("address")
-//                        (findViewById<View>(R.id.tvSigningOrganization) as TextView).text =
-//                            "签发机关：" + info.getString("signingOrganization")
-//                        (findViewById<View>(R.id.tvBirthDate) as TextView).text =
-//                            "出生日期：" + info.getString("birthDate")
-//                        (findViewById<View>(R.id.tvSex) as TextView).text =
-//                            "性别：" + info.getString("sex")
-//                        val bTime = info.getString("beginTime")
-//                        val eTime = info.getString("endTime")
-//                        (findViewById<View>(R.id.tvBeginTime) as TextView).text =
-//                            "有效日期：$bTime - $eTime"
-//                        (findViewById<View>(R.id.imageView) as ImageView).setImageBitmap(
-//                            img
-//                        )
-//                        (findViewById<View>(R.id.tvError) as TextView).text =
-//                            "读卡成功"
-//                        (findViewById<View>(R.id.tvFullTime) as TextView).text =
-//                            "读卡时间：" + (mSuccessTime - mFindTime).toString() + "ms"
+
                         Log.e("读卡信息", ": "+"姓名：" + info.getString("name" ))
                         Log.e("读卡信息", ": "+ "性别：" + info.getString("sex"))
+                        binding!!.edName.setText(info.getString("name" ))
+                        if (info.getString("sex").equals("男")){
+
+                        }else{
+
+                        }
+                        binding!!.edCard.setText(info.getString("idnum" ))
+//                        binding!!.edPhone.setText(info.getString("idnum" ))
+
                         if (info.getString("idType") == SdtCode.SDT_IDTYPE_J) {
 //                            // 港澳台居民居住证，显示通行证号码
                             Log.e("读卡信息", ": "+ "号码：" + """
@@ -137,7 +212,6 @@ class TouristsLoginActivity : AppCompatActivity() {
                                       """.trimIndent() + info.getString(
                                 "otherIdNum"
                             ))
-
                         } else {
                             Log.e("读卡信息", ": "+ "号码：" + info.getString("idnum"))
                             Log.e("读卡信息", ": "+ "民族：" + info.getString("nation"))
@@ -155,6 +229,8 @@ class TouristsLoginActivity : AppCompatActivity() {
             }
         }
     }
+
+
     var sdtStatusCB = EsSdtStatusCB { type ->
         when (type) {
             SdtCode.SDT_ERROR_IO -> onLog("SDT_ERROR_IO")
@@ -172,6 +248,8 @@ class TouristsLoginActivity : AppCompatActivity() {
     // ---------------------------------------------------------------------------------------------
     // 日志Buf
     var buffer = ArrayList<String>()
+
+
 
     private fun getDateTime(): String? {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.CHINESE)

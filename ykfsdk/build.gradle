@@ -33,7 +33,8 @@ dependencies {
 
     api 'com.github.7moor-tech:sdk_video_jitsi:1.0.5'
     //万能适配器
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    api 'org.greenrobot:eventbus:3.1.1'
 }
 
 configurations.all {

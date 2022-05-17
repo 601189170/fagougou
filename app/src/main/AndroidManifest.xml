@@ -22,6 +22,9 @@
             android:name="com.fagougou.xiaoben.consult.TouristsLoginActivity"
             android:exported="false" />
         <activity
+            android:name="com.fagougou.xiaoben.consult.WaitActivity"
+            android:exported="false" />
+        <activity
             android:name="com.fagougou.xiaoben.consult.ChooseDomainActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

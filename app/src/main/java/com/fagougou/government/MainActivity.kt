@@ -249,9 +249,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-//                                showQrCode.value = true
-
-                                ImSdkUtils.startAc(activity)
+                                showQrCode.value = true
                             }
                         )
                         Spacer(modifier = Modifier.width(16.dp))
@@ -273,8 +271,9 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                             },
                             onClick = {
                                 showQrCode.value = true
-                                ImSdkUtils.initKfHelper()
-                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
+                                ImSdkUtils.startAc(activity)
+
+
                             }
                         )
                     }
