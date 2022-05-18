@@ -10,6 +10,7 @@ import com.fagougou.government.chatPage.ChatViewModel.nextChat
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
@@ -146,6 +147,7 @@ object IFly {
 
     fun recognizeMode(){
         if(routeMirror == Router.chat && voiceInputMode.value) {
+            Router.lastTouchTime = stampL
             TTS.stopSpeaking()
             TTS.speak("您请说")
             mIvw.stopListening()

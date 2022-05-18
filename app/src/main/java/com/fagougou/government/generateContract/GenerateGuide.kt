@@ -5,7 +5,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -109,7 +112,9 @@ fun GenerateGuide(navController: NavController) {
                         modifier = Modifier
                             .height(60.dp)
                             .width(200.dp),
-                        onClick = { navController.navigate(Router.generateContract) },
+                        onClick = {
+                            navController.navigate(Router.generateContract)
+                        },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_edit),null)

@@ -2,6 +2,7 @@ package com.fagougou.government
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -18,11 +19,14 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.Router.lastTouchTime
+import com.fagougou.government.Router.noAutoQuitList
 import com.fagougou.government.Router.noLoadingPages
 import com.fagougou.government.SafeBack.safeBack
 import com.fagougou.government.aboutUsPage.AboutUs
@@ -45,8 +49,11 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.loginPage.RegisterResultPage
+import com.fagougou.government.utils.Time.stampL
+import com.fagougou.government.utils.Time.touchWaitTime
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
 import com.fagougou.government.webViewPage.WebViewPage
@@ -69,10 +76,11 @@ class MainActivity : ComponentActivity() {
                     Main()
                     WeChat()
                     Loading()
+                    Text("${routeRemain.value}",color = Color.White)
                 }
             }
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = updateService.updateInfo().execute()
                 val body = response.body() ?: UpdateInfo()
@@ -88,7 +96,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        lastTouchTime = stampL
+        return super.dispatchTouchEvent(ev)
+    }
 }
 
 object SafeBack{
@@ -108,7 +119,11 @@ fun Main() {
     val navController = rememberNavController()
     LaunchedEffect("UpdateNavContent"){
         while (true){
-            delay(200)
+            delay(250)
+            if(routeMirror !in noAutoQuitList){
+                routeRemain.value = touchWaitTime+lastTouchTime-stampL
+                if(routeRemain.value<0) navController.popBackStack(Router.home,false)
+            }else routeRemain.value = 0
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }
