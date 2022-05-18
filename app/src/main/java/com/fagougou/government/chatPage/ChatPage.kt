@@ -534,14 +534,23 @@ fun ChatPage(navController: NavController) {
                 state = listState,
             ) {
                 item {
-                    Row(Modifier.padding(8.dp)) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Surface(
                             color = Color(0x33FFFFFF),
                             shape = RoundedCornerShape(CORNER_FLOAT)
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically){
+                            Row(
+                                Modifier.padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
                                 Image(painterResource(R.drawable.ic_note),null)
-                                Text("温馨提示：拿起话筒后声音更清晰")
+                                Spacer(Modifier.width(16.dp).height(12.dp))
+                                Text("温馨提示：拿起话筒后声音更清晰",color = Color.White,fontSize = 20.sp)
                             }
                         }
                     }
@@ -552,7 +561,10 @@ fun ChatPage(navController: NavController) {
                 if (history.lastOrNull()?.speaker==Speaker.USER) item {
                     MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController)
                 }
-                item { Row( Modifier .fillMaxWidth() .height(20.dp)) {} }
+                item { Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(20.dp)) {} }
             }
         }
         Column(
