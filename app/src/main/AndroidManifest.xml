@@ -20,6 +20,7 @@
         tools:replace="android:label,android:theme,android:allowBackup">
         <activity
             android:name="com.fagougou.xiaoben.consult.TouristsLoginActivity"
+            android:theme="@style/Theme.Government"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="false" />
         <activity
@@ -27,12 +28,11 @@
             android:exported="false" />
         <activity
             android:name="com.fagougou.xiaoben.consult.ChooseDomainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name="com.fagougou.government.UpdateActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            >
         </activity>
 
         <activity

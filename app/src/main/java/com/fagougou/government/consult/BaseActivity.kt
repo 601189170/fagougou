@@ -1,32 +1,14 @@
 package com.fagougou.xiaoben.consult
 
-import android.annotation.SuppressLint
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.ActivityUtils
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.module.LoadMoreModule
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
-
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.ChatViewModel
-import com.fagougou.government.databinding.ActivityChooseDomainBinding
-import com.fagougou.government.databinding.ActivityWaitBinding
-import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
-import com.m7.imkfsdk.chat.MessageEvent
-import com.m7.imkfsdk.utils.SpacesItemDecoration
-import com.m7.imkfsdk.utils.statusbar.StatusBarUtils
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -35,6 +17,8 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         Time.hideSystemUI()
+//        StatusBarUtils.setColor(this, resources.getColor(R.color.ykfsdk_all_white))
+        setStatusBar(resources.getColor(R.color.white))
 
     }
 
@@ -44,5 +28,15 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-
+    protected open fun setStatusBar(color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            window.statusBarColor = color
+            window.navigationBarColor = color
+            var vis = window.decorView.systemUiVisibility
+            vis = vis or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            vis = vis or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            window.decorView.systemUiVisibility = vis
+        }
+    }
 }

@@ -47,11 +47,11 @@ class TouristsLoginActivity : BaseActivity() {
         sdk = EsSdtSdk.getInst()
         onBtnStart()
         initView();
-        if (AppUtils.isAppDebug()){
-            binding!!.edName.setText("丁俊超")
-            binding!!.edPhone.setText("15920012647")
-            binding!!.edCard.setText("429004199506150931")
-        }
+//        if (AppUtils.isAppDebug()){
+//            binding!!.edName.setText("丁俊超")
+//            binding!!.edPhone.setText("15920012647")
+//            binding!!.edCard.setText("429004199506150931")
+//        }
 
     }
     fun initView(){
