@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Time {
-    const val touchWaitTime = 8L*1000L
     val timeText = mutableStateOf("")
     var stampL = 0L
     var stamp = "0"

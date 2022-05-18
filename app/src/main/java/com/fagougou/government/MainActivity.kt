@@ -53,7 +53,7 @@ import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.loginPage.RegisterResultPage
 import com.fagougou.government.utils.Time.stampL
-import com.fagougou.government.utils.Time.touchWaitTime
+import com.fagougou.government.Router.touchWaitTime
 import com.fagougou.government.utils.Tips.context
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap

@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 
 
 object Router {
+    const val touchWaitTime = 15L*1000L
     const val login = "login"
     const val registerResult = "registerResult"
     const val home ="home"
