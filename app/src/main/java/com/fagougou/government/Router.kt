@@ -1,11 +1,14 @@
 package com.fagougou.government
 
+import androidx.compose.runtime.mutableStateOf
+
 
 object Router {
     const val login = "login"
     const val registerResult = "registerResult"
     const val home ="home"
     const val contract ="contract"
+    const val generateGuide = "generateGuide"
     const val generateContract = "generateContract"
     const val chatGuide ="chatGuide"
     const val chat ="chat"
@@ -18,6 +21,13 @@ object Router {
     const val about ="about"
 
     var routeMirror = ""
+    var lastTouchTime = Long.MAX_VALUE
+    var routeRemain = mutableStateOf(0L)
+    val noAutoQuitList = listOf(
+        login,
+        registerResult,
+        home
+    )
     val noLoadingPages = listOf(
         login,
         chat

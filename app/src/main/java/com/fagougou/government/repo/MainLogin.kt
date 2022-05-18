@@ -6,9 +6,9 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface MainLogin {
-    @POST("/api/register-codes/register/")
+    @POST("api/register-codes/register/")
     fun register(@Body request: SerialRegisterRequest): Call<SerialRegisterResponse>
 
-    @POST("/api/register-codes/login/")
+    @POST("api/register-codes/login/")
     fun login(@Body request: SerialLoginRequest): Call<SerialLoginResponse>
 }

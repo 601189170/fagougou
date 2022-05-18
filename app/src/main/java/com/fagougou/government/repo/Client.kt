@@ -75,7 +75,7 @@ object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com"
     const val contractUrl = "https://law-system.fagougou-law.com/"
-    const val loginUrl = "http://192.168.0.133:9000"
+    const val loginUrl = "http://test.robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com"
     const val generateUrl = "https://products.fagougou.com/api/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -143,11 +143,11 @@ object Client {
         when (t) {
             is HttpException -> ex = Exception("服务器错误")
             is JsonParseException, is JSONException, is ParseException -> ex = Exception("解析错误")
-            is SocketException -> ex = Exception("网络连接错误，请重试")
+            is SocketException -> ex = Exception("无网络连接")
             is SocketTimeoutException -> ex = Exception("网络连接超时")
             is SSLHandshakeException -> ex = Exception("证书验证失败")
-            is UnknownHostException -> ex = Exception("网络错误，请切换网络重试")
-            is UnknownServiceException -> ex = Exception("网络错误，请切换网络重试")
+            is UnknownHostException -> ex = Exception("无网络连接")
+            is UnknownServiceException -> ex = Exception("无网络连接")
             is NumberFormatException -> ex = Exception("数字格式化异常")
             else -> {
                 ex = t as Exception

@@ -18,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.R
 import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
@@ -33,7 +33,6 @@ import com.fagougou.government.utils.Tips.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 @Composable
 fun HomeButton(
@@ -110,7 +109,9 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(432.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.chatGuide) },
+                onClick = {
+                    navController.navigate(Router.chatGuide)
+                },
                 contentId = R.drawable.home_ask
             )
             HomeButton(
@@ -125,7 +126,7 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(216.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.generateContract) },
+                onClick = { navController.navigate(Router.generateGuide) },
                 contentId = R.drawable.home_generate_contract
             )
         }

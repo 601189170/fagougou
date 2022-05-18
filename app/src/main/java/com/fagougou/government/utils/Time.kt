@@ -8,13 +8,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Time {
+    const val touchWaitTime = 8L*1000L
     val timeText = mutableStateOf("")
+    var stampL = 0L
     var stamp = "0"
     init {
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 delay(200)
                 val time = System.currentTimeMillis()
+                stampL = time
                 stamp = time.toString()
                 val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
                 timeText.value = simpleDateFormat.format(time).replace("周","星期")
