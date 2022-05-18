@@ -24,6 +24,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
@@ -59,6 +61,7 @@ import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
 import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.m7.imkfsdk.chat.YKFCallHelper
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -123,7 +126,16 @@ fun Main() {
             delay(250)
             if(routeMirror !in noAutoQuitList){
                 routeRemain.value = touchWaitTime+lastTouchTime-stampL
-                if(routeRemain.value<0) navController.popBackStack(Router.home,false)
+                if(routeRemain.value<0) {
+                    navController.popBackStack(Router.home,false)
+
+                    if (!YKFCallHelper.existVideo()) {
+                        ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                    }else{
+                        ToastUtils.showShort("存在通话")
+                    }
+                }
+
             }else routeRemain.value = 0
             routeMirror = navController.currentDestination?.route ?: ""
         }

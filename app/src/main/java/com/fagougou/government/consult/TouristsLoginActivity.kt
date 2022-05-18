@@ -12,6 +12,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
@@ -26,7 +27,7 @@ import org.json.JSONException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TouristsLoginActivity : AppCompatActivity() {
+class TouristsLoginActivity : BaseActivity() {
     var sdk: EsSdtSdk? = null
     var isStart = false
     var sex=""
@@ -42,11 +43,16 @@ class TouristsLoginActivity : AppCompatActivity() {
             setContentView(rootView)
         }
 
-        Time.hideSystemUI()
         //初始化读卡
         sdk = EsSdtSdk.getInst()
         onBtnStart()
         initView();
+//        if (AppUtils.isAppDebug()){
+//            binding!!.edName.setText("丁俊超")
+//            binding!!.edPhone.setText("15920012647")
+//            binding!!.edCard.setText("429004199506150931")
+//        }
+
     }
     fun initView(){
         setSelectSexBg(0)
