@@ -54,6 +54,7 @@ import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.loginPage.RegisterResultPage
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.utils.Time.touchWaitTime
+import com.fagougou.government.utils.Tips.context
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
 import com.fagougou.government.webViewPage.WebViewPage
@@ -281,8 +282,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                                 )
                             },
                             onClick = {
-                                ImSdkUtils.initKfHelper()
-                                ImSdkUtils.helper?.let { ImSdkUtils.initSdk(it) }
+                                ImSdkUtils.startAc(context)
                             }
                         )
                     }
