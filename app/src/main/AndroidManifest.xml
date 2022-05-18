@@ -20,6 +20,7 @@
         tools:replace="android:label,android:theme,android:allowBackup">
         <activity
             android:name="com.fagougou.xiaoben.consult.TouristsLoginActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="false" />
         <activity
             android:name="com.fagougou.xiaoben.consult.WaitActivity"

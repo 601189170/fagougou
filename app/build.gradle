@@ -51,7 +51,9 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs = ['libs']
+//            jniLibs.srcDirs = ['libs']
+            // 指定JNI目录
+            jniLibs.srcDirs = ['libs', 'src/main/jni']
         }
     }
     compileOptions {

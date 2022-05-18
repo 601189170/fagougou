@@ -18,6 +18,7 @@ import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 import com.fagougou.government.databinding.ActivityWaitBinding
 import com.fagougou.government.utils.ImSdkUtils
+import com.fagougou.government.utils.Time
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.utils.SpacesItemDecoration
 import com.m7.imkfsdk.utils.statusbar.StatusBarUtils
@@ -41,6 +42,7 @@ class WaitActivity : AppCompatActivity() {
         ImSdkUtils.helper?.let {
             ImSdkUtils.initSdk(it)
         }
+        Time.hideSystemUI()
         EventBus.getDefault().register(this);
 
     }

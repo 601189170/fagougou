@@ -19,6 +19,7 @@ import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.MessageCheckUtils
+import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Wechat
 import com.fagougou.government.utils.Wechat.showQrCode
 import org.json.JSONException
@@ -41,7 +42,7 @@ class TouristsLoginActivity : AppCompatActivity() {
             setContentView(rootView)
         }
 
-
+        Time.hideSystemUI()
         //初始化读卡
         sdk = EsSdtSdk.getInst()
         onBtnStart()
@@ -160,6 +161,7 @@ class TouristsLoginActivity : AppCompatActivity() {
             sdk!!.Stop()
 //            btStart.setText("开始读证")
 //            btStart.setEnabled(true)
+//            Log.e("TAG", "onBtnStart: " )
             return
         }
         sdk!!.SetReadDelay(1)
@@ -197,9 +199,9 @@ class TouristsLoginActivity : AppCompatActivity() {
                         Log.e("读卡信息", ": "+ "性别：" + info.getString("sex"))
                         binding!!.edName.setText(info.getString("name" ))
                         if (info.getString("sex").equals("男")){
-
+                            setSelectSexBg(0)
                         }else{
-
+                            setSelectSexBg(1)
                         }
                         binding!!.edCard.setText(info.getString("idnum" ))
 //                        binding!!.edPhone.setText(info.getString("idnum" ))

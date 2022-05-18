@@ -17,6 +17,7 @@ import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 import com.fagougou.government.utils.ImSdkUtils
+import com.fagougou.government.utils.Time
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.utils.SpacesItemDecoration
 import com.m7.imkfsdk.utils.statusbar.StatusBarUtils
@@ -37,7 +38,7 @@ class ChooseDomainActivity : AppCompatActivity() {
         }
         StatusBarUtils.setColor(this, resources.getColor(R.color.white))
 
-
+        Time.hideSystemUI()
         initView()
     }
     fun initView(){
