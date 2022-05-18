@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,47 +28,20 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class WaitActivity : AppCompatActivity() {
-    private var binding: ActivityWaitBinding? = null
+open class BaseActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityWaitBinding.inflate(getLayoutInflater());
-        if (binding!=null){
-            val rootView: View = binding!!.root
-            setContentView(rootView)
-        }
-        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
-        ImSdkUtils.initKfHelper()
-        ImSdkUtils.helper?.let {
-            ImSdkUtils.initSdk(it)
-        }
-        EventBus.getDefault().register(this);
-
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onEventMainThread(messageEvent: MessageEvent){
-        if (messageEvent.message.equals("1")){
-            finish()
-            ActivityUtils.finishActivity(this)
-        }else if(messageEvent.message.equals("2")){
-            finish()
-            ActivityUtils.finishActivity(this)
-            val intent = Intent(this, WaitActivity::class.java)
-            startActivity(intent)
-        }else if(messageEvent.message.equals("3")){
-            Router.lastTouchTime = Time.stampL
-        }
+        Time.hideSystemUI()
 
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this);//反注册EventBus
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        Router.lastTouchTime = Time.stampL
+        return super.dispatchTouchEvent(ev)
     }
-
 
 
 

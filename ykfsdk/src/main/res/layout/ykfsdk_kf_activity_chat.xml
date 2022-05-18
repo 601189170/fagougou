@@ -180,8 +180,9 @@
                             android:layout_marginRight="42dp"
                             android:background="@null"
                             android:hint="请输入问题.."
-                            android:imeOptions="flagNoExtractUi"
+                            android:imeOptions="flagNoExtractUi|actionSend"
                             android:maxLines="4"
+
                             android:minHeight="40dp"
                             android:paddingLeft="30dp"
                             android:paddingTop="3dp"

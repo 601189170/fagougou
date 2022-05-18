@@ -452,6 +452,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //设置全局配置
         setGlobalConfig();
         getMainQuestions();
+        handler.postDelayed(touchEvent,1000);
     }
 
 
@@ -502,6 +503,12 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         kefuIntentFilter.addAction(IMChatManager.START_TIMER);
         keFuStatusReceiver = new KeFuStatusReceiver();
         registerReceiver(keFuStatusReceiver, kefuIntentFilter);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        EventBus.getDefault().post(new MessageEvent("3"));
+        return super.dispatchTouchEvent(ev);
     }
 
 
@@ -1035,6 +1042,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                             startReStartDialog();//并且弹框提示开始新会话
                         } else {
                             ll_hintView.setVisibility(View.GONE);
+                            if (!TextUtils.isEmpty(txt))
                             sendTextMsg(txt);
                         }
                     }
@@ -1703,6 +1711,14 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }
 
     }
+    //触摸线程
+    Runnable touchEvent=new Runnable() {
+        @Override
+        public void run() {
+            Log.e("TAG", "touchEvent: "+  YKFCallHelper.existVideo());
+            handler.postDelayed(this,1000);
+        }
+    };
 
     /**
      * 覆盖手机返回键
@@ -1725,6 +1741,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }else {
             EventBus.getDefault().post(new MessageEvent("2"));
         }
+        handleLogOutOrBackPressed();
         if (mHashSet.size() > 0) {
             Iterator<String> iterator = mHashSet.iterator();
             while (iterator.hasNext()) {

@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class ChooseDomainActivity : AppCompatActivity() {
+class ChooseDomainActivity : BaseActivity() {
     private var binding: ActivityChooseDomainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,6 @@ class ChooseDomainActivity : AppCompatActivity() {
         }
         StatusBarUtils.setColor(this, resources.getColor(R.color.white))
 
-        Time.hideSystemUI()
         initView()
     }
     fun initView(){
