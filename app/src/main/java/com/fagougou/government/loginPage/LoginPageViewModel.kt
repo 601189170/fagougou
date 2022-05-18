@@ -18,7 +18,7 @@ import java.lang.Exception
 object LoginPageViewModel {
     val registerCode = mutableStateOf("")
     val registerAction = mutableStateOf("立即绑定")
-    var registerBalance = mutableStateOf(0)
+    var registerBalance = mutableStateOf(-1)
     fun login(navController: NavController){
         registerAction.value = "绑定中..."
         CoroutineScope(Dispatchers.IO).launch {

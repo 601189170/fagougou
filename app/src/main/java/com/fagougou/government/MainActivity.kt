@@ -45,6 +45,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.loginPage.RegisterResultPage
 import com.fagougou.government.utils.Wechat.showQrCode
 import com.fagougou.government.utils.Wechat.wechatBitmap
@@ -130,6 +131,7 @@ fun Main() {
             composable(Router.registerResult) { RegisterResultPage(navController)}
             composable(Router.home) { HomePage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
+            composable(Router.generateGuide) { GenerateGuide(navController) }
             composable(Router.generateContract) { GenerateContract(navController) }
             composable(Router.chatGuide) { ChatGuidePage(navController) }
             composable(Router.chat) { ChatPage(navController) }

@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +27,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.contractPage.Contract.HTLists
 import com.fagougou.government.contractPage.Contract.categoryList
 import com.fagougou.government.contractPage.Contract.searchWord
-import com.fagougou.government.contractPage.Contract.getHTLIST
+import com.fagougou.government.contractPage.Contract.getContractList
 import com.fagougou.government.contractPage.Contract.getTemplate
 import com.fagougou.government.contractPage.Contract.selectedId
 import com.fagougou.government.contractPage.ContractWebView.codeUrl
@@ -52,26 +53,29 @@ object Contract{
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.listCategory().execute()
-            val body = response.body()
-            if (body!=null) categoryList.addAll(body.categorys)
-            categoryList.reverse()
-            selectedId.value = categoryList.firstOrNull()?.id ?: return@launch
-            getHTLIST( selectedId.value )
+            try{
+                val response = contractService.listCategory().execute()
+                val body = response.body()
+                if (body!=null) categoryList.addAll(body.categorys)
+                categoryList.reverse()
+                selectedId.value = categoryList.firstOrNull()?.id ?: return@launch
+                getContractList( selectedId.value )
+            }catch (e:Exception){
+                handleException(e)
+            }
         }
     }
 
-    fun  getHTLIST(folder:String,searchName:String = "") {
+    suspend fun  getContractList(folder:String, searchName:String = "") {
         HTLists.clear()
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 if (searchName!="")selectedId.value = ""
                 val response = contractService.getContractList(ContractListRequest(folder = folder, name = searchName)).execute()
-                val body = response.body() ?: return@launch
+                val body = response.body() ?: return@withContext
                 HTLists.addAll(body.data.list)
             }catch (e:Exception){
                 handleException(e)
-
             }
         }
     }
@@ -94,37 +98,39 @@ object Contract{
 fun Contract(navController: NavController,category: ContractData){
     Column(
         modifier = Modifier
-            .padding(vertical = 8.dp)
             .clickable { getTemplate(category.fileid, navController) }
     ){
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
             Image(painterResource(R.drawable.ic_word), null)
             Text(
-                modifier = Modifier.padding(start = 8.dp,top = 4.dp),
+                modifier = Modifier.padding(start = 8.dp),
                 fontWeight= FontWeight.Bold,
                 text = category.name,
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 color = Color.Black
             )
         }
         Text(
             modifier = Modifier.padding(top = 12.dp),
             text = category.howToUse ?: "暂无数据",
-            fontSize = 24.sp,
+            fontSize = 21.sp,
+            lineHeight = 36.sp,
             color = Color.Black
         )
         Text(
-            modifier = Modifier.padding(top = 12.dp),
+            modifier = Modifier.padding(vertical = 10.dp),
             text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             color = Color.Gray
         )
+        Divider(thickness = 2.dp)
     }
 }
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun ContractGuidePage(navController: NavController) {
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -132,18 +138,20 @@ fun ContractGuidePage(navController: NavController) {
         Header(title = "合同文库", navController = navController)
         Surface(
             modifier = Modifier
-                .height(265.dp)
-                .width(1280.dp)
+                .height(264.dp)
+                .width(1280.dp),
+            color = Color.Transparent
         ) {
             Image(painterResource(id = R.drawable.contract_banner),null)
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .height(264.dp)
+                    .width(1280.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "海量合同文库", fontSize = 48 .sp, color = Color.White,fontWeight = FontWeight.Bold)
+                Text(text = "海量合同文库", fontSize = 40 .sp, color = Color.White,fontWeight = FontWeight.Bold)
                 Row(
-
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val textFieldColors = TextFieldDefaults.textFieldColors(
@@ -174,7 +182,7 @@ fun ContractGuidePage(navController: NavController) {
                                 color = Color.White
                             )
                         },
-                        onClick = { getHTLIST("",searchWord.value) }
+                        onClick = { scope.launch { getContractList("",searchWord.value)} }
                     )
                 }
             }
@@ -184,10 +192,10 @@ fun ContractGuidePage(navController: NavController) {
                 Column(
                     Modifier
                         .fillMaxHeight()
-                        .fillMaxWidth(0.3f),
+                        .fillMaxWidth(0.25f),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.padding(vertical = 36.dp),
+                        modifier = Modifier.padding(vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         content = {
                             items(categoryList){ category ->
@@ -199,7 +207,7 @@ fun ContractGuidePage(navController: NavController) {
                                             .fillMaxWidth()
                                             .clickable {
                                                 selectedId.value = category.id
-                                                getHTLIST(selectedId.value)
+                                                scope.launch { getContractList(selectedId.value) }
                                             },
                                         horizontalArrangement = Arrangement.Start,
                                         verticalAlignment = Alignment.CenterVertically,
@@ -225,7 +233,7 @@ fun ContractGuidePage(navController: NavController) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(48.dp),
+                        .padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     content = {
                         items(HTLists){ category ->
