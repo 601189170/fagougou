@@ -38,10 +38,16 @@ class WaitActivity : AppCompatActivity() {
             val rootView: View = binding!!.root
             setContentView(rootView)
         }
-        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
+//        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
         ImSdkUtils.initKfHelper()
         ImSdkUtils.helper?.let {
             ImSdkUtils.initSdk(it)
+        }
+        binding!!.leftBtn.setOnClickListener {
+
+        }
+        binding!!.rightBtn.setOnClickListener {
+            finish()
         }
         EventBus.getDefault().register(this);
 

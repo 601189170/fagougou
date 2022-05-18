@@ -56,6 +56,7 @@
     <color name="ykfsdk_bg_gray_B3B3B3">#B3B3B3</color>
     <!-- 透明 -->
     <color name="ykfsdk_transparent">#00000000</color>
+    <color name="ykfsdk_transparent2">#10000000</color>
     <!-- 浅灰 -->
     <color name="ykfsdk_lightgrey">#D6D6D6</color>
     <color name="ykfsdk_grey">#999999</color>

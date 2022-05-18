@@ -195,6 +195,7 @@ public class ChatAdapter extends BaseAdapter {
             if (showTimer) {
                 baseHolder.getChattingTime().setVisibility(View.VISIBLE);
                 baseHolder.getChattingTime().setText(DateUtil.getDateString(message.when, DateUtil.SHOW_TYPE_CALL_LOG,context).trim());
+
 //            baseHolder.getChattingTime().setTextColor(Color.WHITE);
 //            baseHolder.getChattingTime().setBackgroundResource(R.color.lightgrey);
                 baseHolder.getChattingTime().setPadding(6, 2, 6, 25);
@@ -203,6 +204,12 @@ public class ChatAdapter extends BaseAdapter {
                 baseHolder.getChattingTime().setShadowLayer(0.0F, 0.0F, 0.0F, 0);
 //            baseHolder.getChattingTime().setBackgroundResource(0);
             }
+        }
+        if (position==0){
+            baseHolder.getChattingTips().setVisibility(View.VISIBLE);
+            baseHolder.getChattingTips().setText("温馨提示：咨询过程中可拿起起电话咨询，声音效果更清晰！");
+        }else {
+            baseHolder.getChattingTips().setVisibility(View.GONE);
         }
 
         //填充消息的数据

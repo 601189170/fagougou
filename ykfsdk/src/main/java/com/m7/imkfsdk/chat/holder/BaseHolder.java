@@ -21,7 +21,7 @@ public class BaseHolder {
      */
     protected ProgressBar progressBar;
     protected ImageView chattingAvatar;
-    protected TextView chattingTime;
+    protected TextView chattingTime,tips;
     protected CheckBox checkBox;
 
     protected ImageView uploadState;
@@ -48,6 +48,7 @@ public class BaseHolder {
     public void initBaseHolder(View baseView) {
         this.baseView = baseView;
         chattingTime = (TextView) baseView.findViewById(R.id.chatting_time_tv);
+        tips = (TextView) baseView.findViewById(R.id.chatting_tips);
         chattingAvatar = (ImageView) baseView.findViewById(R.id.chatting_avatar_iv);
 //        clickAreaView = baseView.findViewById(R.id.chatting_click_area);
         uploadState  = (ImageView) baseView.findViewById(R.id.chatting_state_iv);
@@ -128,7 +129,9 @@ public class BaseHolder {
     public TextView getChattingTime() {
         return chattingTime;
     }
-
+    public TextView getChattingTips() {
+        return tips;
+    }
     /**
      * @param chattingTime the chattingTime to set
      */

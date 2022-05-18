@@ -444,7 +444,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
             hasSet = false;
         }
         loadingDialog = new LoadingFragmentDialog();
-        loadingDialog.setCanceledOnTouchOutside(false);
+//        loadingDialog.setCanceledOnTouchOutside(false);
+        loadingDialog.setCanceledOnTouchOutside(true);
         loadingDialog.show(this.getFragmentManager(), "");
 
         beginChatSession();//开启回话
@@ -452,7 +453,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //设置全局配置
         setGlobalConfig();
         getMainQuestions();
-        handler.postDelayed(touchEvent,1000);
+//        handler.postDelayed(touchEvent,1000);
     }
 
 
@@ -1024,6 +1025,22 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 //                }
 //            }
 //        });
+        mChatInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                EventBus.getDefault().post(new MessageEvent("3"));
+            }
+        });
         mChatInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -1042,8 +1059,12 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                             startReStartDialog();//并且弹框提示开始新会话
                         } else {
                             ll_hintView.setVisibility(View.GONE);
-                            if (!TextUtils.isEmpty(txt))
-                            sendTextMsg(txt);
+                            if (!TextUtils.isEmpty(txt)){
+                                sendTextMsg(txt);
+                            }else {
+                                Toast.makeText(ChatActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
 

@@ -14,4 +14,22 @@
         android:textColor="@color/ykfsdk_color_666666"
         android:textSize="12sp"
         tools:text="2019-10-1 10:10" />
+    <TextView
+        android:id="@+id/chatting_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="2dp"
+        android:paddingVertical="4dp"
+        android:layout_marginTop="28dp"
+        android:textSize="15sp"
+        android:background="@drawable/bottom_chat_tips_bg"
+        android:paddingHorizontal="20dp"
+        android:textColor="@color/dialog_bg_wihte"
+        android:layout_below="@+id/chatting_time_tv"
+        android:drawableLeft="@drawable/icon_tips"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+
+        tools:text="温馨提示：咨询过程中可拿起起麦克风咨询，声音效果更清晰！" />
 </RelativeLayout>

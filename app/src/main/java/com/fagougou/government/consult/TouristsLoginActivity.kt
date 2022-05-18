@@ -47,11 +47,11 @@ class TouristsLoginActivity : BaseActivity() {
         sdk = EsSdtSdk.getInst()
         onBtnStart()
         initView();
-//        if (AppUtils.isAppDebug()){
-//            binding!!.edName.setText("丁俊超")
-//            binding!!.edPhone.setText("15920012647")
-//            binding!!.edCard.setText("429004199506150931")
-//        }
+        if (AppUtils.isAppDebug()){
+            binding!!.edName.setText("丁俊超")
+            binding!!.edPhone.setText("15920012647")
+            binding!!.edCard.setText("429004199506150931")
+        }
 
     }
     fun initView(){
@@ -85,7 +85,12 @@ class TouristsLoginActivity : BaseActivity() {
         }
 
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
-        binding!!.topLayout.tvWechat.setOnClickListener {showQrCode.value = true }
+        binding!!.topLayout.tvWechat.setOnClickListener {
+            showQrCode.value = true
+        }
+        binding!!.topLayout.tvZn.setOnClickListener {
+            finish()
+        }
     }
     fun isPost(){
         var  name=binding!!.edName.text.toString().trim();

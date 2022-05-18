@@ -18,6 +18,7 @@ import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Wechat
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.utils.SpacesItemDecoration
 import com.m7.imkfsdk.utils.statusbar.StatusBarUtils
@@ -36,12 +37,16 @@ class ChooseDomainActivity : BaseActivity() {
             val rootView: View = binding!!.root
             setContentView(rootView)
         }
-        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
+//        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
 
         initView()
     }
     fun initView(){
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
+        binding!!.topLayout.tvWechat.setOnClickListener {
+            Wechat.showQrCode.value = true
+        }
+        binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
 //        binding!!.recyclerView.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5)))
         binding!!.recyclerView.adapter=madapter

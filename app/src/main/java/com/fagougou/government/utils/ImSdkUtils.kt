@@ -3,6 +3,12 @@ package com.fagougou.government.utils
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.blankj.utilcode.util.ActivityUtils
+import com.fagougou.government.MainActivity
+import com.fagougou.government.chatPage.ChatGuidePage
 import com.fagougou.xiaoben.consult.TouristsLoginActivity
 import com.m7.imkfsdk.KfStartHelper
 import com.moor.imkf.IMChatManager
@@ -34,6 +40,8 @@ object ImSdkUtils {
 
         context.startActivity(intent)
     }
+
+
      fun initKfHelper() {
         //设置sdk 显示语言版本
 //        initLanguage();
