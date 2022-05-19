@@ -123,6 +123,10 @@ fun Main() {
                         clear()
                         title = "温馨提示"
                         content.value = "页面长时间无人操作，${routeRemain.value/1000}秒后将退回首页"
+                        firstButtonText.value = "继续咨询"
+                        firstButtonOnClick.value = {}
+                        secondButtonText.value = "返回首页"
+                        secondButtonOnClick.value = { lastTouchTime = 0L}
                         showRouteRemainDialog.value = true
                     }
                 } else {

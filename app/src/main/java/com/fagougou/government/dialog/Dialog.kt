@@ -1,8 +1,10 @@
 package com.fagougou.government.dialog
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,36 +19,40 @@ import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
+import com.fagougou.government.dialog.DialogViewModel.showBackNoteDialog
 import com.fagougou.government.dialog.DialogViewModel.showChangeRobotDialog
 import com.fagougou.government.dialog.DialogViewModel.showRouteRemainDialog
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.ui.theme.Dodgerblue
 
 object DialogViewModel {
     var title = ""
     val content = mutableStateOf("")
-    var firstButtonText = ""
-    var secondButtonText = ""
-    var firstButtonOnClick = {}
-    var secondButtonOnClick = {}
+    var firstButtonText = mutableStateOf("")
+    var secondButtonText = mutableStateOf("")
+    var firstButtonOnClick = mutableStateOf({ })
+    var secondButtonOnClick = mutableStateOf({ })
     val showRouteRemainDialog = mutableStateOf(false)
     val showChangeRobotDialog = mutableStateOf(false)
+    val showBackNoteDialog = mutableStateOf(false)
 
     fun clear(){
         showRouteRemainDialog.value = false
         showChangeRobotDialog.value = false
+        showBackNoteDialog.value = false
         title = ""
         content.value = ""
-        firstButtonText = ""
-        secondButtonText = ""
-        firstButtonOnClick = {}
-        secondButtonOnClick = {}
+        firstButtonText.value = ""
+        secondButtonText.value = ""
+        firstButtonOnClick.value = {}
+        secondButtonOnClick.value = {}
     }
 }
 
 @Composable
 fun Dialog(){
-    val needDialog = showRouteRemainDialog.value || showChangeRobotDialog.value
+    val needDialog = showRouteRemainDialog.value || showChangeRobotDialog.value || showBackNoteDialog.value
     if (needDialog) Surface(color= Color(0x3300000)) {
         Column(
             Modifier.fillMaxSize(),
@@ -55,26 +61,46 @@ fun Dialog(){
         ) {
             Surface(
                 color = Color.White,
-                shape = RoundedCornerShape(CORNER_FLOAT)
+                shape = RoundedCornerShape(CORNER_FLOAT),
+                elevation = 2.dp
             ) {
                 Column(
-                    Modifier.width(600.dp).height(300.dp),
+                    Modifier
+                        .width(640.dp)
+                        .height(320.dp),
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(title,fontSize = 24.sp)
-                    Text(content.value,fontSize = 20.sp,color = Color.DarkGray)
+                    Text(title,fontSize = 28.sp)
+                    Text(content.value,fontSize = 24.sp,color = Color.DarkGray)
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        if(!firstButtonText.isNullOrBlank())Button(
-                            onClick = firstButtonOnClick,
-                            content = { Text(firstButtonText)}
+                        if(!firstButtonText.value.isNullOrBlank())Button(
+                            onClick = firstButtonOnClick.value,
+                            content = {
+                                Text(
+                                    modifier = Modifier.padding(12.dp),
+                                    text = firstButtonText.value,
+                                    fontSize = 24.sp,
+                                    color = Color.White
+                                )
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
                         )
-                        if(!secondButtonText.isNullOrBlank())Button(
-                            onClick = secondButtonOnClick,
-                            content = { Text(secondButtonText) }
+                        if(!secondButtonText.value.isNullOrBlank())Button(
+                            onClick = secondButtonOnClick.value,
+                            content = {
+                                Text(
+                                    modifier = Modifier.padding(12.dp),
+                                    text = secondButtonText.value,
+                                    fontSize = 24.sp,
+                                    color = Dodgerblue
+                                )
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            border = BorderStroke(2.dp, Dodgerblue)
                         )
                     }
                 }

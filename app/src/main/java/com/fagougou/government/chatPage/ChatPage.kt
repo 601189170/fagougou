@@ -47,7 +47,9 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
+import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,10 +85,10 @@ fun BotMenu() {
                             clear()
                             title = "温馨提示"
                             content.value = "更换领域后，当前的记录会清除"
-                            firstButtonText = "取消"
-                            firstButtonOnClick = { showChangeRobotDialog.value = false }
-                            secondButtonText = "确定"
-                            secondButtonOnClick = {
+                            firstButtonText.value = "取消"
+                            firstButtonOnClick.value = { showChangeRobotDialog.value = false }
+                            secondButtonText.value = "确定"
+                            secondButtonOnClick.value = {
                                 showChangeRobotDialog.value = false
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }
@@ -537,7 +539,26 @@ fun ChatPage(navController: NavController) {
             Header(
                 "智能咨询(${selectedChatBot.value})",
                 navController,
-                onBack = { ChatViewModel.clear() }
+                {
+                    with(DialogViewModel){
+                        clear()
+                        title = "温馨提示"
+                        content.value = "请确认本次咨询是否解决您的问题？"
+                        firstButtonText.value = "已经解决"
+                        firstButtonOnClick.value = {
+                            showBackNoteDialog.value = false
+                            Router.lastTouchTime = 0L
+                        }
+                        secondButtonText.value = "没有解决，转人工"
+                        secondButtonOnClick.value = {
+                            showBackNoteDialog.value = false
+                            navController.popBackStack(Router.home,false)
+                            ImSdkUtils.startAc(Tips.context)
+                        }
+                        showBackNoteDialog.value=true
+                    }
+                },
+                false
             )
             var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
             lazyHeight -= if(voiceInputMode.value) 100 else 0
