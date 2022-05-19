@@ -206,9 +206,13 @@ public class ChatAdapter extends BaseAdapter {
             }
         }
         if (position==0){
-            baseHolder.getChattingTips().setVisibility(View.VISIBLE);
-            baseHolder.getChattingTips().setText("温馨提示：咨询过程中可拿起起电话咨询，声音效果更清晰！");
+            if (baseHolder.getChattingTips()!=null){
+                baseHolder.getChattingTips().setVisibility(View.VISIBLE);
+                baseHolder.getChattingTips().setText("温馨提示：咨询过程中可拿起起电话咨询，声音效果更清晰！");
+            }
+
         }else {
+            if (baseHolder.getChattingTips()!=null)
             baseHolder.getChattingTips().setVisibility(View.GONE);
         }
 

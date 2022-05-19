@@ -51,6 +51,7 @@ import com.fagougou.government.repo.Client.updateService
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
+
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.wechat.WeChat
@@ -77,7 +78,6 @@ class MainActivity : ComponentActivity() {
                     Dialog()
                     Text("${routeRemain.value}",color = Color.White)
                     Loading()
-
                 }
             }
         }

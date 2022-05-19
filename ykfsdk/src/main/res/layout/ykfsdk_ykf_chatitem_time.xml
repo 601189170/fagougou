@@ -16,6 +16,7 @@
         tools:text="2019-10-1 10:10" />
     <TextView
         android:id="@+id/chatting_tips"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,6 +24,7 @@
         android:paddingVertical="4dp"
         android:layout_marginTop="28dp"
         android:textSize="15sp"
+        android:visibility="gone"
         android:background="@drawable/bottom_chat_tips_bg"
         android:paddingHorizontal="20dp"
         android:textColor="@color/dialog_bg_wihte"
