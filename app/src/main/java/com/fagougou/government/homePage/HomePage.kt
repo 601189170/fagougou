@@ -24,7 +24,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.mainLogin
+import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.MMKV.clearStack
 import com.fagougou.government.utils.MMKV.kv
@@ -58,14 +58,14 @@ fun HomePage(navController:NavController) {
             var body = SerialLoginResponse()
             withContext(Dispatchers.IO){
                 try {
-                    val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    val response = mainRegister.login(SerialLoginRequest(Build.SERIAL)).execute()
                     body = response.body() ?: SerialLoginResponse()
                 }catch (e:Exception){
                     handleException(e)
                 }
             }
             if(!body.canLogin){ withContext(Dispatchers.Main){
-                navController.navigate(Router.login)
+                navController.navigate(Router.register)
                 toast(body.errorMessage)
             } }
         }

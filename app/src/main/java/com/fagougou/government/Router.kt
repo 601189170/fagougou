@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 object Router {
     const val touchWaitTime = 15L*1000L
     const val login = "login"
+    const val register = "register"
     const val registerResult = "registerResult"
     const val home ="home"
     const val contract ="contract"
@@ -25,12 +26,12 @@ object Router {
     var lastTouchTime = Long.MAX_VALUE
     var routeRemain = mutableStateOf(0L)
     val noAutoQuitList = listOf(
-        login,
+        register,
         registerResult,
         home
     )
     val noLoadingPages = listOf(
-        login,
+        register,
         chat
     )
 }

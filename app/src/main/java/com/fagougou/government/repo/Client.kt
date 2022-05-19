@@ -75,7 +75,7 @@ object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com"
     const val contractUrl = "https://law-system.fagougou-law.com/"
-    const val loginUrl = "http://test.robot-manage-system.fagougou.com/"
+    const val registerUrl = "http://test.robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com"
     const val generateUrl = "https://products.fagougou.com/api/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -110,13 +110,13 @@ object Client {
             .create(ContractService::class.java)
     }
 
-    val mainLogin: MainLogin by lazy {
+    val mainRegister: MainRegister by lazy {
         Retrofit.Builder()
-            .baseUrl(loginUrl)
+            .baseUrl(registerUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(MainLogin::class.java)
+            .create(MainRegister::class.java)
     }
 
     val updateService: UpdateService by lazy {

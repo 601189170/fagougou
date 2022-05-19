@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.model.About
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

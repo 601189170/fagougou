@@ -23,7 +23,7 @@ object RegisterViewModel {
         registerAction.value = "绑定中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = Client.mainLogin.register(SerialRegisterRequest(Build.SERIAL,registerCode.value)).execute()
+                val response = Client.mainRegister.register(SerialRegisterRequest(Build.SERIAL,registerCode.value)).execute()
                 val body = response.body() ?: SerialRegisterResponse()
                 registerBalance.value = body.balance
                 if (body.balance<0){

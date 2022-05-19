@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.generateContract.GenerateContract.data

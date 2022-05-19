@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.Case.data
 import com.fagougou.government.model.CaseData
 import com.fagougou.government.webViewPage.WebView

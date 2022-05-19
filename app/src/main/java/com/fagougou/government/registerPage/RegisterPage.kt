@@ -26,7 +26,7 @@ import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.mainLogin
+import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
@@ -41,7 +41,7 @@ fun RegisterPage(navController: NavController){
                 delay(3000)
                 var body = SerialLoginResponse()
                 try {
-                    val response = mainLogin.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    val response = mainRegister.login(SerialLoginRequest(Build.SERIAL)).execute()
                     body = response.body() ?: SerialLoginResponse()
                 }catch (e:Exception){
                     handleException(e)

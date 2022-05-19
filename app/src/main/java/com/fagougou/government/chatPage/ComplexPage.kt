@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.Router
 import com.fagougou.government.chatPage.Complex.bodyList
 import com.fagougou.government.chatPage.Complex.caseList

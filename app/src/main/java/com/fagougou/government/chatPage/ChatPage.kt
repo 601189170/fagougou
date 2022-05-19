@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.government.chatPage.ChatViewModel.currentProvince

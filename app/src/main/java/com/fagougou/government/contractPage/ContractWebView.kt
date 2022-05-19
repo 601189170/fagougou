@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractWebView.codeBitmap
 import com.fagougou.government.contractPage.ContractWebView.webViewUrl
 import com.king.zxing.util.CodeUtils.createQRCode

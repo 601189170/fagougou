@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.Header
+import com.fagougou.government.component.Header
 import com.fagougou.government.webViewPage.WebViewPageModel.data
 import com.fagougou.government.webViewPage.WebViewPageModel.title
 import com.fagougou.government.webViewPage.WebViewPageModel.urlAddress
