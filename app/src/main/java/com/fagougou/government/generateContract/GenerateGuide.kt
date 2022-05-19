@@ -10,6 +10,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun GenerateGuide(navController: NavController) {
     val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
+        GenerateContract.clear()
+        currentContractId.value = launchId
+        scope.launch { getGenerateTemplete(launchId) }
+        scope.launch { getGenerateForm(launchId) }
+    }
     Surface(color = Color.White) {
         Column(
             modifier = Modifier.fillMaxSize(),
