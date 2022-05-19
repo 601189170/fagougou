@@ -51,8 +51,7 @@ import com.fagougou.government.repo.Client.updateService
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
-import com.fagougou.government.utils.InlineRecommend.setData
-import com.fagougou.government.utils.InlineRecommend.subContentData
+
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.wechat.WeChat
