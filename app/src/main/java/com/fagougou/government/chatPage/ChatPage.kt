@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
+import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.government.chatPage.ChatViewModel.currentProvince
 import com.fagougou.government.chatPage.ChatViewModel.getComplex
@@ -35,14 +37,19 @@ import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.chatPage.ChatViewModel.textInputContent
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
+import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
-import com.fagougou.government.utils.TTS.mTts
+import com.fagougou.government.utils.IFly.wakeMode
+import com.fagougou.government.utils.ImSdkUtils
+import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,8 +81,20 @@ fun BotMenu() {
                         .width(108.dp)
                         .height(132.dp),
                     onClick = {
-                        selectedChatBot.value = bot.first
-                        scope.launch(Dispatchers.IO) { startChat() }
+                        if(Client.globalLoading.value <= 0) { with(DialogViewModel){
+                            clear()
+                            title = "温馨提示"
+                            content.value = "更换领域后，当前的记录会清除"
+                            firstButtonText.value = "取消"
+                            firstButtonOnClick.value = { showChangeRobotDialog.value = false }
+                            secondButtonText.value = "确定"
+                            secondButtonOnClick.value = {
+                                showChangeRobotDialog.value = false
+                                selectedChatBot.value = bot.first
+                                scope.launch(Dispatchers.IO) { startChat() }
+                            }
+                            showChangeRobotDialog.value = true
+                        } }
                     },
                     contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
                 )
@@ -466,6 +485,7 @@ fun inputBox(scope: CoroutineScope){
                 value = textInputContent.value,
                 onValueChange = {
                     textInputContent.value = it
+                    Router.lastTouchTime = Time.stampL
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.White,
@@ -505,6 +525,9 @@ fun inputBox(scope: CoroutineScope){
 @Composable
 fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        wakeMode()
+    }
     Column(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -516,7 +539,26 @@ fun ChatPage(navController: NavController) {
             Header(
                 "智能咨询(${selectedChatBot.value})",
                 navController,
-                onBack = { ChatViewModel.clear() }
+                {
+                    with(DialogViewModel){
+                        clear()
+                        title = "温馨提示"
+                        content.value = "请确认本次咨询是否解决您的问题？"
+                        firstButtonText.value = "已经解决"
+                        firstButtonOnClick.value = {
+                            showBackNoteDialog.value = false
+                            Router.lastTouchTime = 0L
+                        }
+                        secondButtonText.value = "没有解决，转人工"
+                        secondButtonOnClick.value = {
+                            showBackNoteDialog.value = false
+                            navController.popBackStack(Router.home,false)
+                            ImSdkUtils.startAc(Tips.context)
+                        }
+                        showBackNoteDialog.value=true
+                    }
+                },
+                false
             )
             var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
             lazyHeight -= if(voiceInputMode.value) 100 else 0
@@ -543,7 +585,10 @@ fun ChatPage(navController: NavController) {
                                 verticalAlignment = Alignment.CenterVertically
                             ){
                                 Image(painterResource(R.drawable.ic_note),null)
-                                Spacer(Modifier.width(16.dp).height(12.dp))
+                                Spacer(
+                                    Modifier
+                                        .width(16.dp)
+                                        .height(12.dp))
                                 Text("温馨提示：拿起话筒后声音更清晰",color = Color.White,fontSize = 20.sp)
                             }
                         }

@@ -24,7 +24,7 @@ import com.fagougou.government.utils.Tips
 import com.fagougou.government.wechat.Wechat
 
 @Composable
-fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
+fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, canClose:Boolean = true){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
@@ -39,7 +39,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}){
                     .width(230.dp)
                     .clickable {
                         onBack.invoke()
-                        navController.safeBack()
+                        if(canClose)navController.safeBack()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
