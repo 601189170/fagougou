@@ -35,7 +35,7 @@ class CommonApplication: Application(){
     override fun onCreate() {
         super.onCreate()
         Tips.init(this)
-        SpeechUtility.createUtility(this, "appid=33b963d0")
+        SpeechUtility.createUtility(this, "appid=b9efca3f")
         MMKV.initialize(this)
         Bugsnag.start(this)
         IFly.init(this)
