@@ -7,7 +7,7 @@ data class ContractListRequest(
 )
 
 data class ContractList(
-    val `data`: ContractListData = ContractListData(),
+    val data: ContractListData = ContractListData(),
 )
 
 data class ContractListData(

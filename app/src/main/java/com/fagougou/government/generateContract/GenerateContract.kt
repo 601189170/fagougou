@@ -309,6 +309,7 @@ fun GenerateContract(navController: NavController) {
                                         modifier = Modifier.fillMaxWidth(),
                                         value = child.input,
                                         onValueChange = { str ->
+                                            Router.lastTouchTime = Time.stampL
                                             child.input = str
                                             lastModifier = child.variable
                                             notifier.value = Time.stamp

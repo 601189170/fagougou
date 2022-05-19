@@ -36,6 +36,9 @@ import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
+import com.fagougou.government.dialog.Dialog
+import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.dialog.DialogViewModel.showRouteRemainDialog
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
@@ -71,6 +74,7 @@ class MainActivity : ComponentActivity() {
                 ) { 
                     Main()
                     WeChat()
+                    Dialog()
                     Text("${routeRemain.value}",color = Color.White)
                     Loading()
 
@@ -109,13 +113,22 @@ fun Main() {
             if(routeMirror !in noAutoQuitList){
                 routeRemain.value = touchWaitTime+lastTouchTime-stampL
                 if(routeRemain.value<0) {
+                    showRouteRemainDialog.value = false
                     ChatViewModel.clear()
                     GenerateContract.clear()
                     navController.popBackStack(Router.home,false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                } else if(routeRemain.value < 5000L && routeMirror == Router.chat){
+                    with(DialogViewModel){
+                        clear()
+                        title = "温馨提示"
+                        content.value = "页面长时间无人操作，${routeRemain.value/1000}秒后将退回首页"
+                        showRouteRemainDialog.value = true
+                    }
+                } else {
+                    showRouteRemainDialog.value = false
                 }
-
-            }else routeRemain.value = 0
+            }else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }

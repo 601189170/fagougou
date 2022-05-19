@@ -136,7 +136,6 @@ object IFly {
             SpeechConstant.IVW_RES_PATH,
             ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/b9efca3f.jet")
         )
-        mIvw.startListening(mWakeuperListener)
     }
 
     fun stopAll(){
@@ -147,6 +146,7 @@ object IFly {
     }
 
     fun wakeMode(){
+        Router.lastTouchTime = stampL
         mIat.stopListening()
         recognizeResult.value = UNWAKE_TEXT
         mIvw.startListening(mWakeuperListener)
@@ -164,8 +164,8 @@ object IFly {
     fun parseIatResult(json: String): String {
         val ret = StringBuffer()
         try {
-            val tokener = JSONTokener(json)
-            val joResult = JSONObject(tokener)
+            val tokenizer = JSONTokener(json)
+            val joResult = JSONObject(tokenizer)
             val words = joResult.getJSONArray("ws")
             for (i in 0 until words.length()) {
                 // 转写结果词，默认使用第一个结果
