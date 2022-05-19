@@ -21,6 +21,7 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.net.UnknownServiceException
+import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
@@ -141,6 +142,7 @@ object Client {
         globalLoading.value--
         val ex: Exception
         when (t) {
+            is CancellationException -> return
             is HttpException -> ex = Exception("服务器错误")
             is JsonParseException, is JSONException, is ParseException -> ex = Exception("解析错误")
             is SocketException -> ex = Exception("无网络连接")
@@ -155,7 +157,7 @@ object Client {
             }
         }
         CoroutineScope(Dispatchers.Main).launch{
-            toast(ex.message ?: "")
+            if (!ex.message.isNullOrBlank())toast(ex.message?:"")
         }
     }
 }
