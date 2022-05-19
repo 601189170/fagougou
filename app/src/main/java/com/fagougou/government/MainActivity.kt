@@ -35,7 +35,7 @@ import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.homePage.HomePage
-import com.fagougou.government.loginPage.LoginPage
+import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.model.UpdateInfo
 import com.fagougou.government.repo.Client.globalLoading
 import com.fagougou.government.repo.Client.handleException
@@ -47,7 +47,7 @@ import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.generateContract.GenerateGuide
-import com.fagougou.government.loginPage.RegisterResultPage
+import com.fagougou.government.registerPage.RegisterResultPage
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.Router.touchWaitTime
 import com.fagougou.government.chatPage.*
@@ -147,7 +147,7 @@ fun Main() {
             startDestination = Router.home,
             modifier = Modifier.fillMaxHeight()
         ) {
-            composable(Router.login) { LoginPage(navController) }
+            composable(Router.login) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController)}
             composable(Router.home) { HomePage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }

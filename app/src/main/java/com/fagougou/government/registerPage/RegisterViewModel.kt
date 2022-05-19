@@ -1,4 +1,4 @@
-package com.fagougou.government.loginPage
+package com.fagougou.government.registerPage
 
 import android.os.Build
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-object LoginPageViewModel {
+object RegisterViewModel {
     val registerCode = mutableStateOf("")
     val registerAction = mutableStateOf("立即绑定")
     var registerBalance = mutableStateOf(-1)

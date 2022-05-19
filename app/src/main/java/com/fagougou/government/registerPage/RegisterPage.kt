@@ -1,4 +1,4 @@
-package com.fagougou.government.loginPage
+package com.fagougou.government.registerPage
 
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.loginPage.LoginPageViewModel.login
-import com.fagougou.government.loginPage.LoginPageViewModel.registerCode
-import com.fagougou.government.loginPage.LoginPageViewModel.registerAction
-import com.fagougou.government.loginPage.LoginPageViewModel.registerBalance
+import com.fagougou.government.registerPage.RegisterViewModel.login
+import com.fagougou.government.registerPage.RegisterViewModel.registerCode
+import com.fagougou.government.registerPage.RegisterViewModel.registerAction
+import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
@@ -33,7 +33,7 @@ import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
 @Composable
-fun LoginPage(navController: NavController){
+fun RegisterPage(navController: NavController){
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         scope.launch(Dispatchers.IO){
