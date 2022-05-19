@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.handleException
+import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.InlineRecommend.getInline
 import com.fagougou.government.utils.InlineRecommend.removeInline
 import com.fagougou.government.utils.MMKV
@@ -153,5 +154,12 @@ object ChatViewModel {
             Complex.caseList.addAll(content.cases)
             withContext(Dispatchers.Main) { navController.navigate("complex") }
         }
+    }
+
+    fun clear(){
+        IFly.stopAll()
+        textInputContent.value = ""
+        history.clear()
+        currentProvince.value = ""
     }
 }

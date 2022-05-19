@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,7 +24,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
@@ -33,10 +31,6 @@ import com.fagougou.government.Router.noLoadingPages
 import com.fagougou.government.SafeBack.safeBack
 import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
-import com.fagougou.government.chatPage.CasePage
-import com.fagougou.government.chatPage.ChatGuidePage
-import com.fagougou.government.chatPage.ChatPage
-import com.fagougou.government.chatPage.ComplexPage
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.generateContract.GenerateContract
@@ -56,12 +50,12 @@ import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.loginPage.RegisterResultPage
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.Router.touchWaitTime
+import com.fagougou.government.chatPage.*
 import com.fagougou.government.utils.Tips.context
-import com.fagougou.government.utils.Wechat.showQrCode
-import com.fagougou.government.utils.Wechat.wechatBitmap
+import com.fagougou.government.wechat.WeChat
+import com.fagougou.government.wechat.Wechat.showQrCode
 import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.m7.imkfsdk.chat.YKFCallHelper
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -79,8 +73,9 @@ class MainActivity : ComponentActivity() {
                 ) { 
                     Main()
                     WeChat()
-                    Loading()
                     Text("${routeRemain.value}",color = Color.White)
+                    Loading()
+
                 }
             }
         }
@@ -127,13 +122,10 @@ fun Main() {
             if(routeMirror !in noAutoQuitList){
                 routeRemain.value = touchWaitTime+lastTouchTime-stampL
                 if(routeRemain.value<0) {
+                    ChatViewModel.clear()
+                    GenerateContract.clear()
                     navController.popBackStack(Router.home,false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-//                    if (!YKFCallHelper.existVideo()) {
-//                        ActivityUtils.finishToActivity(MainActivity::class.java, false)
-//                    }else{
-//                        ToastUtils.showShort("存在通话")
-//                    }
                 }
 
             }else routeRemain.value = 0
@@ -194,36 +186,6 @@ fun Loading(){
                 CircularProgressIndicator(modifier = Modifier.padding(48.dp))
             }
         }
-    }
-}
-
-@Composable
-fun WeChat(){
-    if(showQrCode.value) Surface(color = Color(0x33000000)) {
-        Button(
-            onClick = { showQrCode.value = false },
-            content = {
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Surface(
-                        modifier = Modifier
-                            .width(272.dp)
-                            .height(320.dp),
-                        shape = RoundedCornerShape(CORNER_FLOAT),
-                        color = Color(0xFFFFFFFF)
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Image(wechatBitmap().asImageBitmap(),null)
-                            Text("微信扫码咨询", fontSize = 28.sp, modifier = Modifier.padding(16.dp))
-                        }
-                    }
-                    Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)
-                }
-            },
-            colors = ButtonDefaults.buttonColors(Color.Transparent),
-            elevation = ButtonDefaults.elevation(0.dp)
-        )
     }
 }
 

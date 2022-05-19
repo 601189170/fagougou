@@ -12,8 +12,6 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
@@ -24,8 +22,6 @@ import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Wechat
-import com.fagougou.government.utils.Wechat.showQrCode
 import com.king.zxing.util.CodeUtils
 import org.json.JSONException
 import java.text.SimpleDateFormat

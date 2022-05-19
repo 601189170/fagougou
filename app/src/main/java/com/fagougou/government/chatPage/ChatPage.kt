@@ -516,13 +516,7 @@ fun ChatPage(navController: NavController) {
             Header(
                 "智能咨询(${selectedChatBot.value})",
                 navController,
-                onBack = {
-                    IFly.wakeMode()
-                    mTts.stopSpeaking()
-                    textInputContent.value = ""
-                    history.clear()
-                    currentProvince.value = ""
-                }
+                onBack = { ChatViewModel.clear() }
             )
             var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
             lazyHeight -= if(voiceInputMode.value) 100 else 0

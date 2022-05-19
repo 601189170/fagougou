@@ -1,6 +1,5 @@
 package com.fagougou.government.webViewPage
 
-import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
@@ -18,7 +16,6 @@ import com.fagougou.government.Header
 import com.fagougou.government.webViewPage.WebViewPageModel.data
 import com.fagougou.government.webViewPage.WebViewPageModel.title
 import com.fagougou.government.webViewPage.WebViewPageModel.urlAddress
-import kotlinx.coroutines.*
 
 object WebViewPageModel{
     var title = ""

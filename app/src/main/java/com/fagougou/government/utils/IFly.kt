@@ -139,6 +139,13 @@ object IFly {
         mIvw.startListening(mWakeuperListener)
     }
 
+    fun stopAll(){
+        recognizeResult.value = UNWAKE_TEXT
+        mIat.stopListening()
+        mIvw.stopListening()
+        TTS.stopSpeaking()
+    }
+
     fun wakeMode(){
         mIat.stopListening()
         recognizeResult.value = UNWAKE_TEXT

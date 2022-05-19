@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.Contract.HTLists
+import com.fagougou.government.contractPage.Contract.ContractLists
 import com.fagougou.government.contractPage.Contract.categoryList
 import com.fagougou.government.contractPage.Contract.searchWord
 import com.fagougou.government.contractPage.Contract.getContractList
@@ -47,7 +47,7 @@ import java.net.URLEncoder
 
 object Contract{
     val categoryList = mutableStateListOf<ContractCategory>()
-    val HTLists = mutableStateListOf<ContractData>()
+    val ContractLists = mutableStateListOf<ContractData>()
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
 
@@ -67,13 +67,13 @@ object Contract{
     }
 
     suspend fun  getContractList(folder:String, searchName:String = "") {
-        HTLists.clear()
+        ContractLists.clear()
         withContext(Dispatchers.IO) {
             try {
                 if (searchName!="")selectedId.value = ""
                 val response = contractService.getContractList(ContractListRequest(folder = folder, name = searchName)).execute()
                 val body = response.body() ?: return@withContext
-                HTLists.addAll(body.data.list)
+                ContractLists.addAll(body.data.list)
             }catch (e:Exception){
                 handleException(e)
             }
@@ -236,11 +236,11 @@ fun ContractGuidePage(navController: NavController) {
                         .padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     content = {
-                        items(HTLists){ category ->
+                        items(ContractLists){ category ->
                             Contract(navController, category)
                         }
                         item{
-                            if(HTLists.isEmpty()){
+                            if(ContractLists.isEmpty()){
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
