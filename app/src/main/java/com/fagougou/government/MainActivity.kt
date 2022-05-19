@@ -128,12 +128,12 @@ fun Main() {
                 routeRemain.value = touchWaitTime+lastTouchTime-stampL
                 if(routeRemain.value<0) {
                     navController.popBackStack(Router.home,false)
-
-                    if (!YKFCallHelper.existVideo()) {
-                        ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                    }else{
-                        ToastUtils.showShort("存在通话")
-                    }
+                    ActivityUtils.finishToActivity(MainActivity::class.java, false)
+//                    if (!YKFCallHelper.existVideo()) {
+//                        ActivityUtils.finishToActivity(MainActivity::class.java, false)
+//                    }else{
+//                        ToastUtils.showShort("存在通话")
+//                    }
                 }
 
             }else routeRemain.value = 0

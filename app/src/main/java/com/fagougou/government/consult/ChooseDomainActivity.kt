@@ -2,29 +2,18 @@ package com.fagougou.xiaoben.consult
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.ActivityUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-
 import com.fagougou.government.R
-import com.fagougou.government.chatPage.ChatViewModel
+import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
-import com.fagougou.government.utils.ImSdkUtils
-import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Wechat
-import com.m7.imkfsdk.chat.MessageEvent
-import com.m7.imkfsdk.utils.SpacesItemDecoration
-import com.m7.imkfsdk.utils.statusbar.StatusBarUtils
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import com.fagougou.government.utils.MMKV
+import com.king.zxing.util.CodeUtils
 
 class ChooseDomainActivity : BaseActivity() {
     private var binding: ActivityChooseDomainBinding? = null
@@ -44,7 +33,7 @@ class ChooseDomainActivity : BaseActivity() {
     fun initView(){
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            Wechat.showQrCode.value = true
+            WechatDiallog(this,  CodeUtils.createQRCode(MMKV.kv.decodeString("wechatUrl"), 256, null, Color.BLACK)).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))

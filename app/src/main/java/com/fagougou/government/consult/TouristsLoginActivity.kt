@@ -3,6 +3,7 @@ package com.fagougou.xiaoben.consult
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +17,8 @@ import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
+import com.fagougou.government.Router
+import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
@@ -23,6 +26,7 @@ import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Wechat
 import com.fagougou.government.utils.Wechat.showQrCode
+import com.king.zxing.util.CodeUtils
 import org.json.JSONException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,6 +64,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
+                Router.lastTouchTime = Time.stampL
                 isPost();
             }
         })
@@ -67,6 +72,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
+                Router.lastTouchTime = Time.stampL
                 isPost();
             }
         })
@@ -74,6 +80,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
+                Router.lastTouchTime = Time.stampL
                 isPost();
             }
         })
@@ -86,7 +93,7 @@ class TouristsLoginActivity : BaseActivity() {
 
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            showQrCode.value = true
+            WechatDiallog(this,  CodeUtils.createQRCode(kv.decodeString("wechatUrl"), 256, null, Color.BLACK)).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener {
             finish()
@@ -163,6 +170,7 @@ class TouristsLoginActivity : BaseActivity() {
     fun saveUser(TouristName:String,TouristPhone:String){
         kv.encode("TouristName",TouristName)
         kv.encode("TouristPhone",TouristPhone)
+
     }
 
     fun onBtnStart() {

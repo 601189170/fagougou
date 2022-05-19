@@ -18,6 +18,10 @@
         <item name="ykfsdk_ykf_theme_chat_activity_bg_default">
             @color/ykfsdk_ykf_chat_activity_bg_default
         </item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
      </style>
 
     <!-- 末行对齐方式 -->
