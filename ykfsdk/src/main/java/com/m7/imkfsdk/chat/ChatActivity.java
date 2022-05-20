@@ -1736,8 +1736,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     Runnable touchEvent=new Runnable() {
         @Override
         public void run() {
-            Log.e("TAG", "touchEvent: "+  YKFCallHelper.existVideo());
-            handler.postDelayed(this,1000);
+            handler.postDelayed(this,3000);
         }
     };
 
@@ -1757,6 +1756,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
     @Override
     protected void onDestroy() {
+
         if (eventtpye==0){
             EventBus.getDefault().post(new MessageEvent("1"));
         }else {
@@ -1771,6 +1771,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
             }
         }
         if (handler != null) {
+            handler.removeCallbacks(touchEvent);
             handler.removeCallbacksAndMessages(null);
         }
         unregisterReceiver(msgReceiver);
@@ -3584,6 +3585,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
      * 开启视频
      */
     private void openVideo2(int type) {
+        handler.post(touchEvent);
         YKFCallInfoBean callInfoBean = new YKFCallInfoBean();
         callInfoBean.setUserName(userName)
                 .setUserIcon(userIcon)

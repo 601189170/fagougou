@@ -6,22 +6,32 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.R
+import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractWebView.codeBitmap
 import com.fagougou.government.contractPage.ContractWebView.webViewUrl
+import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.wechat.Wechat
 import com.king.zxing.util.CodeUtils.createQRCode
 
 object ContractWebView{
@@ -32,11 +42,11 @@ object ContractWebView{
 
 @Composable
 fun ContractWebView(navController: NavController) {
-    Row(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(0.75f),
+                .fillMaxHeight(0.9f)
+                .fillMaxWidth(),
             factory = {
                 WebView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -47,15 +57,64 @@ fun ContractWebView(navController: NavController) {
                 }
             }
         )
-        Surface(modifier = Modifier.fillMaxHeight().width(2.dp),color = ComposeColor(0xFFEEEEEE)){}
-        Surface(color = ComposeColor.White){ Column(
-            modifier = Modifier.fillMaxSize().padding(top = 45.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Surface(modifier = Modifier.fillMaxWidth().height(2.dp),color = ComposeColor(0xFFEEEEEE)){}
+        Surface(color = ComposeColor.White){
+            Row(
+
+            modifier = Modifier.fillMaxSize()
+                .border(1.dp, androidx.compose.ui.graphics.Color.LightGray, RoundedCornerShape(
+                    CORNER_FLOAT
+                )
+                ),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
         ){
-            Image(bitmap = codeBitmap().asImageBitmap(), contentDescription = "QR Code of this page")
-            Text("扫码保存到手机", fontSize = 24.sp)
-        }}
+                Button(
+                    modifier = Modifier
+                        .height(60.dp)
+                        .width(200.dp),
+
+
+                    onClick = {
+                        Wechat.showQrUrl.value = true
+                    },
+                    content = {
+                        Row( verticalAlignment = Alignment.CenterVertically ){
+                            Image(painterResource(R.drawable.ic_wechat),null)
+                            Text(
+                                modifier = Modifier.padding(start = 16.dp),
+                                text = "微信查看",
+                                color = androidx.compose.ui.graphics.Color.White,
+                                fontSize = 21.sp)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Dodgerblue
+                    )
+                )
+                Button(
+
+                    modifier = Modifier
+                        .height(60.dp)
+                        .padding(start = 24.dp)
+                        .width(200.dp),
+                    onClick = { },
+                    content = {
+                        Row( verticalAlignment = Alignment.CenterVertically ){
+                            Image(painterResource(R.drawable.ic_painter),null)
+                            Text(
+                                modifier = Modifier.padding(start = 16.dp),
+                                text = "打印模板",
+                                color = androidx.compose.ui.graphics.Color.White,
+                                fontSize = 21.sp)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Dodgerblue
+                    )
+                )
+        }
+        }
     }
     Header("合同文库", navController)
 }

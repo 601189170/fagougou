@@ -53,6 +53,7 @@ import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.wechat.WeChat
+import com.fagougou.government.wechat.WeChatByUrl
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -73,6 +74,7 @@ class MainActivity : ComponentActivity() {
                 ) { 
                     Main()
                     WeChat()
+                    WeChatByUrl()
                     Dialog()
                     Text("${routeRemain.value}",color = Color.White)
                     Loading()
