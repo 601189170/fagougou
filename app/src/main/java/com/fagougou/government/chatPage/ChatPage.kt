@@ -558,7 +558,6 @@ fun ChatPage(navController: NavController) {
                         secondButtonOnClick.value = {
                             content.value = ""
                             IFly.stopAll()
-                            navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }
                         content.value = "请确认本次咨询是否解决您的问题？"

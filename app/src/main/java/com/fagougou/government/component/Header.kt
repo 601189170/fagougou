@@ -93,7 +93,6 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
                             },
                             onClick = {
                                 IFly.stopAll()
-                                navController.popBackStack(Router.home,false)
                                 ImSdkUtils.startAc(Tips.context)
                             }
                         )
