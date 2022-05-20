@@ -1,21 +1,21 @@
 package com.fagougou.government.chatPage
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -50,7 +50,6 @@ import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
-import com.fagougou.government.wechat.Wechat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -112,7 +111,7 @@ fun BotMenu() {
 }
 
 @Composable
-fun LawExpend(message: Message, index: Int) {
+fun LawExpend(message: Message, index: Int, scope: CoroutineScope) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -190,7 +189,7 @@ fun MessageRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index, scope)
         }
     }
 }
@@ -201,7 +200,8 @@ fun ComplexRect(
     index: Int,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
-    navController: NavController
+    navController: NavController,
+    scope: CoroutineScope
 ) {
     Surface(
         shape = RoundedCornerShape(CORNER_FLOAT),
@@ -239,7 +239,7 @@ fun ComplexRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index, scope)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -247,12 +247,10 @@ fun ComplexRect(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Text(
                     modifier = Modifier.padding(end = 12.dp),
                     color=Color(0xFF0E7AE6),
                     text = "点击查看",
-
                     fontSize = 20.sp,
                 )
                 val svg = R.drawable.ic_icon_right_mark
@@ -313,7 +311,12 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                         )
                     } else Row(
                         modifier = Modifier
-                            .clickable { history[index] = message.copy(isExpend = true) }
+                            .clickable {
+                                history[index] = message.copy(isExpend = true)
+                                if(index == history.lastIndex) scope.launch(Dispatchers.Main) {
+                                    listState.scrollToItem(index)
+                                }
+                            }
                     ) {
                         Image(painterResource(R.drawable.ic_relate_question), null)
                         Text(
@@ -431,10 +434,11 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        ) { ComplexRect(message, index, navController = navController) }
+        ) { ComplexRect(message, index, navController = navController,scope = scope) }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun inputBox(scope: CoroutineScope){
     if(voiceInputMode.value) Surface(
@@ -469,7 +473,10 @@ fun inputBox(scope: CoroutineScope){
                     color = Color.White
                 )
                 Image(
-                    modifier = Modifier.clickable { showBotMenu.value = !showBotMenu.value },
+                    modifier = Modifier.clickable {
+                        showBotMenu.value = true
+                        voiceInputMode.value = false
+                    },
                     painter = painterResource(id = R.drawable.ic_squad),
                     contentDescription = null)
             }
@@ -479,6 +486,7 @@ fun inputBox(scope: CoroutineScope){
         modifier = Modifier.height(80.dp),
         verticalArrangement = Arrangement.Bottom
     ) {
+        val (text,bot) = remember{ FocusRequester.createRefs() }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -486,7 +494,11 @@ fun inputBox(scope: CoroutineScope){
             horizontalArrangement = Arrangement.Start
         ) {
             TextField(
-                modifier = Modifier.fillMaxWidth(0.82f),
+                modifier = Modifier
+                    .fillMaxWidth(0.82f)
+                    .focusRequester(text)
+                    .onFocusChanged { state -> if (state.isFocused) showBotMenu.value = false }
+                    .focusable(),
                 value = textInputContent.value,
                 onValueChange = {
                     textInputContent.value = it
@@ -507,19 +519,27 @@ fun inputBox(scope: CoroutineScope){
                         textInputContent.value = ""
                         scope.launch(Dispatchers.IO) { nextChat(content) }
                     }
-                )
+                ),
             )
             Button(
                 modifier = Modifier.padding(start = 24.dp),
                 content = { Image(painterResource(R.drawable.ic_microphone),null) },
-                onClick = { voiceInputMode.value = true },
+                onClick = {
+                    showBotMenu.value = false
+                    voiceInputMode.value = true
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                 shape = RoundedCornerShape(50)
             )
             Button(
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier.padding(start = 24.dp).focusRequester(bot).focusable(),
                 content = { Image(painterResource(R.drawable.ic_squad),null) },
-                onClick = { showBotMenu.value = !showBotMenu.value },
+                onClick = {
+                    showBotMenu.value = !showBotMenu.value
+                    voiceInputMode.value = false
+                    text.freeFocus()
+                    bot.requestFocus()
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                 shape = RoundedCornerShape(50)
             )
