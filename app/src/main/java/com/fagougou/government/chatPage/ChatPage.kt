@@ -551,6 +551,7 @@ fun ChatPage(navController: NavController) {
                         secondButtonText.value = "没有解决，转人工"
                         secondButtonOnClick.value = {
                             content.value = ""
+                            IFly.stopAll()
                             navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }

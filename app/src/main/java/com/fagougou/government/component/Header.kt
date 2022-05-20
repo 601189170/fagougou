@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
+import com.fagougou.government.Router
 import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
 import com.fagougou.government.utils.Tips
@@ -90,6 +92,8 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
                                 )
                             },
                             onClick = {
+                                IFly.stopAll()
+                                navController.popBackStack(Router.home,false)
                                 ImSdkUtils.startAc(Tips.context)
                             }
                         )

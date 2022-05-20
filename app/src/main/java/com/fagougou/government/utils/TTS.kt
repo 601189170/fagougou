@@ -1,8 +1,10 @@
 package com.fagougou.government.utils
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.utils.IFly.TAG
 import com.fagougou.government.utils.IFly.mIat
 import com.fagougou.government.utils.IFly.mRecognizerListener
@@ -94,9 +96,6 @@ object TTS {
                     mTts.startSpeaking(text, mTtsListener)
                     Log.d(TAG, "Speak $text")
                     lastWord = text
-                }else if(SpeakingProcess==100 && lastWord=="您请说"){
-                    lastWord = ""
-                    mIat.startListening(mRecognizerListener)
                 }
             }
         }
@@ -109,8 +108,18 @@ object TTS {
     }
 
     fun speak(text:String) {
-        val regex = Regex("[a-zA-Z]")
-        TTSQueue.add(text.replace(regex,""))
+        if(text == "您请说"){
+            stopSpeaking()
+//            val player = MediaPlayer()
+//            player.setDataSource(activity.assets.openFd("您请说.mp3").fileDescriptor)
+//            player.setOnPreparedListener { player.start() }
+//            player.prepareAsync()
+            lastWord = ""
+            mIat.startListening(mRecognizerListener)
+        }else{
+            val regex = Regex("[a-zA-Z]")
+            TTSQueue.add(text.replace(regex,""))
+        }
     }
 
 }
