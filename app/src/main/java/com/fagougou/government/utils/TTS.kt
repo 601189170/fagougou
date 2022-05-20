@@ -5,12 +5,16 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.R
 import com.fagougou.government.utils.IFly.TAG
 import com.fagougou.government.utils.IFly.mIat
 import com.fagougou.government.utils.IFly.mRecognizerListener
 import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 object TTS {
@@ -110,10 +114,7 @@ object TTS {
     fun speak(text:String) {
         if(text == "您请说"){
             stopSpeaking()
-//            val player = MediaPlayer()
-//            player.setDataSource(activity.assets.openFd("您请说.mp3").fileDescriptor)
-//            player.setOnPreparedListener { player.start() }
-//            player.prepareAsync()
+            MediaPlayer.create(activity,R.raw.please_say).start()
             lastWord = ""
             mIat.startListening(mRecognizerListener)
         }else{
