@@ -72,12 +72,12 @@ object TTS {
         //设置使用云端引擎
         mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD)
         //设置发音人
-        mTts.setParameter(SpeechConstant.VOICE_NAME,"xiaoyu")
+        mTts.setParameter(SpeechConstant.VOICE_NAME,"xiaoyan")
         //mTts.setParameter(SpeechConstant.TTS_DATA_NOTIFY,"1");//支持实时音频流抛出，仅在synthesizeToUri条件下支持
         //设置合成语速
-        mTts.setParameter(SpeechConstant.SPEED,"100")
+        mTts.setParameter(SpeechConstant.SPEED,"88")
         //设置合成音调
-        mTts.setParameter(SpeechConstant.PITCH,"50")
+        mTts.setParameter(SpeechConstant.PITCH,"45")
         //设置合成音量
         mTts.setParameter(SpeechConstant.VOLUME,"50")
         //设置播放器音频流类型
@@ -114,9 +114,12 @@ object TTS {
     fun speak(text:String) {
         if(text == "您请说"){
             stopSpeaking()
-            MediaPlayer.create(activity,R.raw.please_say).start()
-            lastWord = ""
-            mIat.startListening(mRecognizerListener)
+            val mediaPlayer = MediaPlayer.create(activity,R.raw.please_say)
+            mediaPlayer.setOnCompletionListener {
+                lastWord = ""
+                mIat.startListening(mRecognizerListener)
+            }
+            mediaPlayer.start()
         }else{
             val regex = Regex("[a-zA-Z]")
             TTSQueue.add(text.replace(regex,""))

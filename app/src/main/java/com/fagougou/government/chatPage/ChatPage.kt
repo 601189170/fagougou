@@ -349,7 +349,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                         .height(60.dp)
                                         .width(180.dp),
                                     onClick = { scope.launch(Dispatchers.IO){nextChat(item)} },
-                                    content = { Text(item, fontSize = 24.sp, color = Color.White) },
+                                    content = { Text(item, fontSize = 20.sp, color = Color.White) },
                                     colors = ButtonDefaults.buttonColors(Dodgerblue)
                                 )
                             }
