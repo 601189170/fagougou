@@ -84,16 +84,15 @@ fun BotMenu() {
                         if(Client.globalLoading.value <= 0) { with(DialogViewModel){
                             clear()
                             title = "温馨提示"
-                            content.value = "更换领域后，当前的记录会清除"
                             firstButtonText.value = "取消"
-                            firstButtonOnClick.value = { showChangeRobotDialog.value = false }
+                            firstButtonOnClick.value = { content.value = "" }
                             secondButtonText.value = "确定"
                             secondButtonOnClick.value = {
-                                showChangeRobotDialog.value = false
+                                content.value = ""
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }
                             }
-                            showChangeRobotDialog.value = true
+                            content.value = "更换领域后，当前的记录会清除"
                         } }
                     },
                     contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
@@ -546,16 +545,16 @@ fun ChatPage(navController: NavController) {
                         content.value = "请确认本次咨询是否解决您的问题？"
                         firstButtonText.value = "已经解决"
                         firstButtonOnClick.value = {
-                            showBackNoteDialog.value = false
+                            content.value = ""
                             Router.lastTouchTime = 0L
                         }
                         secondButtonText.value = "没有解决，转人工"
                         secondButtonOnClick.value = {
-                            showBackNoteDialog.value = false
+                            content.value = ""
                             navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }
-                        showBackNoteDialog.value=true
+                        content.value = "请确认本次咨询是否解决您的问题？"
                     }
                 },
                 false

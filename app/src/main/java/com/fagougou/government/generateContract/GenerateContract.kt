@@ -272,7 +272,7 @@ fun GenerateContract(navController: NavController) {
                                     "checkbox" -> {
                                         Column {
                                             for((i,option) in child.values.withIndex()){
-                                                Row {
+                                                Row(verticalAlignment = Alignment.CenterVertically) {
                                                     Checkbox(
                                                         checked = i in child.selected,
                                                         onCheckedChange = {
@@ -290,7 +290,7 @@ fun GenerateContract(navController: NavController) {
                                     "select" -> {
                                         Column {
                                             for((i,option) in child.values.withIndex()){
-                                                Row {
+                                                Row(verticalAlignment = Alignment.CenterVertically) {
                                                     RadioButton(
                                                         selected = i in child.selected,
                                                         onClick = {

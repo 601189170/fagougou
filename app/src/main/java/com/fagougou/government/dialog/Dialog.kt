@@ -19,9 +19,6 @@ import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
-import com.fagougou.government.dialog.DialogViewModel.showBackNoteDialog
-import com.fagougou.government.dialog.DialogViewModel.showChangeRobotDialog
-import com.fagougou.government.dialog.DialogViewModel.showRouteRemainDialog
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -33,14 +30,8 @@ object DialogViewModel {
     var secondButtonText = mutableStateOf("")
     var firstButtonOnClick = mutableStateOf({ })
     var secondButtonOnClick = mutableStateOf({ })
-    val showRouteRemainDialog = mutableStateOf(false)
-    val showChangeRobotDialog = mutableStateOf(false)
-    val showBackNoteDialog = mutableStateOf(false)
 
     fun clear(){
-        showRouteRemainDialog.value = false
-        showChangeRobotDialog.value = false
-        showBackNoteDialog.value = false
         title = ""
         content.value = ""
         firstButtonText.value = ""
@@ -52,8 +43,7 @@ object DialogViewModel {
 
 @Composable
 fun Dialog(){
-    val needDialog = showRouteRemainDialog.value || showChangeRobotDialog.value || showBackNoteDialog.value
-    if (needDialog) Surface(color= Color(0x3300000)) {
+    if (content.value.isNotBlank()) Surface(color= Color(0x3300000)) {
         Column(
             Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

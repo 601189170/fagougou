@@ -38,7 +38,6 @@ import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.dialog.DialogViewModel.showRouteRemainDialog
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
@@ -112,24 +111,23 @@ fun Main() {
             if(routeMirror !in noAutoQuitList){
                 routeRemain.value = touchWaitTime+lastTouchTime-stampL
                 if(routeRemain.value<0) {
-                    showRouteRemainDialog.value = false
+                    DialogViewModel.content.value = ""
                     ChatViewModel.clear()
                     GenerateContract.clear()
                     navController.popBackStack(Router.home,false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if(routeRemain.value < 5000L && routeMirror == Router.chat){
+                } else if(routeRemain.value < 10000L && routeMirror == Router.chat){
                     with(DialogViewModel){
                         clear()
                         title = "温馨提示"
-                        content.value = "页面长时间无人操作，${routeRemain.value/1000}秒后将退回首页"
                         firstButtonText.value = "继续咨询"
                         firstButtonOnClick.value = {}
                         secondButtonText.value = "返回首页"
-                        secondButtonOnClick.value = { lastTouchTime = 0L}
-                        showRouteRemainDialog.value = true
+                        secondButtonOnClick.value = { lastTouchTime = 0L }
+                        content.value = "页面长时间无人操作，${routeRemain.value/1000}秒后将退回首页"
                     }
                 } else {
-                    showRouteRemainDialog.value = false
+                    if(DialogViewModel.content.value.contains("页面长时间无人操作"))DialogViewModel.content.value = ""
                 }
             }else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
