@@ -229,6 +229,12 @@ fun ContractGuidePage(navController: NavController) {
                     )
                 }
             }
+            Surface(color = Color(0xFFDCE1E6),
+                    modifier = Modifier
+                    .width(1.dp).fillMaxHeight()
+            ) {
+
+            }
             Surface(color = Color(0xFFFFFFFF)) {
                 LazyColumn(
                     modifier = Modifier
