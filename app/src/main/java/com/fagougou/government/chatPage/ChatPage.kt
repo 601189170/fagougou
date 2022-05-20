@@ -50,6 +50,7 @@ import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
+import com.fagougou.government.wechat.Wechat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -246,11 +247,16 @@ fun ComplexRect(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
                     modifier = Modifier.padding(end = 12.dp),
-                    text = "点击查看更多",
+                    color=Color(0xFF0E7AE6),
+                    text = "点击查看",
+
                     fontSize = 20.sp,
                 )
+                val svg = R.drawable.ic_icon_right_mark
+                Image(painterResource(svg), null)
             }
         }
     }
