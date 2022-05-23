@@ -1,6 +1,7 @@
 package com.fagougou.government.dialog
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -12,11 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
+import com.fagougou.government.dialog.DialogViewModel.icon
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
@@ -24,6 +27,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 
 object DialogViewModel {
+    var icon = 0
     var title = ""
     val content = mutableStateOf("")
     var firstButtonText = mutableStateOf("")
@@ -32,6 +36,7 @@ object DialogViewModel {
     var secondButtonOnClick = mutableStateOf({ })
 
     fun clear(){
+        icon = 0
         title = ""
         content.value = ""
         firstButtonText.value = ""
@@ -61,6 +66,7 @@ fun Dialog(){
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    if(icon!=0)Image(painterResource(icon),null)
                     Text(title,fontSize = 28.sp)
                     Text(content.value,fontSize = 24.sp,color = Color.DarkGray)
                     Row(

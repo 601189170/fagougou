@@ -93,7 +93,7 @@ fun ContractWebView(navController: NavController) {
                             Text(
                                 modifier = Modifier.padding(start = 16.dp),
                                 text = "打印模板",
-                                color = androidx.compose.ui.graphics.Color.White,
+                                color = Color.White,
                                 fontSize = 21.sp)
                         }
                     },

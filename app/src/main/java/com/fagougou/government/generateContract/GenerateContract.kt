@@ -30,6 +30,7 @@ import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
@@ -223,7 +224,14 @@ fun GenerateContract(navController: NavController) {
                             modifier = Modifier
                                 .height(60.dp)
                                 .width(200.dp),
-                            onClick = { },
+                            onClick = {
+                                with(DialogViewModel) {
+                                    clear()
+                                    icon = R.drawable.ic_painter_blue
+                                    title = "正在打印"
+                                    content.value = "文件正在打印，请耐心等待..."
+                                }
+                            },
                             content = {
                                 Row( verticalAlignment = Alignment.CenterVertically ){
                                     Image(painterResource(R.drawable.ic_painter),null)
