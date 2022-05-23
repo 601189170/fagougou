@@ -1,7 +1,4 @@
 buildscript {
-    ext {
-        compose_version = '1.1.1'
-    }
     dependencies {
         classpath "com.bugsnag:bugsnag-android-gradle-plugin:7.+"
     }

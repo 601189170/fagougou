@@ -1,4 +1,4 @@
-package com.fagougou.xiaoben.consult
+package com.fagougou.government.consult
 
 
 import android.annotation.SuppressLint
@@ -12,13 +12,10 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.Router.routeRemain
-import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
@@ -89,9 +86,7 @@ class TouristsLoginActivity : BaseActivity() {
             PostMsg();
         }
 
-        binding!!.topLayout.tvBack.setOnClickListener {
-            finish()
-        }
+        binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
             WechatDiallog(this,  CodeUtils.createQRCode(kv.decodeString("wechatUrl"), 256, null, Color.BLACK)).show()
         }

@@ -316,7 +316,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                             .clickable {
                                 history[index] = message.copy(isExpend = true)
                                 if(index == history.lastIndex) scope.launch(Dispatchers.Main) {
-                                    listState.scrollToItem(index)
+                                    listState.scrollToItem(index+2)
                                 }
                             }
                     ) {
@@ -632,7 +632,7 @@ fun ChatPage(navController: NavController) {
                 item { Row(
                     Modifier
                         .fillMaxWidth()
-                        .height(20.dp)) {} }
+                        .height(60.dp)) {} }
             }
         }
         Column(

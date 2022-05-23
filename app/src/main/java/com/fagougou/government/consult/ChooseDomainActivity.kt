@@ -1,4 +1,4 @@
-package com.fagougou.xiaoben.consult
+package com.fagougou.government.consult
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,7 +10,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fagougou.government.R
-import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 import com.fagougou.government.utils.MMKV
 import com.king.zxing.util.CodeUtils
@@ -21,7 +20,7 @@ class ChooseDomainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityChooseDomainBinding.inflate(getLayoutInflater());
+        binding = ActivityChooseDomainBinding.inflate(layoutInflater)
         if (binding!=null){
             val rootView: View = binding!!.root
             setContentView(rootView)
@@ -69,7 +68,5 @@ class ChooseDomainActivity : BaseActivity() {
 
             }
         }
-
-
 
 }
