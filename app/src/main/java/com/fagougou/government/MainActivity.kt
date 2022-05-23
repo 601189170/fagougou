@@ -1,6 +1,9 @@
 package com.fagougou.government
 
+import android.app.Presentation
+import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
@@ -42,6 +45,7 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
 import com.fagougou.government.model.UpdateInfo
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
 import com.fagougou.government.repo.Client.globalLoading
@@ -61,6 +65,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
+    lateinit var presentation: Presentation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
@@ -79,6 +84,13 @@ class MainActivity : ComponentActivity() {
                     Text("${routeRemain.value}",color = Color.White)
                     Loading()
                 }
+            }
+        }
+        if(!this::presentation.isInitialized){
+            val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            displayManager.displays.getOrNull(1)?.let {
+                presentation = BannerPresentation(this,it)
+                presentation.show()
             }
         }
         lifecycleScope.launch(Dispatchers.IO) {

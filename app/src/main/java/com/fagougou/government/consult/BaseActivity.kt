@@ -1,4 +1,4 @@
-package com.fagougou.xiaoben.consult
+package com.fagougou.government.consult
 
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +15,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Time.hideSystemUI()
 //        StatusBarUtils.setColor(this, resources.getColor(R.color.ykfsdk_all_white))
         setStatusBar(resources.getColor(R.color.white))

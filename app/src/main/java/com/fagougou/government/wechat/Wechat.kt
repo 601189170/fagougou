@@ -26,7 +26,8 @@ import com.king.zxing.util.CodeUtils
 object Wechat {
     val showQrCode = mutableStateOf(false)
     val showQrUrl = mutableStateOf(false)
-    fun wechatBitmap() = CodeUtils.createQRCode(kv.decodeString("wechatUrl"), 256, null, Color.BLACK)
+    //fun wechatBitmap() = CodeUtils.createQRCode(kv.decodeString("wechatUrl"), 256, null, Color.BLACK)
+    fun wechatBitmap() = CodeUtils.createQRCode("null", 256, null, Color.BLACK)
     fun wechatBitmapByUrl() = CodeUtils.createQRCode(ContractWebView.webViewUrl, 256, null, Color.BLACK)
 }
 

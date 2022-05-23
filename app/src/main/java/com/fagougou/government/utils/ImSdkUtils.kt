@@ -2,21 +2,12 @@ package com.fagougou.government.utils
 
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.blankj.utilcode.util.ActivityUtils
-import com.fagougou.government.MainActivity
-import com.fagougou.government.chatPage.ChatGuidePage
-import com.fagougou.xiaoben.consult.TouristsLoginActivity
+import com.fagougou.government.consult.TouristsLoginActivity
 import com.m7.imkfsdk.KfStartHelper
 import com.moor.imkf.IMChatManager
 import com.moor.imkf.requesturl.RequestUrl
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 object ImSdkUtils {
      var helper: KfStartHelper? = null

@@ -1,4 +1,4 @@
-package com.fagougou.xiaoben.consult
+package com.fagougou.government.consult
 
 
 import android.annotation.SuppressLint
@@ -16,7 +16,6 @@ import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
