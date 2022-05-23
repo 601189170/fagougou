@@ -1,10 +1,9 @@
 package com.fagougou.government
 
-import android.app.Presentation
-import android.content.Context
 import android.content.Intent
-import android.hardware.display.DisplayManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,7 +44,6 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
 import com.fagougou.government.model.UpdateInfo
-import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
 import com.fagougou.government.repo.Client.globalLoading
@@ -56,56 +54,49 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
-import com.fagougou.government.wechat.WeChat
-import com.fagougou.government.wechat.WeChatByUrl
+import com.fagougou.government.qrCode.QrCode
+import com.fagougou.government.qrCode.QrCodeViewModel.show
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class MainActivity : ComponentActivity() {
-    lateinit var presentation: Presentation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
-        val sevenDays = (31L*24L*60L*60L*1000L)
-        if(System.currentTimeMillis()>1651824312910L+sevenDays) finish()
+        val sevenDays = (31L * 24L * 60L * 60L * 1000L)
+        if (System.currentTimeMillis() > 1651824312910L + sevenDays) finish()
         setContent {
             GovernmentTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ) { 
+                ) {
                     Main()
-                    WeChat()
-                    WeChatByUrl()
+                    QrCode()
                     Dialog()
-                    Text("${routeRemain.value}",color = Color.White)
+                    Text("${routeRemain.value}", color = Color.White)
                     Loading()
                 }
-            }
-        }
-        if(!this::presentation.isInitialized){
-            val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-            displayManager.displays.getOrNull(1)?.let {
-                presentation = BannerPresentation(this,it)
-                presentation.show()
             }
         }
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = updateService.updateInfo().execute()
                 val body = response.body() ?: UpdateInfo()
-                val currentCode = packageManager.getPackageInfo(packageName,0).versionCode
-                if(body.code>currentCode) withContext(Dispatchers.Main){
-                    val intent = Intent(this@MainActivity,UpdateActivity::class.java)
-                    intent.putExtra("downloadUrl",body.url)
+                val currentCode = packageManager.getPackageInfo(packageName, 0).versionCode
+                if (body.code > currentCode) withContext(Dispatchers.Main) {
+                    val intent = Intent(this@MainActivity, UpdateActivity::class.java)
+                    intent.putExtra("downloadUrl", body.url)
                     startActivity(intent)
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 handleException(e)
             }
+        }
+        if (!Settings.canDrawOverlays(this)){
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            intent.data = Uri.parse("package:$packageName")
+            startActivity(intent)
         }
     }
 
@@ -119,31 +110,33 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Main() {
     val navController = rememberNavController()
-    LaunchedEffect("UpdateNavContent"){
-        while (true){
+    LaunchedEffect("UpdateNavContent") {
+        while (true) {
             delay(250)
-            if(routeMirror !in noAutoQuitList){
-                routeRemain.value = touchWaitTime+lastTouchTime-stampL
-                if(routeRemain.value<0) {
+            if (routeMirror !in noAutoQuitList) {
+                routeRemain.value = touchWaitTime + lastTouchTime - stampL
+                if (routeRemain.value < 0) {
                     DialogViewModel.content.value = ""
                     ChatViewModel.clear()
                     GenerateContract.clear()
-                    navController.popBackStack(Router.home,false)
+                    show.value = false
+                    navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if(routeRemain.value < 10000L && routeMirror == Router.chat){
-                    with(DialogViewModel){
+                } else if (routeRemain.value < 10000L && routeMirror == Router.chat) {
+                    with(DialogViewModel) {
                         clear()
                         title = "温馨提示"
                         firstButtonText.value = "继续咨询"
                         firstButtonOnClick.value = {}
                         secondButtonText.value = "返回首页"
                         secondButtonOnClick.value = { lastTouchTime = 0L }
-                        content.value = "页面长时间无人操作，${routeRemain.value/1000}秒后将退回首页"
+                        content.value = "页面长时间无人操作，${routeRemain.value / 1000}秒后将退回首页"
                     }
                 } else {
-                    if(DialogViewModel.content.value.contains("页面长时间无人操作"))DialogViewModel.content.value = ""
+                    if (DialogViewModel.content.value.contains("页面长时间无人操作")) DialogViewModel.content.value =
+                        ""
                 }
-            }else routeRemain.value = Long.MAX_VALUE
+            } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }
@@ -163,7 +156,7 @@ fun Main() {
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.register) { RegisterPage(navController) }
-            composable(Router.registerResult) { RegisterResultPage(navController)}
+            composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }
@@ -182,9 +175,9 @@ fun Main() {
 }
 
 @Composable
-fun Loading(){
-    if(routeMirror in noLoadingPages) return
-    if(globalLoading.value <= 0) return
+fun Loading() {
+    if (routeMirror in noLoadingPages) return
+    if (globalLoading.value <= 0) return
     Surface(color = Color.Transparent) {
         Column(
             modifier = Modifier.fillMaxSize(),
