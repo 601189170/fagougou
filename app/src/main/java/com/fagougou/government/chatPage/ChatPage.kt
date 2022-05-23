@@ -48,6 +48,7 @@ import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.ImSdkUtils
+import com.fagougou.government.utils.SafeBack.safeBack
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
@@ -265,7 +266,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
     when (message.speaker) {
         Speaker.ROBOT -> Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.75f)
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
@@ -279,6 +280,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         ) { MessageRect(message, index,scope, Dodgerblue, Color.White) }
         Speaker.RECOMMEND -> Column(
             modifier = Modifier
+                .fillMaxWidth(0.75f)
                 .padding(vertical = 12.dp),
         ) {
             Surface(
@@ -430,7 +432,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         }
         Speaker.COMPLEX -> Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.75f)
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
@@ -572,12 +574,14 @@ fun ChatPage(navController: NavController) {
                         firstButtonText.value = "已经解决"
                         firstButtonOnClick.value = {
                             content.value = ""
-                            Router.lastTouchTime = 0L
+                            navController.safeBack()
+//                            Router.lastTouchTime = 0L
                         }
                         secondButtonText.value = "没有解决，转人工"
                         secondButtonOnClick.value = {
                             content.value = ""
                             IFly.stopAll()
+//                            navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }
                         content.value = "请确认本次咨询是否解决您的问题？"

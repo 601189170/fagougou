@@ -904,6 +904,10 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //修改ui
         layoutPhone = (LinearLayout) this.findViewById(R.id.layout_phone);
         layoutVideo = (LinearLayout) this.findViewById(R.id.layout_video);
+
+        //第一期隐藏
+        layoutPhone.setVisibility(View.GONE);
+        layoutVideo.setVisibility(View.GONE);
         layoutPhone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1288,23 +1292,24 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
      */
     private void handleLogOutOrBackPressed() {
         if (YKFCallHelper.existVideo()) {
-            final CommonBottomSheetDialog dialog = CommonBottomSheetDialog.instance(getString(R.string.ykfsdk_ykf_dialog_exist_video)
-                    , getString(R.string.ykfsdk_ykf_determine)
-                    , getString(R.string.ykfsdk_cancel));
-            dialog.setListener(new CommonBottomSheetDialog.OnClickListener() {
-                @Override
-                public void onClickPositive() {
-                    dialog.close(false);
-                    YKFCallHelper.leave(false);
-                    dealLogOut();
-                }
-
-                @Override
-                public void onClickNegative() {
-                    dialog.close(false);
-                }
-            });
-            dialog.show(getSupportFragmentManager(), "");
+            YKFCallHelper.leave(false);
+            dealLogOut();
+//            final CommonBottomSheetDialog dialog = CommonBottomSheetDialog.instance(getString(R.string.ykfsdk_ykf_dialog_exist_video)
+//                    , getString(R.string.ykfsdk_ykf_determine)
+//                    , getString(R.string.ykfsdk_cancel));
+//            dialog.setListener(new CommonBottomSheetDialog.OnClickListener() {
+//                @Override
+//                public void onClickPositive() {
+//                    dialog.close(false);
+//
+//                }
+//
+//                @Override
+//                public void onClickNegative() {
+//                    dialog.close(false);
+//                }
+//            });
+//            dialog.show(getSupportFragmentManager(), "");
         } else {
             dealLogOut();
         }

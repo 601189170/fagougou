@@ -82,6 +82,7 @@
             <!--最下面输入的bar-->
             <com.m7.imkfsdk.view.ChatListView
                 android:id="@+id/chat_list"
+                android:paddingHorizontal="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
