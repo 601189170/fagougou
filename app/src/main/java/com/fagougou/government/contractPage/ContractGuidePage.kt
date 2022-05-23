@@ -38,6 +38,7 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.qrCode.QrCodeViewModel.currentUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,6 +87,7 @@ object Contract{
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
                 codeUrl = body.data
+                currentUrl = body.data
                 val encodedUrl = URLEncoder.encode(codeUrl,"UTF-8")
                 ContractWebView.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                 navController.navigate(Router.contractWebView)

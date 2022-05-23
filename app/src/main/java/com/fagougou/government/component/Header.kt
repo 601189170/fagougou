@@ -17,13 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
-import com.fagougou.government.Router
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
 import com.fagougou.government.utils.Tips
-import com.fagougou.government.wechat.Wechat
+import com.fagougou.government.qrCode.QrCodeViewModel
 
 @Composable
 fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, canClose:Boolean = true){
@@ -72,7 +71,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
                                     color = Color.White
                                 )
                             },
-                            onClick = { Wechat.showQrCode.value = true }
+                            onClick = { QrCodeViewModel.show.value = true }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Image(painterResource(id = R.drawable.ic_human), null)
