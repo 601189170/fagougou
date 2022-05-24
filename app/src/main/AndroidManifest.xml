@@ -19,6 +19,7 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Government"
+        android:largeHeap="true"
         tools:replace="android:label,android:theme,android:allowBackup">
         <activity
             android:name=".consult.TouristsLoginActivity"

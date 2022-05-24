@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.registerPage.RegisterViewModel.login
 import com.fagougou.government.registerPage.RegisterViewModel.registerCode
 import com.fagougou.government.registerPage.RegisterViewModel.registerAction
@@ -72,18 +73,9 @@ fun RegisterPage(navController: NavController){
                 contentDescription = "Home Logo",
                 modifier = Modifier.height(36.dp)
             )
-            Text(
-                Time.timeText.value,
-                color = Color.White,
-                fontSize = 24.sp
-            )
+            BasicText(Time.timeText.value,0.dp,24.sp)
         }
-        Text(
-            modifier = Modifier.padding(top = 192.dp),
-            text = "智能法律服务系统",
-            color = Color.White,
-            fontSize = 32.sp
-        )
+        BasicText("智能法律服务系统",192.dp,32.sp)
         val textFieldColors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color(0x44FFFFFF),
             cursorColor = Color.White,
@@ -117,14 +109,7 @@ fun RegisterPage(navController: NavController){
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
-        Text(
-            modifier = Modifier.padding(top = 400.dp),
-            text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
-            fontSize = 20.sp,
-            color = Color.White
-        )
+        BasicText("技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",400.dp,20.sp)
     }
-    BackHandler {
-
-    }
+    BackHandler {}
 }

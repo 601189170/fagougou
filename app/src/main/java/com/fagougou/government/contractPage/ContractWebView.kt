@@ -9,10 +9,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,18 +26,15 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractPage.ContractWebView.webViewUrl
+import com.fagougou.government.contractPage.ContractViewModel.officeUrl
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.qrCode.QrCodeViewModel
 
-object ContractWebView{
-    var webViewUrl = ""
-    var codeUrl = ""
-}
-
 @Composable
 fun ContractWebView(navController: NavController) {
+    val scope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier
@@ -45,14 +43,16 @@ fun ContractWebView(navController: NavController) {
             factory = {
                 WebView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    setInitialScale(100)
+                    setInitialScale(80)
                     settings.javaScriptEnabled = true
                     webChromeClient = WebChromeClient()
-                    loadUrl(webViewUrl)
+                    loadUrl(officeUrl)
                 }
             }
         )
-        Surface(modifier = Modifier.fillMaxWidth().height(2.dp),color = ComposeColor(0xFFEEEEEE)){}
+        Surface(modifier = Modifier
+            .fillMaxWidth()
+            .height(2.dp),color = ComposeColor(0xFFEEEEEE)){}
         Surface(color = ComposeColor.White){
             Row(
                 modifier = Modifier
@@ -66,7 +66,7 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .width(200.dp),
                     onClick = {
-                        QrCodeViewModel.show.value = true
+                        QrCodeViewModel.content.value = ContractViewModel.fileUrl
                     },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
@@ -79,27 +79,25 @@ fun ContractWebView(navController: NavController) {
                             )
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
+                    colors = buttonColors(backgroundColor = Dodgerblue)
                 )
                 Button(
                     modifier = Modifier
                         .height(60.dp)
                         .padding(start = 24.dp)
                         .width(200.dp),
-                    onClick = { },
+                    onClick = { DialogViewModel.startPrint(scope) },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_painter),null)
                             Text(
                                 modifier = Modifier.padding(start = 16.dp),
                                 text = "打印模板",
-                                color = androidx.compose.ui.graphics.Color.White,
+                                color = Color.White,
                                 fontSize = 21.sp)
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Dodgerblue
-                    )
+                    colors = buttonColors(backgroundColor = Dodgerblue)
                 )
             }
         }
@@ -107,6 +105,6 @@ fun ContractWebView(navController: NavController) {
     Header(
         "合同文库",
         navController,
-        { QrCodeViewModel.currentUrl = QrCodeViewModel.constWechatUrl }
+        qrCode = ContractViewModel.fileUrl
     )
 }

@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
 import com.fagougou.government.generateContract.GenerateContract.data
@@ -29,6 +30,9 @@ import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,7 +42,10 @@ fun GenerateGuide(navController: NavController) {
         val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
         GenerateContract.clear()
         currentContractId.value = launchId
-        scope.launch { getGenerateTemplete(launchId) }
+        scope.launch {
+            getGenerateTemplete(launchId)
+            GenerateContract.updateContent()
+        }
         scope.launch { getGenerateForm(launchId) }
     }
     Surface(color = Color.White) {
@@ -133,15 +140,13 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Dodgerblue
-                        )
+                        colors = buttonColors(backgroundColor = Dodgerblue)
                     )
                     Button(
                         modifier = Modifier
                             .height(60.dp)
                             .width(200.dp),
-                        onClick = { },
+                        onClick = { DialogViewModel.startPrint(scope) },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)
@@ -152,7 +157,7 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(
+                        colors = buttonColors(
                             backgroundColor = Dodgerblue
                         )
                     )

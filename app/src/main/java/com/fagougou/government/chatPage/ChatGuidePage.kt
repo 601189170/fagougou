@@ -18,6 +18,7 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
+import com.fagougou.government.qrCode.QrCodeViewModel.constWechatUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,10 @@ fun ChatGuidePage(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header(title = "智能咨询", navController = navController)
+        Header(
+            "智能咨询",
+            navController,
+            qrCode = constWechatUrl)
         Text(
             modifier = Modifier.padding(top = 96.dp),
             text = "智能咨询",

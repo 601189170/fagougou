@@ -44,9 +44,14 @@ import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.chatPage.ChatViewModel.textInputContent
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.homePage.HomeButton
+import com.fagougou.government.model.CityMap
+import com.fagougou.government.model.Message
+import com.fagougou.government.model.Speaker
+import com.fagougou.government.qrCode.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -394,7 +399,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                         .height(60.dp)
                                         .width(180.dp),
                                     onClick = { scope.launch(Dispatchers.IO){nextChat(item)} },
-                                    content = { Text(item, fontSize = 20.sp, color = Color.White) },
+                                    content = { BasicText(item,0.dp,20.sp) },
                                     colors = ButtonDefaults.buttonColors(Dodgerblue)
                                 )
                             }
@@ -615,13 +620,11 @@ fun ChatPage(navController: NavController) {
                         firstButtonOnClick.value = {
                             content.value = ""
                             navController.safeBack()
-//                            Router.lastTouchTime = 0L
                         }
                         secondButtonText.value = "没有解决，转人工"
                         secondButtonOnClick.value = {
                             content.value = ""
                             IFly.stopAll()
-//                            navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }
                         content.value = "请确认本次咨询是否解决您的问题？"

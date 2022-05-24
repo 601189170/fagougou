@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.webViewPage.WebViewPageModel
 
@@ -43,25 +44,17 @@ fun CalculatorGuidePage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header(title = "法律计算器", navController = navController)
-        Text(
-            modifier = Modifier.padding(top = 96.dp),
-            text = "法律计算器",
-            fontSize = 32.sp,
-            color = Color.White
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = "快速智能，助您计算相关费用",
-            fontSize = 24.sp,
-            color = Color.White
-        )
+        BasicText("法律计算器",96.dp,32.sp)
+        BasicText("快速智能，助您计算相关费用",8.dp,24.sp)
         LazyVerticalGrid(
             userScrollEnabled = false,
             modifier = Modifier.padding(start = 100.dp,end = 100.dp),
             columns = GridCells.Fixed(3),
             content = {
                 items(calResMap.toList()){ cal ->
-                    Column(modifier= Modifier.fillMaxSize().height(160.dp),
+                    Column(modifier= Modifier
+                        .fillMaxSize()
+                        .height(160.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally){
                         HomeButton(

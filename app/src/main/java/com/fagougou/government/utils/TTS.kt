@@ -32,25 +32,19 @@ object TTS {
             Log.d(TAG, "开始播放：" + System.currentTimeMillis())
         }
 
-        override fun onSpeakPaused() {
-            toast("暂停播放")
-        }
+        override fun onSpeakPaused() { }
 
-        override fun onSpeakResumed() {
-        }
+        override fun onSpeakResumed() { }
 
-        override fun onBufferProgress(percent: Int, beginPos: Int, endPos: Int, info: String) {
-            // 合成进度
-        }
+        override fun onBufferProgress(percent: Int, beginPos: Int, endPos: Int, info: String) { }
 
         override fun onSpeakProgress(percent: Int, beginPos: Int, endPos: Int) {
             // 播放进度
-            if(percent%20 == 1)Log.d(TAG, "SpeakProgress：$percent")
+            if(percent%30 == 1)Log.d(TAG, "SpeakProgress：$percent")
             SpeakingProcess = percent
         }
 
         override fun onCompleted(error: SpeechError?) {
-            Log.d(TAG, "Speak Complete")
             SpeakingProcess = 100
         }
 
@@ -125,5 +119,4 @@ object TTS {
             TTSQueue.add(text.replace(regex,""))
         }
     }
-
 }

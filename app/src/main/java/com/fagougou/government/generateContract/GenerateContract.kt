@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.component.Header
@@ -29,7 +30,7 @@ import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
@@ -46,10 +47,6 @@ object GenerateContract {
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
     var lastModifier = Time.stamp
-    val updateContractList = listOf(
-        Router.generateContract,
-        Router.generateGuide
-    )
 
     fun init(context: Context) {
         val file = context.assets.open("generateContract.html")
@@ -61,12 +58,6 @@ object GenerateContract {
                 contractList.addAll(body.list)
             } catch (e:Exception) {
                 handleException(e)
-            }
-        }
-        CoroutineScope(Dispatchers.Default).launch {
-            while(true){
-                delay(750)
-                if(routeMirror in updateContractList)updateContent()
             }
         }
     }
@@ -173,6 +164,13 @@ fun ContractWebView(data: MutableState<String>){
 
 @Composable
 fun GenerateContract(navController: NavController) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        while(isActive){
+            delay(750)
+            GenerateContract.updateContent()
+        }
+    }
     Surface(color = Color.White) {
         Text(notifier.value)
         Column(
@@ -187,7 +185,9 @@ fun GenerateContract(navController: NavController) {
             Row(modifier = Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
-                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
@@ -215,15 +215,13 @@ fun GenerateContract(navController: NavController) {
                                           fontSize = 21.sp)
                                   }
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Dodgerblue
-                            )
+                            colors = buttonColors(backgroundColor = Dodgerblue)
                         )
                         Button(
                             modifier = Modifier
                                 .height(60.dp)
                                 .width(200.dp),
-                            onClick = { },
+                            onClick = { DialogViewModel.startPrint(scope) },
                             content = {
                                 Row( verticalAlignment = Alignment.CenterVertically ){
                                     Image(painterResource(R.drawable.ic_painter),null)
@@ -234,9 +232,7 @@ fun GenerateContract(navController: NavController) {
                                         fontSize = 21.sp)
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Dodgerblue
-                            )
+                            colors = buttonColors(backgroundColor = Dodgerblue)
                         )
                     }
                 }

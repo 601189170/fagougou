@@ -87,7 +87,7 @@ object IFly {
         }
 
         override fun onError(error: SpeechError?) {
-            if(error!=null) toast(error.getPlainDescription(true))
+            if(error!=null) Log.d(TAG, "onError " + error.getPlainDescription(true))
         }
 
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
@@ -101,7 +101,6 @@ object IFly {
 
         override fun onError(error: SpeechError) {
             Log.d(TAG, "onError " + error.getPlainDescription(true))
-            toast(error.getPlainDescription(true))
         }
 
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }

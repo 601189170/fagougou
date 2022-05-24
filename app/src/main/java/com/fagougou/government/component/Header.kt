@@ -3,9 +3,6 @@ package com.fagougou.government.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
-import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
@@ -25,7 +22,13 @@ import com.fagougou.government.utils.Tips
 import com.fagougou.government.qrCode.QrCodeViewModel
 
 @Composable
-fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, canClose:Boolean = true){
+fun Header(
+    title:String,
+    navController: NavController,
+    onBack:() -> Unit = {},
+    canClose:Boolean = true,
+    qrCode:String = ""
+){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
@@ -37,7 +40,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
         ) {
             Row(
                 modifier = Modifier
-                    .width(230.dp)
+                    .width(200.dp)
                     .clickable {
                         onBack.invoke()
                         if(canClose)navController.safeBack()
@@ -52,51 +55,38 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
                 Text("返回", fontSize = 24.sp, color = Color.White)
             }
             Text( title, color = Color.White, fontSize = 24.sp )
-            Surface( Modifier.width(230.dp), color = Color.Transparent ) {
-                if (navController.currentDestination?.route?.contains("chat") == true) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(painterResource(id = R.drawable.ic_wechat), null)
-                        Button(
-                            colors = ButtonDefaults.buttonColors(Color.Transparent),
-                            shape = RoundedCornerShape(
-                                topEnd = CORNER_FLOAT,
-                                bottomEnd = CORNER_FLOAT
-                            ),
-                            elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
-                            content = {
-                                Text(
-                                    modifier = Modifier.padding(vertical = 3.dp),
-                                    text = "微信",
-                                    fontSize = 24.sp,
-                                    color = Color.White
-                                )
-                            },
-                            onClick = { QrCodeViewModel.show.value = true }
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Image(painterResource(id = R.drawable.ic_human), null)
-                        Button(
-                            colors = ButtonDefaults.buttonColors(Color.Transparent),
-                            shape = RoundedCornerShape(
-                                topEnd = CORNER_FLOAT,
-                                bottomEnd = CORNER_FLOAT
-                            ),
-                            elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
-                            content = {
-                                Text(
-                                    modifier = Modifier.padding(vertical = 3.dp),
-                                    text = "人工",
-                                    fontSize = 24.sp,
-                                    color = Color.White
-                                )
-                            },
-                            onClick = {
+            Row(
+                Modifier.width(200.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                if(qrCode.isNotBlank()) {
+                    Image(painterResource(id = R.drawable.ic_wechat), null)
+                    Text(
+                        modifier = Modifier
+                            .padding(vertical = 3.dp)
+                            .clickable { QrCodeViewModel.content.value = qrCode },
+                        text = "微信",
+                        fontSize = 24.sp,
+                        color = Color.White
+                    )
+                }
+                Spacer(modifier = Modifier.width(24.dp))
+                if (routeMirror.contains("chat")) {
+                    Image(painterResource(id = R.drawable.ic_human), null)
+                    Text(
+                        modifier = Modifier
+                            .padding(vertical = 3.dp)
+                            .clickable {
                                 IFly.stopAll()
                                 ImSdkUtils.startAc(Tips.context)
-                            }
-                        )
-                    }
+                            },
+                        text = "人工",
+                        fontSize = 24.sp,
+                        color = Color.White
+                    )
                 }
+                Spacer(modifier = Modifier.width(32.dp))
             }
         }
     }

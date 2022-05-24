@@ -3,6 +3,7 @@ package com.fagougou.government.dialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -18,26 +19,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.dialog.DialogViewModel.clear
+import com.fagougou.government.R
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.defcontent
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
+import com.fagougou.government.dialog.DialogViewModel.icon
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object DialogViewModel {
+    var icon = 0
     var title = ""
     val content = mutableStateOf("")
     val defcontent = mutableStateOf("")
     var firstButtonText = mutableStateOf("")
     var secondButtonText = mutableStateOf("")
-    var firstButtonOnClick = mutableStateOf({ })
-    var secondButtonOnClick = mutableStateOf({ })
+    var firstButtonOnClick = mutableStateOf({})
+    var secondButtonOnClick = mutableStateOf({})
 
     fun clear(){
+        icon = 0
         title = ""
         content.value = ""
         defcontent.value = ""
@@ -45,6 +54,17 @@ object DialogViewModel {
         secondButtonText.value = ""
         firstButtonOnClick.value = {}
         secondButtonOnClick.value = {}
+    }
+
+    fun startPrint(scope:CoroutineScope){
+        clear()
+        icon = R.drawable.ic_painter_blue
+        title = "正在打印"
+        content.value = "文件正在打印，请耐心等待..."
+        scope.launch(Dispatchers.Default) {
+            delay(2500)
+            if(content.value.contains("文件正在打印"))clear()
+        }
     }
 }
 
@@ -68,6 +88,7 @@ fun Dialog(){
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    if(icon!=0)Image(painterResource(icon),null)
                     Text(title,fontSize = 28.sp)
                     Text(content.value,fontSize = 24.sp,color = Color.DarkGray)
                     Row(

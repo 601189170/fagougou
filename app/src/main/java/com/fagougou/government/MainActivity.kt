@@ -56,7 +56,7 @@ import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.qrCode.QrCode
-import com.fagougou.government.qrCode.QrCodeViewModel.show
+import com.fagougou.government.qrCode.QrCodeViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
 
@@ -64,8 +64,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
-        val sevenDays = (31L * 24L * 60L * 60L * 1000L)
-        if (System.currentTimeMillis() > 1651824312910L + sevenDays) finish()
         setContent {
             GovernmentTheme {
                 Surface(
@@ -77,6 +75,7 @@ class MainActivity : ComponentActivity() {
                     Dialog()
                     DialogByDef();
                     Text("${routeRemain.value}", color = Color.White)
+                    Text("${routeRemain.value/1000}", color = Color(0x33FFFFFF))
                     Loading()
                 }
             }
@@ -121,7 +120,7 @@ fun Main() {
                     DialogViewModel.content.value = ""
                     ChatViewModel.clear()
                     GenerateContract.clear()
-                    show.value = false
+                    QrCodeViewModel.content.value = ""
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < 10000L && routeMirror == Router.chat) {
