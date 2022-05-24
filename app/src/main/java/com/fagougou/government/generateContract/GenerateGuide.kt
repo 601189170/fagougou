@@ -76,12 +76,15 @@ fun GenerateGuide(navController: NavController) {
                                 .border(
                                     1.dp,
                                     if (item.id == currentContractId.value) Dodgerblue else Color.LightGray,
-                                    RoundedCornerShape(10)
+                                    RoundedCornerShape(12)
                                 )
                                 .clickable {
                                     GenerateContract.clear()
                                     currentContractId.value = item.id
-                                    scope.launch { getGenerateTemplate(item.id) }
+                                    scope.launch {
+                                        getGenerateTemplate(item.id)
+                                        GenerateContract.updateContent()
+                                    }
                                     scope.launch { getGenerateForm(item.id) }
                                 },
                             verticalAlignment = Alignment.CenterVertically,
@@ -136,7 +139,8 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = buttonColors(backgroundColor = Dodgerblue)
+                        colors = buttonColors(backgroundColor = Dodgerblue),
+                        shape = RoundedCornerShape(16)
                     )
                     Spacer(Modifier.width(32.dp).height(32.dp))
                     Button(
@@ -155,9 +159,8 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = buttonColors(
-                            backgroundColor = Dodgerblue
-                        )
+                        colors = buttonColors(backgroundColor = Dodgerblue),
+                        shape = RoundedCornerShape(16)
                     )
                 }
             }

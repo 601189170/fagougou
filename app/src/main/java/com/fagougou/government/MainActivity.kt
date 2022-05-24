@@ -121,7 +121,7 @@ fun Main() {
                     QrCodeViewModel.content.value = ""
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if (routeRemain.value < 10000L && routeMirror == Router.chat) {
+                } else if (routeRemain.value < 300000L && routeMirror == Router.chat) {
                     with(DialogViewModel) {
                         clear()
                         title = "温馨提示"
@@ -132,8 +132,7 @@ fun Main() {
                         content.value = "页面长时间无人操作，${routeRemain.value / 1000}秒后将退回首页"
                     }
                 } else {
-                    if (DialogViewModel.content.value.contains("页面长时间无人操作")) DialogViewModel.content.value =
-                        ""
+                    if (DialogViewModel.content.value.contains("页面长时间无人操作")) DialogViewModel.content.value = ""
                 }
             } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""

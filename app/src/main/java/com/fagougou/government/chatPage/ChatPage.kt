@@ -615,7 +615,7 @@ fun ChatPage(navController: NavController) {
                             IFly.stopAll()
                             navController.safeBack()
                         }
-                        secondButtonText.value = "没有解决，转人工"
+                        secondButtonText.value = "转人工咨询"
                         secondButtonOnClick.value = {
                             content.value = ""
                             IFly.stopAll()

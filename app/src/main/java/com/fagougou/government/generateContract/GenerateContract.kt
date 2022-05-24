@@ -217,7 +217,8 @@ fun GenerateContract(navController: NavController) {
 //                                          fontSize = 21.sp)
 //                                  }
 //                            },
-//                            colors = buttonColors(backgroundColor = Dodgerblue)
+//                            colors = buttonColors(backgroundColor = Dodgerblue),
+//                            shape = RoundedCornerShape(18)
 //                        )
                         Button(
                             modifier = Modifier
@@ -235,7 +236,8 @@ fun GenerateContract(navController: NavController) {
                                         fontSize = 21.sp)
                                 }
                             },
-                            colors = buttonColors(backgroundColor = Dodgerblue)
+                            colors = buttonColors(backgroundColor = Dodgerblue),
+                            shape = RoundedCornerShape(16)
                         )
                     }
                 }
@@ -311,7 +313,7 @@ fun GenerateContract(navController: NavController) {
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .height(if(child.label.contains("地址"))112.dp else 56.dp)
-                                            .border(1.dp, Color.LightGray, RoundedCornerShape(12)),
+                                            .border(1.dp, Color.LightGray, RoundedCornerShape(18)),
                                         colors = TextFieldDefaults.textFieldColors(
                                             backgroundColor = Color.White,
                                             focusedIndicatorColor = Color.Transparent,

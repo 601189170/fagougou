@@ -96,42 +96,50 @@ fun ButtonDialog() {
         Column(
             Modifier
                 .width(640.dp)
-                .height(320.dp),
+                .height(288.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (icon != 0) Image(painterResource(icon), null)
+            if (icon != 0){
+                Spacer(Modifier.height(16.dp).height(16.dp))
+                Image(painterResource(icon), null)
+            }
             Text(title, fontSize = 28.sp)
             Text(content.value, fontSize = 24.sp, color = Color.DarkGray)
             Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
                 if (!firstButtonText.value.isNullOrBlank()) Button(
                     onClick = firstButtonOnClick.value,
                     content = {
                         Text(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(8.dp),
                             text = firstButtonText.value,
                             fontSize = 24.sp,
                             color = Color.White
                         )
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
+                    contentPadding = PaddingValues(horizontal = 12.dp)
                 )
-                if (!secondButtonText.value.isNullOrBlank()) Button(
-                    onClick = secondButtonOnClick.value,
-                    content = {
-                        Text(
-                            modifier = Modifier.padding(12.dp),
-                            text = secondButtonText.value,
-                            fontSize = 24.sp,
-                            color = Dodgerblue
-                        )
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                    border = BorderStroke(2.dp, Dodgerblue)
-                )
+                if (!secondButtonText.value.isNullOrBlank()){
+                    Spacer(Modifier.width(36.dp).height(36.dp))
+                    Button(
+                        onClick = secondButtonOnClick.value,
+                        content = {
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = secondButtonText.value,
+                                fontSize = 24.sp,
+                                color = Dodgerblue
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                        border = BorderStroke(2.dp, Dodgerblue),
+                        contentPadding = PaddingValues(horizontal = 12.dp)
+                    )
+                }
             }
         }
     }
