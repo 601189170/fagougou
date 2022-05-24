@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     Main()
                     QrCode()
                     Dialog()
-                    Text("${routeRemain.value}", color = Color.White)
+                    Text("${routeRemain.value/1000}", color = Color(0x33FFFFFF))
                     Loading()
                 }
             }

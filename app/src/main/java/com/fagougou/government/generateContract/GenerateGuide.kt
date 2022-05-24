@@ -32,6 +32,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,7 +42,10 @@ fun GenerateGuide(navController: NavController) {
         val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
         GenerateContract.clear()
         currentContractId.value = launchId
-        scope.launch { getGenerateTemplete(launchId) }
+        scope.launch {
+            getGenerateTemplete(launchId)
+            GenerateContract.updateContent()
+        }
         scope.launch { getGenerateForm(launchId) }
     }
     Surface(color = Color.White) {

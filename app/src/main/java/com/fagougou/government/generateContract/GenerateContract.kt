@@ -173,7 +173,7 @@ fun GenerateContract(navController: NavController) {
     LaunchedEffect(null){
         while(isActive){
             delay(750)
-            if(routeMirror in GenerateContract.updateContractList) GenerateContract.updateContent()
+            GenerateContract.updateContent()
         }
     }
     Surface(color = Color.White) {

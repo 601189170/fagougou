@@ -42,6 +42,7 @@ import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
+import com.fagougou.government.qrCode.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -575,19 +576,18 @@ fun ChatPage(navController: NavController) {
                         firstButtonOnClick.value = {
                             content.value = ""
                             navController.safeBack()
-//                            Router.lastTouchTime = 0L
                         }
                         secondButtonText.value = "没有解决，转人工"
                         secondButtonOnClick.value = {
                             content.value = ""
                             IFly.stopAll()
-//                            navController.popBackStack(Router.home,false)
                             ImSdkUtils.startAc(Tips.context)
                         }
                         content.value = "请确认本次咨询是否解决您的问题？"
                     }
                 },
-                false
+                false,
+                constWechatUrl
             )
             var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
             lazyHeight -= if(voiceInputMode.value) 100 else 0

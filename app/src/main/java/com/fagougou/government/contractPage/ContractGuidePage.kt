@@ -24,13 +24,12 @@ import androidx.navigation.NavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.Contract.ContractLists
-import com.fagougou.government.contractPage.Contract.categoryList
-import com.fagougou.government.contractPage.Contract.searchWord
-import com.fagougou.government.contractPage.Contract.getContractList
-import com.fagougou.government.contractPage.Contract.getTemplate
-import com.fagougou.government.contractPage.Contract.selectedId
-import com.fagougou.government.contractPage.ContractWebView.fileUrl
+import com.fagougou.government.contractPage.ContractViewModel.ContractLists
+import com.fagougou.government.contractPage.ContractViewModel.categoryList
+import com.fagougou.government.contractPage.ContractViewModel.searchWord
+import com.fagougou.government.contractPage.ContractViewModel.getContractList
+import com.fagougou.government.contractPage.ContractViewModel.getTemplate
+import com.fagougou.government.contractPage.ContractViewModel.selectedId
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
@@ -38,7 +37,6 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.qrCode.QrCodeViewModel.content
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,11 +44,13 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.net.URLEncoder
 
-object Contract{
+object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
     val ContractLists = mutableStateListOf<ContractData>()
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
+    var officeUrl = ""
+    var fileUrl = ""
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -87,9 +87,8 @@ object Contract{
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
                 fileUrl = body.data
-                content.value = body.data
                 val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
-                ContractWebView.officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                 navController.navigate(Router.contractWebView)
             }
         }
