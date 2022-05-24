@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface UpdateService {
-    @GET("/FagougouAtXiaobenUpdate.json")
+    @GET("/FagougouAtGovernmentUpdate.json")
     fun updateInfo(): Call<UpdateInfo>
 }

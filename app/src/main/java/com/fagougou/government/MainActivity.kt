@@ -63,8 +63,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
-        val sevenDays = (31L * 24L * 60L * 60L * 1000L)
-        if (System.currentTimeMillis() > 1651824312910L + sevenDays) finish()
         setContent {
             GovernmentTheme {
                 Surface(

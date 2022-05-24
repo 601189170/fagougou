@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fagougou.government.R
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
@@ -25,6 +26,10 @@ import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object DialogViewModel {
     var icon = 0
@@ -32,8 +37,8 @@ object DialogViewModel {
     val content = mutableStateOf("")
     var firstButtonText = mutableStateOf("")
     var secondButtonText = mutableStateOf("")
-    var firstButtonOnClick = mutableStateOf({ })
-    var secondButtonOnClick = mutableStateOf({ })
+    var firstButtonOnClick = mutableStateOf({})
+    var secondButtonOnClick = mutableStateOf({})
 
     fun clear(){
         icon = 0
@@ -43,6 +48,17 @@ object DialogViewModel {
         secondButtonText.value = ""
         firstButtonOnClick.value = {}
         secondButtonOnClick.value = {}
+    }
+
+    fun startPrint(scope:CoroutineScope){
+        clear()
+        icon = R.drawable.ic_painter_blue
+        title = "正在打印"
+        content.value = "文件正在打印，请耐心等待..."
+        scope.launch(Dispatchers.Default) {
+            delay(2500)
+            if(content.value.contains("文件正在打印"))clear()
+        }
     }
 }
 

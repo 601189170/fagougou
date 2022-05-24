@@ -30,7 +30,6 @@ import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -48,10 +47,6 @@ object GenerateContract {
     val formList = mutableStateListOf(GenerateForm())
     val notifier = mutableStateOf("")
     var lastModifier = Time.stamp
-    val updateContractList = listOf(
-        Router.generateContract,
-        Router.generateGuide
-    )
 
     fun init(context: Context) {
         val file = context.assets.open("generateContract.html")
@@ -226,18 +221,7 @@ fun GenerateContract(navController: NavController) {
                             modifier = Modifier
                                 .height(60.dp)
                                 .width(200.dp),
-                            onClick = {
-                                with(DialogViewModel) {
-                                    clear()
-                                    icon = R.drawable.ic_painter_blue
-                                    title = "正在打印"
-                                    content.value = "文件正在打印，请耐心等待..."
-                                    scope.launch(Dispatchers.Default) {
-                                        delay(2500)
-                                        if(content.value.contains("文件正在打印"))clear()
-                                    }
-                                }
-                            },
+                            onClick = { DialogViewModel.startPrint(scope) },
                             content = {
                                 Row( verticalAlignment = Alignment.CenterVertically ){
                                     Image(painterResource(R.drawable.ic_painter),null)

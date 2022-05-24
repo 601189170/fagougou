@@ -146,18 +146,7 @@ fun GenerateGuide(navController: NavController) {
                         modifier = Modifier
                             .height(60.dp)
                             .width(200.dp),
-                        onClick = {
-                            with(DialogViewModel) {
-                                clear()
-                                icon = R.drawable.ic_painter_blue
-                                title = "正在打印"
-                                content.value = "文件正在打印，请耐心等待..."
-                                scope.launch(Dispatchers.Default) {
-                                    delay(2500)
-                                    if(content.value.contains("文件正在打印"))clear()
-                                }
-                            }
-                        },
+                        onClick = { DialogViewModel.startPrint(scope) },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)

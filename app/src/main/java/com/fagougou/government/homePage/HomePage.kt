@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
@@ -64,10 +65,12 @@ fun HomePage(navController:NavController) {
                     handleException(e)
                 }
             }
-            if(!body.canLogin){ withContext(Dispatchers.Main){
-                navController.navigate(Router.register)
-                toast(body.errorMessage)
-            } }
+            if(!body.canLogin){
+                withContext(Dispatchers.Main){
+                    navController.navigate(Router.register)
+                    toast(body.errorMessage)
+                }
+            }
         }
     }
     Column(
@@ -86,24 +89,10 @@ fun HomePage(navController:NavController) {
                 contentDescription = "Home Logo",
                 modifier = Modifier.height(36.dp)
             )
-            Text(
-                timeText.value,
-                color = Color.White,
-                fontSize = 24.sp
-            )
+            BasicText( timeText.value )
         }
-        Text(
-            modifier = Modifier.padding(top = 84.dp),
-            text = "欢迎使用",
-            fontSize = 24.sp,
-            color = Color.White
-        )
-        Text(
-            modifier = Modifier.padding(top = 48.dp),
-            text = "智能法律服务系统",
-            fontSize = 28.sp,
-            color = Color.White
-        )
+        BasicText( "欢迎使用",84.dp)
+        BasicText( "智能法律服务系统",48.dp,28.sp)
         Row( modifier = Modifier.padding(top = 48.dp) ) {
             HomeButton(
                 modifier = Modifier
