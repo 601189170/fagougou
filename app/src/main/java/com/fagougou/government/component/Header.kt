@@ -43,7 +43,7 @@ fun Header(
                     .width(200.dp)
                     .clickable {
                         onBack.invoke()
-                        if(canClose)navController.safeBack()
+                        if (canClose) navController.safeBack()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -52,9 +52,9 @@ fun Header(
                     painter = painterResource(R.drawable.ic_back),
                     contentDescription = "Back"
                 )
-                Text("返回", fontSize = 24.sp, color = Color.White)
+                BasicText("返回")
             }
-            Text( title, color = Color.White, fontSize = 24.sp )
+            BasicText(title)
             Row(
                 Modifier.width(200.dp),
                 verticalAlignment = Alignment.CenterVertically,

@@ -3,7 +3,6 @@ package com.fagougou.government.statisticPage
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -19,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.fagougou.government.R
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.repo.Client.apiService
 import com.fagougou.government.statisticPage.Statistic.allNumber
 import com.fagougou.government.statisticPage.Statistic.monthNumber
@@ -47,18 +47,8 @@ fun StatisticPage(navController:NavController){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header("咨询数据",navController)
-        Text(
-            modifier = Modifier.padding(top = 96.dp),
-            text = "咨询数据统计",
-            fontSize = 32.sp,
-            color = Color.White
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = "为您统计每月和历史所有咨询数据",
-            fontSize = 24.sp,
-            color = Color.White
-        )
+        BasicText("咨询数据统计",96.dp,32.sp)
+        BasicText("为您统计每月和历史所有咨询数据",8.dp)
         Row(
             modifier = Modifier.padding(top = 40.dp),
         ) {
@@ -77,16 +67,8 @@ fun StatisticPage(navController:NavController){
                     modifier = Modifier.padding(34.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = "本月咨询人数",
-                        fontSize = 28.sp,
-                        color = Color.White
-                    )
-                    Text(
-                        text = monthNumber.value.toString(),
-                        fontSize = 48.sp,
-                        color = Color.White
-                    )
+                    BasicText("本月咨询人数",0.dp,28.sp)
+                    BasicText(monthNumber.value.toString(),0.dp,48.sp)
                 }
             }
             Surface(
@@ -103,16 +85,8 @@ fun StatisticPage(navController:NavController){
                     modifier = Modifier.padding(34.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = "历史咨询人数",
-                        fontSize = 28.sp,
-                        color = Color.White
-                    )
-                    Text(
-                        text = allNumber.value.toString(),
-                        fontSize = 48.sp,
-                        color = Color.White
-                    )
+                    BasicText("历史咨询人数",0.dp,28.sp)
+                    BasicText(allNumber.value.toString(),0.dp,48.sp)
                 }
             }
         }
