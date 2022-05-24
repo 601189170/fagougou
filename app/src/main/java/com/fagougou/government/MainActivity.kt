@@ -55,7 +55,7 @@ import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.qrCode.QrCode
-import com.fagougou.government.qrCode.QrCodeViewModel.show
+import com.fagougou.government.qrCode.QrCodeViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
 
@@ -119,7 +119,7 @@ fun Main() {
                     DialogViewModel.content.value = ""
                     ChatViewModel.clear()
                     GenerateContract.clear()
-                    show.value = false
+                    QrCodeViewModel.content.value = ""
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < 10000L && routeMirror == Router.chat) {

@@ -24,13 +24,13 @@ import com.king.zxing.util.CodeUtils
 object QrCodeViewModel {
     val show = mutableStateOf(false)
     val constWechatUrl="https://m.fagougou.com/wx/custom?mkt=ideil0957f3ae"
-    var currentUrl = constWechatUrl
-    fun bitmap() = CodeUtils.createQRCode(currentUrl, 256, null, Color.BLACK)
+    var content = mutableStateOf("")
+    fun bitmap() = CodeUtils.createQRCode(content.value, 256, null, Color.BLACK)
 }
 
 @Composable
 fun QrCode(){
-    if(QrCodeViewModel.show.value) Surface( color = ColorCompose(0x33000000)) {
+    if(QrCodeViewModel.content.value.isNotBlank()) Surface( color = ColorCompose(0x33000000)) {
         Button(
             onClick = { QrCodeViewModel.show.value = false },
             content = {

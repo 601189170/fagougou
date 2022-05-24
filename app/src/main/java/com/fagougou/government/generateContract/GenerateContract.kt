@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.component.Header
@@ -62,12 +63,6 @@ object GenerateContract {
                 contractList.addAll(body.list)
             } catch (e:Exception) {
                 handleException(e)
-            }
-        }
-        CoroutineScope(Dispatchers.Default).launch {
-            while(true){
-                delay(750)
-                if(routeMirror in updateContractList)updateContent()
             }
         }
     }
@@ -174,6 +169,13 @@ fun ContractWebView(data: MutableState<String>){
 
 @Composable
 fun GenerateContract(navController: NavController) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        while(isActive){
+            delay(750)
+            if(routeMirror in GenerateContract.updateContractList) GenerateContract.updateContent()
+        }
+    }
     Surface(color = Color.White) {
         Text(notifier.value)
         Column(
@@ -188,7 +190,9 @@ fun GenerateContract(navController: NavController) {
             Row(modifier = Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
-                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
@@ -216,9 +220,7 @@ fun GenerateContract(navController: NavController) {
                                           fontSize = 21.sp)
                                   }
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Dodgerblue
-                            )
+                            colors = buttonColors(backgroundColor = Dodgerblue)
                         )
                         Button(
                             modifier = Modifier
@@ -230,6 +232,10 @@ fun GenerateContract(navController: NavController) {
                                     icon = R.drawable.ic_painter_blue
                                     title = "正在打印"
                                     content.value = "文件正在打印，请耐心等待..."
+                                    scope.launch(Dispatchers.Default) {
+                                        delay(2500)
+                                        if(content.value.contains("文件正在打印"))clear()
+                                    }
                                 }
                             },
                             content = {
@@ -242,9 +248,7 @@ fun GenerateContract(navController: NavController) {
                                         fontSize = 21.sp)
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Dodgerblue
-                            )
+                            colors = buttonColors(backgroundColor = Dodgerblue)
                         )
                     }
                 }

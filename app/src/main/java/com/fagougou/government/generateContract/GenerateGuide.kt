@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
 import com.fagougou.government.generateContract.GenerateContract.data
@@ -29,6 +30,8 @@ import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -133,15 +136,24 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Dodgerblue
-                        )
+                        colors = buttonColors(backgroundColor = Dodgerblue)
                     )
                     Button(
                         modifier = Modifier
                             .height(60.dp)
                             .width(200.dp),
-                        onClick = { },
+                        onClick = {
+                            with(DialogViewModel) {
+                                clear()
+                                icon = R.drawable.ic_painter_blue
+                                title = "正在打印"
+                                content.value = "文件正在打印，请耐心等待..."
+                                scope.launch(Dispatchers.Default) {
+                                    delay(2500)
+                                    if(content.value.contains("文件正在打印"))clear()
+                                }
+                            }
+                        },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)
@@ -152,7 +164,7 @@ fun GenerateGuide(navController: NavController) {
                                     fontSize = 21.sp)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(
+                        colors = buttonColors(
                             backgroundColor = Dodgerblue
                         )
                     )

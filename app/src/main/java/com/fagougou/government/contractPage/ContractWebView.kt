@@ -25,14 +25,14 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractPage.ContractWebView.webViewUrl
+import com.fagougou.government.contractPage.ContractWebView.officeUrl
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.qrCode.QrCodeViewModel
 
 object ContractWebView{
-    var webViewUrl = ""
-    var codeUrl = ""
+    var officeUrl = ""
+    var fileUrl = ""
 }
 
 @Composable
@@ -48,7 +48,7 @@ fun ContractWebView(navController: NavController) {
                     setInitialScale(100)
                     settings.javaScriptEnabled = true
                     webChromeClient = WebChromeClient()
-                    loadUrl(webViewUrl)
+                    loadUrl(officeUrl)
                 }
             }
         )
@@ -66,7 +66,7 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .width(200.dp),
                     onClick = {
-                        QrCodeViewModel.show.value = true
+                        QrCodeViewModel.content.value = ContractWebView.fileUrl
                     },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
@@ -107,6 +107,6 @@ fun ContractWebView(navController: NavController) {
     Header(
         "合同文库",
         navController,
-        { QrCodeViewModel.currentUrl = QrCodeViewModel.constWechatUrl }
+        { QrCodeViewModel.content.value = QrCodeViewModel.constWechatUrl }
     )
 }

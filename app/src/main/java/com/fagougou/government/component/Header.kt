@@ -25,7 +25,7 @@ import com.fagougou.government.utils.Tips
 import com.fagougou.government.qrCode.QrCodeViewModel
 
 @Composable
-fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, canClose:Boolean = true){
+fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, canClose:Boolean = true, qrCode:String = ""){
     Surface(color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
@@ -71,7 +71,7 @@ fun Header(title:String, navController: NavController, onBack:() -> Unit = {}, c
                                     color = Color.White
                                 )
                             },
-                            onClick = { QrCodeViewModel.show.value = true }
+                            onClick = { QrCodeViewModel.content.value = qrCode }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Image(painterResource(id = R.drawable.ic_human), null)

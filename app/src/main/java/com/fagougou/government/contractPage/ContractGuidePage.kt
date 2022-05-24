@@ -30,7 +30,7 @@ import com.fagougou.government.contractPage.Contract.searchWord
 import com.fagougou.government.contractPage.Contract.getContractList
 import com.fagougou.government.contractPage.Contract.getTemplate
 import com.fagougou.government.contractPage.Contract.selectedId
-import com.fagougou.government.contractPage.ContractWebView.codeUrl
+import com.fagougou.government.contractPage.ContractWebView.fileUrl
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
@@ -38,7 +38,7 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.qrCode.QrCodeViewModel.currentUrl
+import com.fagougou.government.qrCode.QrCodeViewModel.content
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,10 +86,10 @@ object Contract{
             val response = contractService.getTemplate(fileid).execute()
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
-                codeUrl = body.data
-                currentUrl = body.data
-                val encodedUrl = URLEncoder.encode(codeUrl,"UTF-8")
-                ContractWebView.webViewUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
+                fileUrl = body.data
+                content.value = body.data
+                val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
+                ContractWebView.officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
                 navController.navigate(Router.contractWebView)
             }
         }
