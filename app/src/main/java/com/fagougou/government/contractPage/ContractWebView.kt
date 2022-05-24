@@ -67,13 +67,14 @@ fun ContractWebView(navController: NavController) {
                         .width(200.dp),
                     onClick = {
                         QrCodeViewModel.content.value = ContractViewModel.fileUrl
+                        QrCodeViewModel.hint.value = "微信扫码下载"
                     },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_wechat),null)
                             Text(
                                 modifier = Modifier.padding(start = 16.dp),
-                                text = "微信查看",
+                                text = "微信下载",
                                 color = Color.White,
                                 fontSize = 21.sp
                             )

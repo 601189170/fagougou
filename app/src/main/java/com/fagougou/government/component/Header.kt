@@ -26,7 +26,8 @@ fun Header(
     navController: NavController,
     onBack:() -> Unit = {},
     canClose:Boolean = true,
-    qrCode:String = ""
+    qrCode:String = "",
+    qrCodeHint:String = ""
 ){
     Surface(color = Color(0xFF17192C)) {
         Row(
@@ -64,7 +65,10 @@ fun Header(
                     Text(
                         modifier = Modifier
                             .padding(vertical = 3.dp)
-                            .clickable { QrCodeViewModel.content.value = qrCode },
+                            .clickable {
+                                QrCodeViewModel.content.value = qrCode
+                                QrCodeViewModel.hint.value = qrCodeHint
+                            },
                         text = "微信",
                         fontSize = 24.sp,
                         color = Color.White

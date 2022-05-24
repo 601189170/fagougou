@@ -120,7 +120,7 @@ fun Main() {
                     content.clear()
                     ChatViewModel.clear()
                     GenerateContract.clear()
-                    QrCodeViewModel.content.value = ""
+                    QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < (115L*1000L) && routeMirror == Router.chat) {

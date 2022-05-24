@@ -21,9 +21,16 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.king.zxing.util.CodeUtils
 
 object QrCodeViewModel {
-    val constWechatUrl="https://m.fagougou.com/wx/custom?mkt=ideil0957f3ae"
-    var content = mutableStateOf("")
+    const val constWechatUrl="https://m.fagougou.com/wx/custom?mkt=ideil0957f3ae"
+    val content = mutableStateOf("")
+    val hint = mutableStateOf("")
+
     fun bitmap() = CodeUtils.createQRCode(content.value, 256, null, Color.BLACK)
+
+    fun clear(){
+        content.value = ""
+        hint.value = ""
+    }
 }
 
 @Composable
@@ -32,7 +39,7 @@ fun QrCode(){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { QrCodeViewModel.content.value = "" }
+                .clickable { QrCodeViewModel.clear() }
             ,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
@@ -47,7 +54,7 @@ fun QrCode(){
                     modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Image(QrCodeViewModel.bitmap().asImageBitmap(),null)
-                    Text("扫一扫查看", fontSize = 28.sp, modifier = Modifier.padding(16.dp))
+                    Text(QrCodeViewModel.hint.value, fontSize = 28.sp, modifier = Modifier.padding(16.dp))
                 }
             }
             Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)
