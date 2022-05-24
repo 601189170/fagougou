@@ -266,13 +266,7 @@ fun ComplexRect(
                         .height(48.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        message.complex.title,
-                        fontSize = 24.sp,
-                        color = Color.White,
-                    )
-                }
+                ) { BasicText(message.complex.title) }
             }
             Text(
                 modifier = Modifier.padding(12.dp),
@@ -424,13 +418,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                             .height(50.dp)
                                             .width(150.dp),
                                         onClick = { currentProvince.value = provinceList[i] },
-                                        content = {
-                                            Text(
-                                                provinceList[i],
-                                                fontSize = 24.sp,
-                                                color = Color.White
-                                            )
-                                        },
+                                        content = { BasicText(provinceList[i]) },
                                         colors = ButtonDefaults.buttonColors(Dodgerblue)
                                     )
                                 }
@@ -458,13 +446,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                                 currentProvince.value = ""
                                             }
                                         },
-                                        content = {
-                                            Text(
-                                                cityList[i],
-                                                fontSize = 20.sp,
-                                                color = Color.White
-                                            )
-                                        },
+                                        content = { BasicText(cityList[i],0.dp,20.sp ) },
                                         colors = ButtonDefaults.buttonColors(Dodgerblue),
                                         contentPadding = PaddingValues(4.dp)
                                     )
@@ -579,7 +561,10 @@ fun inputBox(scope: CoroutineScope){
                 shape = RoundedCornerShape(50)
             )
             Button(
-                modifier = Modifier.padding(start = 24.dp).focusRequester(bot).focusable(),
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .focusRequester(bot)
+                    .focusable(),
                 content = { Image(painterResource(R.drawable.ic_squad),null) },
                 onClick = {
                     showBotMenu.value = !showBotMenu.value
@@ -661,21 +646,16 @@ fun ChatPage(navController: NavController) {
                                     Modifier
                                         .width(16.dp)
                                         .height(12.dp))
-                                Text("温馨提示：拿起话筒后声音更清晰",color = Color.White,fontSize = 20.sp)
+                                BasicText("温馨提示：拿起话筒后声音更清晰",0.dp,20.sp)
                             }
                         }
                     }
                 }
-                items(history.size) { index ->
-                    MessageItem(history[index], index, scope, navController)
-                }
+                items(history.size) { index -> MessageItem(history[index], index, scope, navController) }
                 if (history.lastOrNull()?.speaker==Speaker.USER) item {
                     MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController)
                 }
-                item { Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)) {} }
+                item { Row( Modifier .fillMaxWidth() .height(60.dp)) {} }
             }
         }
         Column(
