@@ -18,7 +18,7 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
-import com.fagougou.government.qrCode.QrCodeViewModel.constWechatUrl
+import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

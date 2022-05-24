@@ -18,7 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.*
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -29,7 +31,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
@@ -45,25 +46,25 @@ import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.chatPage.ChatViewModel.textInputContent
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.consult.WechatDiallog
+import com.fagougou.government.component.Header
+import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
-import com.fagougou.government.qrCode.QrCodeViewModel.constWechatUrl
-import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.*
+import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
+import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
-import com.m7.imkfsdk.chat.dialog.TimeoDiallog
+import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun BotMenu() {
@@ -604,6 +605,7 @@ fun ChatPage(navController: NavController) {
                         firstButtonText.value = "已经解决"
                         firstButtonOnClick.value = {
                             content.value = ""
+                            IFly.stopAll()
                             navController.safeBack()
                         }
                         secondButtonText.value = "没有解决，转人工"
@@ -615,7 +617,8 @@ fun ChatPage(navController: NavController) {
                         content.value = "请确认本次咨询是否解决您的问题？"
                     }
                 },
-                false
+                false,
+                constWechatUrl
             )
             var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
             lazyHeight -= if(voiceInputMode.value) 100 else 0
@@ -669,4 +672,3 @@ fun ChatPage(navController: NavController) {
     BackHandler(enabled = true) {
     }
 }
-

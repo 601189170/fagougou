@@ -39,7 +39,7 @@ import com.fagougou.government.chatPage.*
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.dialog.Dialog
-import com.fagougou.government.dialog.DialogByDef
+import com.fagougou.government.dialog.NameDefDialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
@@ -55,8 +55,8 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
-import com.fagougou.government.qrCode.QrCode
-import com.fagougou.government.qrCode.QrCodeViewModel
+import com.fagougou.government.component.QrCode
+import com.fagougou.government.component.QrCodeViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
 
@@ -73,8 +73,6 @@ class MainActivity : ComponentActivity() {
                     Main()
                     QrCode()
                     Dialog()
-                    DialogByDef();
-                    Text("${routeRemain.value}", color = Color.White)
                     Text("${routeRemain.value/1000}", color = Color(0x33FFFFFF))
                     Loading()
                 }

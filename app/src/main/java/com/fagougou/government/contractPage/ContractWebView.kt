@@ -30,7 +30,7 @@ import com.fagougou.government.contractPage.ContractViewModel.officeUrl
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.qrCode.QrCodeViewModel
+import com.fagougou.government.component.QrCodeViewModel
 
 @Composable
 fun ContractWebView(navController: NavController) {

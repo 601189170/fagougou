@@ -2,28 +2,8 @@ package com.fagougou.government.utils
 
 import android.text.TextUtils
 import android.util.Log
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import androidx.navigation.NavController
 import com.alibaba.fastjson.JSON
-import com.fagougou.government.Router
-import com.fagougou.government.contractPage.ContractWebView
-import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
-import com.fagougou.government.model.DefineRequest
-import com.fagougou.government.model.DefineResponse
-import com.fagougou.government.qrCode.QrCodeViewModel
-import com.fagougou.government.repo.Client
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.StringBuilder
-import java.net.URLEncoder
 
 object InlineRecommend {
     val questionRegex = Regex("[\n]*#question::")

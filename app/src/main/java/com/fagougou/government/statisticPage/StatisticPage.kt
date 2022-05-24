@@ -32,9 +32,9 @@ object Statistic{
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiService.aboutRobot().execute()
             val body = response.body() ?: About()
-            allNumber.value = body.aboutData.aboutFirm.allNumber
-            monthNumber.value = body.aboutData.aboutFirm.monthNumber
-            qrcodeUrl.value = body.aboutData.aboutFirm.qrcodeUrl
+            allNumber.value = body.data.firm.allNumber
+            monthNumber.value = body.data.firm.monthNumber
+            qrcodeUrl.value = body.data.firm.qrcodeUrl
         }
     }
 }

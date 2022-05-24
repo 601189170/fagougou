@@ -1,24 +1,15 @@
 package com.fagougou.government.model
 
-import com.google.gson.annotations.SerializedName
-
 data class About(
-    @SerializedName("data")
-    val aboutData: AboutData = AboutData(),
+    val data: AboutData = AboutData(),
 )
 
 data class AboutData(
-    @SerializedName("firm")
-    val aboutFirm: AboutFirm = AboutFirm(),
+    val firm: AboutFirm = AboutFirm(),
 )
 
 data class AboutFirm(
-    @SerializedName("allNumber")
     val allNumber: Int = 0,
-
-    @SerializedName("monthNumber")
     val monthNumber: Int = 0,
-
-    @SerializedName("qrcodeUrl")
     val qrcodeUrl: String = "",
 )

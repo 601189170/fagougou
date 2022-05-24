@@ -19,7 +19,6 @@ import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
 import com.fagougou.government.utils.Tips
-import com.fagougou.government.qrCode.QrCodeViewModel
 
 @Composable
 fun Header(

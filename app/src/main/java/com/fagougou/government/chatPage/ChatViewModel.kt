@@ -184,7 +184,8 @@ object ChatViewModel {
                 with(DialogViewModel) {
                     clear()
                     title = def
-                    defcontent.value = body.data
+                    type = "nameDef"
+                    content.value = body.data
                 }
             }
         }

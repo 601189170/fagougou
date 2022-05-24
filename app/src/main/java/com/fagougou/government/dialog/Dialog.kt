@@ -3,7 +3,6 @@ package com.fagougou.government.dialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -21,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.R
 import com.fagougou.government.dialog.DialogViewModel.content
-import com.fagougou.government.dialog.DialogViewModel.defcontent
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
 import com.fagougou.government.dialog.DialogViewModel.icon
+import com.fagougou.government.dialog.DialogViewModel.type
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
@@ -39,125 +38,125 @@ object DialogViewModel {
     var icon = 0
     var title = ""
     val content = mutableStateOf("")
-    val defcontent = mutableStateOf("")
+    var type = "button"
     var firstButtonText = mutableStateOf("")
     var secondButtonText = mutableStateOf("")
     var firstButtonOnClick = mutableStateOf({})
     var secondButtonOnClick = mutableStateOf({})
 
-    fun clear(){
+    fun clear() {
         icon = 0
         title = ""
         content.value = ""
-        defcontent.value = ""
+        type = "button"
         firstButtonText.value = ""
         secondButtonText.value = ""
         firstButtonOnClick.value = {}
         secondButtonOnClick.value = {}
     }
 
-    fun startPrint(scope:CoroutineScope){
+    fun startPrint(scope: CoroutineScope) {
         clear()
         icon = R.drawable.ic_painter_blue
         title = "正在打印"
         content.value = "文件正在打印，请耐心等待..."
         scope.launch(Dispatchers.Default) {
             delay(2500)
-            if(content.value.contains("文件正在打印"))clear()
+            if (content.value.contains("文件正在打印")) clear()
         }
     }
 }
 
 @Composable
-fun Dialog(){
-    if (content.value.isNotBlank()) Surface(color= Color(0x3300000)) {
+fun Dialog() {
+    if (content.value.isNotBlank()) Surface(
+        Modifier.clickable { if(type == "nameDef")clear() },
+        color = Color(0x33000000)
+    ) {
         Column(
             Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Surface(
-                color = Color.White,
-                shape = RoundedCornerShape(CORNER_FLOAT),
-                elevation = 2.dp
-            ) {
-                Column(
-                    Modifier
-                        .width(640.dp)
-                        .height(320.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if(icon!=0)Image(painterResource(icon),null)
-                    Text(title,fontSize = 28.sp)
-                    Text(content.value,fontSize = 24.sp,color = Color.DarkGray)
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        if(!firstButtonText.value.isNullOrBlank())Button(
-                            onClick = firstButtonOnClick.value,
-                            content = {
-                                Text(
-                                    modifier = Modifier.padding(12.dp),
-                                    text = firstButtonText.value,
-                                    fontSize = 24.sp,
-                                    color = Color.White
-                                )
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
-                        )
-                        if(!secondButtonText.value.isNullOrBlank())Button(
-                            onClick = secondButtonOnClick.value,
-                            content = {
-                                Text(
-                                    modifier = Modifier.padding(12.dp),
-                                    text = secondButtonText.value,
-                                    fontSize = 24.sp,
-                                    color = Dodgerblue
-                                )
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                            border = BorderStroke(2.dp, Dodgerblue)
-                        )
-                    }
-                }
+            when (type) {
+                "button" -> ButtonDialog()
+                "nameDef" -> NameDefDialog()
             }
         }
     }
 }
 
 @Composable
-fun DialogByDef(){
-    if (defcontent.value.isNotBlank()) Surface(color= Color(0x3300000)) {
+fun ButtonDialog() {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(CORNER_FLOAT),
+        elevation = 2.dp
+    ) {
         Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            Modifier
+                .width(640.dp)
+                .height(320.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Surface(
-                color = Color.White,
-                shape = RoundedCornerShape(CORNER_FLOAT),
-                elevation = 2.dp
+            if (icon != 0) Image(painterResource(icon), null)
+            Text(title, fontSize = 28.sp)
+            Text(content.value, fontSize = 24.sp, color = Color.DarkGray)
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Column(
-                    Modifier
-                        .width(720.dp)
-                        .height(288.dp)
-                        .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(title,fontSize = 28.sp)
-                    Text(defcontent.value,fontSize = 24.sp,color = Color.DarkGray)
-
-                }
-            }
-            Row( Modifier.padding(top=32.dp).clickable(){
-                clear()
-            }) {
-                Image(painterResource(id = com.fagougou.government.R.drawable.ic_close), null)
+                if (!firstButtonText.value.isNullOrBlank()) Button(
+                    onClick = firstButtonOnClick.value,
+                    content = {
+                        Text(
+                            modifier = Modifier.padding(12.dp),
+                            text = firstButtonText.value,
+                            fontSize = 24.sp,
+                            color = Color.White
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
+                )
+                if (!secondButtonText.value.isNullOrBlank()) Button(
+                    onClick = secondButtonOnClick.value,
+                    content = {
+                        Text(
+                            modifier = Modifier.padding(12.dp),
+                            text = secondButtonText.value,
+                            fontSize = 24.sp,
+                            color = Dodgerblue
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    border = BorderStroke(2.dp, Dodgerblue)
+                )
             }
         }
+    }
+}
+
+@Composable
+fun NameDefDialog() {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(CORNER_FLOAT),
+        elevation = 2.dp
+    ) {
+        Column(
+            Modifier
+                .width(720.dp)
+                .height(288.dp)
+                .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(title, fontSize = 28.sp)
+            Text(content.value, fontSize = 24.sp, color = Color.DarkGray)
+        }
+    }
+    Row( Modifier.padding(top = 32.dp) ) {
+        Image(painterResource(R.drawable.ic_close), null)
     }
 }

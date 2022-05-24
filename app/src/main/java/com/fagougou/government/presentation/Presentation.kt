@@ -17,7 +17,7 @@ class BannerPresentation(context: Context, display: Display) : Presentation(cont
         CoroutineScope(Dispatchers.Default).launch{
             var i = 0
             while (isActive){
-                delay(1500)
+                delay(3000)
                 i++
                 withContext(Dispatchers.Main){
                     binding.viewPager.currentItem = i
