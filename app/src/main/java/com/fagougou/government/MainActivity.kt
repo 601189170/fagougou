@@ -39,6 +39,7 @@ import com.fagougou.government.chatPage.*
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.dialog.Dialog
+import com.fagougou.government.dialog.DialogByDef
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
@@ -74,6 +75,7 @@ class MainActivity : ComponentActivity() {
                     Main()
                     QrCode()
                     Dialog()
+                    DialogByDef();
                     Text("${routeRemain.value}", color = Color.White)
                     Loading()
                 }

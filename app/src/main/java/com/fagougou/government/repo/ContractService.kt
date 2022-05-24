@@ -17,4 +17,5 @@ interface ContractService {
     @GET("contractTemplate/downloadLink")
     fun getTemplate(@Query("fileid") fileid :String): Call<TemplateBean>
 
+
 }

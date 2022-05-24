@@ -11,4 +11,5 @@ interface MainRegister {
 
     @POST("api/register-codes/login/")
     fun login(@Body request: SerialLoginRequest): Call<SerialLoginResponse>
+
 }

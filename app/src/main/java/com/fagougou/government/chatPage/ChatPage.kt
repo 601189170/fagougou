@@ -1,10 +1,13 @@
 package com.fagougou.government.chatPage
 
+import android.text.TextUtils
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -18,8 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -29,6 +35,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.government.chatPage.ChatViewModel.currentProvince
 import com.fagougou.government.chatPage.ChatViewModel.getComplex
+import com.fagougou.government.chatPage.ChatViewModel.getDefInfo
 import com.fagougou.government.chatPage.ChatViewModel.history
 import com.fagougou.government.chatPage.ChatViewModel.listState
 import com.fagougou.government.chatPage.ChatViewModel.nextChat
@@ -37,23 +44,21 @@ import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.chatPage.ChatViewModel.textInputContent
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
+import com.fagougou.government.consult.WechatDiallog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.homePage.HomeButton
-import com.fagougou.government.model.CityMap
-import com.fagougou.government.model.Message
-import com.fagougou.government.model.Speaker
+import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.IFly
+import com.fagougou.government.utils.*
 import com.fagougou.government.utils.IFly.wakeMode
-import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
-import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
+import com.m7.imkfsdk.chat.dialog.TimeoDiallog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun BotMenu() {
@@ -169,13 +174,48 @@ fun MessageRect(
         color = backgroundColor,
     ) {
         Column {
-            Text(
+            if ( message.listDef.size==0){
+                Text(
                 modifier = Modifier.padding(12.dp),
                 text = message.content + message.complex.explanation,
                 fontSize = 24.sp,
                 lineHeight = 32.sp,
                 color = textColor,
             )
+            }else{
+                val annotatedString = buildAnnotatedString {
+
+                    message.listDef.forEach(){
+                        if (!TextUtils.isEmpty(it.content)){
+                            if (it.style==0){
+                                append(it.content)
+                            }else{
+                                pushStringAnnotation(tag = "policy", annotation = it.content)
+                                withStyle(style = SpanStyle(color = Dodgerblue)) {
+                                    append(" ["+it.content+"] ")
+                                }
+                                pop()
+                            }
+                        }
+
+                    }
+                }
+
+                ClickableText(
+                    modifier = Modifier.padding(12.dp),
+                    text = annotatedString, style = MaterialTheme.typography.h5, onClick = { offset ->
+                        annotatedString.getStringAnnotations(tag = "policy", start = offset, end = offset).firstOrNull()?.let {
+                            Log.d("policy URL", it.item)
+
+                            getDefInfo(it.item);
+                        }
+                    })
+            }
+
+
+
+
+
             for(question in message.inlineRecommend){
                 Text(
                     modifier = Modifier
@@ -646,3 +686,4 @@ fun ChatPage(navController: NavController) {
     BackHandler(enabled = true) {
     }
 }
+

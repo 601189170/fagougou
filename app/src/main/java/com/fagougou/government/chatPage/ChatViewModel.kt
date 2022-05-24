@@ -1,14 +1,19 @@
 package com.fagougou.government.chatPage
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
+import com.alibaba.fastjson.JSON
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.utils.IFly
+import com.fagougou.government.utils.InlineRecommend
 import com.fagougou.government.utils.InlineRecommend.getInline
+import com.fagougou.government.utils.InlineRecommend.removeData
 import com.fagougou.government.utils.InlineRecommend.removeInline
 import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.TTS
@@ -32,14 +37,19 @@ object ChatViewModel {
         for (say in chatData.botSays) {
             val content = say.content.body.removeInline()
             val inlineRecommend = say.content.body.getInline()
+            val content2 = say.content.body.removeData()
+            val defDatas = InlineRecommend.getDefData(content2)
             when (say.type) {
                 "text" -> {
+                    Log.e("TAG", "addChatData2: ==>"+content )
+                    Log.e("TAG", "defDatas: ==>"+ JSON.toJSONString(defDatas) )
                     history.add(
                         Message(
                             Speaker.ROBOT,
                             inlineRecommend = inlineRecommend,
                             content = content,
-                            laws = say.content.laws
+                            laws = say.content.laws,
+                            listDef=defDatas
                         )
                     )
                     TTS.speak(content)
@@ -87,6 +97,7 @@ object ChatViewModel {
             listState.scrollToItem(history.lastIndex)
         }
     }
+
 
     suspend fun startChat() {
         TTS.stopSpeaking()
@@ -161,5 +172,21 @@ object ChatViewModel {
         textInputContent.value = ""
         history.clear()
         currentProvince.value = ""
+    }
+
+    fun  getDefInfo(def:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val strs="#def::"+def+"#"
+            val response = Client.apiService.define(sessionId,DefineRequest(strs)).execute()
+            val body = response.body() ?: DefineResponse()
+            Log.e("TAG", "getDefInfo: "+body.toString() )
+            withContext(Dispatchers.Main){
+                with(DialogViewModel) {
+                    clear()
+                    title = def
+                    defcontent.value = body.data
+                }
+            }
+        }
     }
 }

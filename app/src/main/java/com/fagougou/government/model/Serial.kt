@@ -19,3 +19,5 @@ data class SerialLoginResponse(
     val canLogin: Boolean = false,
     val errorMessage: String = ""
 )
+
+

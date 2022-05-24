@@ -28,4 +28,8 @@ interface ApiService {
 
     @GET("/v1/case-origin/{serial}")
     fun case(@Path("serial")serial:String): Call<CaseResponse>
+
+    @POST("v1/query/{sessionId}/define")
+    fun define(@Path("sessionId")sessionId:String,@Body request: DefineRequest): Call<DefineResponse>
+
 }

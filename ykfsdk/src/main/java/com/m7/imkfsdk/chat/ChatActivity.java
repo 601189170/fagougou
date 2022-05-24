@@ -906,8 +906,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         layoutVideo = (LinearLayout) this.findViewById(R.id.layout_video);
 
         //第一期隐藏
-        layoutPhone.setVisibility(View.GONE);
-        layoutVideo.setVisibility(View.GONE);
+//        layoutPhone.setVisibility(View.GONE);
+//        layoutVideo.setVisibility(View.GONE);
         layoutPhone.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

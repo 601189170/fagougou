@@ -12,7 +12,8 @@ data class Message(
     val laws: List<Law> = listOf(),
     val option: Option = Option(),
     val complex: BotSaysContent = BotSaysContent(),
-    var isExpend:Boolean = false
+    var isExpend:Boolean = false,
+    var listDef:List<ContentStyle> = listOf()
 )
 
 data class ChatRequest(

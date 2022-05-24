@@ -1,6 +1,29 @@
 package com.fagougou.government.utils
 
+import android.text.TextUtils
+import android.util.Log
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.navigation.NavController
+import com.alibaba.fastjson.JSON
+import com.fagougou.government.Router
+import com.fagougou.government.contractPage.ContractWebView
+import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.model.ContentStyle
+import com.fagougou.government.model.DefineRequest
+import com.fagougou.government.model.DefineResponse
+import com.fagougou.government.qrCode.QrCodeViewModel
+import com.fagougou.government.repo.Client
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
+import java.net.URLEncoder
 
 object InlineRecommend {
     val questionRegex = Regex("[\n]*#question::")
@@ -13,7 +36,10 @@ object InlineRecommend {
             .replace(sharpRegex,"")
             .replace("%||%","\n")
     }
-
+    fun String.removeData():String{
+        return replace(questionRegex,"")
+            .replace("%||%","\n")
+    }
     fun String.getInline():List<String>{
         var isQuestion = false
         val inputList = split("#")
@@ -39,4 +65,53 @@ object InlineRecommend {
         }
         return resultList
     }
+
+    var def="#def::"
+    var regx="#";
+
+    fun getDefData(content: String):List<ContentStyle> {
+        val resultList = mutableListOf<Int>()
+        val subContent = mutableListOf<ContentStyle>()
+        var max=content.length
+        for (i in content.indices){
+            if (content.get(i).toString().equals(regx)){
+                resultList.add(i)
+            }
+        }
+        Log.e("TAG", "resultList: "+ JSON.toJSONString(resultList))
+
+        for (i in resultList.indices){
+            if (i==0){
+
+                var startdata=content.substring(0,resultList.get(0))
+                if (!TextUtils.isEmpty(startdata)){
+                    subContent.add(ContentStyle(startdata,0))
+                }
+            }else{
+                var subdata=content.substring(resultList.get(i-1),resultList.get(i))
+                if (!TextUtils.isEmpty(subdata)){
+                    if (subdata.contains(def)){
+                        var data=subdata.replace(def,"").replace(regx,"")
+                        if (!TextUtils.isEmpty(data))
+                            subContent.add(ContentStyle(data,1))
+                    }else{
+                        var data=subdata.replace(def,"").replace(regx,"")
+                        if (!TextUtils.isEmpty(data))
+                            subContent.add(ContentStyle(data,0))
+                    }
+                }
+            }
+            if (i==resultList.size-1){
+                var lastdata=content.substring(resultList.get(i),max).replace(regx,"")
+                if (!TextUtils.isEmpty(lastdata)){
+                    subContent.add(ContentStyle(lastdata,0))
+                }
+            }
+        }
+
+        Log.e("TAG", "subContent: "+ JSON.toJSONString(subContent))
+        return subContent
+    }
+
+
 }
