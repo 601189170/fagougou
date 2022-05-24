@@ -57,6 +57,8 @@ import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.component.QrCode
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.dialog.DialogViewModel.content
+import com.fagougou.government.model.ContentStyle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
 
@@ -115,13 +117,13 @@ fun Main() {
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stampL
                 if (routeRemain.value < 0) {
-                    DialogViewModel.content.value = ""
+                    content.clear()
                     ChatViewModel.clear()
                     GenerateContract.clear()
                     QrCodeViewModel.content.value = ""
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if (routeRemain.value < 300000L && routeMirror == Router.chat) {
+                } else if (routeRemain.value < (115L*1000L) && routeMirror == Router.chat) {
                     with(DialogViewModel) {
                         clear()
                         title = "温馨提示"
@@ -129,10 +131,12 @@ fun Main() {
                         firstButtonOnClick.value = {}
                         secondButtonText.value = "返回首页"
                         secondButtonOnClick.value = { lastTouchTime = 0L }
-                        content.value = "页面长时间无人操作，${routeRemain.value / 1000}秒后将退回首页"
+                        content.add(ContentStyle("页面长时间无人操作，"))
+                        content.add(ContentStyle("${routeRemain.value / 1000}秒",1))
+                        content.add(ContentStyle("后将退回首页"))
                     }
                 } else {
-                    if (DialogViewModel.content.value.contains("页面长时间无人操作")) DialogViewModel.content.value = ""
+                    if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
                 }
             } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""

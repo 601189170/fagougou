@@ -51,6 +51,7 @@ import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.CityMap
+import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
 import com.fagougou.government.repo.Client
@@ -97,14 +98,14 @@ fun BotMenu() {
                             clear()
                             title = "温馨提示"
                             firstButtonText.value = "取消"
-                            firstButtonOnClick.value = { content.value = "" }
+                            firstButtonOnClick.value = { content.clear() }
                             secondButtonText.value = "确定"
                             secondButtonOnClick.value = {
-                                content.value = ""
+                                content.clear()
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }
                             }
-                            content.value = "更换领域后，当前的记录会清除"
+                            content.add(ContentStyle("更换领域后，当前的记录会清除"))
                         } }
                     },
                     contentId = botResMap[bot.first] ?: R.drawable.bot_small_unknow
@@ -608,20 +609,19 @@ fun ChatPage(navController: NavController) {
                     with(DialogViewModel){
                         clear()
                         title = "温馨提示"
-                        content.value = "请确认本次咨询是否解决您的问题？"
                         firstButtonText.value = "已经解决"
                         firstButtonOnClick.value = {
-                            content.value = ""
+                            content.clear()
                             IFly.stopAll()
                             navController.safeBack()
                         }
                         secondButtonText.value = "转人工咨询"
                         secondButtonOnClick.value = {
-                            content.value = ""
+                            content.clear()
                             IFly.stopAll()
                             ImSdkUtils.startAc(Tips.context)
                         }
-                        content.value = "请确认本次咨询是否解决您的问题？"
+                        content.add(ContentStyle("请确认本次咨询是否解决您的问题？"))
                     }
                 },
                 false,

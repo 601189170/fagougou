@@ -28,11 +28,15 @@ object PAG {
             while (true) {
                 delay(50)
                 when (IFly.recognizeResult.value) {
-                    IFly.UNWAKE_TEXT -> if(unwakeAlpha<100)unwakeAlpha+=10
-                    else -> if (unwakeAlpha>1)unwakeAlpha-=10
+                    IFly.UNWAKE_TEXT -> if (unwakeAlpha < 100) unwakeAlpha += 10
+                    else -> if (unwakeAlpha > 1) unwakeAlpha -= 10
                 }
-                if(::unwakePAGView.isInitialized)unwakePAGView.alpha = unwakeAlpha.toFloat() / 100f
-                if(::wakedPAGView.isInitialized)wakedPAGView.alpha = (100-unwakeAlpha).toFloat() / 100f
+                withContext(Dispatchers.Main) {
+                    if (::unwakePAGView.isInitialized) unwakePAGView.alpha =
+                        unwakeAlpha.toFloat() / 100f
+                    if (::wakedPAGView.isInitialized) wakedPAGView.alpha =
+                        (100 - unwakeAlpha).toFloat() / 100f
+                }
             }
         }
     }

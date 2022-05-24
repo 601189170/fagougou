@@ -185,7 +185,7 @@ object ChatViewModel {
                     clear()
                     title = def
                     type = "nameDef"
-                    content.value = body.data
+                    content.add(ContentStyle(body.data))
                 }
             }
         }
