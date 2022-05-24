@@ -541,7 +541,7 @@ fun inputBox(scope: CoroutineScope){
                     focusedIndicatorColor = Color.Transparent
                 ),
                 textStyle = TextStyle(fontSize = 21.sp),
-                shape = RoundedCornerShape(CORNER_FLOAT),
+                shape = RoundedCornerShape(50),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(
                     onSend = {
@@ -552,18 +552,24 @@ fun inputBox(scope: CoroutineScope){
                 ),
             )
             Button(
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .width(54.dp)
+                    .height(54.dp),
                 content = { Image(painterResource(R.drawable.ic_microphone),null) },
                 onClick = {
                     showBotMenu.value = false
                     voiceInputMode.value = true
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
-                shape = RoundedCornerShape(50)
+                shape = RoundedCornerShape(50),
+                contentPadding = PaddingValues(8.dp)
             )
             Button(
                 modifier = Modifier
                     .padding(start = 24.dp)
+                    .width(54.dp)
+                    .height(54.dp)
                     .focusRequester(bot)
                     .focusable(),
                 content = { Image(painterResource(R.drawable.ic_squad),null) },
@@ -574,7 +580,8 @@ fun inputBox(scope: CoroutineScope){
                     bot.requestFocus()
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
-                shape = RoundedCornerShape(50)
+                shape = RoundedCornerShape(50),
+                contentPadding = PaddingValues(8.dp)
             )
         }
     }

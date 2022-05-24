@@ -7,10 +7,13 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,24 +22,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.Header
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
-import java.lang.Exception
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
@@ -83,7 +84,7 @@ object GenerateContract {
         }
     }
 
-    suspend fun getGenerateTemplete(id:String){
+    suspend fun getGenerateTemplate(id:String){
         withContext(Dispatchers.IO){
             template = ""
             try {
@@ -195,32 +196,34 @@ fun GenerateContract(navController: NavController) {
                     ){
                         ContractWebView(data)
                     }
+                    Divider(thickness = 2.dp)
                     Row(
                         Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ){
+//                        Button(
+//                            modifier = Modifier
+//                                .height(60.dp)
+//                                .width(200.dp),
+//                            onClick = { },
+//                            content = {
+//                                  Row( verticalAlignment = Alignment.CenterVertically ){
+//                                      Image(painterResource(R.drawable.ic_wechat),null)
+//                                      Text(
+//                                          modifier = Modifier.padding(start = 16.dp),
+//                                          text = "微信查看",
+//                                          color = Color.White,
+//                                          fontSize = 21.sp)
+//                                  }
+//                            },
+//                            colors = buttonColors(backgroundColor = Dodgerblue)
+//                        )
                         Button(
                             modifier = Modifier
                                 .height(60.dp)
                                 .width(200.dp),
-                            onClick = { },
-                            content = {
-                                  Row( verticalAlignment = Alignment.CenterVertically ){
-                                      Image(painterResource(R.drawable.ic_wechat),null)
-                                      Text(
-                                          modifier = Modifier.padding(start = 16.dp),
-                                          text = "微信查看",
-                                          color = Color.White,
-                                          fontSize = 21.sp)
-                                  }
-                            },
-                            colors = buttonColors(backgroundColor = Dodgerblue)
-                        )
-                        Button(
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(200.dp),
+                            elevation = ButtonDefaults.elevation(0.dp,0.dp),
                             onClick = { DialogViewModel.startPrint(scope) },
                             content = {
                                 Row( verticalAlignment = Alignment.CenterVertically ){
@@ -253,10 +256,13 @@ fun GenerateContract(navController: NavController) {
                         )
                         for (child in item.children) {
                             Column(Modifier.padding(horizontal = 16.dp)) {
-                                Row(Modifier.padding(top = 20.dp,bottom = 12.dp)){
+                                Row(
+                                    Modifier.padding(top = 24.dp,bottom = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
                                     Surface(
                                         Modifier
-                                            .height(20.dp)
+                                            .height(24.dp)
                                             .width(4.dp),color = Dodgerblue) { }
                                     Text(
                                         modifier = Modifier.padding(start = 12.dp),
@@ -302,7 +308,15 @@ fun GenerateContract(navController: NavController) {
                                         }
                                     }
                                     else -> TextField(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(if(child.label.contains("地址"))112.dp else 56.dp)
+                                            .border(1.dp, Color.LightGray, RoundedCornerShape(12)),
+                                        colors = TextFieldDefaults.textFieldColors(
+                                            backgroundColor = Color.White,
+                                            focusedIndicatorColor = Color.Transparent,
+                                            unfocusedIndicatorColor = Color.Transparent,
+                                        ),
                                         value = child.input,
                                         onValueChange = { str ->
                                             Router.lastTouchTime = Time.stampL
@@ -314,9 +328,9 @@ fun GenerateContract(navController: NavController) {
                                     )
                                 }
                             }
-                            Divider(modifier = Modifier.padding(top = 12.dp),thickness = 2.dp)
                         }
                     }
+                    Spacer(Modifier.width(56.dp).height(112.dp))
                 }
             }
         }

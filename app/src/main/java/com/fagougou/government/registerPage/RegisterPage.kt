@@ -80,7 +80,7 @@ fun RegisterPage(navController: NavController){
             backgroundColor = Color(0x44FFFFFF),
             cursorColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
-
+            unfocusedIndicatorColor = Color.Transparent,
         )
         TextField(
             modifier = Modifier

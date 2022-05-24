@@ -5,10 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
+import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,12 +25,9 @@ import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
-import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplete
+import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplate
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,7 +38,7 @@ fun GenerateGuide(navController: NavController) {
         GenerateContract.clear()
         currentContractId.value = launchId
         scope.launch {
-            getGenerateTemplete(launchId)
+            getGenerateTemplate(launchId)
             GenerateContract.updateContent()
         }
         scope.launch { getGenerateForm(launchId) }
@@ -86,7 +81,7 @@ fun GenerateGuide(navController: NavController) {
                                 .clickable {
                                     GenerateContract.clear()
                                     currentContractId.value = item.id
-                                    scope.launch { getGenerateTemplete(item.id) }
+                                    scope.launch { getGenerateTemplate(item.id) }
                                     scope.launch { getGenerateForm(item.id) }
                                 },
                             verticalAlignment = Alignment.CenterVertically,
@@ -120,13 +115,14 @@ fun GenerateGuide(navController: NavController) {
                 }
                 Row(
                     Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Button(
                         modifier = Modifier
                             .height(60.dp)
-                            .width(200.dp),
+                            .width(180.dp),
+                        elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         onClick = {
                             navController.navigate(Router.generateContract)
                         },
@@ -142,10 +138,12 @@ fun GenerateGuide(navController: NavController) {
                         },
                         colors = buttonColors(backgroundColor = Dodgerblue)
                     )
+                    Spacer(Modifier.width(32.dp).height(32.dp))
                     Button(
                         modifier = Modifier
                             .height(60.dp)
-                            .width(200.dp),
+                            .width(180.dp),
+                        elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         onClick = { DialogViewModel.startPrint(scope) },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){

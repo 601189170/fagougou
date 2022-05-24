@@ -74,7 +74,7 @@ fun ContractWebView(navController: NavController) {
                             Text(
                                 modifier = Modifier.padding(start = 16.dp),
                                 text = "微信查看",
-                                color = androidx.compose.ui.graphics.Color.White,
+                                color = Color.White,
                                 fontSize = 21.sp
                             )
                         }
@@ -105,6 +105,5 @@ fun ContractWebView(navController: NavController) {
     Header(
         "合同文库",
         navController,
-        qrCode = ContractViewModel.fileUrl
     )
 }
