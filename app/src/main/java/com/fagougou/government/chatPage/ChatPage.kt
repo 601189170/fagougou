@@ -85,7 +85,10 @@ fun BotMenu() {
     val botList = botQueryIdMap.toList()
     val scrollState = rememberScrollState()
     Row(
-        modifier = Modifier.horizontalScroll(scrollState)
+        modifier = Modifier
+            .fillMaxHeight()
+            .horizontalScroll(scrollState),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         for (bot in botList) Column(modifier = Modifier.padding(8.dp)) {
             Surface(color = Color.Transparent) {
@@ -124,7 +127,7 @@ fun BotMenu() {
 }
 
 @Composable
-fun LawExpend(message: Message, index: Int, scope: CoroutineScope) {
+fun LawExpend(message: Message, index: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -177,58 +180,43 @@ fun MessageRect(
     textColor: Color = Color.Black,
 ) {
     Surface(
+        Modifier.padding(start = 16.dp),
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column {
-            if ( message.listDef.size==0){
+        Column(Modifier.padding(vertical = 16.dp,horizontal = 24.dp) ) {
+            if (message.listDef.isEmpty()){
                 Text(
-                modifier = Modifier.padding(12.dp),
-                text = message.content + message.complex.explanation,
-                fontSize = 24.sp,
-                lineHeight = 32.sp,
-                color = textColor,
-            )
+                    message.content + message.complex.explanation,
+                    fontSize = 24.sp,
+                    lineHeight = 32.sp,
+                    color = textColor,
+                )
             }else{
                 val annotatedString = buildAnnotatedString {
-
-                    message.listDef.forEach(){
+                    message.listDef.forEach{
                         if (!TextUtils.isEmpty(it.content)){
-                            if (it.style==0){
-                                append(it.content)
-                            }else{
+                            if (it.style==0) append(it.content)
+                            else{
                                 pushStringAnnotation(tag = "policy", annotation = it.content)
-                                withStyle(style = SpanStyle(color = Dodgerblue)) {
-                                    append(" ["+it.content+"] ")
-                                }
+                                withStyle(SpanStyle(Dodgerblue)) { append(it.content) }
                                 pop()
                             }
                         }
-
                     }
                 }
-
                 ClickableText(
-                    modifier = Modifier.padding(12.dp),
-                    text = annotatedString, style = MaterialTheme.typography.h5, onClick = { offset ->
-                        annotatedString.getStringAnnotations(tag = "policy", start = offset, end = offset).firstOrNull()?.let {
-                            Log.d("policy URL", it.item)
-
+                    annotatedString, style = MaterialTheme.typography.h5, onClick = { offset ->
+                        annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
                             getDefInfo(it.item);
                         }
-                    })
+                    }
+                )
             }
-
-
-
-
-
             for(question in message.inlineRecommend){
                 Text(
-                    modifier = Modifier
-                        .padding(bottom = 12.dp, start = 12.dp)
-                        .clickable { scope.launch(Dispatchers.IO) { nextChat(question) } },
-                    text = question,
+                    question,
+                    Modifier.clickable { scope.launch(Dispatchers.IO) { nextChat(question) } },
                     fontSize = 24.sp,
                     color = Dodgerblue,
                 )
@@ -237,7 +225,7 @@ fun MessageRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp,
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index, scope)
+            if (message.laws.isNotEmpty()) LawExpend(message, index)
         }
     }
 }
@@ -249,29 +237,26 @@ fun ComplexRect(
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
     navController: NavController,
-    scope: CoroutineScope
 ) {
     Surface(
+        Modifier.padding(start = 16.dp),
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
         Column(
-            modifier = Modifier
-                .clickable {
+            modifier = Modifier.clickable {
                     getComplex(message.complex.attachmentId, navController)
                 }
         ) {
             Surface(color = Dodgerblue) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) { BasicText(message.complex.title) }
             }
             Text(
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(vertical = 16.dp,horizontal = 24.dp),
                 text = message.content + message.complex.explanation,
                 fontSize = 24.sp,
                 lineHeight = 32.sp,
@@ -281,7 +266,7 @@ fun ComplexRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index, scope)
+            if (message.laws.isNotEmpty()) LawExpend(message, index)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -304,168 +289,180 @@ fun ComplexRect(
 
 @Composable
 fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navController: NavController) {
-    when (message.speaker) {
-        Speaker.ROBOT -> Row(
-            modifier = Modifier
-                .fillMaxWidth(0.75f)
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) { MessageRect(message, index,scope) }
-        Speaker.USER -> Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically,
-        ) { MessageRect(message, index,scope, Dodgerblue, Color.White) }
-        Speaker.RECOMMEND -> Column(
-            modifier = Modifier
-                .fillMaxWidth(0.75f)
-                .padding(vertical = 12.dp),
-        ) {
-            Surface(
-                shape = RoundedCornerShape(CORNER_FLOAT),
-                color = Color.White,
+    Row {
+        if (!(history.getOrNull(index)?.speaker == Speaker.USER)) {
+            if (index <= 0 || history[index-1].speaker == Speaker.USER) {
+                Image(painterResource(R.drawable.ic_robot_avatar), null,Modifier.padding(start = 8.dp,top = 16.dp))
+            } else Box( Modifier.height(48.dp).width(56.dp))
+        }
+        when (message.speaker) {
+            Speaker.ROBOT -> Row(
+                Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) { MessageRect(message, index, scope) }
+            Speaker.USER -> Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+            ) { MessageRect(message, index, scope, Dodgerblue, Color.White) }
+            Speaker.RECOMMEND -> Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 12.dp),
             ) {
-                Column(
-                    modifier = Modifier.padding(12.dp)
+                Surface(
+                    Modifier.padding(start = 16.dp),
+                    shape = RoundedCornerShape(CORNER_FLOAT),
+                    color = Color.White,
                 ) {
-                    if (message.isExpend) {
-                        Row(
-                            modifier = Modifier.padding(start = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (index == 1) Text("大家都在问:", fontSize = 24.sp)
-                            else {
-                                Image(painterResource(R.drawable.ic_relate_question), null)
-                                Text(
-                                    modifier = Modifier.padding(start = 12.dp),
-                                    text = "相关问题",
-                                    fontSize = 24.sp
-                                )
-                            }
-                        }
-                        for (question in message.recommends) Button(
-                            onClick = { scope.launch(Dispatchers.IO){ nextChat(question) } },
-                            content = { Text("·$question", fontSize = 24.sp, color = Dodgerblue) },
-                            colors = ButtonDefaults.buttonColors(Color.Transparent),
-                            elevation = ButtonDefaults.elevation(0.dp)
-                        )
-                    } else Row(
-                        modifier = Modifier
-                            .clickable {
-                                history[index] = message.copy(isExpend = true)
-                                if(index == history.lastIndex) scope.launch(Dispatchers.Main) {
-                                    listState.scrollToItem(index+2)
+                    Column( Modifier.padding(vertical = 16.dp,horizontal = 24.dp) ) {
+                        if (message.isExpend) {
+                            Row(
+                                modifier = Modifier.padding(start = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                if (index == 1) Text("大家都在问:", fontSize = 24.sp)
+                                else {
+                                    Image(painterResource(R.drawable.ic_relate_question), null)
+                                    Text(
+                                        modifier = Modifier.padding(start = 12.dp),
+                                        text = "相关问题",
+                                        fontSize = 24.sp
+                                    )
                                 }
                             }
-                    ) {
-                        Image(painterResource(R.drawable.ic_relate_question), null)
-                        Text(
-                            modifier = Modifier.padding(start = 12.dp),
-                            text = "点击查看与您情况相关的问题",
-                            fontSize = 24.sp,
-                            color = Dodgerblue
-                        )
+                            for (question in message.recommends) Button(
+                                onClick = { scope.launch(Dispatchers.IO) { nextChat(question) } },
+                                content = {
+                                    Text(
+                                        "·$question",
+                                        fontSize = 24.sp,
+                                        color = Dodgerblue
+                                    )
+                                },
+                                colors = ButtonDefaults.buttonColors(Color.Transparent),
+                                elevation = ButtonDefaults.elevation(0.dp)
+                            )
+                        } else Row(
+                            modifier = Modifier
+                                .clickable {
+                                    history[index] = message.copy(isExpend = true)
+                                    if (index == history.lastIndex) scope.launch(Dispatchers.Main) {
+                                        listState.scrollToItem(index + 2)
+                                    }
+                                }
+                        ) {
+                            Image(painterResource(R.drawable.ic_relate_question), null)
+                            Text(
+                                modifier = Modifier.padding(start = 12.dp),
+                                text = "点击查看与您情况相关的问题",
+                                fontSize = 24.sp,
+                                color = Dodgerblue
+                            )
+                        }
                     }
                 }
             }
-        }
-        Speaker.OPTIONS -> Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
-        ) {
-            when (message.option.type) {
-                "radio" -> {
-                    val lastIndex = message.option.items.lastIndex
-                    for (y in 0..lastIndex step 4) Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        for (x in 0..3) {
-                            val i = y + x
-                            if (i <= lastIndex) {
-                                val item = message.option.items[i]
-                                Button(
-                                    modifier = Modifier
-                                        .height(60.dp)
-                                        .width(180.dp),
-                                    onClick = { scope.launch(Dispatchers.IO){nextChat(item)} },
-                                    content = { BasicText(item,0.dp,20.sp) },
-                                    colors = ButtonDefaults.buttonColors(Dodgerblue)
-                                )
-                            }
-                        }
-                    }
-                }
-                "address-with-search" -> {
-                    if (currentProvince.value == "") {
-                        val provinceList = CityMap.provinceList.keys.toList()
-                        val lastIndex = provinceList.lastIndex
-                        for (y in 0..lastIndex step 6) Row(
+            Speaker.OPTIONS -> Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            ) {
+                when (message.option.type) {
+                    "radio" -> {
+                        val lastIndex = message.option.items.lastIndex
+                        for (y in 0..lastIndex step 4) Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 16.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            for (x in 0..5) {
+                            for (x in 0..3) {
                                 val i = y + x
-                                if (y + x <= lastIndex) {
+                                if (i <= lastIndex) {
+                                    val item = message.option.items[i]
                                     Button(
                                         modifier = Modifier
-                                            .height(50.dp)
-                                            .width(150.dp),
-                                        onClick = { currentProvince.value = provinceList[i] },
-                                        content = { BasicText(provinceList[i]) },
+                                            .height(60.dp)
+                                            .width(180.dp),
+                                        onClick = { scope.launch(Dispatchers.IO) { nextChat(item) } },
+                                        content = { BasicText(item, 0.dp, 20.sp) },
                                         colors = ButtonDefaults.buttonColors(Dodgerblue)
                                     )
                                 }
                             }
                         }
-                    } else {
-                        val cityList = CityMap.provinceList[currentProvince.value] ?: listOf()
-                        val lastIndex = cityList.lastIndex
-                        for (y in 0..lastIndex step 6) Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            for (x in 0..5) {
-                                val i = y + x
-                                if (i <= lastIndex) {
-                                    Button(
-                                        modifier = Modifier
-                                            .height(50.dp)
-                                            .width(150.dp),
-                                        onClick = {
-                                            scope.launch(Dispatchers.IO){
-                                                nextChat(currentProvince.value + "-${cityList[i]}")
-                                                currentProvince.value = ""
-                                            }
-                                        },
-                                        content = { BasicText(cityList[i],0.dp,20.sp ) },
-                                        colors = ButtonDefaults.buttonColors(Dodgerblue),
-                                        contentPadding = PaddingValues(4.dp)
-                                    )
+                    }
+                    "address-with-search" -> {
+                        if (currentProvince.value == "") {
+                            val provinceList = CityMap.provinceList.keys.toList()
+                            val lastIndex = provinceList.lastIndex
+                            for (y in 0..lastIndex step 6) Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                for (x in 0..5) {
+                                    val i = y + x
+                                    if (y + x <= lastIndex) {
+                                        Button(
+                                            modifier = Modifier
+                                                .height(50.dp)
+                                                .width(150.dp),
+                                            onClick = { currentProvince.value = provinceList[i] },
+                                            content = { BasicText(provinceList[i]) },
+                                            colors = ButtonDefaults.buttonColors(Dodgerblue)
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            val cityList = CityMap.provinceList[currentProvince.value] ?: listOf()
+                            val lastIndex = cityList.lastIndex
+                            for (y in 0..lastIndex step 6) Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                for (x in 0..5) {
+                                    val i = y + x
+                                    if (i <= lastIndex) {
+                                        Button(
+                                            modifier = Modifier
+                                                .height(50.dp)
+                                                .width(150.dp),
+                                            onClick = {
+                                                scope.launch(Dispatchers.IO) {
+                                                    nextChat(currentProvince.value + "-${cityList[i]}")
+                                                    currentProvince.value = ""
+                                                }
+                                            },
+                                            content = { BasicText(cityList[i], 0.dp, 20.sp) },
+                                            colors = ButtonDefaults.buttonColors(Dodgerblue),
+                                            contentPadding = PaddingValues(4.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            Speaker.COMPLEX -> Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) { ComplexRect(message, index, navController = navController) }
         }
-        Speaker.COMPLEX -> Row(
-            modifier = Modifier
-                .fillMaxWidth(0.75f)
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) { ComplexRect(message, index, navController = navController,scope = scope) }
     }
 }
 
@@ -474,9 +471,9 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
 fun inputBox(scope: CoroutineScope){
     if(voiceInputMode.value) Surface(
         modifier = Modifier
-            .height(180.dp)
+            .height(200.dp)
             .width(480.dp)
-            .padding(8.dp),
+            .padding(16.dp),
         color = Color(0x33FFFFFF),
         shape = RoundedCornerShape(CORNER_FLOAT)
     ){
@@ -514,14 +511,15 @@ fun inputBox(scope: CoroutineScope){
             PAG()
         }
     } else Column(
-        modifier = Modifier.height(80.dp),
-        verticalArrangement = Arrangement.Bottom
+        modifier = Modifier.height(86.dp),
+        verticalArrangement = Arrangement.Center
     ) {
         val (text,bot) = remember{ FocusRequester.createRefs() }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 16.dp),
+                .height(54.dp)
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.Start
         ) {
             TextField(
@@ -627,20 +625,18 @@ fun ChatPage(navController: NavController) {
                 false,
                 constWechatUrl
             )
-            var lazyHeight = 850 - if(showBotMenu.value) 135 else 0
-            lazyHeight -= if(voiceInputMode.value) 100 else 0
+            var lazyHeight = 856 - if(showBotMenu.value) 140 else 0
+            lazyHeight -= if(voiceInputMode.value) 110 else 0
             LazyColumn(
                 modifier = Modifier
                     .height(lazyHeight.dp)
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 12.dp),
                 verticalArrangement = Arrangement.Top,
                 state = listState,
             ) {
                 item {
                     Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
+                        Modifier.fillMaxWidth().padding(top = 12.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Surface(
@@ -665,7 +661,7 @@ fun ChatPage(navController: NavController) {
                 if (history.lastOrNull()?.speaker==Speaker.USER) item {
                     MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController)
                 }
-                item { Row( Modifier .fillMaxWidth() .height(60.dp)) {} }
+                item { Row( Modifier.fillMaxWidth().height(60.dp)) {} }
             }
         }
         Column(

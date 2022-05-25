@@ -2,18 +2,20 @@ package com.fagougou.government.contractPage
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -81,9 +83,9 @@ object ContractViewModel{
         }
     }
 
-    fun  getTemplate(fileid:String,navController: NavController) {
+    fun  getTemplate(filed:String, navController: NavController) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.getTemplate(fileid).execute()
+            val response = contractService.getTemplate(filed).execute()
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
                 fileUrl = body.data
@@ -98,36 +100,44 @@ object ContractViewModel{
 @Composable
 fun Contract(navController: NavController,category: ContractData){
     Column(
-        modifier = Modifier
-            .clickable { getTemplate(category.fileid, navController) }
+        Modifier.clickable { getTemplate(category.fileid, navController) }
     ){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+        Row(
+            Modifier.padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
             Image(painterResource(R.drawable.ic_word), null)
             Text(
-                modifier = Modifier.padding(start = 8.dp),
+                category.name,
+                Modifier.padding(start = 8.dp),
                 fontWeight= FontWeight.Bold,
-                text = category.name,
                 fontSize = 24.sp,
                 color = Color.Black
             )
         }
         Text(
-            modifier = Modifier.padding(top = 12.dp),
-            text = category.howToUse ?: "暂无数据",
-            fontSize = 21.sp,
+            category.howToUse ?: "暂无数据",
+            Modifier.padding(top = 12.dp),
+            fontSize = 20.sp,
             lineHeight = 36.sp,
             color = Color.Black
         )
         Text(
-            modifier = Modifier.padding(vertical = 10.dp),
-            text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
+            "行业类型：" + (category.folder?.name ?: "暂无数据"),
+            Modifier.padding(top = 12.dp,bottom = 16.dp),
             fontSize = 18.sp,
             color = Color.Gray
         )
-        Divider(thickness = 2.dp)
+        Surface(
+            Modifier
+                .fillMaxWidth()
+                .height(1.dp),color = Color.LightGray
+        ){}
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun ContractGuidePage(navController: NavController) {
@@ -138,14 +148,13 @@ fun ContractGuidePage(navController: NavController) {
     ) {
         Header(title = "合同文库", navController = navController)
         Surface(
-            modifier = Modifier
+            Modifier
                 .height(264.dp)
-                .width(1280.dp),
-            color = Color.Transparent
+                .width(1280.dp), color = Color.Transparent
         ) {
             Image(painterResource(id = R.drawable.contract_banner),null)
             Column(
-                modifier = Modifier
+                Modifier
                     .height(264.dp)
                     .width(1280.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -155,15 +164,20 @@ fun ContractGuidePage(navController: NavController) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val (text,button) = remember{ FocusRequester.createRefs() }
                     val textFieldColors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color(0xFFFFFFFF),
                         cursorColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                     )
                     TextField(
-                        modifier = Modifier.width(568.dp),
-                        value =searchWord.value,
-                        onValueChange = { searchWord.value = it },
+                        searchWord.value,
+                        { searchWord.value = it },
+                        Modifier
+                            .width(568.dp)
+                            .height(64.dp)
+                            .focusRequester(text)
+                            .focusable(),
                         textStyle = TextStyle(color = Color.Gray, fontSize = 24.sp),
                         placeholder = {Text("输入关键词搜索",color = Color.Gray, fontSize = 24.sp)},
                         colors = textFieldColors,
@@ -171,19 +185,30 @@ fun ContractGuidePage(navController: NavController) {
                         maxLines = 1
                     )
                     Button(
-                        modifier = Modifier.width(152.dp),
+                        modifier = Modifier
+                            .width(152.dp)
+                            .height(64.dp)
+                            .focusRequester(button)
+                            .focusable(),
                         colors = ButtonDefaults.buttonColors(Dodgerblue),
                         shape = RoundedCornerShape(topEnd = CORNER_FLOAT, bottomEnd = CORNER_FLOAT),
                         elevation = ButtonDefaults.elevation(0.dp),
                         content = {
-                            Text(
-                                modifier = Modifier.padding(vertical = 8.dp),
-                                text = "搜索",
-                                fontSize = 24.sp,
-                                color = Color.White
-                            )
+                            Row( verticalAlignment = Alignment.CenterVertically ){
+                                Image(painterResource(R.drawable.ic_search),null)
+                                Text(
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    text = "搜索",
+                                    fontSize = 24.sp,
+                                    color = Color.White
+                                )
+                            }
                         },
-                        onClick = { scope.launch { getContractList("",searchWord.value)} }
+                        onClick = {
+                            text.freeFocus()
+                            button.requestFocus()
+                            scope.launch { getContractList("",searchWord.value)}
+                        }
                     )
                 }
             }
@@ -196,15 +221,14 @@ fun ContractGuidePage(navController: NavController) {
                         .fillMaxWidth(0.25f),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.padding(vertical = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        Modifier.padding(vertical = 24.dp),
                         content = {
                             items(categoryList){ category ->
                                 Surface(
-                                    color = if(category.id== selectedId.value)Color(0xFFBBCCEE) else Color(0xFFFFFFFF)
+                                    color = if(category.id == selectedId.value)Color(0xFFBBCCEE) else Color(0xFFFFFFFF)
                                 ) {
                                     Row(
-                                        modifier = Modifier
+                                        Modifier
                                             .fillMaxWidth()
                                             .clickable {
                                                 selectedId.value = category.id
@@ -218,10 +242,9 @@ fun ContractGuidePage(navController: NavController) {
                                             contentDescription = null,
                                             modifier = Modifier.padding(start = 24.dp))
                                         Text(
-                                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                            text = category.name,
-                                            fontSize = 24.sp,
-                                            color = Color.Black
+                                            category.name,
+                                            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                            fontSize = 22.sp,
                                         )
                                     }
                                 }
@@ -230,22 +253,24 @@ fun ContractGuidePage(navController: NavController) {
                     )
                 }
             }
-            Surface(color = Color(0xFFDCE1E6),
-                    modifier = Modifier
-                    .width(1.dp).fillMaxHeight()
-            ) {
-
-            }
+            Surface(
+                Modifier
+                    .width(1.dp)
+                    .fillMaxHeight(),color = Color.LightGray) {}
             Surface(color = Color(0xFFFFFFFF)) {
                 LazyColumn(
-                    modifier = Modifier
+                    Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                        .padding(horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                     content = {
-                        items(ContractLists){ category ->
-                            Contract(navController, category)
+                        item{
+                            Surface(
+                                Modifier
+                                    .width(8.dp)
+                                    .height(8.dp),color = Color.Transparent) { }
                         }
+                        items(ContractLists){ category -> Contract(navController, category) }
                         item{
                             if(ContractLists.isEmpty()){
                                 Column(

@@ -123,7 +123,7 @@ fun Main() {
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if (routeRemain.value < (115L*1000L) && routeMirror == Router.chat) {
+                } else if (routeRemain.value < (30L*1000L) && routeMirror == Router.chat) {
                     with(DialogViewModel) {
                         clear()
                         title = "温馨提示"

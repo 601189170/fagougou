@@ -138,7 +138,8 @@ fun ButtonDialog() {
                         )
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
                 )
                 if (!secondButtonText.value.isNullOrBlank()){
                     Spacer(Modifier.width(36.dp).height(36.dp))
@@ -154,7 +155,8 @@ fun ButtonDialog() {
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                         border = BorderStroke(2.dp, Dodgerblue),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        elevation = ButtonDefaults.elevation(0.dp,0.dp),
                     )
                 }
             }

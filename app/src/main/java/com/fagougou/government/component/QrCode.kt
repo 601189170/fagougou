@@ -37,10 +37,7 @@ object QrCodeViewModel {
 fun QrCode(){
     if(QrCodeViewModel.content.value.isNotBlank()) Surface( color = ColorCompose(0x33000000)) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable { QrCodeViewModel.clear() }
-            ,
+            modifier = Modifier.fillMaxSize().clickable { QrCodeViewModel.clear() },
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
             Surface(
@@ -51,10 +48,10 @@ fun QrCode(){
                 color = ColorCompose(0xFFFFFFFF)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(QrCodeViewModel.bitmap().asImageBitmap(),null)
-                    Text(QrCodeViewModel.hint.value, fontSize = 28.sp, modifier = Modifier.padding(16.dp))
+                    Text(QrCodeViewModel.hint.value, fontSize = 24.sp)
                 }
             }
             Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)

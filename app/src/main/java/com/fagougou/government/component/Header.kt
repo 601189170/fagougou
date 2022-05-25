@@ -64,7 +64,7 @@ fun Header(
                     Image(painterResource(id = R.drawable.ic_wechat), null)
                     Text(
                         modifier = Modifier
-                            .padding(vertical = 3.dp)
+                            .padding(start = 8.dp)
                             .clickable {
                                 QrCodeViewModel.content.value = qrCode
                                 QrCodeViewModel.hint.value = qrCodeHint
@@ -79,7 +79,7 @@ fun Header(
                     Image(painterResource(id = R.drawable.ic_human), null)
                     Text(
                         modifier = Modifier
-                            .padding(vertical = 3.dp)
+                            .padding(start = 8.dp)
                             .clickable {
                                 IFly.stopAll()
                                 ImSdkUtils.startAc(Tips.context)
