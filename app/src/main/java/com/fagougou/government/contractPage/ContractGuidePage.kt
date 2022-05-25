@@ -1,6 +1,8 @@
 package com.fagougou.government.contractPage
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,14 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel.ContractLists
 import com.fagougou.government.contractPage.ContractViewModel.categoryList
-import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.getContractList
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
+import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
@@ -37,12 +39,13 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.Tips.context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.net.URLEncoder
+import java.security.AccessController.getContext
 
 object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
@@ -101,7 +104,7 @@ fun Contract(navController: NavController,category: ContractData){
         modifier = Modifier
             .clickable { getTemplate(category.fileid, navController) }
     ){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+        Row(Modifier.padding(top = 8.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
             Image(painterResource(R.drawable.ic_word), null)
             Text(
                 modifier = Modifier.padding(start = 8.dp),
@@ -119,7 +122,7 @@ fun Contract(navController: NavController,category: ContractData){
             color = Color.Black
         )
         Text(
-            modifier = Modifier.padding(vertical = 10.dp),
+            modifier = Modifier.padding(top = 16.dp,bottom = 28.dp),
             text = "行业类型：" + (category.folder?.name ?: "暂无数据"),
             fontSize = 18.sp,
             color = Color.Gray
@@ -169,6 +172,7 @@ fun ContractGuidePage(navController: NavController) {
                         colors = textFieldColors,
                         shape = RoundedCornerShape(topStart = CORNER_FLOAT, bottomStart = CORNER_FLOAT),
                         maxLines = 1
+
                     )
                     Button(
                         modifier = Modifier.width(152.dp),
@@ -193,7 +197,7 @@ fun ContractGuidePage(navController: NavController) {
                 Column(
                     Modifier
                         .fillMaxHeight()
-                        .fillMaxWidth(0.25f),
+                        .fillMaxWidth(0.30f),
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 24.dp),
@@ -232,7 +236,8 @@ fun ContractGuidePage(navController: NavController) {
             }
             Surface(color = Color(0xFFDCE1E6),
                     modifier = Modifier
-                    .width(1.dp).fillMaxHeight()
+                        .width(1.dp)
+                        .fillMaxHeight()
             ) {
 
             }

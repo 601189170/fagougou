@@ -57,6 +57,7 @@ public class TimeoDiallog extends BaseDialog {
                 if (listener!=null){
                     listener.Confirm();
                 }
+                cancel();
             }
         });
         btn_cancle.setOnClickListener(new View.OnClickListener() {

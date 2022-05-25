@@ -57,10 +57,17 @@ import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.webViewPage.WebViewPage
 import com.fagougou.government.component.QrCode
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.consult.ChooseDomainActivity
+import com.fagougou.government.consult.TouristsLoginActivity
+import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.chat.ChatActivity
+import com.m7.imkfsdk.chat.MessageEvent
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +131,9 @@ fun Main() {
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < (115L*1000L) && routeMirror == Router.chat) {
+
+                        EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
+
                     with(DialogViewModel) {
                         clear()
                         title = "温馨提示"
@@ -198,4 +208,5 @@ fun Loading() {
         }
     }
 }
+
 

@@ -12,6 +12,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R

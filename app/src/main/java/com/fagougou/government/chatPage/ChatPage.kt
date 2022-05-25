@@ -210,7 +210,13 @@ fun MessageRect(
 
                 ClickableText(
                     modifier = Modifier.padding(12.dp),
-                    text = annotatedString, style = MaterialTheme.typography.h5, onClick = { offset ->
+                    text = annotatedString,
+                    style = TextStyle(
+                        color = textColor,
+                        fontSize = 24.sp,
+                        lineHeight=38.sp,
+                    ),
+                    onClick = { offset ->
                         annotatedString.getStringAnnotations(tag = "policy", start = offset, end = offset).firstOrNull()?.let {
                             Log.d("policy URL", it.item)
 
