@@ -206,8 +206,6 @@ fun MessageRect(
                     }
                 }
                 ClickableText(
-                    annotatedString, style = MaterialTheme.typography.h5, onClick = { offset ->
-                        annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
                     modifier = Modifier.padding(12.dp),
                     text = annotatedString,
                     style = TextStyle(

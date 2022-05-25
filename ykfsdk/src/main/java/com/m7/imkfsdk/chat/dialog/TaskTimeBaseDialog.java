@@ -33,7 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class TaskTimeBaseDialog extends Dialog implements DialogInterface.OnDismissListener {
     Activity activity;
-    int endTime = 1 * 6;
+    int endTime = 1 * 30;
     public boolean isTimerClost;
     TextView content;
     String str="";
@@ -138,7 +138,7 @@ public class TaskTimeBaseDialog extends Dialog implements DialogInterface.OnDism
 
     public void RefreshShow(){
         if (!isShowing()&& !activity.isFinishing()){
-            endTime = 1 * 6;
+            endTime = 1 * 30;
             claseHandler.post(thread);
             show();
         }

@@ -60,7 +60,10 @@ import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.chat.MessageEvent
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +127,7 @@ fun Main() {
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < (30L*1000L) && routeMirror == Router.chat) {
+                    EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
                     with(DialogViewModel) {
                         clear()
                         title = "温馨提示"
