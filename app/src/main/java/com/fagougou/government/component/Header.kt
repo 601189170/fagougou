@@ -26,7 +26,8 @@ fun Header(
     navController: NavController,
     onBack:() -> Unit = {},
     canClose:Boolean = true,
-    qrCode:String = ""
+    qrCode:String = "",
+    qrCodeHint:String = ""
 ){
     Surface(color = Color(0xFF17192C)) {
         Row(
@@ -63,8 +64,11 @@ fun Header(
                     Image(painterResource(id = R.drawable.ic_wechat), null)
                     Text(
                         modifier = Modifier
-                            .padding(vertical = 3.dp)
-                            .clickable { QrCodeViewModel.content.value = qrCode },
+                            .padding(start = 8.dp)
+                            .clickable {
+                                QrCodeViewModel.content.value = qrCode
+                                QrCodeViewModel.hint.value = qrCodeHint
+                            },
                         text = "微信",
                         fontSize = 24.sp,
                         color = Color.White
@@ -75,7 +79,7 @@ fun Header(
                     Image(painterResource(id = R.drawable.ic_human), null)
                     Text(
                         modifier = Modifier
-                            .padding(vertical = 3.dp)
+                            .padding(start = 8.dp)
                             .clickable {
                                 IFly.stopAll()
                                 ImSdkUtils.startAc(Tips.context)
