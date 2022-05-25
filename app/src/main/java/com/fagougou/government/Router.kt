@@ -35,4 +35,6 @@ object Router {
         register,
         chat
     )
+     var freshTime =true;
+
 }

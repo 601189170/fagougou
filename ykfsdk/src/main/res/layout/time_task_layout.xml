@@ -15,7 +15,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="是否更换领域？"
+        android:text="温馨提示"
         android:textColor="#303133"
         android:textStyle="bold"
         android:textSize="24sp"
@@ -24,30 +24,58 @@
         android:layout_height="wrap_content">
 
     </TextView>
-
-    <TextView
+    <LinearLayout
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="105dp"
+
         android:layout_marginHorizontal="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:gravity="center"
-        android:text="选择更换领域后，需要重新进入坐席等候区，是否确定更换？"
-        android:textColor="#303133"
-        android:textSize="24sp"
-        android:id="@+id/content"
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+        <TextView
 
-    </TextView>
+            android:gravity="center"
+            android:text="页面长时间无人操作,"
+            android:textColor="#303133"
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <TextView
+            android:layout_marginHorizontal="5dp"
+            android:gravity="center"
+            android:text="30s"
+            android:textColor="#F52C36"
+            android:textSize="24sp"
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <TextView
+
+            android:gravity="center"
+            android:text="后将退回首页"
+            android:textColor="#303133"
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/left_btn"
         android:layout_marginBottom="48dp"
-        android:text="取消"
+        android:text="继续咨询"
         android:gravity="center"
         android:textSize="24sp"
-        android:textColor="#007BFF"
+        android:textColor="@color/dialog_bg_blue"
         android:background="@drawable/dialog_btn_white_bg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +88,7 @@
     <TextView
         android:id="@+id/right_btn"
         android:layout_marginBottom="48dp"
-        android:text="确定"
+        android:text="退回首页"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:background="@drawable/dialog_btn_blue_bg"

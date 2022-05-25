@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -49,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -62,11 +62,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.m7.imkfsdk.KfStartHelper;
 
+import com.m7.imkfsdk.MessageConstans;
 import com.m7.imkfsdk.MoorWebCenter;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.chat.adapter.ChatTagLabelsAdapter;
-import com.m7.imkfsdk.chat.dialog.BaseDialog;
 import com.m7.imkfsdk.chat.dialog.BottomSheetLogisticsInfoDialog;
 import com.m7.imkfsdk.chat.dialog.BottomSheetLogisticsProgressDialog;
 import com.m7.imkfsdk.chat.dialog.BottomTabQuestionDialog;
@@ -75,6 +75,7 @@ import com.m7.imkfsdk.chat.dialog.CommonBottomSheetDialog;
 import com.m7.imkfsdk.chat.dialog.InvestigateDialog;
 import com.m7.imkfsdk.chat.dialog.LoadingFragmentDialog;
 import com.m7.imkfsdk.chat.dialog.SelectRuleDiallog;
+import com.m7.imkfsdk.chat.dialog.TaskTimeBaseDialog;
 import com.m7.imkfsdk.chat.dialog.TimeoDiallog;
 import com.m7.imkfsdk.chat.dialog.TimeoDialogListener;
 import com.m7.imkfsdk.chat.emotion.EmotionPagerView;
@@ -295,7 +296,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     private LinearLayout layoutPhone;
     private LinearLayout layoutVideo;
 
-
+    TaskTimeBaseDialog Timedialog;
     /**
      * Handler改为静态内部类
      */
@@ -453,6 +454,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //设置全局配置
         setGlobalConfig();
         getMainQuestions();
+        Timedialog=new TaskTimeBaseDialog(this);
+
 //        handler.postDelayed(touchEvent,1000);
     }
 
@@ -464,6 +467,16 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         }
         if (type.equals("schedule")) {
             beginScheduleSession(scheduleId, processId, currentNodeId, entranceId);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MessageEvent messageEvent) {
+        Log.e("TAG", "onEventMainThread: " );
+        if (messageEvent.getMessage().equals(MessageConstans.CloseAction)){
+            if (!Timedialog.isShowing()&&!isFinishing()){
+                Timedialog.RefreshShow();
+            }
         }
     }
 
@@ -508,7 +521,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        EventBus.getDefault().post(new MessageEvent("3"));
+        EventBus.getDefault().post(new MessageEvent(MessageConstans.RefreshTime));
         return super.dispatchTouchEvent(ev);
     }
 
@@ -1042,7 +1055,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
             @Override
             public void afterTextChanged(Editable editable) {
-                EventBus.getDefault().post(new MessageEvent("3"));
+                EventBus.getDefault().post(new MessageEvent(MessageConstans.RefreshTime));
             }
         });
         mChatInput.setOnKeyListener(new View.OnKeyListener() {
@@ -1763,9 +1776,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     protected void onDestroy() {
 
         if (eventtpye==0){
-            EventBus.getDefault().post(new MessageEvent("1"));
+            EventBus.getDefault().post(new MessageEvent(MessageConstans.CloseWait));
         }else {
-            EventBus.getDefault().post(new MessageEvent("2"));
+            EventBus.getDefault().post(new MessageEvent(MessageConstans.CloseToWait));
         }
         handleLogOutOrBackPressed();
         if (mHashSet.size() > 0) {

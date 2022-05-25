@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.ActivityUtils
+import com.fagougou.government.MainActivity
 
 import com.fagougou.government.Router
 import com.fagougou.government.databinding.ActivityWaitBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
+import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.MessageEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -41,15 +43,16 @@ class WaitActivity : AppCompatActivity() {
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEventMainThread(messageEvent: MessageEvent){
-        if (messageEvent.message.equals("1")){
+        if (messageEvent.message .equals(MessageConstans.CloseToMain) ) {
+            ActivityUtils.finishToActivity(MainActivity::class.java, false)
+            Router.lastTouchTime = 0
+        }else if (messageEvent.message.equals(MessageConstans.CloseWait)){
             finish()
-            ActivityUtils.finishActivity(this)
-        }else if(messageEvent.message.equals("2")){
+        }else if(messageEvent.message.equals(MessageConstans.CloseToWait)){
             finish()
-            ActivityUtils.finishActivity(this)
             val intent = Intent(this, WaitActivity::class.java)
             startActivity(intent)
-        }else if(messageEvent.message.equals("3")){
+        }else if(messageEvent.message.equals(MessageConstans.RefreshTime)){
             Router.lastTouchTime = Time.stampL
         }
     }
