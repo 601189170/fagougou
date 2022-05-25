@@ -35,8 +35,6 @@ open class BaseActivity : AppCompatActivity() {
         EventBus.getDefault().register(this)
          diallog=TaskTimeBaseDialog(this)
 
-
-
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

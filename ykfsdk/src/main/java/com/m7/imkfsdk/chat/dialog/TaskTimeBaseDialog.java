@@ -117,6 +117,12 @@ public class TaskTimeBaseDialog extends Dialog implements DialogInterface.OnDism
                 cancel();
             }
         });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancel();
+            }
+        });
 //        claseHandler.post(thread);
     }
 
