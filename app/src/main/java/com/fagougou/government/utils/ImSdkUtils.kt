@@ -10,28 +10,15 @@ import org.json.JSONException
 import org.json.JSONObject
 
 object ImSdkUtils {
-     var helper: KfStartHelper? = null
-
-    // 接入id（需后台配置获取）
-     val accessId = "90d8c6e0-d0d5-11ec-94aa-a36b72b57644"
-
-    //用户名
+    var helper: KfStartHelper? = null
+    val accessId = "90d8c6e0-d0d5-11ec-94aa-a36b72b57644"
     var userName = "用户名"
-
-    //用户id
     var userId = "用户id"
 
-
-
     fun startAc(context: Context){
-        val intent =
-//            Intent(context, ChooseDomainActivity::class.java)
-//            Intent(context, TouristsLoginActivity::class.java)
-            Intent(context, TouristsLoginActivity::class.java)
-
+        val intent = Intent(context, TouristsLoginActivity::class.java)
         context.startActivity(intent)
     }
-
 
      fun initKfHelper() {
         //设置sdk 显示语言版本
@@ -105,8 +92,4 @@ object ImSdkUtils {
             e.printStackTrace()
         }
     }
-
-
-
-
 }

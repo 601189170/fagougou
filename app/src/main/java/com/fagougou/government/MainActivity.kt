@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     Main()
                     QrCode()
                     Dialog()
-                    Text("${min(routeRemain.value/1000L,150L)}", color = Color(0x22FFFFFF))
+                    Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
                     Loading()
                 }
             }
@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                 handleException(e)
             }
         }
-        if (!Settings.canDrawOverlays(this)){
+        if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
@@ -131,24 +131,22 @@ fun Main() {
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if (isShowTaskActiviy()&&routeRemain.value < (30L*1000L)){
-                    EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
-                }else if (routeRemain.value < (30L*1000L) && routeMirror == Router.chat) {
-                    EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
-                    with(DialogViewModel) {
-                        clear()
-                        title = "温馨提示"
-                        firstButtonText.value = "继续咨询"
-                        firstButtonOnClick.value = {}
-                        secondButtonText.value = "返回首页"
-                        secondButtonOnClick.value = { lastTouchTime = 0L }
-                        content.add(ContentStyle("页面长时间无人操作，"))
-                        content.add(ContentStyle("${routeRemain.value / 1000}秒",1))
-                        content.add(ContentStyle("后将退回首页"))
+                } else if (routeRemain.value < (30L * 1000L)) {
+                    if (isShowTaskActiviy()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
+                    if (routeMirror == Router.chat) {
+                        with(DialogViewModel) {
+                            clear()
+                            title = "温馨提示"
+                            firstButtonText.value = "继续咨询"
+                            firstButtonOnClick.value = {}
+                            secondButtonText.value = "返回首页"
+                            secondButtonOnClick.value = { lastTouchTime = 0L }
+                            content.add(ContentStyle("页面长时间无人操作，"))
+                            content.add(ContentStyle("${routeRemain.value / 1000}秒", 1))
+                            content.add(ContentStyle("后将退回首页"))
+                        }
                     }
-                } else {
-                    if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
-                }
+                } else if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
             } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
         }
@@ -210,10 +208,15 @@ fun Loading() {
     }
 }
 
-fun isShowTaskActiviy():Boolean{
-    if(ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java)||ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)||ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)||ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)){
+fun isShowTaskActiviy(): Boolean {
+    if (ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java) || ActivityUtils.isActivityExistsInStack(
+            TouristsLoginActivity::class.java
+        ) || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java) || ActivityUtils.isActivityExistsInStack(
+            ChatActivity::class.java
+        )
+    ) {
         return true
-    }else{
+    } else {
         return false
     }
 }

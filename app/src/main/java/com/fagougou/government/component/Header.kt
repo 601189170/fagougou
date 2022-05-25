@@ -33,7 +33,6 @@ fun Header(
         Row(
             modifier = Modifier
                 .height(72.dp)
-                .padding(top = 6.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
