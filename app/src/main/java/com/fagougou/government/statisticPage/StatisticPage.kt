@@ -47,14 +47,13 @@ fun StatisticPage(navController:NavController){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header("咨询数据",navController)
-        BasicText("咨询数据统计",96.dp,32.sp)
-        BasicText("为您统计每月和历史所有咨询数据",8.dp)
+        BasicText("咨询数据统计",128.dp,32.sp)
+        BasicText("为您统计每月和历史所有咨询数据",24.dp)
         Row(
-            modifier = Modifier.padding(top = 40.dp),
+            modifier = Modifier.padding(top = 48.dp),
         ) {
             Surface(
                 modifier = Modifier
-                    .padding(end = 18.dp)
                     .width(472.dp)
                     .height(240.dp),
                 color = Color.Transparent
@@ -73,6 +72,7 @@ fun StatisticPage(navController:NavController){
             }
             Surface(
                 modifier = Modifier
+                    .padding(start = 24.dp)
                     .width(472.dp)
                     .height(240.dp),
                 color = Color.Transparent

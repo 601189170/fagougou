@@ -36,19 +36,18 @@ class ChooseDomainActivity : BaseActivity() {
         }
         binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
-//        binding!!.recyclerView.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5)))
         binding!!.recyclerView.adapter=madapter
         val botResMap = mapOf(
-            Pair("公司财税", R.drawable.bot_small_tax),
-            Pair("交通事故", R.drawable.bot_small_traffic),
-            Pair("婚姻家事", R.drawable.bot_small_marry),
-            Pair("员工纠纷", R.drawable.bot_small_employee),
-            Pair("知识产权", R.drawable.bot_small_knowledge),
-            Pair("刑事犯罪", R.drawable.bot_small_crime),
-            Pair("房产纠纷", R.drawable.bot_small_house),
-            Pair("企业人事", R.drawable.bot_small_employer),
-            Pair("民间借贷", R.drawable.bot_small_loan),
-            Pair("消费维权", R.drawable.bot_small_consumer),
+            Pair("公司财税", R.drawable.bot_tax),
+            Pair("交通事故", R.drawable.bot_traffic),
+            Pair("婚姻家事", R.drawable.bot_marry),
+            Pair("员工纠纷", R.drawable.bot_employee),
+            Pair("知识产权", R.drawable.bot_knowledge),
+            Pair("刑事犯罪", R.drawable.bot_crime),
+            Pair("房产纠纷", R.drawable.bot_house),
+            Pair("企业人事", R.drawable.bot_employer),
+            Pair("民间借贷", R.drawable.bot_loan),
+            Pair("消费维权", R.drawable.bot_consumer),
         )
         val botList = botResMap.toList()
         madapter.setList(botList)

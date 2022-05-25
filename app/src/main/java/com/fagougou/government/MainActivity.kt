@@ -61,6 +61,7 @@ import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.*
+import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     Main()
                     QrCode()
                     Dialog()
-                    Text("${routeRemain.value/1000}", color = Color(0x33FFFFFF))
+                    Text("${min(routeRemain.value/1000L,150L)}", color = Color(0x22FFFFFF))
                     Loading()
                 }
             }

@@ -24,6 +24,7 @@ object Router {
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
+
     var routeRemain = mutableStateOf(0L)
     val noAutoQuitList = listOf(
         register,
