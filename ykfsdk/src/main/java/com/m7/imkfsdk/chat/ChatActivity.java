@@ -454,7 +454,17 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         //设置全局配置
         setGlobalConfig();
         getMainQuestions();
-        Timedialog=new TaskTimeBaseDialog(this);
+        Timedialog=new TaskTimeBaseDialog(this, "", new TimeoDialogListener() {
+            @Override
+            public void Confirm() {
+
+            }
+
+            @Override
+            public void Cancle() {
+
+            }
+        });
 
 //        handler.postDelayed(touchEvent,1000);
     }
@@ -472,7 +482,6 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MessageEvent messageEvent) {
-        Log.e("TAG", "onEventMainThread: " );
         if (messageEvent.getMessage().equals(MessageConstans.CloseAction)){
             if (!Timedialog.isShowing()&&!isFinishing()){
                 Timedialog.RefreshShow();

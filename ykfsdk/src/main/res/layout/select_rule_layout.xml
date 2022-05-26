@@ -32,6 +32,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:gravity="center"
+        android:lineSpacingMultiplier="1.5"
         android:text="选择更换领域后，需要重新进入坐席等候区，是否确定更换？"
         android:textColor="#303133"
         android:textSize="24sp"
