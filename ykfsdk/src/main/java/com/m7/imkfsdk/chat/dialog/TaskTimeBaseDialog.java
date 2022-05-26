@@ -80,12 +80,19 @@ public class TaskTimeBaseDialog extends Dialog implements DialogInterface.OnDism
 
     public TaskTimeBaseDialog(@NonNull Context context, int theme) {
         super(context, theme);
-        activity = (Activity) context;
     }
 
 
+    public TaskTimeBaseDialog(@NonNull Context context, String str, TimeoDialogListener listener) {
+        this(context, R.style.shareDialog);
+        activity = (Activity) context;
+        this.str = str;
+        this.listener = listener;
+
+    }
     public TaskTimeBaseDialog(@NonNull Context context) {
         this(context, R.style.shareDialog);
+        activity = (Activity) context;
     }
 
     @Override

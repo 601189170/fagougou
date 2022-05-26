@@ -52,7 +52,7 @@ fun AboutUs(navController: NavController) {
                 text = "公司先后获得松禾资本、蚁米基金数千万的投资，获得20多项国家级技术专利、知识产权、“深圳高新技术企业”、深圳第一届人工智能理事会会员单位、多次创新技术比赛冠军等奖项。为100+ 个省、市、区级政务部门提供AI咨询技术产品支持，与中国最大规模电商之一京东合作打造智能法务产品“法咚咚”，与三大云服务商之一金山云达成战略合作。"
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 32.dp,bottom =120.dp ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(

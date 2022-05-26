@@ -80,9 +80,10 @@ fun HomePage(navController:NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(28.dp),
+                .padding(28.dp).clickable { navController.navigate(Router.about) },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
+
         ) {
             Image(
                 painter = painterResource(R.drawable.home_logo),

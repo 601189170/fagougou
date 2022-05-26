@@ -16,12 +16,11 @@
         tools:text="2019-10-1 10:10" />
     <TextView
         android:id="@+id/chatting_tips"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="2dp"
-        android:paddingVertical="4dp"
+        android:paddingVertical="6dp"
         android:layout_marginTop="28dp"
         android:textSize="15sp"
         android:visibility="gone"
@@ -33,5 +32,5 @@
         android:drawablePadding="4dp"
         android:gravity="center"
 
-        tools:text="温馨提示：咨询过程中可拿起起麦克风咨询，声音效果更清晰！" />
+        tools:text="温馨提示：咨询过程中可拿起麦克风咨询，声音效果更清晰！" />
 </RelativeLayout>
