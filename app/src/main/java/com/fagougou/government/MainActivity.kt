@@ -137,6 +137,7 @@ fun Main() {
                         with(DialogViewModel) {
                             clear()
                             title = "温馨提示"
+                            canExit = true
                             firstButtonText.value = "继续咨询"
                             firstButtonOnClick.value = {}
                             secondButtonText.value = "返回首页"

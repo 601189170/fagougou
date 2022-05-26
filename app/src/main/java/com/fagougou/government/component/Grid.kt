@@ -20,11 +20,12 @@ import com.fagougou.government.ui.theme.Dodgerblue
 fun <T> VerticalGrid(datas:List<T>, columnNumber:Int, height: Int, width:Int, onClick:(T) -> Unit, selected:(T) -> Boolean = {false}, backgound:Color = Dodgerblue){
     val lastIndex = datas.lastIndex
     val padding = (1280-(columnNumber*width))/(columnNumber+1)
+    val verticalPadding = if(datas.firstOrNull() is Pair<*,*>) padding/2 else padding
     for (y in 0..lastIndex step columnNumber) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top =  padding.dp),
+                .padding(top =  verticalPadding.dp),
             horizontalArrangement = Arrangement.Start
         ) {
             for (x in 0 until columnNumber) {
