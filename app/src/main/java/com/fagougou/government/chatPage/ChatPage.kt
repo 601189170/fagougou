@@ -55,6 +55,7 @@ fun ChatPage(navController: NavController) {
                 with(DialogViewModel){
                     clear()
                     title = "温馨提示"
+                    canExit = true
                     firstButtonText.value = "已经解决"
                     firstButtonOnClick.value = {
                         content.clear()
@@ -67,19 +68,16 @@ fun ChatPage(navController: NavController) {
                         IFly.stopAll()
                         ImSdkUtils.startAc(Tips.context)
                     }
-                    content.add(ContentStyle("请确认本次咨询是否解决您的问题？"))
+                    content.add(ContentStyle("退出前，请确认本次咨询是否解决您的问题？"))
                 }
             },
             false,
             constWechatUrl
         )
-        var lazyHeight = 952 - if(showBotMenu.value) 408 else 0
+        var lazyHeight = 952 - if(showBotMenu.value) 436 else 0
         lazyHeight -= if(voiceInputMode.value) 220 else 80
         LazyColumn(
-            Modifier
-                .height(lazyHeight.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+            Modifier.height(lazyHeight.dp).fillMaxWidth().padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.Top,
             state = listState,
         ) {
@@ -97,11 +95,8 @@ fun ChatPage(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically
                         ){
                             Image(painterResource(R.drawable.ic_note),null)
-                            Spacer(
-                                Modifier
-                                    .width(16.dp)
-                                    .height(12.dp))
-                            BasicText("温馨提示：拿起话筒后声音更清晰",0.dp,20.sp)
+                            Spacer( Modifier.width(16.dp).height(12.dp))
+                            BasicText("温馨提示：咨询过程中可拿起麦克风咨询，声音效果更清晰！",0.dp,20.sp)
                         }
                     }
                 }

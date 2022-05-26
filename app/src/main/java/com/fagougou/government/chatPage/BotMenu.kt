@@ -27,7 +27,7 @@ fun BotMenu() {
     )
     VerticalGrid(
         botResMap.toList(),
-        8,
+        6,
         128,
         128,
         onClick = {

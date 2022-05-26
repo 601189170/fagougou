@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,7 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.R
-import com.fagougou.government.chatPage.ChatViewModel
+import com.fagougou.government.component.BasicText
+import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
@@ -45,16 +47,18 @@ object DialogViewModel {
     var title = ""
     val content = mutableStateListOf<ContentStyle>()
     var type = "button"
-    var firstButtonText = mutableStateOf("")
-    var secondButtonText = mutableStateOf("")
-    var firstButtonOnClick = mutableStateOf({})
-    var secondButtonOnClick = mutableStateOf({})
+    var canExit = false
+    val firstButtonText = mutableStateOf("")
+    val secondButtonText = mutableStateOf("")
+    val firstButtonOnClick = mutableStateOf({})
+    val secondButtonOnClick = mutableStateOf({})
 
     fun clear() {
         icon = 0
         title = ""
         content.clear()
         type = "button"
+        canExit = true
         firstButtonText.value = ""
         secondButtonText.value = ""
         firstButtonOnClick.value = {}
@@ -102,12 +106,16 @@ fun ButtonDialog() {
         Column(
             Modifier
                 .width(640.dp)
-                .height(288.dp),
+                .height(288.dp)
+                .padding(vertical = 4.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (icon != 0){
-                Spacer(Modifier.height(16.dp).height(16.dp))
+                Spacer(
+                    Modifier
+                        .height(10.dp)
+                        .height(16.dp))
                 Image(painterResource(icon), null)
             }
             Text(title, fontSize = 28.sp)
@@ -120,7 +128,7 @@ fun ButtonDialog() {
                 }
             }
             ClickableText(
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(10.dp),
                 text = annotatedString, style = MaterialTheme.typography.h5, onClick = {}
             )
             Row(
@@ -129,37 +137,41 @@ fun ButtonDialog() {
             ) {
                 if (!firstButtonText.value.isNullOrBlank()) Button(
                     onClick = firstButtonOnClick.value,
-                    content = {
-                        Text(
-                            modifier = Modifier.padding(10.dp),
-                            text = firstButtonText.value,
-                            fontSize = 24.sp,
-                            color = Color.White
-                        )
-                    },
+                    content = { BasicText(firstButtonText.value) },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
-                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
                     elevation = ButtonDefaults.elevation(0.dp,0.dp),
+                    shape = RoundedCornerShape(12)
                 )
                 if (!secondButtonText.value.isNullOrBlank()){
-                    Spacer(Modifier.width(36.dp).height(36.dp))
+                    Spacer(
+                        Modifier
+                            .width(36.dp)
+                            .height(36.dp))
                     Button(
                         onClick = secondButtonOnClick.value,
-                        content = {
-                            Text(
-                                modifier = Modifier.padding(10.dp),
-                                text = secondButtonText.value,
-                                fontSize = 24.sp,
-                                color = Dodgerblue
-                            )
-                        },
+                        content = { BasicText(secondButtonText.value, color = Dodgerblue) },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                         border = BorderStroke(2.dp, Dodgerblue),
-                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
+                        shape = RoundedCornerShape(12)
                     )
                 }
             }
+        }
+        if (canExit)Row(
+            Modifier.width(640.dp).height(288.dp).padding(end = 24.dp,top = 24.dp),
+            horizontalArrangement = Arrangement.End
+        ){
+            Image(
+                painterResource(R.drawable.ic_close),
+                "Close Dialog",
+                modifier = Modifier
+                    .height(32.dp)
+                    .width(32.dp)
+                    .clickable { clear() },
+                colorFilter = ColorFilter.tint(Color.DarkGray))
         }
     }
 }
