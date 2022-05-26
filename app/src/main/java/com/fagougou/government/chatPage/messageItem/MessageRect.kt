@@ -92,6 +92,8 @@ fun MessageRect(
     ) {
         Column(Modifier.padding(vertical = 16.dp,horizontal = 24.dp) ) {
             if (message.listDef.isEmpty()){
+
+
                 Text(
                     message.content + message.complex.explanation,
                     fontSize = 24.sp,
@@ -105,7 +107,7 @@ fun MessageRect(
                             if (it.style==0) append(it.content)
                             else{
                                 pushStringAnnotation(tag = "policy", annotation = it.content)
-                                withStyle(SpanStyle(Dodgerblue)) { append(it.content) }
+                                withStyle(SpanStyle(Dodgerblue)) { append(" 「"+it.content+"」 ") }
                                 pop()
                             }
                         }

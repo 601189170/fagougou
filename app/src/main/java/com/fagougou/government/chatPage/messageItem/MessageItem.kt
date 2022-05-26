@@ -45,7 +45,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         when (message.speaker) {
             Speaker.ROBOT -> Row(
                 Modifier
-                    .fillMaxWidth(0.75f)
+                    .fillMaxWidth(0.6f)
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -59,11 +59,11 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
             ) { MessageRect(message, index, scope, Dodgerblue, Color.White) }
             Speaker.RECOMMEND -> Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.75f)
+                    .fillMaxWidth(0.6f)
                     .padding(vertical = 12.dp),
             ) {
                 Surface(
-                    Modifier.padding(start = 16.dp),
+                    Modifier.padding(start = 16.dp).fillMaxWidth(),
                     shape = RoundedCornerShape(CORNER_FLOAT),
                     color = Color.White,
                 ) {
@@ -122,7 +122,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
             }
             Speaker.OPTIONS -> Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.6f)
                     .padding(vertical = 16.dp)
             ) {
                 when (message.option.type) {
@@ -184,7 +184,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
             }
             Speaker.COMPLEX -> Row(
                 modifier = Modifier
-                    .fillMaxWidth(0.75f)
+                    .fillMaxWidth(0.6f)
                     .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically

@@ -75,7 +75,10 @@ fun InputBox(scope: CoroutineScope){
                     contentDescription = null)
             }
             PAG()
-            Spacer(Modifier.height(12.dp).width(12.dp))
+            Spacer(
+                Modifier
+                    .height(12.dp)
+                    .width(12.dp))
         }
     } else Column(
         modifier = Modifier.height(80.dp),
@@ -93,7 +96,9 @@ fun InputBox(scope: CoroutineScope){
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .focusRequester(text)
-                    .onFocusChanged { state -> if (state.isFocused) ChatViewModel.showBotMenu.value = false }
+                    .onFocusChanged { state ->
+                        if (state.isFocused) ChatViewModel.showBotMenu.value = false
+                    }
                     .focusable(),
                 value = ChatViewModel.textInputContent.value,
                 onValueChange = {
@@ -106,6 +111,7 @@ fun InputBox(scope: CoroutineScope){
                     cursorColor = Color.White,
                     focusedIndicatorColor = Color.Transparent
                 ),
+                placeholder = {Text("请输入问题..",color = Color.Gray, fontSize = 20.sp)},
                 textStyle = TextStyle(fontSize = 20.sp),
                 shape = RoundedCornerShape(45),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -116,6 +122,7 @@ fun InputBox(scope: CoroutineScope){
                         scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(content) }
                     }
                 ),
+
             )
             Button(
                 modifier = Modifier
@@ -149,6 +156,7 @@ fun InputBox(scope: CoroutineScope){
                 shape = RoundedCornerShape(50),
                 contentPadding = PaddingValues(8.dp)
             )
+
         }
     }
 }

@@ -62,8 +62,8 @@ class TouristsLoginActivity : BaseActivity() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 Router.lastTouchTime = Time.stampL
-                isPost();
-
+                isPost()
+                binding!!.tipsName.visibility=if (MessageCheckUtils.isLegalName(editable.toString())) View.GONE else View.VISIBLE
             }
         })
         binding!!.edPhone.addTextChangedListener(object : TextWatcher {
@@ -71,7 +71,8 @@ class TouristsLoginActivity : BaseActivity() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 Router.lastTouchTime = Time.stampL
-                isPost();
+                isPost()
+                binding!!.tipsPhone.visibility=if (MessageCheckUtils.checkPhone(editable.toString())) View.GONE else View.VISIBLE
             }
         })
         binding!!.edCard.addTextChangedListener(object : TextWatcher {
@@ -79,7 +80,8 @@ class TouristsLoginActivity : BaseActivity() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 Router.lastTouchTime = Time.stampL
-                isPost();
+                isPost()
+                binding!!.tipsCard.visibility=if (MessageCheckUtils.isLegalPattern(editable.toString())) View.GONE else View.VISIBLE
             }
         })
 
@@ -103,8 +105,11 @@ class TouristsLoginActivity : BaseActivity() {
         var  cardNo=binding!!.edCard.text.toString().trim()
         if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(cardNo)){
             binding!!.btnPost.background=this.resources.getDrawable(R.drawable.tourists_btn_bg_nomal)
-        }else{
+        }
+        if (MessageCheckUtils.isLegalName(name)&&MessageCheckUtils.checkPhone(phone)&&MessageCheckUtils.isLegalPattern(cardNo)){
             binding!!.btnPost.background=this.resources.getDrawable(R.drawable.tourists_btn_bg_true)
+        }else{
+            binding!!.btnPost.background=this.resources.getDrawable(R.drawable.tourists_btn_bg_nomal)
         }
 
     }
