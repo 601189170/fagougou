@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fagougou.government.R
+import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 import com.fagougou.government.utils.MMKV
 import com.king.zxing.util.CodeUtils
@@ -32,7 +33,7 @@ class ChooseDomainActivity : BaseActivity() {
     fun initView(){
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            WechatDiallog(this,  CodeUtils.createQRCode(MMKV.kv.decodeString("wechatUrl"), 256, null, Color.BLACK)).show()
+            WechatDiallog(this,  CodeUtils.createQRCode(QrCodeViewModel.constWechatUrl, 256, null, Color.BLACK)).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))

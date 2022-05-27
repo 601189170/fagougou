@@ -39,10 +39,11 @@ fun BotMenu() {
                 secondButtonText.value = "确定"
                 secondButtonOnClick.value = {
                     content.clear()
+                    ChatViewModel.showBotMenu.value = false
                     ChatViewModel.selectedChatBot.value = it.first
                     scope.launch(Dispatchers.IO) { ChatViewModel.startChat() }
                 }
-                content.add( ContentStyle( "更换领域后，当前的记录会清除" ) )
+                content.add( ContentStyle( "选择更换领域后，当前的咨询记录会清除，是否确定更换？" ) )
             }
         },
         selected = { ChatViewModel.selectedChatBot.value == it.first },

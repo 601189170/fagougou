@@ -18,7 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -107,7 +109,7 @@ fun ButtonDialog() {
             Modifier
                 .width(640.dp)
                 .height(288.dp)
-                .padding(vertical = 4.dp),
+                .padding(vertical = 4.dp,horizontal = 40.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -129,7 +131,13 @@ fun ButtonDialog() {
             }
             ClickableText(
                 modifier = Modifier.padding(10.dp),
-                text = annotatedString, style = MaterialTheme.typography.h5, onClick = {}
+                style = TextStyle(
+                    textAlign= TextAlign.Center,
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    lineHeight=38.sp,
+                ),
+                text = annotatedString, onClick = {}
             )
             Row(
                 Modifier.fillMaxWidth(),
@@ -161,7 +169,7 @@ fun ButtonDialog() {
             }
         }
         if (canExit)Row(
-            Modifier.width(640.dp).height(288.dp).padding(end = 24.dp,top = 24.dp),
+            Modifier.width(640.dp).height(288.dp).padding(start = 40.dp,end = 40.dp,top = 24.dp),
             horizontalArrangement = Arrangement.End
         ){
             Image(
@@ -192,7 +200,7 @@ fun NameDefDialog() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(title, fontSize = 28.sp)
-            Text(content.firstOrNull()?.content?:"", fontSize = 24.sp, color = Color.DarkGray)
+            Text(content.firstOrNull()?.content?:"", fontSize = 24.sp, color = Color.DarkGray,lineHeight =35.sp )
         }
     }
     Row( Modifier.padding(top = 32.dp) ) {

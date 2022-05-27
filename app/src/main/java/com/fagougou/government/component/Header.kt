@@ -27,7 +27,7 @@ fun Header(
     onBack:() -> Unit = {},
     canClose:Boolean = true,
     qrCode:String = "",
-    qrCodeHint:String = ""
+    qrCodeHint:String = "微信扫码咨询"
 ){
     Surface(color = Color(0xFF17192C)) {
         Row(

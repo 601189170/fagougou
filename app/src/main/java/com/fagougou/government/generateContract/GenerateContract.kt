@@ -11,6 +11,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -32,11 +34,13 @@ import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
+import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.Logger
 import java.io.InputStreamReader
 
 object GenerateContract {
@@ -85,6 +89,8 @@ object GenerateContract {
     }
 
     suspend fun getGenerateTemplate(id:String){
+        Log.e("TAG", "getGenerateTemplate: "+ Router.routeMirror)
+        Log.e("TAG", "getGenerateTemplate: "+ Client.globalLoading)
         withContext(Dispatchers.IO){
             template = ""
             try {
@@ -312,8 +318,9 @@ fun GenerateContract(navController: NavController) {
                                     else -> TextField(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(if(child.label.contains("地址"))112.dp else 56.dp)
+                                            .height(if (child.label.contains("地址")) 112.dp else 56.dp)
                                             .border(1.dp, Color.LightGray, RoundedCornerShape(18)),
+                                        keyboardOptions= if(child.label.contains("电话")) KeyboardOptions(keyboardType =  KeyboardType.Number) else KeyboardOptions(keyboardType = KeyboardType.Text),
                                         colors = TextFieldDefaults.textFieldColors(
                                             backgroundColor = Color.White,
                                             focusedIndicatorColor = Color.Transparent,
@@ -332,7 +339,10 @@ fun GenerateContract(navController: NavController) {
                             }
                         }
                     }
-                    Spacer(Modifier.width(56.dp).height(112.dp))
+                    Spacer(
+                        Modifier
+                            .width(56.dp)
+                            .height(112.dp))
                 }
             }
         }

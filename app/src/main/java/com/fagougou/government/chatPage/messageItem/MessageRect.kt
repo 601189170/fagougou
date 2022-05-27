@@ -151,6 +151,8 @@ fun MessageRect(
             if (message.laws.isNotEmpty()) LawExpend(message, index)
         }
     }
+
+
 }
 
 @Composable

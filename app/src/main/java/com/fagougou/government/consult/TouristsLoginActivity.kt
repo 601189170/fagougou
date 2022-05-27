@@ -2,6 +2,7 @@ package com.fagougou.government.consult
 
 
 import android.annotation.SuppressLint
+import android.app.ZysjSystemManager
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -12,11 +13,11 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MMKV.kv
@@ -31,8 +32,11 @@ class TouristsLoginActivity : BaseActivity() {
     var sdk: EsSdtSdk? = null
     var isStart = false
     var sex=""
+    var manager:ZysjSystemManager?=null
+
 
     private var binding: ActivityReadCardMsgBinding? = null
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,6 +51,10 @@ class TouristsLoginActivity : BaseActivity() {
         sdk = EsSdtSdk.getInst()
         onBtnStart()
         initView();
+
+        manager = getSystemService("zysj") as ZysjSystemManager
+
+        val result = manager!!.ZYSystemBar(0)
 //        if (AppUtils.isAppDebug()){
 //            binding!!.edName.setText("丁俊超")
 //            binding!!.edPhone.setText("15920012647")
@@ -93,7 +101,7 @@ class TouristsLoginActivity : BaseActivity() {
 
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            WechatDiallog(this,  CodeUtils.createQRCode(kv.decodeString("wechatUrl"), 256, null, Color.BLACK)).show()
+            WechatDiallog(this,  CodeUtils.createQRCode(QrCodeViewModel.constWechatUrl, 256, null, Color.BLACK)).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener {
             finish()

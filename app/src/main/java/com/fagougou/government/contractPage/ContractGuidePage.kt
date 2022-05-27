@@ -70,12 +70,15 @@ object ContractViewModel{
     }
 
     suspend fun  getContractList(folder:String, searchName:String = "") {
-        ContractLists.clear()
+//        ContractLists.clear()
+//        var bean=ContractData()
+//        ContractLists.add(bean)
         withContext(Dispatchers.IO) {
             try {
                 if (searchName!="")selectedId.value = ""
                 val response = contractService.getContractList(ContractListRequest(folder = folder, name = searchName)).execute()
                 val body = response.body() ?: return@withContext
+                ContractLists.clear()
                 ContractLists.addAll(body.data.list)
             }catch (e:Exception){
                 handleException(e)

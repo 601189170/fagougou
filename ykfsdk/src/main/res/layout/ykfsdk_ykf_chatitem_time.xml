@@ -32,5 +32,5 @@
         android:drawablePadding="4dp"
         android:gravity="center"
 
-        tools:text="温馨提示：咨询过程中可拿起麦克风咨询，声音效果更清晰！" />
+        tools:text="温馨提示：咨询过程中可拿起电话咨询，声音效果更清晰！" />
 </RelativeLayout>

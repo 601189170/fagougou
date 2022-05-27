@@ -51,6 +51,7 @@ fun ChatPage(navController: NavController) {
         Header(
             "智能咨询(${selectedChatBot.value})",
             navController,
+
             {
                 with(DialogViewModel){
                     clear()
@@ -96,7 +97,7 @@ fun ChatPage(navController: NavController) {
                         ){
                             Image(painterResource(R.drawable.ic_note),null)
                             Spacer( Modifier.width(16.dp).height(12.dp))
-                            BasicText("温馨提示：咨询过程中可拿起麦克风咨询，声音效果更清晰！",0.dp,20.sp)
+                            BasicText("温馨提示：咨询过程中可拿起电话咨询，声音效果更清晰！",0.dp,20.sp)
                         }
                     }
                 }

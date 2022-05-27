@@ -30,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Time.hideSystemUI()
-        setStatusBar(resources.getColor(R.color.white))
+//        setStatusBar(resources.getColor(R.color.white))
         EventBus.getDefault().register(this)
          diallog=TaskTimeBaseDialog(this)
 
