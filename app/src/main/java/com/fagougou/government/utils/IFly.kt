@@ -24,7 +24,7 @@ import org.json.JSONTokener
 import java.lang.Exception
 
 object IFly {
-    const val UNWAKE_TEXT = "请说,你好小笨"
+    const val UNWAKE_TEXT = "请说,你好小法"
     const val WAKE_TEXT = "请说出您的问题"
     val TAG = javaClass.simpleName
     val resultBuilder = StringBuilder()

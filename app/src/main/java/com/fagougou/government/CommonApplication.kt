@@ -1,6 +1,7 @@
 package com.fagougou.government
 
 import android.app.Application
+import android.app.ZysjSystemManager
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
@@ -9,6 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.lifecycleScope
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
@@ -32,6 +34,7 @@ class CommonApplication: Application(){
     companion object {
         lateinit var activity: ComponentActivity
         const val TAG = "FaGouGou@XiaoBen"
+
     }
 
     override fun attachBaseContext(base: Context?) {

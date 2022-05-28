@@ -1,5 +1,6 @@
 package com.fagougou.government
 
+import android.app.ZysjSystemManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -62,6 +64,7 @@ import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
+import com.fagougou.government.utils.ZYSJ.manager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
@@ -74,6 +77,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
+        try {
+            manager = getSystemService("zysj") as ZysjSystemManager
+        }catch (e:Exception){ }
         setContent {
             GovernmentTheme {
                 Surface(

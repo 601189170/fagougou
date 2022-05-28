@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,18 +14,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
+import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
+import com.fagougou.government.utils.ZYSJ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun ChatGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
+    LaunchedEffect(null) {
+        ZYSJ.manager?.ZYSystemBar(0)
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.virtual_chat_guide)
+        )
+        mediaPlayer.prepareAsync()
+    }
     val botResMap = mapOf(
         Pair("公司财税", R.drawable.bot_tax),
         Pair("交通事故", R.drawable.bot_traffic),

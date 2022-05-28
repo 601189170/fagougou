@@ -24,6 +24,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -31,6 +32,7 @@ import com.fagougou.government.utils.MMKV.clearStack
 import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Time.timeText
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.ZYSJ.manager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,6 +57,11 @@ fun HomeButton(
 fun HomePage(navController:NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
+        manager?.ZYSystemBar(0)
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.virtual_home))
+        mediaPlayer.prepareAsync()
         scope.launch{
             var body = SerialLoginResponse()
             withContext(Dispatchers.IO){
@@ -67,6 +74,13 @@ fun HomePage(navController:NavController) {
             }
             if(!body.canLogin){
                 withContext(Dispatchers.Main){
+
+
+
+
+
+
+
                     navController.navigate(Router.register)
                     toast(body.errorMessage)
                 }
@@ -151,6 +165,7 @@ fun HomePage(navController:NavController) {
                     clearStack--
                     if (clearStack<=0){
                         kv.remove("canLogin")
+                        manager?.ZYSystemBar(1)
                         toast("登出成功")
                         activity.finish()
                     }

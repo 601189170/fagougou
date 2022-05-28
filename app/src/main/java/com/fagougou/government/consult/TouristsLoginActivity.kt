@@ -2,7 +2,6 @@ package com.fagougou.government.consult
 
 
 import android.annotation.SuppressLint
-import android.app.ZysjSystemManager
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -31,8 +30,7 @@ import java.util.*
 class TouristsLoginActivity : BaseActivity() {
     var sdk: EsSdtSdk? = null
     var isStart = false
-    var sex=""
-    var manager:ZysjSystemManager?=null
+    var gender=""
 
 
     private var binding: ActivityReadCardMsgBinding? = null
@@ -52,9 +50,6 @@ class TouristsLoginActivity : BaseActivity() {
         onBtnStart()
         initView();
 
-        manager = getSystemService("zysj") as ZysjSystemManager
-
-        val result = manager!!.ZYSystemBar(0)
 //        if (AppUtils.isAppDebug()){
 //            binding!!.edName.setText("丁俊超")
 //            binding!!.edPhone.setText("15920012647")
@@ -160,13 +155,13 @@ class TouristsLoginActivity : BaseActivity() {
         binding!!.imgMarkMan.visibility=View.GONE
         binding!!.imgMarkWoman.visibility=View.GONE
         if (type==0){
-            sex="0"
+            gender="0"
             binding!!.imgMarkMan.visibility=View.VISIBLE
             binding!!.fgMan.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_true)
             binding!!.imgMan.background=this.resources.getDrawable(R.drawable.ic_icon_man2)
             binding!!.tvMan.setTextColor(this.resources.getColor(R.color.blue007))
         }else{
-            sex="1"
+            gender="1"
             binding!!.imgMarkWoman.visibility=View.VISIBLE
             binding!!.fgWoman.background=this.resources.getDrawable(R.drawable.tourists_edit_bg_true)
             binding!!.imgWoman.background=this.resources.getDrawable(R.drawable.ic_icon_woman2)
