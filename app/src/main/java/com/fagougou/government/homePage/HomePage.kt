@@ -74,13 +74,6 @@ fun HomePage(navController:NavController) {
             }
             if(!body.canLogin){
                 withContext(Dispatchers.Main){
-
-
-
-
-
-
-
                     navController.navigate(Router.register)
                     toast(body.errorMessage)
                 }
