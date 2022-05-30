@@ -3,7 +3,6 @@ package com.fagougou.government.consult
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -19,7 +18,6 @@ import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
-import com.king.zxing.util.CodeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -27,6 +25,7 @@ import timber.log.Timber
 class TouristsLoginActivity : BaseActivity() {
     lateinit var binding: ActivityReadCardMsgBinding
     val esSdt = EsSdtSdk.getInst()
+    val wechatDialog = WechatDiallog(this)
     var logCB = EsLogCB { level, msg -> onLog(msg) }
     var mFindTime: Long = 0
     var mSuccessTime: Long = 0
@@ -47,8 +46,6 @@ class TouristsLoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityReadCardMsgBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //初始化读卡
         initView()
         esSdt.SetReadDelay(1)
     }
@@ -95,10 +92,9 @@ class TouristsLoginActivity : BaseActivity() {
         binding.btnPost.setOnClickListener { PostMsg() }
         binding.topLayout.tvBack.setOnClickListener { finish() }
         binding.topLayout.tvWechat.setOnClickListener {
-            WechatDiallog(
-                this,
-                CodeUtils.createQRCode(QrCodeViewModel.constWechatUrl, 256, null, Color.BLACK)
-            ).show()
+            QrCodeViewModel.clear()
+            QrCodeViewModel.content.value = QrCodeViewModel.constWechatUrl
+            wechatDialog.show()
         }
         binding.topLayout.tvZn.setOnClickListener { finish() }
     }
