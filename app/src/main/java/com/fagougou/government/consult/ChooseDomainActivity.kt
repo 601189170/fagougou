@@ -33,7 +33,7 @@ class ChooseDomainActivity : BaseActivity() {
     fun initView(){
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            WechatDiallog(this,  CodeUtils.createQRCode(QrCodeViewModel.constWechatUrl, 256, null, Color.BLACK)).show()
+            WechatDiallog(this).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
