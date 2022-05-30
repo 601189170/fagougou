@@ -59,7 +59,6 @@ fun RegisterPage(navController: NavController){
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
         ) {
         Row(
             modifier = Modifier
@@ -92,11 +91,11 @@ fun RegisterPage(navController: NavController){
             placeholder = {Text("请输入注册码",color = Color.Gray, fontSize = 28.sp)},
             shape = RoundedCornerShape(CORNER_FLOAT),
             colors = textFieldColors,
-            leadingIcon = { Image(painterResource(R.drawable.ic_login_user), null, modifier = Modifier.padding(horizontal = 24.dp))}
+            leadingIcon = { Image(painterResource(R.drawable.ic_key), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
         Button(
             modifier = Modifier
-                .padding(top = 24.dp)
+                .padding(top = 488.dp)
                 .width(480.dp)
                 .height(60.dp),
             onClick = { if(registerAction.value=="立即绑定") login(navController) },

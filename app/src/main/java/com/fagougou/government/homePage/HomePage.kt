@@ -157,10 +157,12 @@ fun HomePage(navController:NavController) {
                 .clickable {
                     clearStack--
                     if (clearStack<=0){
-                        kv.remove("canLogin")
-                        manager?.ZYSystemBar(1)
-                        toast("登出成功")
-                        activity.finish()
+                        clearStack=8
+                        navController.navigate(Router.admin)
+//                        kv.remove("canLogin")
+//                        manager?.ZYSystemBar(1)
+//                        toast("登出成功")
+//                        activity.finish()
                     }
                 },
             text = "技术支持：法狗狗人工智能 v2.0",

@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,7 +40,6 @@ import com.fagougou.government.chatPage.*
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.dialog.Dialog
-import com.fagougou.government.dialog.NameDefDialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
@@ -64,6 +62,7 @@ import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
+import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.utils.ZYSJ.manager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
@@ -138,7 +137,7 @@ fun Main() {
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
                 } else if (routeRemain.value < (30L * 1000L)) {
-                    if (isShowTaskActiviy()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
+                    if (isShowTaskActivity()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
                     if (routeMirror == Router.chat) {
                         with(DialogViewModel) {
                             clear()
@@ -176,6 +175,7 @@ fun Main() {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(navController) }
+            composable(Router.admin) { AdminPage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }
             composable(Router.generateContract) { GenerateContract(navController) }
@@ -215,16 +215,10 @@ fun Loading() {
     }
 }
 
-fun isShowTaskActiviy(): Boolean {
-    if (ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java) || ActivityUtils.isActivityExistsInStack(
-            TouristsLoginActivity::class.java
-        ) || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java) || ActivityUtils.isActivityExistsInStack(
-            ChatActivity::class.java
-        )
-    ) {
-        return true
-    } else {
-        return false
-    }
+fun isShowTaskActivity(): Boolean {
+    return ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java)
+            || ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)
+            || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)
+            || ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)
 }
 
