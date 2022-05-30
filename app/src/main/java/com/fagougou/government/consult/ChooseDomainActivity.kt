@@ -2,7 +2,6 @@ package com.fagougou.government.consult
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,10 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fagougou.government.R
-import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
-import com.fagougou.government.utils.MMKV
-import com.king.zxing.util.CodeUtils
 
 class ChooseDomainActivity : BaseActivity() {
     private var binding: ActivityChooseDomainBinding? = null
@@ -33,7 +29,7 @@ class ChooseDomainActivity : BaseActivity() {
     fun initView(){
         binding!!.topLayout.tvBack.setOnClickListener { finish() }
         binding!!.topLayout.tvWechat.setOnClickListener {
-            WechatDiallog(this).show()
+            WechatDialog(this).show()
         }
         binding!!.topLayout.tvZn.setOnClickListener { finish() }
         binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))

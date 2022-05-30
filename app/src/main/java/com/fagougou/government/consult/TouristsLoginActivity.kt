@@ -24,9 +24,9 @@ import timber.log.Timber
 
 class TouristsLoginActivity : BaseActivity() {
     lateinit var binding: ActivityReadCardMsgBinding
+    lateinit var wechatDialog : WechatDialog
     val esSdt = EsSdtSdk.getInst()
-    val wechatDialog = WechatDiallog(this)
-    var logCB = EsLogCB { level, msg -> onLog(msg) }
+    var logCB = EsLogCB { _, msg -> onLog(msg) }
     var mFindTime: Long = 0
     var mSuccessTime: Long = 0
     val sdtStatusCB = EsSdtStatusCB { type ->
@@ -45,6 +45,7 @@ class TouristsLoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReadCardMsgBinding.inflate(layoutInflater)
+        wechatDialog = WechatDialog(this)
         setContentView(binding.root)
         initView()
         esSdt.SetReadDelay(1)
