@@ -3,6 +3,7 @@ package com.fagougou.government.registerPage
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
@@ -30,6 +32,7 @@ import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
@@ -63,14 +66,15 @@ fun RegisterPage(navController: NavController){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(28.dp),
+                .height(48.dp)
+                .padding(top = 16.dp,start = 40.dp,end = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(R.drawable.home_logo),
-                contentDescription = "Home Logo",
-                modifier = Modifier.height(36.dp)
+                contentDescription = "Company Logo",
+                modifier = Modifier.height(32.dp)
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
@@ -95,7 +99,7 @@ fun RegisterPage(navController: NavController){
         )
         Button(
             modifier = Modifier
-                .padding(top = 488.dp)
+                .padding(top = 24.dp)
                 .width(480.dp)
                 .height(60.dp),
             onClick = { if(registerAction.value=="立即绑定") login(navController) },
@@ -108,7 +112,20 @@ fun RegisterPage(navController: NavController){
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
-        BasicText("技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",400.dp,20.sp)
+        Text(
+            modifier = Modifier
+                .padding(top = 488.dp)
+                .clickable {
+                    MMKV.clearStack--
+                    if (MMKV.clearStack <=0){
+                        MMKV.clearStack =8
+                        activity.finish()
+                    }
+                },
+            text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
+            fontSize = 24.sp,
+            color = Color.White
+        )
     }
     BackHandler {}
 }

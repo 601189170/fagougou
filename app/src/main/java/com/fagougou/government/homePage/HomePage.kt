@@ -22,8 +22,6 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
@@ -31,8 +29,7 @@ import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.MMKV.clearStack
-import com.fagougou.government.utils.MMKV.kv
-import com.fagougou.government.utils.Time.timeText
+import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ.manager
 import kotlinx.coroutines.Dispatchers
@@ -89,17 +86,19 @@ fun HomePage(navController:NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(28.dp).clickable { navController.navigate(Router.about) },
+                .height(48.dp)
+                .padding(top = 16.dp,start = 40.dp,end = 40.dp)
+                .clickable { navController.navigate(Router.about) },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
 
         ) {
             Image(
                 painter = painterResource(R.drawable.home_logo),
-                contentDescription = "Home Logo",
-                modifier = Modifier.height(36.dp)
+                contentDescription = "Company Logo",
+                modifier = Modifier.height(32.dp)
             )
-            BasicText( timeText.value )
+            BasicText(Time.timeText.value,0.dp,24.sp)
         }
         BasicText( "欢迎使用",84.dp)
         BasicText( "智能法律服务系统",48.dp,28.sp)
