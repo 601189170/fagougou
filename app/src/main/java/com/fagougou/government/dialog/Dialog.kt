@@ -103,7 +103,6 @@ fun Dialog() {
             when (type) {
                 "button" -> ButtonDialog()
                 "nameDef" -> NameDefDialog()
-                "hidebar" -> HideBarDialog()
             }
         }
     }
@@ -222,57 +221,3 @@ fun NameDefDialog() {
     }
 }
 
-@Composable
-fun HideBarDialog() {
-    Surface(
-        color = Color.White,
-        shape = RoundedCornerShape(CORNER_FLOAT),
-        elevation = 2.dp
-    ) {
-        Column(
-            Modifier
-                .width(720.dp)
-                .height(288.dp)
-                .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(title, fontSize = 28.sp)
-            val textFieldColors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF),
-                cursorColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-            )
-
-                TextField(
-                    textWord.value,
-                    { textWord.value = it },
-                    Modifier
-                        .width(200.dp)
-                        .height(66.dp),
-                    textStyle = TextStyle(color = Color.Gray, fontSize = 24.sp),
-                    placeholder = {Text("请输入口令",color = Color.Gray, fontSize = 24.sp)},
-                    colors = textFieldColors,
-                    shape = RoundedCornerShape(topStart = CORNER_FLOAT, bottomStart = CORNER_FLOAT),
-                    maxLines = 1
-                )
-                Button(
-                    onClick = { if(textWord.equals("faxiaomeng")){
-                        openBar()
-                    }else toast("口令错误") },
-                    content = { BasicText(secondButtonText.value, color = Dodgerblue) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                    border = BorderStroke(2.dp, Dodgerblue),
-                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
-                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                    shape = RoundedCornerShape(12),
-                    modifier = Modifier.padding(top = 50.dp)
-                )
-
-
-        }
-    }
-    Row( Modifier.padding(top = 32.dp) ) {
-        Image(painterResource(R.drawable.ic_close), null)
-    }
-}

@@ -23,7 +23,6 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.dialog.HideBarDialog
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
@@ -150,8 +149,7 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(288.dp)
                     .height(120.dp),
-//                onClick = { navController.navigate(Router.about) },
-                onClick = { navController.navigate(Router.settings) },
+                onClick = { navController.navigate(Router.about) },
                 contentId = R.drawable.home_about
             )
         }
