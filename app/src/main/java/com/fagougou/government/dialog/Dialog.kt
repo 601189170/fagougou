@@ -1,21 +1,21 @@
 package com.fagougou.government.dialog
 
 import android.text.TextUtils
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -26,32 +26,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel.canExit
+import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.firstButtonText
 import com.fagougou.government.dialog.DialogViewModel.icon
-import com.fagougou.government.dialog.DialogViewModel.type
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
-import com.fagougou.government.dialog.DialogViewModel.textWord
 import com.fagougou.government.dialog.DialogViewModel.title
+import com.fagougou.government.dialog.DialogViewModel.type
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.Tips
-import com.fagougou.government.utils.Tips.toast
-import com.fagougou.government.utils.ZYSJ.manager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.fagougou.government.utils.ZYSJ.manager
-import com.fagougou.government.utils.ZYSJ.openBar
 
 object DialogViewModel {
     var icon = 0
@@ -63,7 +56,6 @@ object DialogViewModel {
     val secondButtonText = mutableStateOf("")
     val firstButtonOnClick = mutableStateOf({})
     val secondButtonOnClick = mutableStateOf({})
-    val textWord = mutableStateOf("")
 
     fun clear() {
         icon = 0

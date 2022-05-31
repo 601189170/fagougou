@@ -26,6 +26,7 @@ import com.fagougou.government.generateContract.GenerateContract.currentContract
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplate
+import com.fagougou.government.generateContract.GenerateContract.printRequest
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.launch
