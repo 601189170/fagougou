@@ -22,6 +22,7 @@ object Router {
     const val contractWebView ="contractWebView"
     const val webView ="webView"
     const val about ="about"
+    const val settings ="settings"
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE

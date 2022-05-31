@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.dialog.DialogViewModel.firstButtonOnClick
@@ -35,14 +38,20 @@ import com.fagougou.government.dialog.DialogViewModel.icon
 import com.fagougou.government.dialog.DialogViewModel.type
 import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
+import com.fagougou.government.dialog.DialogViewModel.textWord
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.Tips
+import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.ZYSJ.manager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.fagougou.government.utils.ZYSJ.manager
+import com.fagougou.government.utils.ZYSJ.openBar
 
 object DialogViewModel {
     var icon = 0
@@ -54,6 +63,7 @@ object DialogViewModel {
     val secondButtonText = mutableStateOf("")
     val firstButtonOnClick = mutableStateOf({})
     val secondButtonOnClick = mutableStateOf({})
+    val textWord = mutableStateOf("")
 
     fun clear() {
         icon = 0
@@ -93,6 +103,7 @@ fun Dialog() {
             when (type) {
                 "button" -> ButtonDialog()
                 "nameDef" -> NameDefDialog()
+                "hidebar" -> HideBarDialog()
             }
         }
     }
@@ -109,7 +120,7 @@ fun ButtonDialog() {
             Modifier
                 .width(640.dp)
                 .height(288.dp)
-                .padding(vertical = 4.dp,horizontal = 40.dp),
+                .padding(vertical = 4.dp, horizontal = 40.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -169,7 +180,10 @@ fun ButtonDialog() {
             }
         }
         if (canExit)Row(
-            Modifier.width(640.dp).height(288.dp).padding(start = 40.dp,end = 40.dp,top = 24.dp),
+            Modifier
+                .width(640.dp)
+                .height(288.dp)
+                .padding(start = 40.dp, end = 40.dp, top = 24.dp),
             horizontalArrangement = Arrangement.End
         ){
             Image(
@@ -201,6 +215,61 @@ fun NameDefDialog() {
         ) {
             Text(title, fontSize = 28.sp)
             Text(content.firstOrNull()?.content?:"", fontSize = 24.sp, color = Color.DarkGray,lineHeight =35.sp )
+        }
+    }
+    Row( Modifier.padding(top = 32.dp) ) {
+        Image(painterResource(R.drawable.ic_close), null)
+    }
+}
+
+@Composable
+fun HideBarDialog() {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(CORNER_FLOAT),
+        elevation = 2.dp
+    ) {
+        Column(
+            Modifier
+                .width(720.dp)
+                .height(288.dp)
+                .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(title, fontSize = 28.sp)
+            val textFieldColors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(0xFFFFFFFF),
+                cursorColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+            )
+
+                TextField(
+                    textWord.value,
+                    { textWord.value = it },
+                    Modifier
+                        .width(200.dp)
+                        .height(66.dp),
+                    textStyle = TextStyle(color = Color.Gray, fontSize = 24.sp),
+                    placeholder = {Text("请输入口令",color = Color.Gray, fontSize = 24.sp)},
+                    colors = textFieldColors,
+                    shape = RoundedCornerShape(topStart = CORNER_FLOAT, bottomStart = CORNER_FLOAT),
+                    maxLines = 1
+                )
+                Button(
+                    onClick = { if(textWord.equals("faxiaomeng")){
+                        openBar()
+                    }else toast("口令错误") },
+                    content = { BasicText(secondButtonText.value, color = Dodgerblue) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    border = BorderStroke(2.dp, Dodgerblue),
+                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
+                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
+                    shape = RoundedCornerShape(12),
+                    modifier = Modifier.padding(top = 50.dp)
+                )
+
+
         }
     }
     Row( Modifier.padding(top = 32.dp) ) {

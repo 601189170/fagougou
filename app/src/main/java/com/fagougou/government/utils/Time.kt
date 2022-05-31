@@ -14,7 +14,7 @@ object Time {
     init {
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
-                delay(200)
+                delay(1000)
                 val time = System.currentTimeMillis()
                 stampL = time
                 stamp = time.toString()

@@ -63,6 +63,7 @@ import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.setting.AdminPage
+import com.fagougou.government.setting.Settings
 import com.fagougou.government.utils.ZYSJ.manager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
@@ -188,6 +189,7 @@ fun Main() {
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
+            composable(Router.settings) { Settings(navController) }
         }
     }
 }

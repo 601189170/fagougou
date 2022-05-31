@@ -52,10 +52,10 @@ fun AdminPage(navController: NavController){
         )
         Button(
             onClick = {
-                if (text.value == "法小萌") {
+                if (text.value == "faxiaomeng") {
                     text.value = ""
                     navController.popBackStack()
-                    navController.navigate(Router.generateGuide)
+                    navController.navigate(Router.settings)
                 }
             },
             Modifier.padding(top = 24.dp).width(480.dp).height(60.dp),
