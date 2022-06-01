@@ -1,6 +1,10 @@
 package com.fagougou.government.generateContract
 
 import android.content.Context
+import android.os.Build
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintManager
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
@@ -28,8 +32,11 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.Router.webView
 import com.fagougou.government.component.Header
+import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.generateContract.GenerateContract.PrintPDF
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
@@ -39,6 +46,7 @@ import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.Logger
 import java.io.InputStreamReader
@@ -138,6 +146,23 @@ object GenerateContract {
             data.value = result
         }
     }
+    fun PrintPDF(webView: WebView){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // Get a PrintManager instance
+            val printManager = CommonApplication.activity.getSystemService(Context.PRINT_SERVICE) as PrintManager
+
+            // Get a print adapter instance
+            val printAdapter = webView.createPrintDocumentAdapter()
+//            val printAdapter = MyPrintAdapter()
+
+            // Create a print job with name and adapter instance
+            val jobName = "Document"
+            printManager.print(jobName, printAdapter, PrintAttributes.Builder().build())
+        } else {
+            Tips.toast("当前系统不支持该功能")
+        }
+    }
+
 }
 
 @Composable
@@ -164,6 +189,10 @@ fun ContractWebView(data: MutableState<String>){
                 withContext(Dispatchers.Main){
                     it.evaluateJavascript("javascript:getHtml()",{ Log.i("html",it)})
                 }
+            }
+            if (ContractViewModel.isPrint.value=="1"){
+                PrintPDF(it)
+                ContractViewModel.isPrint.value=""
             }
         }
     )
@@ -231,7 +260,8 @@ fun GenerateContract(navController: NavController) {
                                 .height(60.dp)
                                 .width(200.dp),
                             elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                            onClick = { DialogViewModel.startPrint(scope) },
+                            onClick = { DialogViewModel.startPrint(scope)
+                                ContractViewModel.isPrint.value="1"},
                             content = {
                                 Row( verticalAlignment = Alignment.CenterVertically ){
                                     Image(painterResource(R.drawable.ic_painter),null)

@@ -3,6 +3,7 @@ package com.fagougou.government.registerPage
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -30,6 +31,7 @@ import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
@@ -55,6 +57,7 @@ fun RegisterPage(navController: NavController){
                 }
             }
         }
+
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -95,7 +98,7 @@ fun RegisterPage(navController: NavController){
         )
         Button(
             modifier = Modifier
-                .padding(top = 488.dp)
+                .padding(top = 50.dp)
                 .width(480.dp)
                 .height(60.dp),
             onClick = { if(registerAction.value=="立即绑定") login(navController) },
@@ -108,7 +111,20 @@ fun RegisterPage(navController: NavController){
             },
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
-        BasicText("技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",400.dp,20.sp)
+        Text(
+            modifier = Modifier
+                .padding(top = 350.dp)
+                .clickable {
+                    MMKV.clearStack--
+                    if (MMKV.clearStack <=0){
+                        MMKV.clearStack =8
+                        navController.navigate(Router.admin)
+                    }
+                },
+            text = "技术支持：法狗狗人工智能 v2.0",
+            fontSize = 24.sp,
+            color = Color.White
+        )
     }
     BackHandler {}
 }

@@ -13,6 +13,7 @@ import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,9 +32,12 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.contractPage.ContractViewModel.isPrint
+import com.fagougou.government.generateContract.GenerateContract.PrintPDF
 
 @Composable
 fun ContractWebView(navController: NavController) {
+
     val scope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
@@ -48,6 +52,15 @@ fun ContractWebView(navController: NavController) {
                     webChromeClient = WebChromeClient()
                     loadUrl(officeUrl)
                 }
+
+            }
+            ,
+            update = {
+                if (isPrint.value=="1"){
+                    PrintPDF(it)
+                    isPrint.value=""
+                }
+
             }
         )
         Surface(modifier = Modifier
@@ -87,7 +100,8 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .padding(start = 24.dp)
                         .width(200.dp),
-                    onClick = { DialogViewModel.startPrint(scope) },
+                    onClick = { DialogViewModel.startPrint(scope)
+                              isPrint.value="1"},
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_painter),null)

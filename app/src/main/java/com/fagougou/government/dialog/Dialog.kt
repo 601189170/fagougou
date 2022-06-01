@@ -1,7 +1,15 @@
 package com.fagougou.government.dialog
 
+import android.content.Context
+import android.content.Context.PRINT_SERVICE
+import android.os.Build
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.text.TextUtils
 import android.util.Log
+import android.webkit.WebView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,6 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.getSystemService
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
@@ -40,6 +50,7 @@ import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.textWord
 import com.fagougou.government.dialog.DialogViewModel.title
+import com.fagougou.government.generateContract.MyPrintAdapter
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
