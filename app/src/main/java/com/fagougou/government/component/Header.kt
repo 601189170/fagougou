@@ -1,5 +1,6 @@
 package com.fagougou.government.component
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,12 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.utils.IFly
-import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
-import com.fagougou.government.utils.Tips
 
 @Composable
 fun Header(
@@ -81,7 +82,8 @@ fun Header(
                             .padding(start = 8.dp)
                             .clickable {
                                 IFly.stopAll()
-                                ImSdkUtils.startAc(Tips.context)
+                                val intent = Intent(activity, TouristsLoginActivity::class.java)
+                                activity.startActivity(intent)
                             },
                         text = "人工",
                         fontSize = 24.sp,

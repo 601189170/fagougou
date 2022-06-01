@@ -20,8 +20,6 @@ import androidx.navigation.NavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.ContractViewModel
-import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
 import com.fagougou.government.generateContract.GenerateContract.data
@@ -149,8 +147,9 @@ fun GenerateGuide(navController: NavController) {
                             .height(60.dp)
                             .width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                        onClick = { DialogViewModel.startPrint(scope)
-                            ContractViewModel.isPrint.value="1"},
+                        onClick = {
+
+                        },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)
