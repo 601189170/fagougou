@@ -33,7 +33,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel.isPrint
-import com.fagougou.government.generateContract.GenerateContract.PrintPDF
+import com.fagougou.government.utils.Printer.PrintPDF
 
 @Composable
 fun ContractWebView(navController: NavController) {

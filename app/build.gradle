@@ -122,5 +122,6 @@ dependencies {
     implementation project(path: ':ykfsdk')
     implementation 'com.blankj:utilcode:1.30.6'
     implementation files("libs/libEsSdtApi-1.0.aar")
+    implementation 'me.jessyan:autosize:1.0.5'
 
 }

@@ -36,15 +36,14 @@ import com.fagougou.government.Router.webView
 import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.generateContract.GenerateContract.PrintPDF
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
-import com.fagougou.government.generateContract.GenerateContract.printRequest
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.Printer.PrintPDF
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.*
@@ -141,22 +140,6 @@ object GenerateContract {
                 .replace("{{DataHook}}",builder.toString())
                 .replace("class=\"$lastModifier","style=\"background-color: yellow;\" class=\"$lastModifier")
             data.value = result
-        }
-    }
-    fun PrintPDF(webView: WebView){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // Get a PrintManager instance
-            val printManager = CommonApplication.activity.getSystemService(Context.PRINT_SERVICE) as PrintManager
-
-            // Get a print adapter instance
-            val printAdapter = webView.createPrintDocumentAdapter()
-//            val printAdapter = MyPrintAdapter()
-
-            // Create a print job with name and adapter instance
-            val jobName = "Document"
-            printManager.print(jobName, printAdapter, PrintAttributes.Builder().build())
-        } else {
-            Tips.toast("当前系统不支持该功能")
         }
     }
 
