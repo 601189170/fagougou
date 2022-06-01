@@ -25,7 +25,6 @@ fun RegisterResultPage(navController: NavController){
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-
         ) {
         Row(
             modifier = Modifier

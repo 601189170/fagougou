@@ -20,9 +20,6 @@ object Time {
                 stamp = time.toString()
                 val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
                 timeText.value = simpleDateFormat.format(time).replace("周","星期")
-                withContext(Dispatchers.Main){
-                    hideSystemUI()
-                }
             }
         }
     }

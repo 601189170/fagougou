@@ -40,15 +40,14 @@ import com.fagougou.government.generateContract.GenerateContract.PrintPDF
 import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
+import com.fagougou.government.generateContract.GenerateContract.printRequest
 import com.fagougou.government.model.*
-import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.*
-import org.greenrobot.eventbus.Logger
 import java.io.InputStreamReader
 
 object GenerateContract {
@@ -97,8 +96,6 @@ object GenerateContract {
     }
 
     suspend fun getGenerateTemplate(id:String){
-        Log.e("TAG", "getGenerateTemplate: "+ Router.routeMirror)
-        Log.e("TAG", "getGenerateTemplate: "+ Client.globalLoading)
         withContext(Dispatchers.IO){
             template = ""
             try {
@@ -237,24 +234,24 @@ fun GenerateContract(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ){
-//                        Button(
-//                            modifier = Modifier
-//                                .height(60.dp)
-//                                .width(200.dp),
-//                            onClick = { },
-//                            content = {
-//                                  Row( verticalAlignment = Alignment.CenterVertically ){
-//                                      Image(painterResource(R.drawable.ic_wechat),null)
-//                                      Text(
-//                                          modifier = Modifier.padding(start = 16.dp),
-//                                          text = "微信查看",
-//                                          color = Color.White,
-//                                          fontSize = 21.sp)
-//                                  }
-//                            },
-//                            colors = buttonColors(backgroundColor = Dodgerblue),
-//                            shape = RoundedCornerShape(18)
-//                        )
+                        if(false)Button(
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(200.dp),
+                            onClick = { },
+                            content = {
+                                  Row( verticalAlignment = Alignment.CenterVertically ){
+                                      Image(painterResource(R.drawable.ic_wechat),null)
+                                      Text(
+                                          modifier = Modifier.padding(start = 16.dp),
+                                          text = "微信查看",
+                                          color = Color.White,
+                                          fontSize = 21.sp)
+                                  }
+                            },
+                            colors = buttonColors(backgroundColor = Dodgerblue),
+                            shape = RoundedCornerShape(18)
+                        )
                         Button(
                             modifier = Modifier
                                 .height(60.dp)
@@ -269,7 +266,8 @@ fun GenerateContract(navController: NavController) {
                                         modifier = Modifier.padding(start = 16.dp),
                                         text = "打印合同",
                                         color = Color.White,
-                                        fontSize = 21.sp)
+                                        fontSize = 21.sp
+                                    )
                                 }
                             },
                             colors = buttonColors(backgroundColor = Dodgerblue),
@@ -369,10 +367,7 @@ fun GenerateContract(navController: NavController) {
                             }
                         }
                     }
-                    Spacer(
-                        Modifier
-                            .width(56.dp)
-                            .height(112.dp))
+                    Spacer( Modifier.width(56.dp).height(112.dp))
                 }
             }
         }

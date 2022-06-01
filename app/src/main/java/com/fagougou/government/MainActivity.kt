@@ -158,16 +158,8 @@ fun Main() {
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }
-    Image(
-        modifier = Modifier.fillMaxSize(),
-        painter = painterResource(R.drawable.home_background),
-        contentDescription = "Background"
-    )
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
+    Image( painterResource(R.drawable.home_background),"Background",Modifier.fillMaxSize() )
+    Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(
             navController = navController,
             startDestination = Router.home,

@@ -117,8 +117,5 @@ fun ContractWebView(navController: NavController) {
             }
         }
     }
-    Header(
-        "合同文库",
-        navController,
-    )
+    Header("合同文库",navController)
 }

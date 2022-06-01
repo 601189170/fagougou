@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
@@ -57,7 +58,6 @@ fun RegisterPage(navController: NavController){
                 }
             }
         }
-
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -66,14 +66,15 @@ fun RegisterPage(navController: NavController){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(28.dp),
+                .height(48.dp)
+                .padding(top = 16.dp,start = 40.dp,end = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(R.drawable.home_logo),
-                contentDescription = "Home Logo",
-                modifier = Modifier.height(36.dp)
+                contentDescription = "Company Logo",
+                modifier = Modifier.height(32.dp)
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
@@ -98,7 +99,7 @@ fun RegisterPage(navController: NavController){
         )
         Button(
             modifier = Modifier
-                .padding(top = 50.dp)
+                .padding(top = 24.dp)
                 .width(480.dp)
                 .height(60.dp),
             onClick = { if(registerAction.value=="立即绑定") login(navController) },
@@ -113,15 +114,15 @@ fun RegisterPage(navController: NavController){
         )
         Text(
             modifier = Modifier
-                .padding(top = 350.dp)
+                .padding(top = 488.dp)
                 .clickable {
                     MMKV.clearStack--
                     if (MMKV.clearStack <=0){
                         MMKV.clearStack =8
-                        navController.navigate(Router.admin)
+                        activity.finish()
                     }
                 },
-            text = "技术支持：法狗狗人工智能 v2.0",
+            text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
             fontSize = 24.sp,
             color = Color.White
         )
