@@ -15,11 +15,6 @@ object ImSdkUtils {
     var userName = "用户名"
     var userId = "用户id"
 
-    fun startAc(context: Context){
-        val intent = Intent(context, TouristsLoginActivity::class.java)
-        context.startActivity(intent)
-    }
-
      fun initKfHelper() {
         //设置sdk 显示语言版本
 //        initLanguage();

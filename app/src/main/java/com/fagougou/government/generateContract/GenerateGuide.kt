@@ -149,8 +149,10 @@ fun GenerateGuide(navController: NavController) {
                             .height(60.dp)
                             .width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                        onClick = { DialogViewModel.startPrint(scope)
-                            ContractViewModel.isPrint.value="1"},
+                        onClick = {
+                            DialogViewModel.startPrint(scope)
+                            ContractViewModel.isPrint.value="1"
+                        },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)

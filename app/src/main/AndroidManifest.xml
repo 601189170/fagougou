@@ -11,15 +11,15 @@
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
     <application
-        android:name="com.fagougou.government.CommonApplication"
+        android:name=".CommonApplication"
         android:allowBackup="false"
         android:icon="@drawable/fagougou"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@drawable/fagougou"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Government"
-        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label,android:theme,android:allowBackup">
         <meta-data
             android:name="design_width_in_dp"
@@ -29,9 +29,9 @@
             android:value="1080" />
         <activity
             android:name=".consult.TouristsLoginActivity"
+            android:exported="false"
             android:theme="@style/Theme.Government"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:exported="false" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".consult.WaitActivity"
             android:exported="false" />
@@ -39,13 +39,10 @@
             android:name=".consult.ChooseDomainActivity"
             android:exported="false" />
         <activity
-            android:name="com.fagougou.government.UpdateActivity"
-            android:exported="true"
-            >
-        </activity>
-
+            android:name=".UpdateActivity"
+            android:exported="true"></activity>
         <activity
-            android:name="com.fagougou.government.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Government"
             android:windowSoftInputMode="adjustPan">
@@ -57,7 +54,7 @@
         </activity>
         <meta-data
             android:name="com.bugsnag.android.API_KEY"
-             android:value="ae73180eda276349a3eb4602b1eba951" />
+            android:value="ae73180eda276349a3eb4602b1eba951" />
     </application>
 
 </manifest>

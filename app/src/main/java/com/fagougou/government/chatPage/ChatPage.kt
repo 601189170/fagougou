@@ -1,5 +1,6 @@
 package com.fagougou.government.chatPage
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel.history
 import com.fagougou.government.chatPage.ChatViewModel.listState
@@ -26,6 +28,7 @@ import com.fagougou.government.chatPage.messageItem.MessageItem
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
+import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.Message
@@ -67,7 +70,8 @@ fun ChatPage(navController: NavController) {
                     secondButtonOnClick.value = {
                         content.clear()
                         IFly.stopAll()
-                        ImSdkUtils.startAc(Tips.context)
+                        val intent = Intent(activity, TouristsLoginActivity::class.java)
+                        activity.startActivity(intent)
                     }
                     content.add(ContentStyle("退出前，请确认本次咨询是否解决您的问题？"))
                 }
