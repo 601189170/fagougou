@@ -1,5 +1,6 @@
 package com.fagougou.government.registerPage
 
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -37,7 +38,7 @@ import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
 @Composable
-fun RegisterPage(navController: NavController){
+fun RegisterPage(context: Context, navController: NavController){
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         scope.launch(Dispatchers.IO){
@@ -102,7 +103,7 @@ fun RegisterPage(navController: NavController){
                 .padding(top = 24.dp)
                 .width(480.dp)
                 .height(60.dp),
-            onClick = { if(registerAction.value=="立即绑定") login(navController) },
+            onClick = { if(registerAction.value=="立即绑定") login(context, navController) },
             content = {
                 Text(
                     text = registerAction.value,
@@ -116,9 +117,9 @@ fun RegisterPage(navController: NavController){
             modifier = Modifier
                 .padding(top = 488.dp)
                 .clickable {
-                    MMKV.clearStack--
-                    if (MMKV.clearStack <=0){
-                        MMKV.clearStack =8
+                    Time.exitStack--
+                    if (Time.exitStack <=0){
+                        Time.exitStack =8
                         activity.finish()
                     }
                 },

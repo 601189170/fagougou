@@ -25,8 +25,7 @@ dependencies {
     api 'com.google.android:flexbox:1.0.0'
     //解决多依赖冲突
     api 'androidx.multidex:multidex:2.0.0'
-    //glide
-//        implementation 'com.github.bumptech.glide:glide:3.7.0'
+
     api 'com.github.bumptech.glide:glide:4.9.0'
 
     api 'com.github.7moor-tech:7moor_visitorIm_sdk:4.1.0'

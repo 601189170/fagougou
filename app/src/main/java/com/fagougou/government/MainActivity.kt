@@ -1,6 +1,8 @@
 package com.fagougou.government
 
+import android.annotation.SuppressLint
 import android.app.ZysjSystemManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -74,6 +76,7 @@ import org.greenrobot.eventbus.EventBus
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
@@ -86,7 +89,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Main()
+                    Main(this)
                     QrCode()
                     Dialog()
                     Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
@@ -115,6 +118,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity = this
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         lastTouchTime = stampL
         return super.dispatchTouchEvent(ev)
@@ -123,7 +131,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Main() {
+fun Main(context: Context) {
     val navController = rememberNavController()
     LaunchedEffect("UpdateNavContent") {
         while (true) {
@@ -165,9 +173,9 @@ fun Main() {
             startDestination = Router.home,
             modifier = Modifier.fillMaxHeight()
         ) {
-            composable(Router.register) { RegisterPage(navController) }
+            composable(Router.register) { RegisterPage(context,navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
-            composable(Router.home) { HomePage(navController) }
+            composable(Router.home) { HomePage(context,navController) }
             composable(Router.admin) { AdminPage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }

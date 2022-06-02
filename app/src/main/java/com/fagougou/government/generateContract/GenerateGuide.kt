@@ -115,7 +115,7 @@ fun GenerateGuide(navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    ContractWebView(data)
+                    ContractWebView()
                 }
                 Row(
                     Modifier.fillMaxSize(),
@@ -150,8 +150,7 @@ fun GenerateGuide(navController: NavController) {
                             .width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         onClick = {
-                            DialogViewModel.startPrint(scope)
-                            ContractViewModel.isPrint.value="1"
+                            DialogViewModel.confirmPrint()
                         },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){

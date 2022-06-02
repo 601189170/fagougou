@@ -38,13 +38,12 @@ import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.dialog.DialogViewModel.type
+import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.fagougou.government.utils.Printer
+import com.fagougou.government.utils.Time
 
 object DialogViewModel {
     var icon = 0
@@ -62,22 +61,33 @@ object DialogViewModel {
         title = ""
         content.clear()
         type = "button"
-        canExit = true
+        canExit = false
         firstButtonText.value = ""
         secondButtonText.value = ""
         firstButtonOnClick.value = {}
         secondButtonOnClick.value = {}
     }
 
-    fun startPrint(scope: CoroutineScope) {
+    fun confirmPrint() {
+        GenerateContract.lastModifier = Time.stamp
+        clear()
+        title = "即将进行打印"
+        content.add(ContentStyle("按下确认键开始打印当前合同"))
+        canExit = true
+        firstButtonText.value = "取消"
+        secondButtonText.value = "确认"
+        firstButtonOnClick.value = { clear() }
+        secondButtonOnClick.value = {
+            startPrint()
+            Printer.printWebView.value=true
+        }
+    }
+
+    fun startPrint() {
         clear()
         icon = R.drawable.ic_painter_blue
         title = "正在打印"
-        content.add(ContentStyle("文件正在打印，请耐心等待..."))
-        scope.launch(Dispatchers.Default) {
-            delay(2500)
-            if (content.firstOrNull()?.content?.contains("文件正在打印") == true) clear()
-        }
+        content.add(ContentStyle("文件正在打印，预计需要30秒。请耐心等待..."))
     }
 }
 

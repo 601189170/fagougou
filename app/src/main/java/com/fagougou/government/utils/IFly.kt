@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
+import timber.log.Timber
 import java.lang.Exception
 
 object IFly {
@@ -33,7 +34,7 @@ object IFly {
 
     var mIatResults = mutableMapOf<String, String>()
     val mInitListener = InitListener { code ->
-        if (code != ErrorCode.SUCCESS) toast("初始化失败，错误码：$code")
+        if (code != ErrorCode.SUCCESS) Timber.e("讯飞初始化失败，代码%d",code)
     }
     val mRecognizerListener = object:RecognizerListener{
         override fun onVolumeChanged(volume: Int, data: ByteArray) {
@@ -51,7 +52,6 @@ object IFly {
         }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
-            Log.d(TAG, results.resultString)
             val text: String = parseIatResult(results.resultString)
             var sn = ""
             var pgs = ""
@@ -87,7 +87,7 @@ object IFly {
         }
 
         override fun onError(error: SpeechError?) {
-            if(error!=null) Log.d(TAG, "onError " + error.getPlainDescription(true))
+            error?.let { Timber.e("讯飞识别失败，代码%d",error.errorCode)}
         }
 
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
@@ -99,8 +99,8 @@ object IFly {
 
         override fun onResult(results: WakeuperResult) = recognizeMode()
 
-        override fun onError(error: SpeechError) {
-            Log.d(TAG, "onError " + error.getPlainDescription(true))
+        override fun onError(error: SpeechError?) {
+            error?.let { Timber.e("讯飞唤醒失败，代码%d",error.errorCode)}
         }
 
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }

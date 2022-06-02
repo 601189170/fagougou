@@ -13,8 +13,6 @@ import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,13 +30,10 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractPage.ContractViewModel.isPrint
-import com.fagougou.government.utils.Printer.PrintPDF
+import com.fagougou.government.utils.Printer.printWebView
 
 @Composable
 fun ContractWebView(navController: NavController) {
-
-    val scope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier
@@ -52,15 +47,12 @@ fun ContractWebView(navController: NavController) {
                     webChromeClient = WebChromeClient()
                     loadUrl(officeUrl)
                 }
-
-            }
-            ,
+            },
             update = {
-                if (isPrint.value=="1"){
-                    PrintPDF(it)
-                    isPrint.value=""
+                if (printWebView.value){
+                    printWebView(it)
+                    printWebView.value=false
                 }
-
             }
         )
         Surface(modifier = Modifier
@@ -100,8 +92,9 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .padding(start = 24.dp)
                         .width(200.dp),
-                    onClick = { DialogViewModel.startPrint(scope)
-                              isPrint.value="1"},
+                    onClick = {
+                        DialogViewModel.confirmPrint()
+                    },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_painter),null)

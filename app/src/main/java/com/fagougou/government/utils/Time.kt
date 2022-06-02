@@ -11,6 +11,7 @@ object Time {
     val timeText = mutableStateOf("")
     var stampL = 0L
     var stamp = "0"
+    var exitStack = 8
     init {
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
@@ -20,6 +21,7 @@ object Time {
                 stamp = time.toString()
                 val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
                 timeText.value = simpleDateFormat.format(time).replace("周","星期")
+                if (exitStack < 8) exitStack++
             }
         }
     }

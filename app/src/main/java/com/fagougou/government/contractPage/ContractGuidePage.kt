@@ -53,7 +53,6 @@ object ContractViewModel{
     val searchWord = mutableStateOf("")
     var officeUrl = ""
     var fileUrl = ""
-    val isPrint = mutableStateOf("")
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -71,9 +70,6 @@ object ContractViewModel{
     }
 
     suspend fun  getContractList(folder:String, searchName:String = "") {
-//        ContractLists.clear()
-//        var bean=ContractData()
-//        ContractLists.add(bean)
         withContext(Dispatchers.IO) {
             try {
                 if (searchName!="")selectedId.value = ""

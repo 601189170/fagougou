@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.utils.Tips.toast
 import com.king.app.dialog.AppDialog
 import com.king.app.updater.AppUpdater
@@ -19,6 +20,11 @@ class UpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update)
         update()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity = this
     }
     lateinit var tvProgress: TextView
     lateinit var progressBar: ProgressBar

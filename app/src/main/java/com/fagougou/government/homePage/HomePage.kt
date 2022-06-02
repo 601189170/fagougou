@@ -1,5 +1,6 @@
 package com.fagougou.government.homePage
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -28,7 +29,6 @@ import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPl
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
-import com.fagougou.government.utils.MMKV.clearStack
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ.manager
@@ -53,7 +53,7 @@ fun HomeButton(
 }
 
 @Composable
-fun HomePage(navController:NavController) {
+fun HomePage(context: Context, navController:NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         manager?.ZYSystemBar(0)
@@ -156,14 +156,10 @@ fun HomePage(navController:NavController) {
             modifier = Modifier
                 .padding(top = 225.dp)
                 .clickable {
-                    clearStack--
-                    if (clearStack<=0){
-                        clearStack=8
+                    Time.exitStack--
+                    if (Time.exitStack<=0){
+                        Time.exitStack=8
                         navController.navigate(Router.admin)
-//                        kv.remove("canLogin")
-//                        manager?.ZYSystemBar(1)
-//                        toast("登出成功")
-//                        activity.finish()
                     }
                 },
             text = "技术支持：法狗狗人工智能 v2.0",

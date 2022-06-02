@@ -1,6 +1,5 @@
 package com.fagougou.government.consult
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.eseid.sdtapi.*
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
@@ -26,18 +26,31 @@ class TouristsLoginActivity : BaseActivity() {
     lateinit var binding: ActivityReadCardMsgBinding
     lateinit var wechatDialog : WechatDialog
     val esSdt = EsSdtSdk.getInst()
-    var logCB = EsLogCB { _, msg -> onLog(msg) }
-    var mFindTime: Long = 0
-    var mSuccessTime: Long = 0
+    val sdtCB = EsSdtCB { type, msg ->
+        when (type) {
+            SdtCode.SDT_NOTIFY_SAMID -> Timber.d("设备序列号:%s",msg)
+            SdtCode.SDT_NOTIFY_FIND -> Timber.d("发现证件")
+            SdtCode.SDT_NOTIFY_SUCCESS -> {
+                Timber.d("证件读取成功")
+                val info = SdtInfo(msg).info
+                lifecycleScope.launch(Dispatchers.Main) {
+                    binding.edName.setText(info.getString("name"))
+                    setSelectSexBg(info.getString("sex"))
+                    binding.edCard.setText(info.getString("idnum"))
+                }
+            }
+            SdtCode.SDT_NOTIFY_ERROR -> Timber.e("身份证读取失败")
+        }
+    }
     val sdtStatusCB = EsSdtStatusCB { type ->
         when (type) {
-            SdtCode.SDT_ERROR_IO -> onLog("SDT_ERROR_IO")
-            SdtCode.SDT_ERROR -> onLog("SDT_ERROR")
-            SdtCode.SDT_STOP -> onLog("SDT_STOP")
-            SdtCode.SDT_STOPPING -> onLog("SDT_STOPPING")
-            SdtCode.SDT_STARTING -> onLog("SDT_STARTING")
-            SdtCode.SDT_RUNNING -> onLog("SDT_RUNNING")
-            SdtCode.SDT_PAUSE -> onLog("SDT_PAUSE")
+            SdtCode.SDT_ERROR_IO -> Timber.d("SDT_ERROR_IO")
+            SdtCode.SDT_ERROR -> Timber.d("SDT_ERROR")
+            SdtCode.SDT_STOP -> Timber.d("SDT_STOP")
+            SdtCode.SDT_STOPPING -> Timber.d("SDT_STOPPING")
+            SdtCode.SDT_STARTING -> Timber.d("SDT_STARTING")
+            SdtCode.SDT_RUNNING -> Timber.d("SDT_RUNNING")
+            SdtCode.SDT_PAUSE -> Timber.d("SDT_PAUSE")
         }
     }
 
@@ -53,7 +66,8 @@ class TouristsLoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        esSdt.Start(this, sdtCB, logCB, sdtStatusCB)
+        activity = this
+        esSdt.Start(this, sdtCB, { _, msg -> Timber.d(msg) }, sdtStatusCB)
     }
 
     fun initView() {
@@ -162,37 +176,5 @@ class TouristsLoginActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         esSdt.Stop()
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // 读证
-    // ---------------------------------------------------------------------------------------------
-    var sdtCB = EsSdtCB { type, msg ->
-        when (type) {
-            SdtCode.SDT_NOTIFY_SAMID -> {
-                onLog("设备序列号: $msg")
-            }
-            SdtCode.SDT_NOTIFY_FIND -> {
-                onLog("发现证件")
-                mFindTime = System.currentTimeMillis()
-            }
-            SdtCode.SDT_NOTIFY_SUCCESS -> {
-                val eidInfo = SdtInfo(msg)
-                val info = eidInfo.info
-                onLog("证件读取成功")
-                mSuccessTime = System.currentTimeMillis()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.edName.setText(info.getString("name"))
-                    setSelectSexBg(info.getString("sex"))
-                    binding.edCard.setText(info.getString("idnum"))
-                }
-            }
-            SdtCode.SDT_NOTIFY_ERROR -> onLog("读证失败")
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    fun onLog(msg: String) {
-        Timber.d(msg)
     }
 }

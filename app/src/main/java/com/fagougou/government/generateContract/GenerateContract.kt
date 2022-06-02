@@ -1,11 +1,6 @@
 package com.fagougou.government.generateContract
 
 import android.content.Context
-import android.os.Build
-import android.print.PrintAttributes
-import android.print.PrintDocumentAdapter
-import android.print.PrintManager
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -32,20 +27,16 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.Router.webView
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.Printer.PrintPDF
+import com.fagougou.government.utils.Printer.printWebView
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
 
@@ -147,7 +138,7 @@ object GenerateContract {
 }
 
 @Composable
-fun ContractWebView(data: MutableState<String>) {
+fun ContractWebView() {
     AndroidView(
         modifier = Modifier
             .fillMaxHeight()
@@ -167,10 +158,10 @@ fun ContractWebView(data: MutableState<String>) {
             }
         },
         update = {
-            it.loadDataWithBaseURL(null, data.value, "text/html; charset=utf-8", "utf-8", null)
-            if (ContractViewModel.isPrint.value=="1"){
-                PrintPDF(it)
-                ContractViewModel.isPrint.value=""
+            it.loadDataWithBaseURL(null, GenerateContract.data.value, "text/html; charset=utf-8", "utf-8", null)
+            if (printWebView.value){
+                printWebView(it)
+                printWebView.value=false
             }
         }
     )
@@ -178,10 +169,9 @@ fun ContractWebView(data: MutableState<String>) {
 
 @Composable
 fun GenerateContract(navController: NavController) {
-    val scope = rememberCoroutineScope()
     LaunchedEffect(null) {
         while (isActive) {
-            delay(750)
+            delay(600)
             GenerateContract.updateContent()
         }
     }
@@ -207,7 +197,7 @@ fun GenerateContract(navController: NavController) {
                     Column(
                         Modifier.fillMaxHeight(0.88f)
                     ) {
-                        ContractWebView(data)
+                        ContractWebView()
                     }
                     Divider(thickness = 2.dp)
                     Row(
@@ -239,8 +229,9 @@ fun GenerateContract(navController: NavController) {
                                 .height(60.dp)
                                 .width(200.dp),
                             elevation = ButtonDefaults.elevation(0.dp, 0.dp),
-                            onClick = { DialogViewModel.startPrint(scope)
-                                ContractViewModel.isPrint.value="1"},
+                            onClick = {
+                                DialogViewModel.confirmPrint()
+                            },
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_painter), null)
@@ -266,8 +257,8 @@ fun GenerateContract(navController: NavController) {
                 ) {
                     for (item in GenerateContract.formList) {
                         Text(
-                            modifier = Modifier.padding(top = 24.dp, start = 16.dp),
-                            text = item.label,
+                            item.label,
+                            Modifier.padding(top = 24.dp, start = 16.dp),
                             fontSize = 24.sp
                         )
                         for (child in item.children) {
@@ -281,9 +272,8 @@ fun GenerateContract(navController: NavController) {
                                             .height(24.dp)
                                             .width(4.dp), color = Dodgerblue
                                     ) { }
-                                    Text(
-                                        modifier = Modifier.padding(start = 12.dp),
-                                        text = child.label,
+                                    Text(child.label,
+                                        Modifier.padding(start = 12.dp),
                                         fontSize = 18.sp
                                     )
                                 }
@@ -293,8 +283,8 @@ fun GenerateContract(navController: NavController) {
                                             for ((i, option) in child.values.withIndex()) {
                                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                                     Checkbox(
-                                                        checked = i in child.selected,
-                                                        onCheckedChange = {
+                                                        i in child.selected,
+                                                        {
                                                             if (it) child.selected.add(i)
                                                             else child.selected.remove(i)
                                                             lastModifier = child.variable
@@ -311,8 +301,8 @@ fun GenerateContract(navController: NavController) {
                                             for ((i, option) in child.values.withIndex()) {
                                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                                     RadioButton(
-                                                        selected = i in child.selected,
-                                                        onClick = {
+                                                        i in child.selected,
+                                                        {
                                                             child.selected.clear()
                                                             child.selected.add(i)
                                                             lastModifier = child.variable
@@ -325,7 +315,14 @@ fun GenerateContract(navController: NavController) {
                                         }
                                     }
                                     else -> TextField(
-                                        modifier = Modifier
+                                        child.input,
+                                        { str ->
+                                            Router.lastTouchTime = Time.stampL
+                                            child.input = str
+                                            lastModifier = child.variable
+                                            notifier.value = Time.stamp
+                                        },
+                                        Modifier
                                             .fillMaxWidth()
                                             .height(if (child.label.contains("地址")) 112.dp else 56.dp)
                                             .border(1.dp, Color.LightGray, RoundedCornerShape(18)),
@@ -337,20 +334,13 @@ fun GenerateContract(navController: NavController) {
                                             focusedIndicatorColor = Color.Transparent,
                                             unfocusedIndicatorColor = Color.Transparent,
                                         ),
-                                        value = child.input,
-                                        onValueChange = { str ->
-                                            Router.lastTouchTime = Time.stampL
-                                            child.input = str
-                                            lastModifier = child.variable
-                                            notifier.value = Time.stamp
-                                        },
                                         placeholder = { if (child.input == "") Text(child.comment) }
                                     )
                                 }
                             }
                         }
                     }
-                    Spacer( Modifier.width(56.dp).height(112.dp))
+                    Spacer( Modifier.width(56.dp).height(112.dp) )
                 }
             }
         }

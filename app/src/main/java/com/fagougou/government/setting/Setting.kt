@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.utils.MMKV
+import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import com.fagougou.government.utils.ZYSJ
 import com.fagougou.government.utils.ZYSJ.hideBar
@@ -68,35 +70,5 @@ fun Settings(navController: NavController) {
             )
             Image(painterResource(R.drawable.ic_right),null)
         }
-        Divider(
-            Modifier.padding(top = 5.dp),
-            color = Color(0xFFFFFFFF),
-            thickness = 2.dp,
-        )
-        Row(
-            modifier = Modifier
-                .padding(vertical = 32.dp).padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable {   MMKV.clearStack--
-                    if (MMKV.clearStack <= 0) {
-                        MMKV.kv.remove("canLogin")
-                        Tips.toast("登出成功")
-                        CommonApplication.activity.finish()
-                    }},
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
-                lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "清除缓存"
-            )
-            Image(painterResource(R.drawable.ic_right),null)
-        }
-
-
     }
 }
