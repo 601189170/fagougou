@@ -37,6 +37,7 @@ import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer.printWebView
+import com.fagougou.government.utils.Printer.wantPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
@@ -166,9 +167,9 @@ fun ContractWebView() {
                 "utf-8",
                 null
             )
-            if (printWebView.value) {
+            if (wantPrint.value) {
                 printWebView(it)
-                printWebView.value = false
+                wantPrint.value = false
             }
         }
     )
@@ -215,7 +216,7 @@ fun GenerateContract(navController: NavController) {
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_wechat), null)
-                                    BasicText("微信查看",16.dp,21.sp)
+                                    BasicText("微信查看",0.dp,21.sp)
                                 }
                             },
                             colors = buttonColors(backgroundColor = Dodgerblue),
@@ -232,7 +233,7 @@ fun GenerateContract(navController: NavController) {
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_painter), null)
-                                    BasicText("打印合同",16.dp,21.sp)
+                                    BasicText("打印合同",0.dp,21.sp)
                                 }
                             },
                             colors = buttonColors(backgroundColor = Dodgerblue),

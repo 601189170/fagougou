@@ -146,9 +146,6 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         activity = this
-        if (binding!=null){
-            binding.homeBtn.visibility=View.GONE
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

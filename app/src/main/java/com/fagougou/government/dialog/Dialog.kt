@@ -79,7 +79,7 @@ object DialogViewModel {
         firstButtonOnClick.value = { clear() }
         secondButtonOnClick.value = {
             startPrint()
-            Printer.printWebView.value=true
+            Printer.wantPrint.value=true
         }
     }
 

@@ -30,6 +30,7 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.utils.Printer.wantPrint
 import com.fagougou.government.utils.Printer.printWebView
 
 @Composable
@@ -49,9 +50,9 @@ fun ContractWebView(navController: NavController) {
                 }
             },
             update = {
-                if (printWebView.value){
+                if (wantPrint.value){
                     printWebView(it)
-                    printWebView.value=false
+                    wantPrint.value=false
                 }
             }
         )
