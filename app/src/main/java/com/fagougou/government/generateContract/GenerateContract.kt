@@ -272,7 +272,8 @@ fun GenerateContract(navController: NavController) {
                                             .height(24.dp)
                                             .width(4.dp), color = Dodgerblue
                                     ) { }
-                                    Text(child.label,
+                                    Text(
+                                        child.label,
                                         Modifier.padding(start = 12.dp),
                                         fontSize = 18.sp
                                     )
@@ -334,6 +335,13 @@ fun GenerateContract(navController: NavController) {
                                             focusedIndicatorColor = Color.Transparent,
                                             unfocusedIndicatorColor = Color.Transparent,
                                         ),
+                                        value = child.input,
+                                        onValueChange = { str ->
+                                            Router.lastTouchTime = Time.stampL
+                                            child.input = str
+                                            lastModifier = child.variable
+                                            notifier.value = Time.stamp
+                                        },
                                         placeholder = { if (child.input == "") Text(child.comment) }
                                     )
                                 }

@@ -11,6 +11,10 @@ public class MessageConstans {
     public static String RefreshTime="RefreshTime";
     //关闭动作
     public static String CloseAction="CloseAction";
+    //隐藏悬浮框
+    public static String WindsViewGone="WindsViewGone";
+    //打开悬浮框
+    public static String WindsViewShow="WindsViewShow";
 
 
 }

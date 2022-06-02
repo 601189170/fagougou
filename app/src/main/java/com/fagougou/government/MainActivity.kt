@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.app.ZysjSystemManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.PixelFormat
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.MotionEvent
+import android.view.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -39,43 +41,57 @@ import com.fagougou.government.Router.touchWaitTime
 import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
+import com.fagougou.government.component.QrCode
+import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.consult.ChooseDomainActivity
+import com.fagougou.government.consult.TouristsLoginActivity
+import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
+import com.fagougou.government.databinding.ActivityChooseDomainBinding
+import com.fagougou.government.databinding.ActivityReadCardMsgBinding
+import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
+import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.UpdateInfo
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
 import com.fagougou.government.repo.Client.globalLoading
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.updateService
+import com.fagougou.government.setting.AdminPage
+import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Time.stampL
-import com.fagougou.government.webViewPage.WebViewPage
-import com.fagougou.government.component.QrCode
-import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.consult.ChooseDomainActivity
-import com.fagougou.government.consult.TouristsLoginActivity
-import com.fagougou.government.consult.WaitActivity
-import com.fagougou.government.dialog.DialogViewModel.content
-import com.fagougou.government.model.ContentStyle
-import com.fagougou.government.setting.AdminPage
-import com.fagougou.government.setting.Settings
 import com.fagougou.government.utils.ZYSJ.manager
+import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
+    var mwindowview: View? = null
+    lateinit var binding: LayoutHomebtnBinding
+
+    var mwm: WindowManager? = null
+
+
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +131,17 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
+        }else{
+            mwm= activity.getSystemService(ComponentActivity.WINDOW_SERVICE) as WindowManager
+            binding=LayoutHomebtnBinding.inflate(layoutInflater)
+            binding.homeBtn.setOnClickListener {
+                EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
+//                lastTouchTime = 0
+                startActivity(Intent(activity, MainActivity::class.java))
+            }
+            EventBus.getDefault().register(this)
+            binding.homeBtn.visibility=View.GONE
+            mwm!!.addView(binding.root, initWindsSetting())
         }
     }
 
@@ -126,6 +153,23 @@ class MainActivity : ComponentActivity() {
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         lastTouchTime = stampL
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (mwm != null) {
+            mwm!!.removeViewImmediate(binding.root)
+        }
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    open fun onEventMainThread(messageEvent: MessageEvent) {
+        if (messageEvent.message .equals(MessageConstans.WindsViewGone) ) {
+            binding.homeBtn.visibility=View.GONE
+        } else if (messageEvent.message .equals(MessageConstans.WindsViewShow) ) {
+            binding.homeBtn.visibility=View.VISIBLE
+        }
     }
 }
 
@@ -223,4 +267,26 @@ fun isShowTaskActivity(): Boolean {
             || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)
             || ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)
 }
+
+fun initWindsSetting():WindowManager.LayoutParams{
+    val lp = WindowManager.LayoutParams(
+        WindowManager.LayoutParams.WRAP_CONTENT,
+        WindowManager.LayoutParams.WRAP_CONTENT,
+        WindowManager.LayoutParams.TYPE_PHONE,
+        0, PixelFormat.TRANSPARENT)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //6.0+
+        lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+    } else {
+        lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+    }
+    lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+    lp.gravity = Gravity.RIGHT
+    lp.gravity = Gravity.TOP
+
+    return lp
+}
+
+
+
+
 
