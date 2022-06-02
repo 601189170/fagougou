@@ -34,6 +34,7 @@ import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel.isPrint
 import com.fagougou.government.utils.Printer.PrintPDF
+import com.fagougou.government.utils.Printer.initWebView
 
 @Composable
 fun ContractWebView(navController: NavController) {
@@ -57,6 +58,7 @@ fun ContractWebView(navController: NavController) {
             ,
             update = {
                 if (isPrint.value=="1"){
+                    initWebView(it)
                     PrintPDF(it)
                     isPrint.value=""
                 }
