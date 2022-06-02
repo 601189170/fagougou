@@ -69,6 +69,7 @@ import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
+import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
@@ -86,17 +87,15 @@ import org.greenrobot.eventbus.ThreadMode
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
-    var mwindowview: View? = null
     lateinit var binding: LayoutHomebtnBinding
-
     var mwm: WindowManager? = null
-
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
         try {
+            mwm = activity.getSystemService(WINDOW_SERVICE) as WindowManager
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
         setContent {
@@ -132,16 +131,15 @@ class MainActivity : ComponentActivity() {
             intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
         }else{
-            mwm= activity.getSystemService(ComponentActivity.WINDOW_SERVICE) as WindowManager
             binding=LayoutHomebtnBinding.inflate(layoutInflater)
             binding.homeBtn.setOnClickListener {
                 EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
-//                lastTouchTime = 0
+                DialogViewModel.clear()
                 startActivity(Intent(activity, MainActivity::class.java))
             }
             EventBus.getDefault().register(this)
             binding.homeBtn.visibility=View.GONE
-            mwm!!.addView(binding.root, initWindsSetting())
+            mwm?.addView(binding.root, initWindsSetting())
         }
     }
 
@@ -280,7 +278,7 @@ fun initWindsSetting():WindowManager.LayoutParams{
         lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
     }
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-    lp.gravity = Gravity.RIGHT
+    lp.gravity = Gravity.END
     lp.gravity = Gravity.TOP
 
     return lp

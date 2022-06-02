@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
@@ -158,10 +159,16 @@ fun ContractWebView() {
             }
         },
         update = {
-            it.loadDataWithBaseURL(null, GenerateContract.data.value, "text/html; charset=utf-8", "utf-8", null)
-            if (printWebView.value){
+            it.loadDataWithBaseURL(
+                null,
+                GenerateContract.data.value,
+                "text/html; charset=utf-8",
+                "utf-8",
+                null
+            )
+            if (printWebView.value) {
                 printWebView(it)
-                printWebView.value=false
+                printWebView.value = false
             }
         }
     )
@@ -177,10 +184,7 @@ fun GenerateContract(navController: NavController) {
     }
     Surface(color = Color.White) {
         Text(notifier.value)
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-        ) {
+        Column(Modifier.fillMaxSize(), Arrangement.Top) {
             Header(
                 title = "智能文书",
                 navController = navController,
@@ -194,9 +198,7 @@ fun GenerateContract(navController: NavController) {
                         .fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        Modifier.fillMaxHeight(0.88f)
-                    ) {
+                    Column(Modifier.fillMaxHeight(0.88f)) {
                         ContractWebView()
                     }
                     Divider(thickness = 2.dp)
@@ -213,12 +215,7 @@ fun GenerateContract(navController: NavController) {
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_wechat), null)
-                                    Text(
-                                        modifier = Modifier.padding(start = 16.dp),
-                                        text = "微信查看",
-                                        color = Color.White,
-                                        fontSize = 21.sp
-                                    )
+                                    BasicText("微信查看",16.dp,21.sp)
                                 }
                             },
                             colors = buttonColors(backgroundColor = Dodgerblue),
@@ -235,12 +232,7 @@ fun GenerateContract(navController: NavController) {
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_painter), null)
-                                    Text(
-                                        modifier = Modifier.padding(start = 16.dp),
-                                        text = "打印合同",
-                                        color = Color.White,
-                                        fontSize = 21.sp
-                                    )
+                                    BasicText("打印合同",16.dp,21.sp)
                                 }
                             },
                             colors = buttonColors(backgroundColor = Dodgerblue),
@@ -248,7 +240,11 @@ fun GenerateContract(navController: NavController) {
                         )
                     }
                 }
-                Divider( modifier = Modifier.fillMaxHeight().width(1.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp)
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -335,20 +331,17 @@ fun GenerateContract(navController: NavController) {
                                             focusedIndicatorColor = Color.Transparent,
                                             unfocusedIndicatorColor = Color.Transparent,
                                         ),
-                                        value = child.input,
-                                        onValueChange = { str ->
-                                            Router.lastTouchTime = Time.stampL
-                                            child.input = str
-                                            lastModifier = child.variable
-                                            notifier.value = Time.stamp
-                                        },
                                         placeholder = { if (child.input == "") Text(child.comment) }
                                     )
                                 }
                             }
                         }
                     }
-                    Spacer( Modifier.width(56.dp).height(112.dp) )
+                    Spacer(
+                        Modifier
+                            .width(56.dp)
+                            .height(112.dp)
+                    )
                 }
             }
         }

@@ -44,13 +44,6 @@ fun ContractWebView(navController: NavController) {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     setInitialScale(80)
                     settings.javaScriptEnabled = true
-                    settings.setDefaultFontSize(40)
-                    settings.setUseWideViewPort(true) //将图片调整到适合webview的大小
-                    settings.setLoadWithOverviewMode(true) // 缩放至屏幕的大小
-                    settings.setSupportZoom(false) //支持缩放，默认为true。是下面那个的前提。
-                    settings.setBuiltInZoomControls(false) //设置内置的缩放控件。若为false，则该WebView不可缩放
-                    settings.setDisplayZoomControls(true) //隐藏原生的缩放控件
-                    settings.setAllowFileAccess(true)
                     webChromeClient = WebChromeClient()
                     loadUrl(officeUrl)
                 }
