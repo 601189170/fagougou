@@ -2,6 +2,7 @@ package com.fagougou.government.utils
 
 import android.content.Context
 import android.print.PrintAttributes
+import android.print.PrintJob
 import android.print.PrintManager
 import android.util.Log
 import android.webkit.WebView
@@ -21,25 +22,30 @@ object Printer {
     var printWebView = mutableStateOf(false)
     val printManager = activity.getSystemService(Context.PRINT_SERVICE) as PrintManager
     val printAttributes = PrintAttributes.Builder().build()
+    var currentJob : PrintJob? = null
 
     fun printWebView(webView: WebView){
         val printAdapter = webView.createPrintDocumentAdapter("打印合同")
-        val job = printManager.print("打印合同", printAdapter, printAttributes)
+        currentJob = printManager.print("打印合同", printAdapter, printAttributes)
         EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewShow))
         CoroutineScope(Dispatchers.Default).launch {
-            while (isActive){
+            while (currentJob!=null){
                 delay(1000)
                 Router.lastTouchTime = Time.stampL
-                toast(
-                    when {
-                        job.isCompleted -> "打印任务已完成"
-                        job.isFailed -> "打印任务已失败"
-                        job.isCancelled -> "打印任务已取消"
-                        job.isStarted -> "打印任务已启动"
-                        job.isQueued -> "打印任务已入列"
-                        else -> "打印任务已创建"
+                when {
+                    currentJob?.isCompleted == true -> {
+                        toast("打印任务已完成")
+                        break
                     }
-                )
+                    currentJob?.isFailed == true -> {
+                        toast("打印任务已失败")
+                        break
+                    }
+                    currentJob?.isCancelled == true -> {
+                        toast("打印任务已取消")
+                        break
+                    }
+                }
             }
             DialogViewModel.content.firstOrNull()?.let{ style ->
                 if (style.content.contains("文件正在打印")) DialogViewModel.clear()

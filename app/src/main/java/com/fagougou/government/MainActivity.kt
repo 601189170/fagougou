@@ -134,7 +134,7 @@ class MainActivity : ComponentActivity() {
             binding=LayoutHomebtnBinding.inflate(layoutInflater)
             binding.homeBtn.setOnClickListener {
                 EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
-                DialogViewModel.clear()
+                Printer.currentJob = null
                 startActivity(Intent(activity, MainActivity::class.java))
             }
             EventBus.getDefault().register(this)
@@ -155,17 +155,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mwm != null) {
-            mwm!!.removeViewImmediate(binding.root)
-        }
+        mwm?.removeViewImmediate(binding.root)
         EventBus.getDefault().unregister(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onEventMainThread(messageEvent: MessageEvent) {
-        if (messageEvent.message .equals(MessageConstans.WindsViewGone) ) {
+        if (messageEvent.message.equals(MessageConstans.WindsViewGone) ) {
             binding.homeBtn.visibility=View.GONE
-        } else if (messageEvent.message .equals(MessageConstans.WindsViewShow) ) {
+        } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
             binding.homeBtn.visibility=View.VISIBLE
         }
     }
