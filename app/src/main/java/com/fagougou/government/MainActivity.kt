@@ -8,7 +8,9 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,7 +32,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.FileUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
@@ -84,6 +88,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.File
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
@@ -95,6 +100,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         activity = this
         try {
+//            Log.e("TAG", "onCreate: "+JSON.toJSONString(Environment.getExternalStorageDirectory().path+ File.separator+"chao.pdf") )
             mwm = activity.getSystemService(WINDOW_SERVICE) as WindowManager
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
