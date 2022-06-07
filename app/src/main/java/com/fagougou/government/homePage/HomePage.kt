@@ -87,7 +87,7 @@ fun HomePage(context: Context, navController:NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .padding(top = 16.dp,start = 40.dp,end = 40.dp)
+                .padding(top = 8.dp,start = 40.dp,end = 40.dp)
                 .clickable { navController.navigate(Router.about) },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -100,7 +100,7 @@ fun HomePage(context: Context, navController:NavController) {
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
-        BasicText( "欢迎使用",124.dp)
+        BasicText( "欢迎使用",160.dp)
         BasicText( "智能法律服务系统",8.dp,28.sp)
         Row( modifier = Modifier.padding(top = 48.dp) ) {
             HomeButton(
@@ -164,7 +164,7 @@ fun HomePage(context: Context, navController:NavController) {
                     }
                 },
             text = "技术支持：法狗狗人工智能 v2.0",
-            fontSize = 24.sp,
+            fontSize = 21.sp,
             color = Color.White
         )
     }
