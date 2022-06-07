@@ -215,7 +215,7 @@ fun Main(context: Context) {
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(
             navController = navController,
-            startDestination = Router.home,
+            startDestination = Router.register,
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.register) { RegisterPage(context,navController) }
