@@ -115,16 +115,6 @@ fun RegisterPage(context: Context, navController: NavController){
         )
         Text(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .clickable {
-                    activity.finish()
-                },
-            text = "退出系统",
-            fontSize = 24.sp,
-            color = Color(0x65FFFFFF)
-        )
-        Text(
-            modifier = Modifier
                 .padding(top = 460.dp)
                 .clickable {
                     Time.exitStack--

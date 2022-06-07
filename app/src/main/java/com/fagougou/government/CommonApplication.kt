@@ -64,7 +64,7 @@ class CommonApplication: Application(){
         }
     }
 
-    suspend fun openSecondScreen() {
+    private suspend fun openSecondScreen() {
         withContext(Dispatchers.Main){
             val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
             val display = displayManager.displays.getOrNull(1) ?: return@withContext

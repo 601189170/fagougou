@@ -6,10 +6,9 @@ import android.print.PrintJob
 import android.print.PrintManager
 import android.webkit.WebView
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.content.ContextCompat.getSystemService
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.MyPrintAdapter
+import com.fagougou.government.contractPage.PdfPrintAdapter
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.utils.Tips.toast
 import com.m7.imkfsdk.MessageConstans
@@ -68,7 +67,10 @@ object Printer {
             toast("请等待当前打印任务完成")
             return
         }
-        val printAdapter = MyPrintAdapter(activity, filePath)
+        val printAdapter = PdfPrintAdapter(
+            activity,
+            filePath
+        )
         CoroutineScope(Dispatchers.Default).launch {
             while (currentJob!=null){
                 delay(250)

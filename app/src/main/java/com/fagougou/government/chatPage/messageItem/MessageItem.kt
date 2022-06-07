@@ -32,16 +32,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navController: NavController) {
     Row {
-        if (!(ChatViewModel.history.getOrNull(index)?.speaker == Speaker.USER)) {
-            if (index <= 0 || ChatViewModel.history[index-1].speaker == Speaker.USER) {
-                Image(
-                    painterResource(R.drawable.ic_robot_avatar), null,
-                    Modifier.padding(start = 25.dp,top = 16.dp))
-            } else Box(
-                Modifier
-                    .padding(start = 25.dp)
-                    .height(48.dp)
-                    .width(56.dp))
+        when (message.speaker){
+            Speaker.OPTIONS,Speaker.USER -> {}
+            else -> {
+                if (index <= 0 || ChatViewModel.history[index - 1].speaker == Speaker.USER) {
+                    Image(
+                        painterResource(R.drawable.ic_robot_avatar),
+                        null,
+                        Modifier.padding(start = 24.dp, top = 16.dp)
+                    )
+                } else Box(Modifier.padding(start = 16.dp).height(48.dp).width(56.dp))
+            }
         }
         when (message.speaker) {
             Speaker.ROBOT -> Row(
@@ -72,38 +73,27 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     Column( Modifier.padding(vertical = 16.dp,horizontal = 24.dp) ) {
                         if (message.isExpend) {
                             Row(
-                                modifier = Modifier.padding(start = 12.dp),
+                                Modifier.padding(start = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 if (index == 1) Text("大家都在问:", fontSize = 24.sp)
                                 else {
                                     Image(painterResource(R.drawable.ic_relate_question), null)
-                                    Text(
-                                        modifier = Modifier.padding(start = 12.dp),
-                                        text = "相关问题",
-                                        fontSize = 24.sp
-                                    )
+                                    Text("相关问题",Modifier.padding(start = 12.dp),fontSize = 24.sp)
                                 }
                             }
                             for (question in message.recommends) Button(
-                                onClick = { scope.launch(Dispatchers.IO) {
-                                    ChatViewModel.nextChat(
-                                        question
-                                    )
+                                { scope.launch(Dispatchers.IO) {
+                                    ChatViewModel.nextChat(question)
                                 } },
                                 content = {
-                                    Text(
-                                        "·$question",
-                                        fontSize = 24.sp,
-                                        color = Dodgerblue
-                                    )
+                                    Text("·$question", fontSize = 24.sp, color = Dodgerblue)
                                 },
                                 colors = ButtonDefaults.buttonColors(Color.Transparent),
                                 elevation = ButtonDefaults.elevation(0.dp)
                             )
                         } else Row(
-                            modifier = Modifier
-                                .clickable {
+                            modifier = Modifier.clickable {
                                     ChatViewModel.history[index] = message.copy(isExpend = true)
                                     if (index == ChatViewModel.history.lastIndex) scope.launch(
                                         Dispatchers.Main) {
@@ -112,67 +102,31 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                 }
                         ) {
                             Image(painterResource(R.drawable.ic_relate_question), null)
-                            Text(
-                                modifier = Modifier.padding(start = 12.dp),
-                                text = "点击查看与您情况相关的问题",
-                                fontSize = 24.sp,
-                                color = Dodgerblue
-                            )
+                            Text("点击查看与您情况相关的问题",Modifier.padding(start = 12.dp),Dodgerblue,24.sp,)
                         }
                     }
                 }
             }
             Speaker.OPTIONS -> Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.6f)
+                    .fillMaxWidth()
                     .padding(vertical = 16.dp)
             ) {
                 when (message.option.type) {
                     "radio" -> {
-                        val lastIndex = message.option.items.lastIndex
-                        for (y in 0..lastIndex step 4) Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            for (x in 0..3) {
-                                val i = y + x
-                                if (i <= lastIndex) {
-                                    val item = message.option.items[i]
-                                    Button(
-                                        modifier = Modifier
-                                            .height(60.dp)
-                                            .width(180.dp),
-                                        onClick = { scope.launch(Dispatchers.IO) {
-                                            ChatViewModel.nextChat(
-                                                item
-                                            )
-                                        } },
-                                        content = { BasicText(item, 0.dp, 20.sp) },
-                                        colors = ButtonDefaults.buttonColors(Dodgerblue)
-                                    )
-                                }
-                            }
-                        }
+                        VerticalGrid( message.option.items, 4, 64, 256,
+                            { scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(it) } }
+                        )
                     }
                     "address-with-search" -> {
                         if (ChatViewModel.currentProvince.value == "") {
                             val provinceList = CityMap.provinceList.keys.toList()
-                            VerticalGrid(
-                                provinceList,
-                                6,
-                                50,
-                                150,
+                            VerticalGrid(provinceList, 6, 48, 192,
                                 {  ChatViewModel.currentProvince.value = it }
                             )
                         } else {
                             val cityList = CityMap.provinceList[ChatViewModel.currentProvince.value] ?: listOf()
-                            VerticalGrid(
-                                cityList,
-                                6,
-                                50,
-                                150,
+                            VerticalGrid(cityList, 6, 48, 192,
                                 {
                                     scope.launch(Dispatchers.IO) {
                                         ChatViewModel.nextChat("${ChatViewModel.currentProvince.value}-$it")

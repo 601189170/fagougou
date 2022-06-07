@@ -100,7 +100,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         activity = this
         try {
-//            Log.e("TAG", "onCreate: "+JSON.toJSONString(Environment.getExternalStorageDirectory().path+ File.separator+"chao.pdf") )
             mwm = activity.getSystemService(WINDOW_SERVICE) as WindowManager
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
@@ -216,7 +215,7 @@ fun Main(context: Context) {
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(
             navController = navController,
-            startDestination = Router.home,
+            startDestination = Router.register,
             modifier = Modifier.fillMaxHeight()
         ) {
             composable(Router.register) { RegisterPage(context,navController) }
@@ -276,11 +275,8 @@ fun initWindsSetting():WindowManager.LayoutParams{
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.TYPE_PHONE,
         0, PixelFormat.TRANSPARENT)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //6.0+
-        lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-    } else {
-        lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-    }
+    if (Build.VERSION.SDK_INT >= 26)  lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+    else  lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
     lp.gravity = Gravity.END
     lp.gravity = Gravity.TOP

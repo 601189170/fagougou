@@ -4,6 +4,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
+import com.fagougou.government.Router
+import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
@@ -129,10 +131,9 @@ object ChatViewModel {
                 .replace("额", "")
                 .replace("啊", "")
                 .replace(" ", "")
-            val response =
-                Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
+            val response = Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
             val body = response.body() ?: return
-            addChatData(body.chatData)
+            if(routeMirror == Router.chat) addChatData(body.chatData)
         } catch (e: Exception) {
             handleException(e)
         }
@@ -142,10 +143,7 @@ object ChatViewModel {
         val response = Client.apiService.relateQuestion(queryRecordItemId).execute()
         val body = response.body() ?: return
         for (say in body.data.says) history.add(
-            Message(
-                Speaker.RECOMMEND,
-                recommends = say.content.questions
-            )
+            Message( Speaker.RECOMMEND, recommends = say.content.questions )
         )
         withContext(Dispatchers.Main) {
             listState.scrollToItem(history.lastIndex)
@@ -157,9 +155,8 @@ object ChatViewModel {
             val response = Client.apiService.attachment(attachmentId).execute()
             val outerBody = response.body() ?: AttachmentResponse()
             val content = outerBody.data.content
-            Complex.bodyList.clear()
+            Complex.clear()
             Complex.bodyList.addAll(content.body)
-            Complex.caseList.clear()
             Complex.caseList.addAll(content.cases)
             withContext(Dispatchers.Main) { navController.navigate("complex") }
         }

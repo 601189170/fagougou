@@ -4,7 +4,6 @@ import com.fagougou.government.model.ContractCategoryResponse
 import com.fagougou.government.model.ContractList
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.model.TemplateBean
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 

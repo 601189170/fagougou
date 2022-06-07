@@ -53,7 +53,7 @@ object GenerateContract {
     var lastModifier = Time.stamp
 
     fun init(context: Context) {
-        val file = context.assets.open("generateContract.html")
+        val file = context.assets.open("html/generateContract.html")
         baseHtml = InputStreamReader(file, "UTF-8").readText()
         CoroutineScope(Dispatchers.IO).launch {
             try {

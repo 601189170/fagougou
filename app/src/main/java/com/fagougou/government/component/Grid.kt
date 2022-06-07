@@ -17,7 +17,15 @@ import com.fagougou.government.R
 import com.fagougou.government.ui.theme.Dodgerblue
 
 @Composable
-fun <T> VerticalGrid(datas:List<T>, columnNumber:Int, height: Int, width:Int, onClick:(T) -> Unit, selected:(T) -> Boolean = {false}, backgound:Color = Dodgerblue){
+fun <T> VerticalGrid(
+    datas:List<T>,
+    columnNumber:Int,
+    height: Int,
+    width:Int,
+    onClick:(T) -> Unit,
+    selected:(T) -> Boolean = {false},
+    background:Color = Dodgerblue
+){
     val lastIndex = datas.lastIndex
     val padding = (1280-(columnNumber*width))/(columnNumber+1)
     val verticalPadding = if(datas.firstOrNull() is Pair<*,*>) padding/2 else padding
@@ -30,7 +38,7 @@ fun <T> VerticalGrid(datas:List<T>, columnNumber:Int, height: Int, width:Int, on
         ) {
             for (x in 0 until columnNumber) {
                 val i = y + x
-                if (y + x <= lastIndex) GridItem(datas[i], height.dp , (width+padding).dp, padding.dp, onClick, selected, backgound)
+                if (y + x <= lastIndex) GridItem(datas[i], height.dp , (width+padding).dp, padding.dp, onClick, selected, background)
             }
         }
     }

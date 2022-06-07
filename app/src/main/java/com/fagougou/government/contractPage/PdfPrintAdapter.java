@@ -24,10 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by guocheng on 2017/6/13.
- */
-public class MyPrintAdapter extends PrintDocumentAdapter {
+public class PdfPrintAdapter extends PrintDocumentAdapter {
 
     private Context context;
     private int pageHeight;
@@ -37,7 +34,7 @@ public class MyPrintAdapter extends PrintDocumentAdapter {
     private String pdfPath;
     private List<Bitmap> mlist;
 
-    public MyPrintAdapter(Context context, String pdfPath) {
+    public PdfPrintAdapter(Context context, String pdfPath) {
         this.context = context;
         this.pdfPath = pdfPath;
     }
@@ -62,28 +59,23 @@ public class MyPrintAdapter extends PrintDocumentAdapter {
         PdfRenderer.Page page = null;
         try {
             mFileDescriptor = ParcelFileDescriptor.open(new File(pdfPath), ParcelFileDescriptor.MODE_READ_ONLY);
-            if (mFileDescriptor != null)
-                pdfRender = new PdfRenderer(mFileDescriptor);
+            if (mFileDescriptor != null) pdfRender = new PdfRenderer(mFileDescriptor);
 
             mlist = new ArrayList<>();
 
             if (pdfRender.getPageCount() > 0) {
                 totalpages = pdfRender.getPageCount();
                 for (int i = 0; i < pdfRender.getPageCount(); i++) {
-                    if(null != page)
-                        page.close();
+                    if(null != page) page.close();
                     page = pdfRender.openPage(i);
                     Bitmap bmp = Bitmap.createBitmap(page.getWidth()*2,page.getHeight()*2, Bitmap.Config.ARGB_8888);
                     page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
                     mlist.add(bmp);
                 }
             }
-            if(null != page)
-                page.close();
-            if(null != mFileDescriptor)
-                mFileDescriptor.close();
-            if (null != pdfRender)
-                pdfRender.close();
+            if(null != page) page.close();
+            if(null != mFileDescriptor) mFileDescriptor.close();
+            if (null != pdfRender) pdfRender.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -140,9 +132,8 @@ public class MyPrintAdapter extends PrintDocumentAdapter {
     }
 
     private boolean pageInRange(PageRange[] pageRanges, int page) {
-        for (int i = 0; i < pageRanges.length; i++) {
-            if ((page >= pageRanges[i].getStart()) &&
-                    (page <= pageRanges[i].getEnd()))
+        for (PageRange pageRange : pageRanges) {
+            if ((page >= pageRange.getStart()) && (page <= pageRange.getEnd()))
                 return true;
         }
         return false;
@@ -168,10 +159,6 @@ public class MyPrintAdapter extends PrintDocumentAdapter {
     @Override
     public void onFinish() {
         super.onFinish();
-
     }
-
-
-
 
 }
