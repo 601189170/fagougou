@@ -17,6 +17,7 @@ data class ContractListData(
 )
 
 data class ContractData(
+    val id: String = "",
     val fileid: String = "",
     val folder: ContractFolder? = ContractFolder(),
     val howToUse: String? = "",
