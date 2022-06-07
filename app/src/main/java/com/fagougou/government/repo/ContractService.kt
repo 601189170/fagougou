@@ -4,6 +4,7 @@ import com.fagougou.government.model.ContractCategoryResponse
 import com.fagougou.government.model.ContractList
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.model.TemplateBean
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -20,7 +21,6 @@ interface ContractService {
     fun getTemplate(@Query("fileid") fileid :String): Call<TemplateBean>
 
     @Streaming
-    @Headers("Content-Type: application/json", "Accept: application/json") //需要添加头
     @GET("api/contract-template/pdf/{id}")
     fun getTemplatePdf(@Path("id") fileid :String): Call<TemplateBean>
 

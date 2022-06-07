@@ -30,6 +30,11 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.contractPage.ContractViewModel.baseloadId
+import com.fagougou.government.contractPage.ContractViewModel.getPdfData
+import com.fagougou.government.repo.Client.prettyService
+import com.fagougou.government.utils.FileUtils
+import com.fagougou.government.utils.FileUtils.FILE_TO
 import com.fagougou.government.utils.Printer.wantPrint
 import com.fagougou.government.utils.Printer.printWebView
 
@@ -94,7 +99,7 @@ fun ContractWebView(navController: NavController) {
                         .padding(start = 24.dp)
                         .width(200.dp),
                     onClick = {
-                        DialogViewModel.confirmPrint()
+                        getPdfData()
                     },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){

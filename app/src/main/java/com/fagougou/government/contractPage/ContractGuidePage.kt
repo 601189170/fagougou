@@ -3,7 +3,6 @@ package com.fagougou.government.contractPage
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
@@ -25,15 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.alibaba.fastjson.JSON
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel.ContractLists
 import com.fagougou.government.contractPage.ContractViewModel.categoryList
-import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.getContractList
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
+import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
@@ -42,12 +42,17 @@ import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.prettyService
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.FileUtils
+import com.fagougou.government.utils.FileUtils.FILE_TO
+import com.fagougou.government.utils.FileUtils.copyInputStreamToFile
+import com.fagougou.government.utils.Printer.printPdf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
+import java.io.*
 import java.net.URLEncoder
+
 
 object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
@@ -56,6 +61,8 @@ object ContractViewModel{
     val searchWord = mutableStateOf("")
     var officeUrl = ""
     var fileUrl = ""
+    var baseloadId=""
+
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -86,11 +93,11 @@ object ContractViewModel{
         }
     }
 
-    fun  getTemplate(filed:String, navController: NavController) {
+    fun  getTemplate(category :ContractData, navController: NavController) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.getTemplate(filed).execute()
-//            val response = prettyService.getTemplatePdf(filed).execute()
+            val response = contractService.getTemplate(category.fileid).execute()
             val body = response.body() ?: return@launch
+            baseloadId=category._id
             withContext(Dispatchers.Main){
                 fileUrl = body.data
                 val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
@@ -99,13 +106,29 @@ object ContractViewModel{
             }
         }
     }
+
+    fun  getPdfData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = prettyService.getTemplatePdf(baseloadId).execute()
+            val body = response.body() ?: return@launch
+            FileUtils.base64StringToPDF(body.data,FILE_TO)
+            printPdf(FILE_TO)
+            DialogViewModel.confirmPrint()
+        }
+    }
 }
+
+private fun InputStream.saveToFile(file: String) = use { input ->
+    File(file).outputStream().use { output ->
+        input.copyTo(output)
+    }
+}
+
 
 @Composable
 fun Contract(navController: NavController,category: ContractData){
     Column(
-        Modifier.clickable { getTemplate(category.fileid, navController) }
-//        Modifier.clickable { getTemplate("5d81b017c90b3c05f8752e1e", navController) }
+        Modifier.clickable { getTemplate(category, navController) }
     ){
         Row(
             Modifier.padding(top = 16.dp),
