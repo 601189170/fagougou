@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.contractPage.ContractViewModel.getPdfData
 import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.dialog.DialogViewModel.content
@@ -80,6 +81,7 @@ object DialogViewModel {
         secondButtonOnClick.value = {
             startPrint()
             Printer.wantPrint.value=true
+            getPdfData();
         }
     }
 

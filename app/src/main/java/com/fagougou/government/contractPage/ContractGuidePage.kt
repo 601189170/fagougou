@@ -109,11 +109,12 @@ object ContractViewModel{
 
     fun  getPdfData() {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = prettyService.getTemplatePdf(baseloadId).execute()
-            val body = response.body() ?: return@launch
-            FileUtils.base64StringToPDF(body.data,FILE_TO)
-            printPdf(FILE_TO)
-            DialogViewModel.confirmPrint()
+            if (!baseloadId.isBlank()){
+                val response = prettyService.getTemplatePdf(baseloadId).execute()
+                val body = response.body() ?: return@launch
+                FileUtils.base64StringToPDF(body.data,FILE_TO)
+                printPdf(FILE_TO)
+            }
         }
     }
 }

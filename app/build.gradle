@@ -121,5 +121,10 @@ dependencies {
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation project(path: ':ykfsdk')
     implementation 'com.blankj:utilcode:1.30.6'
+    implementation files("libs/libEsSdtApi-1.0.aar")
+    implementation 'me.jessyan:autosize:1.0.5'
+
+
+
     implementation 'com.github.g39088902:Pdf-Viewer:19d8bce636'
 }

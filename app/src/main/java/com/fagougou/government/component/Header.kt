@@ -58,7 +58,8 @@ fun Header(
             }
             BasicText(title)
             Row(
-                Modifier.padding(end = 12.dp),
+
+                Modifier.padding(end = 12.dp).width(200.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {

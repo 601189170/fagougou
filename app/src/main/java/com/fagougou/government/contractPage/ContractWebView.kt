@@ -21,7 +21,9 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.contractPage.ContractViewModel.getPdfData
 import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.repo.Client.prettyUrl
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.rajat.pdfviewer.PdfRendererView
@@ -38,7 +40,8 @@ fun ContractWebView(navController: NavController) {
                     .fillMaxWidth(),
                 factory = {
                     PdfRendererView(activity).apply{
-                        initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/5d81ac96b01a9b0567a6d577")
+//                        initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/5d81ac96b01a9b0567a6d577")
+                        initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/"+ ContractViewModel.baseloadId)
                     }
                 },
                 update = {

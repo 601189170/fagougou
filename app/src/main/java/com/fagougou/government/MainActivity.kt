@@ -1,16 +1,20 @@
 package com.fagougou.government
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.ZysjSystemManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
-import android.util.Log
+import android.text.TextUtils
 import android.view.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,13 +32,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
@@ -52,8 +58,6 @@ import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.contractPage.ContractGuidePage
 import com.fagougou.government.contractPage.ContractWebView
-import com.fagougou.government.databinding.ActivityChooseDomainBinding
-import com.fagougou.government.databinding.ActivityReadCardMsgBinding
 import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
@@ -88,8 +92,8 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.File
 import java.lang.Long.min
+
 
 class MainActivity : ComponentActivity() {
     lateinit var binding: LayoutHomebtnBinding
@@ -114,6 +118,7 @@ class MainActivity : ComponentActivity() {
                     Dialog()
                     Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
                     Loading()
+                    requestPermission()
                 }
             }
         }
@@ -147,7 +152,15 @@ class MainActivity : ComponentActivity() {
             mwm?.addView(binding.root, initWindsSetting())
         }
     }
-
+    private fun requestPermission() {
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         activity = this
