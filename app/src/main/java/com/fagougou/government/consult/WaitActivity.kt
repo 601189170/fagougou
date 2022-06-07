@@ -13,6 +13,7 @@ import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.MessageEvent
+import com.m7.imkfsdk.video.YKFCallManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -32,6 +33,7 @@ class WaitActivity : AppCompatActivity() {
         ImSdkUtils.helper?.let {
             ImSdkUtils.initSdk(it)
         }
+        YKFCallManager.cameraRotation=0
         binding!!.leftBtn.setOnClickListener {
 
         }

@@ -52,7 +52,7 @@ fun ChatPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header(
-            "智能咨询(${selectedChatBot.value})",
+            "智能咨询  (${selectedChatBot.value})",
             navController,
 
             {

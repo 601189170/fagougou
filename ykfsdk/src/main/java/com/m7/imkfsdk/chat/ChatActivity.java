@@ -1763,6 +1763,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     Runnable touchEvent=new Runnable() {
         @Override
         public void run() {
+            EventBus.getDefault().post(new MessageEvent(MessageConstans.RefreshTime));
             handler.postDelayed(this,3000);
         }
     };
@@ -3521,7 +3522,6 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
         ll_invite = panelView.findViewById(R.id.ll_invite);
         RecyclerView  recycler_view = panelView.findViewById(R.id.recycler_view);
         recycler_view.setLayoutManager(new GridLayoutManager(this,6));
-        recycler_view.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(25f)));
         recycler_view.setAdapter(adapter);
         photos.add(R.drawable.icon_s1);
         photos.add(R.drawable.icon_s2);

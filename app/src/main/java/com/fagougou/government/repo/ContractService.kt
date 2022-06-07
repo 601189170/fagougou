@@ -1,9 +1,11 @@
 package com.fagougou.government.repo
 
-import com.fagougou.government.model.*
+import com.fagougou.government.model.ContractCategoryResponse
+import com.fagougou.government.model.ContractList
+import com.fagougou.government.model.ContractListRequest
+import com.fagougou.government.model.TemplateBean
 import retrofit2.Call
 import retrofit2.http.*
-import retrofit2.http.Query
 
 interface ContractService {
     @GET("contractTemplateCates")
@@ -16,6 +18,13 @@ interface ContractService {
 
     @GET("contractTemplate/downloadLink")
     fun getTemplate(@Query("fileid") fileid :String): Call<TemplateBean>
+
+    @Streaming
+    @Headers("Content-Type: application/json", "Accept: application/json") //需要添加头
+    @GET("api/contract-template/pdf/{id}")
+    fun getTemplatePdf(@Path("id") fileid :String): Call<TemplateBean>
+
+
 
 
 }

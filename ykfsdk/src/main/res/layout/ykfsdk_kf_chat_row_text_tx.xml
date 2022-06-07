@@ -33,7 +33,7 @@
                 android:id="@+id/chatto_content_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="24dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/chatting_avatar_iv">
 

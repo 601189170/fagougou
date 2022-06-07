@@ -8,15 +8,23 @@ import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
+import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.government.generateContract.GenerateContract
+import com.fagougou.government.model.Auth
+import com.fagougou.government.model.AuthRequest
+import com.fagougou.government.model.BotList
 import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.repo.Client.apiService
+import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.utils.IFly
+import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.TTS
 import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.*
+import java.lang.Exception
 
 class CommonApplication: Application(){
     companion object {
@@ -41,6 +49,18 @@ class CommonApplication: Application(){
                 while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
                 openSecondScreen()
             }else openSecondScreen()
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenResponse = apiService.auth(AuthRequest()).execute()
+                val tokenBody = tokenResponse.body() ?: Auth()
+                kv.encode("token", tokenBody.data.token)
+                val botListResponse = apiService.botList().execute()
+                val botListBody = botListResponse.body() ?: BotList()
+                for (bot in botListBody.data) if (bot.tyId == "") botQueryIdMap[bot.name] = bot.id
+            }catch (e: Exception){
+                handleException(e)
+            }
         }
     }
 

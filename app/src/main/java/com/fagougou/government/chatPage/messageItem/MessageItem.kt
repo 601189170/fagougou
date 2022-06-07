@@ -36,9 +36,10 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
             if (index <= 0 || ChatViewModel.history[index-1].speaker == Speaker.USER) {
                 Image(
                     painterResource(R.drawable.ic_robot_avatar), null,
-                    Modifier.padding(start = 8.dp,top = 16.dp))
+                    Modifier.padding(start = 25.dp,top = 16.dp))
             } else Box(
                 Modifier
+                    .padding(start = 25.dp)
                     .height(48.dp)
                     .width(56.dp))
         }
@@ -53,6 +54,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
             Speaker.USER -> Row(
                 Modifier
                     .fillMaxWidth()
+                    .padding(end = 20.dp)
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,

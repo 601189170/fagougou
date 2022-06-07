@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.blankj.utilcode.util.AppUtils
 import com.eseid.sdtapi.*
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
@@ -62,6 +63,12 @@ class TouristsLoginActivity : BaseActivity() {
         setContentView(binding.root)
         initView()
         esSdt.SetReadDelay(1)
+        setSelectSexBg("男")
+        if (AppUtils.isAppDebug()){
+            binding.edName.setText("过分接口")
+            binding.edPhone.setText("15920012647")
+            binding.edCard.setText("429004199506150931")
+        }
     }
 
     override fun onResume() {

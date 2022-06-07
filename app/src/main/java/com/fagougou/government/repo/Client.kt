@@ -75,6 +75,7 @@ object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com/"
     const val contractUrl = "https://law-system.fagougou-law.com/"
+    const val prettyUrl = "http://beta.products.fagougou.com/"
     const val registerUrl = "https://robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com/"
     const val generateUrl = "https://products.fagougou.com/api/"
@@ -104,6 +105,15 @@ object Client {
     val contractService: ContractService by lazy {
         Retrofit.Builder()
             .baseUrl(contractUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ContractService::class.java)
+    }
+
+    val prettyService: ContractService by lazy {
+        Retrofit.Builder()
+            .baseUrl(prettyUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

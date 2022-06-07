@@ -30,7 +30,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="8dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ykfsdk_kf_head_default_local"/>
+            android:src="@drawable/ykfsdk_kf_head_default_local" />
 
         <TextView
             android:id="@+id/chatfrom_tv_name"

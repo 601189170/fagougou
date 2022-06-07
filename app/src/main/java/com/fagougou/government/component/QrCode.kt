@@ -42,16 +42,19 @@ fun QrCode(){
             verticalArrangement = Arrangement.Center) {
             Surface(
                 modifier = Modifier
+
                     .width(272.dp)
                     .height(320.dp),
                 shape = RoundedCornerShape(CORNER_FLOAT),
                 color = ColorCompose(0xFFFFFFFF)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(QrCodeViewModel.bitmap().asImageBitmap(),null)
-                    Text(QrCodeViewModel.hint.value, fontSize = 24.sp)
+                    Surface(Modifier.width(210.dp).padding(top = 15.dp),color = androidx.compose.ui.graphics.Color.Transparent) {
+                        Image(QrCodeViewModel.bitmap().asImageBitmap(),null)
+                    }
+                    Text(QrCodeViewModel.hint.value, fontSize = 28.sp)
                 }
             }
             Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)

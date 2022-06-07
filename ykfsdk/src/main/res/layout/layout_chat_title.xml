@@ -44,8 +44,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/img"
         android:id="@+id/info"
-        android:textColor="#FFFFFF"
-        android:text=""
+        android:textColor="#60FFFFFF"
+        android:text="专家咨询，全程隐私交流"
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
