@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
@@ -49,9 +48,7 @@ fun InputBox(scope: CoroutineScope){
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Row(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
+                Modifier.padding(8.dp).fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Image(
@@ -76,36 +73,34 @@ fun InputBox(scope: CoroutineScope){
                     contentDescription = null)
             }
             PAG()
-            Spacer(
-                Modifier
-                    .height(12.dp)
-                    .width(12.dp))
+            Spacer(Modifier.height(12.dp).width(12.dp))
         }
     } else Column(
-        modifier = Modifier.height(80.dp),
+        Modifier.height(80.dp),
         verticalArrangement = Arrangement.Center
     ) {
         val (text,bot) = remember{ FocusRequester.createRefs() }
         Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
-                .height(58.dp)
+                .height(64.dp)
                 .padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
-                modifier = Modifier
+                ChatViewModel.textInputContent.value,
+                {
+                    ChatViewModel.textInputContent.value = it
+                    Router.lastTouchTime = Time.stampL
+                },
+                Modifier
                     .fillMaxWidth(0.85f)
+                    .height(64.dp)
                     .focusRequester(text)
                     .onFocusChanged { state ->
                         if (state.isFocused) ChatViewModel.showBotMenu.value = false
                     }
                     .focusable(),
-                value = ChatViewModel.textInputContent.value,
-                onValueChange = {
-                    ChatViewModel.textInputContent.value = it
-                    Router.lastTouchTime = Time.stampL
-                },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.White,
                     backgroundColor = Color(0x33FFFFFF),
@@ -128,8 +123,8 @@ fun InputBox(scope: CoroutineScope){
             Button(
                 modifier = Modifier
                     .padding(start = 24.dp)
-                    .width(54.dp)
-                    .height(54.dp),
+                    .width(64.dp)
+                    .height(64.dp),
                 content = { Image(painterResource(R.drawable.ic_microphone),null) },
                 onClick = {
                     ChatViewModel.showBotMenu.value = false
@@ -142,11 +137,19 @@ fun InputBox(scope: CoroutineScope){
             Button(
                 modifier = Modifier
                     .padding(start = 24.dp)
-                    .width(54.dp)
-                    .height(54.dp)
+                    .width(64.dp)
+                    .height(64.dp)
                     .focusRequester(bot)
                     .focusable(),
-                content = { Image(if (!showBotMenu.value) painterResource(R.drawable.ic_squad) else painterResource(R.drawable.ic_close_ly),null) },
+                content = {
+                    Image(
+                        painterResource(
+                            if (!ChatViewModel.showBotMenu.value) R.drawable.ic_squad
+                            else R.drawable.ic_close_ly
+                        ),
+                        null
+                    )
+                },
                 onClick = {
                     ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
                     ChatViewModel.voiceInputMode.value = false
@@ -157,7 +160,6 @@ fun InputBox(scope: CoroutineScope){
                 shape = RoundedCornerShape(50),
                 contentPadding = PaddingValues(8.dp)
             )
-
         }
     }
 }

@@ -39,6 +39,12 @@ object Complex{
     val selectPage = mutableStateOf("body")
     var bodyList = mutableStateListOf<AttachmentBody>()
     val caseList = mutableStateListOf<AttachmentCases>()
+
+    fun clear(){
+        selectPage.value = "body"
+        bodyList.clear()
+        caseList.clear()
+    }
 }
 
 @Composable
@@ -105,17 +111,11 @@ fun CaseButton(case: AttachmentCases,scope: CoroutineScope,navController: NavCon
 @Composable
 fun ComplexPage(navController: NavController) {
     val scope = rememberCoroutineScope()
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+    Surface(Modifier.fillMaxSize(), color = Color.White) {
         Column {
-            Header("详细分析", navController,
-                onBack = {
-                    selectPage.value = "body"
-                }
-            )
+            Header("详细分析", navController, onBack = { Complex.clear() } )
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
+                Modifier.fillMaxWidth().padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 if(bodyList.isNotEmpty() && caseList.isNotEmpty()){
@@ -135,7 +135,7 @@ fun ComplexPage(navController: NavController) {
             }
             Column(modifier = Modifier.verticalScroll(ScrollState(0))) {
                 when (selectPage.value) {
-                    "body" -> for(body in bodyList)if(body.content != "")WebView("", body.content.replace("\n",""))
+                    "body" -> for(body in bodyList) if(body.content != "")WebView("", body.content.replace("\n",""))
                     "case" -> for(case in caseList) CaseButton(case,scope,navController)
                 }
             }

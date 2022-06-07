@@ -47,6 +47,6 @@ fun BotMenu() {
             }
         },
         selected = { ChatViewModel.selectedChatBot.value == it.first },
-        backgound = Color.Transparent
+        background = Color.Transparent
     )
 }
