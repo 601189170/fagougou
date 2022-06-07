@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="128dp"
     android:orientation="vertical"
-    android:layout_height="170dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
     tools:ignore="ResourceName">
     <ImageView
         android:id="@+id/img"

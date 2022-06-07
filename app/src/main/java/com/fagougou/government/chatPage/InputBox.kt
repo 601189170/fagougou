@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.chatPage.ChatViewModel.showBotMenu
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
@@ -37,8 +38,8 @@ import kotlinx.coroutines.launch
 fun InputBox(scope: CoroutineScope){
     if(ChatViewModel.voiceInputMode.value) Surface(
         modifier = Modifier
-            .height(220.dp)
-            .width(540.dp)
+            .height(260.dp)
+            .width(880.dp)
             .padding(16.dp),
         color = Color(0x33FFFFFF),
         shape = RoundedCornerShape(CORNER_FLOAT)
@@ -145,7 +146,7 @@ fun InputBox(scope: CoroutineScope){
                     .height(54.dp)
                     .focusRequester(bot)
                     .focusable(),
-                content = { Image(painterResource(R.drawable.ic_squad),null) },
+                content = { Image(if (!showBotMenu.value) painterResource(R.drawable.ic_squad) else painterResource(R.drawable.ic_close_ly),null) },
                 onClick = {
                     ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
                     ChatViewModel.voiceInputMode.value = false

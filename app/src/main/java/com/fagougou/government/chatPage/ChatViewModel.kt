@@ -102,8 +102,10 @@ object ChatViewModel {
             val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
             val tokenBody = tokenResponse.body() ?: Auth()
             MMKV.kv.encode("token", tokenBody.data.token)
-            val response = Client.apiService
-                .startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
+            val botListResponse = Client.apiService.botList().execute()
+            val botListBody = botListResponse.body() ?: BotList()
+            for (bot in botListBody.data) if (bot.tyId == "") botQueryIdMap[bot.name] = bot.id
+            val response = Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return
             sessionId = body.chatData.queryId
             addChatData(body.chatData)

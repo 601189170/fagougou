@@ -79,7 +79,7 @@ fun RegisterPage(context: Context, navController: NavController){
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
-        BasicText("智能法律服务系统",192.dp,32.sp)
+        BasicText("注册码绑定",192.dp,32.sp)
         val textFieldColors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color(0x44FFFFFF),
             cursorColor = Color.White,
@@ -115,7 +115,17 @@ fun RegisterPage(context: Context, navController: NavController){
         )
         Text(
             modifier = Modifier
-                .padding(top = 488.dp)
+                .padding(top = 24.dp)
+                .clickable {
+                    activity.finish()
+                },
+            text = "退出系统",
+            fontSize = 24.sp,
+            color = Color(0x65FFFFFF)
+        )
+        Text(
+            modifier = Modifier
+                .padding(top = 460.dp)
                 .clickable {
                     Time.exitStack--
                     if (Time.exitStack <=0){
@@ -123,7 +133,7 @@ fun RegisterPage(context: Context, navController: NavController){
                         activity.finish()
                     }
                 },
-            text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
+            text = "技术支持：法狗狗(深圳)科技有限公司",
             fontSize = 24.sp,
             color = Color.White
         )

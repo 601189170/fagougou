@@ -30,10 +30,12 @@ fun Header(
     qrCode:String = "",
     qrCodeHint:String = "微信扫码咨询"
 ){
-    Surface(color = Color(0xFF17192C)) {
+    Surface(modifier = Modifier
+        .height(64.dp)
+        .fillMaxWidth(),color = Color(0xFF17192C)) {
         Row(
             modifier = Modifier
-                .height(72.dp)
+                .height(64.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -56,7 +58,7 @@ fun Header(
             }
             BasicText(title)
             Row(
-                Modifier.width(200.dp),
+                Modifier.padding(end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {

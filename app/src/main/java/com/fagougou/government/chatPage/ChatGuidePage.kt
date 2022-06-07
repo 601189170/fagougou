@@ -63,7 +63,7 @@ fun ChatGuidePage(navController: NavController) {
         )
         Text(
             modifier = Modifier.padding(top = 96.dp),
-            text = "智能咨询",
+            text = "请选择法律领域",
             fontSize = 32.sp,
             color = Color.White
         )

@@ -135,7 +135,7 @@ fun GenerateGuide(navController: NavController) {
                                 Image(painterResource(R.drawable.ic_edit),null)
                                 Text(
                                     modifier = Modifier.padding(start = 16.dp),
-                                    text = "填写合同",
+                                    text = "填写模板",
                                     color = Color.White,
                                     fontSize = 21.sp)
                             }

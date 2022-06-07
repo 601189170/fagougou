@@ -100,8 +100,8 @@ fun HomePage(context: Context, navController:NavController) {
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
-        BasicText( "欢迎使用",84.dp)
-        BasicText( "智能法律服务系统",48.dp,28.sp)
+        BasicText( "欢迎使用",124.dp)
+        BasicText( "智能法律服务系统",8.dp,28.sp)
         Row( modifier = Modifier.padding(top = 48.dp) ) {
             HomeButton(
                 modifier = Modifier
@@ -117,15 +117,16 @@ fun HomePage(context: Context, navController:NavController) {
                     .padding(horizontal = 24.dp)
                     .width(216.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.contract) },
-                contentId = R.drawable.home_document
+                onClick = { navController.navigate(Router.generateGuide) },
+                contentId = R.drawable.home_generate_contract
             )
+
             HomeButton(
                 modifier = Modifier
                     .width(216.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.generateGuide) },
-                contentId = R.drawable.home_generate_contract
+                onClick = { navController.navigate(Router.contract) },
+                contentId = R.drawable.home_document
             )
         }
         Row( modifier = Modifier.padding(top = 24.dp) ) {

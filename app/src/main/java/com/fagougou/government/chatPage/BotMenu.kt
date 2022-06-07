@@ -20,10 +20,10 @@ fun BotMenu() {
         Pair("员工纠纷", R.drawable.bot_square_employee),
         Pair("知识产权", R.drawable.bot_square_knowledge),
         Pair("刑事犯罪", R.drawable.bot_square_crime),
-        Pair("企业人事", R.drawable.bot_square_employer),
         Pair("房产纠纷", R.drawable.bot_square_house),
-        Pair("民间借贷", R.drawable.bot_square_loan),
+        Pair("企业人事", R.drawable.bot_square_employer),
         Pair("消费维权", R.drawable.bot_square_consumer),
+        Pair("民间借贷", R.drawable.bot_square_loan),
     )
     VerticalGrid(
         botResMap.toList(),

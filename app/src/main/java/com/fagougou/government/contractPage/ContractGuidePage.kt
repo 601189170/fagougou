@@ -1,6 +1,7 @@
 package com.fagougou.government.contractPage
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.alibaba.fastjson.JSON
 import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -37,6 +39,7 @@ import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
+import com.fagougou.government.repo.Client.prettyService
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.CoroutineScope
@@ -86,6 +89,7 @@ object ContractViewModel{
     fun  getTemplate(filed:String, navController: NavController) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = contractService.getTemplate(filed).execute()
+//            val response = prettyService.getTemplatePdf(filed).execute()
             val body = response.body() ?: return@launch
             withContext(Dispatchers.Main){
                 fileUrl = body.data
@@ -101,6 +105,7 @@ object ContractViewModel{
 fun Contract(navController: NavController,category: ContractData){
     Column(
         Modifier.clickable { getTemplate(category.fileid, navController) }
+//        Modifier.clickable { getTemplate("5d81b017c90b3c05f8752e1e", navController) }
     ){
         Row(
             Modifier.padding(top = 16.dp),
@@ -281,7 +286,7 @@ fun ContractGuidePage(navController: NavController) {
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ){
                                     Image(painterResource(R.drawable.ic_no_contract),"No Content")
-                                    Text(text = "暂无相关内容",fontSize = 28.sp,color = Color.Gray)
+                                    Text(modifier = Modifier.padding(top = 16.dp),text = "暂无搜索结果",fontSize = 28.sp,color = Color.Gray)
                                 }
                             }
                         }

@@ -203,7 +203,7 @@ fun Main(context: Context) {
                             secondButtonText.value = "返回首页"
                             secondButtonOnClick.value = { lastTouchTime = 0L }
                             content.add(ContentStyle("页面长时间无人操作，"))
-                            content.add(ContentStyle("${routeRemain.value / 1000}秒", 1))
+                            content.add(ContentStyle("${routeRemain.value / 1000}s", 1))
                             content.add(ContentStyle("后将退回首页"))
                         }
                     }
