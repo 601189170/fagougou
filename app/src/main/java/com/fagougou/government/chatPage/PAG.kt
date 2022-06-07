@@ -55,7 +55,7 @@ fun PAG(){
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                    val pagFile = PAGFile.Load(context.assets, "chat_unwaked.pag")
+                    val pagFile = PAGFile.Load(context.assets, "pag/chat_unwaked.pag")
                     composition = pagFile
                     setRepeatCount(0)
                     play()
@@ -73,7 +73,7 @@ fun PAG(){
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                    val pagFile = PAGFile.Load(context.assets, "chat_waked.pag")
+                    val pagFile = PAGFile.Load(context.assets, "pag/chat_waked.pag")
                     composition = pagFile
                     setRepeatCount(0)
                     play()
