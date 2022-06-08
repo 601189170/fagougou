@@ -5,7 +5,13 @@ import android.os.Environment
 import java.io.*
 
 object  FileUtils {
-    val FILE_TO = Environment.getExternalStorageDirectory().path + File.separator + "ding.pdf"
+    val FileDir = Environment.getExternalStorageDirectory().path +"/contract"
+    val FILE_PATH = Environment.getExternalStorageDirectory().path + File.separator+"/contract"+File.separator
+    var FILE_NAME = "chao.pdf"
+
+
+
+
 
     // InputStream -> File
     @Throws(IOException::class)
@@ -66,6 +72,16 @@ object  FileUtils {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun isLoalFile():Boolean{
+        val dir = File(FileDir)
+        if (!dir.exists()) {
+            //创建目录
+            dir.mkdirs()
+        }
+        //判断文件或文件夹是否存在
+        return File(FILE_PATH, FILE_NAME).exists()
     }
 
 }

@@ -43,6 +43,7 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.FileUtils
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 
@@ -81,7 +82,7 @@ object DialogViewModel {
         secondButtonOnClick.value = {
             startPrint()
             Printer.wantPrint.value=true
-            getPdfData();
+            Printer.printPdf(FileUtils.FILE_PATH+FileUtils.FILE_NAME)
         }
     }
 
