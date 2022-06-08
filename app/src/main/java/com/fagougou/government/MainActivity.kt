@@ -218,7 +218,7 @@ fun Main(context: Context) {
             startDestination = Router.register,
             modifier = Modifier.fillMaxHeight()
         ) {
-            composable(Router.register) { RegisterPage(context,navController) }
+            composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(context,navController) }
             composable(Router.admin) { AdminPage(navController) }
@@ -264,9 +264,9 @@ fun Loading() {
 
 fun isShowTaskActivity(): Boolean {
     return ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java)
-            || ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)
-            || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)
-            || ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)
+        || ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)
+        || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)
+        || ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)
 }
 
 fun initWindsSetting():WindowManager.LayoutParams{
@@ -280,7 +280,6 @@ fun initWindsSetting():WindowManager.LayoutParams{
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
     lp.gravity = Gravity.END
     lp.gravity = Gravity.TOP
-
     return lp
 }
 

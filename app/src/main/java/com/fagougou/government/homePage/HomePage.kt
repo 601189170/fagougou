@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -65,7 +66,7 @@ fun HomePage(context: Context, navController:NavController) {
             var body = SerialLoginResponse()
             withContext(Dispatchers.IO){
                 try {
-                    val response = mainRegister.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    val response = mainRegister.login(SerialLoginRequest(CommonApplication.serial)).execute()
                     body = response.body() ?: SerialLoginResponse()
                 }catch (e:Exception){
                     handleException(e)
