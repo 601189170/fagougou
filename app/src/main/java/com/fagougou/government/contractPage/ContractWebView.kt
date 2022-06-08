@@ -1,7 +1,6 @@
 package com.fagougou.government.contractPage
 
-import android.annotation.SuppressLint
-import android.util.Xml
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,51 +13,64 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.get
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.contractPage.ContractViewModel.FilePath
+import com.fagougou.government.contractPage.ContractViewModel.fileName
+import com.fagougou.government.contractPage.ContractViewModel.fileTime
+import com.fagougou.government.contractPage.ContractViewModel.fileloadId
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.FileUtils.FILE_NAME
-import com.fagougou.government.utils.FileUtils.FILE_PATH
-
-import com.github.barteksc.pdfviewer.PDFView
+import com.fagougou.government.utils.FileUtils
+import com.fagougou.government.utils.MMKV.pdfKv
+import com.rajat.pdfviewer.PdfQuality
+import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
 import androidx.compose.ui.graphics.Color as ComposeColor
 
-@SuppressLint("ResourceType")
 @Composable
 fun ContractWebView(navController: NavController) {
     Surface(color = ComposeColor.White){
-        Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Header("合同文库",navController)
-            var parser = activity.getResources().getXml(R.layout.textview);
-            var attributes = Xml.asAttributeSet(parser);
-            Row(Modifier.width(800.dp) .border(1.dp, Color.LightGray),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                AndroidView(
-                    modifier = Modifier
-                        .fillMaxHeight(0.9f)
-                        .fillMaxWidth(),
-                    factory = {
-                        PDFView(activity,attributes).apply {
-                            fromFile(File(FILE_PATH+FILE_NAME)).load()
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxHeight(0.9f)
+                    .fillMaxWidth(),
+                factory = {
+                    PdfRendererView(activity).apply{
+                        if (pdfKv.decodeString(fileloadId)?.isBlank() == true){
+                            initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/"+ fileloadId, PdfQuality.NORMAL, fileName)
+                        }else if (pdfKv.decodeString(fileloadId)!= fileTime){
+                            initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/"+ fileloadId,PdfQuality.NORMAL, fileName)
+                        }else if (File(activity.cacheDir,fileName+".pdf").exists()){
+                            initWithFile(File(activity.cacheDir,fileName+".pdf"))
+                            FilePath=activity.cacheDir.absolutePath+File.separator+ fileName+".pdf"
+                        }else{
+                            initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/"+ fileloadId, PdfQuality.NORMAL, fileName)
                         }
-                    },
-                    update = {
+                        statusListener=object : PdfRendererView.StatusCallBack {
+                            override fun onDownloadSuccess(filePath: String) {
+                                super.onDownloadSuccess(filePath)
+                                FilePath=filePath;
+                                Log.e("TAG", "onDownloadSuccess: "+FilePath )
+                                pdfKv.encode(fileloadId, fileTime)
+                            }
+                        }
                     }
-                )
-            }
-
+                },
+                update = {
+                }
+            )
             Surface(modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp),color = ComposeColor(0xFFEEEEEE)){}

@@ -21,7 +21,6 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.contractPage.ContractViewModel
-import com.fagougou.government.contractPage.ContractViewModel.baseloadId
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId

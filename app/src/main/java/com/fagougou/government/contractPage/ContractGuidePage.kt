@@ -30,7 +30,7 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel.ContractLists
 import com.fagougou.government.contractPage.ContractViewModel.categoryList
 import com.fagougou.government.contractPage.ContractViewModel.getContractList
-import com.fagougou.government.contractPage.ContractViewModel.getPdfData
+
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
 import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
@@ -49,6 +49,7 @@ import com.fagougou.government.utils.FileUtils.FILE_PATH
 
 import com.fagougou.government.utils.FileUtils.copyInputStreamToFile
 import com.fagougou.government.utils.FileUtils.isLoalFile
+import com.fagougou.government.utils.MMKV.pdfKv
 import com.fagougou.government.utils.Printer.printPdf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,9 +66,10 @@ object ContractViewModel{
     val searchWord = mutableStateOf("")
     var officeUrl = ""
     var fileUrl = ""
-    var baseloadId=""
-
-
+    var fileloadId=""
+    var fileName=""
+    var fileTime=""
+    var FilePath=""
     init {
         CoroutineScope(Dispatchers.IO).launch {
             try{
@@ -98,39 +100,17 @@ object ContractViewModel{
     }
 
     fun  getTemplate(category :ContractData, navController: NavController) {
+        fileloadId=category._id
+        fileName=category.name
+        fileTime= category.updatedAt
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.getTemplate(category.fileid).execute()
-            val body = response.body() ?: return@launch
-            baseloadId=category._id
-            withContext(Dispatchers.Main){
-                fileUrl = body.data
-                val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
-                officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                navController.navigate(Router.contractWebView)
-            }
+                withContext(Dispatchers.Main){
+                    navController.navigate(Router.contractWebView)
+                }
         }
     }
 
-    fun  getPdfData(category: ContractData,navController: NavController) {
-        FILE_NAME=category.name
-        if (!isLoalFile()){
-            Log.e("TAG", "getPdfData: 不存在" )
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = prettyService.getTemplatePdf(category._id).execute()
-                val body = response.body() ?: return@launch
-                FileUtils.base64StringToPDF(body.data,FILE_PATH+ FILE_NAME)
-                withContext(Dispatchers.Main){
-                    fileUrl = body.data
-                    val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
-                    officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                    navController.navigate(Router.contractWebView)
-                }
-            }
-        }else{
-            Log.e("TAG", "getPdfData: 已存在" )
-            navController.navigate(Router.contractWebView)
-        }
-    }
+
 }
 
 
@@ -138,8 +118,7 @@ object ContractViewModel{
 fun Contract(navController: NavController,category: ContractData){
     Column(
         Modifier.clickable {
-//            getTemplate(category, navController)
-            getPdfData(category,navController,)
+            getTemplate(category, navController)
         }
     ){
         Row(

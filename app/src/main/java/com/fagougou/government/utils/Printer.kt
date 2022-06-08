@@ -71,6 +71,7 @@ object Printer {
             activity,
             filePath
         )
+        EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewShow))
         CoroutineScope(Dispatchers.Default).launch {
             while (currentJob!=null){
                 delay(250)

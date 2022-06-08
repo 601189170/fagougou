@@ -8,4 +8,5 @@ import kotlinx.coroutines.launch
 
 object MMKV {
     val kv = MMKV.defaultMMKV()
+    val pdfKv = MMKV.mmkvWithID("pdfUpdate")
 }
