@@ -1,6 +1,5 @@
 package com.fagougou.government.registerPage
 
-import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication

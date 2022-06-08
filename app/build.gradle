@@ -121,5 +121,5 @@ dependencies {
     implementation 'com.github.jenly1314.AppUpdater:app-dialog:1.1.3'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.blankj:utilcode:1.30.6'
-    implementation 'com.github.g39088902:Pdf-Viewer:44dafec771'
+    implementation 'com.github.g39088902:Pdf-Viewer:5246e1d13b'
 }

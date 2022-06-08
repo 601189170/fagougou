@@ -1,6 +1,5 @@
 package com.fagougou.government.registerPage
 
-import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -43,7 +42,7 @@ fun RegisterPage(navController: NavController){
     LaunchedEffect(null){
         scope.launch(Dispatchers.IO){
             while(isActive){
-                delay(3000)
+                delay(1000)
                 var body = SerialLoginResponse()
                 try {
                     val response = mainRegister.login(SerialLoginRequest(CommonApplication.serial)).execute()
@@ -52,11 +51,10 @@ fun RegisterPage(navController: NavController){
                     handleException(e)
                 }
                 if(body.canLogin){
-                    if(registerBalance.value < 0) withContext(Dispatchers.Main){
-                        navController.navigate(Router.home)
-                    }
+                    withContext(Dispatchers.Main){ navController.navigate(Router.home) }
                     break
                 }
+                delay(1000)
             }
         }
     }

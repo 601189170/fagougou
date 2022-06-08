@@ -42,7 +42,7 @@ fun Header(
         ) {
             Row(
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(240.dp)
                     .clickable {
                         onBack.invoke()
                         if (canClose) navController.safeBack()
@@ -58,22 +58,22 @@ fun Header(
             }
             BasicText(title)
             Row(
-                Modifier.padding(end = 12.dp),
+                Modifier.width(240.dp).padding(end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
                 if(qrCode.isNotBlank()) {
-                    Image(painterResource(id = R.drawable.ic_wechat), null)
+                    Image(painterResource(R.drawable.ic_wechat), null)
                     Text(
-                        modifier = Modifier
+                        "微信",
+                        Modifier
                             .padding(start = 8.dp)
                             .clickable {
                                 QrCodeViewModel.content.value = qrCode
                                 QrCodeViewModel.hint.value = qrCodeHint
                             },
-                        text = "微信",
-                        fontSize = 24.sp,
-                        color = Color.White
+                        Color.White,
+                        24.sp,
                     )
                 }
                 Spacer(modifier = Modifier.width(24.dp))
