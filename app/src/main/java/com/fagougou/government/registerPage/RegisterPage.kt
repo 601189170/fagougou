@@ -61,26 +61,25 @@ fun RegisterPage(context: Context, navController: NavController){
         }
     }
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier.fillMaxSize(),
+        Arrangement.Top,
+        Alignment.CenterHorizontally,
         ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .padding(top = 16.dp,start = 40.dp,end = 40.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            Modifier.fillMaxWidth().height(48.dp).padding(top = 16.dp,start = 40.dp,end = 40.dp),
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.home_logo),
-                contentDescription = "Company Logo",
-                modifier = Modifier.height(32.dp)
+                painterResource(R.drawable.home_logo),
+                "Company Logo",
+                Modifier.height(32.dp)
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
         BasicText("注册码绑定",192.dp,32.sp)
         val textFieldColors = TextFieldDefaults.textFieldColors(
+            Color.White,
             backgroundColor = Color(0x44FFFFFF),
             cursorColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
@@ -92,18 +91,18 @@ fun RegisterPage(context: Context, navController: NavController){
                 .width(480.dp),
             value = registerCode.value,
             onValueChange = {registerCode.value = it},
-            textStyle = TextStyle(color = Color.White, fontSize = 28.sp),
+            textStyle = TextStyle(fontSize = 28.sp),
             placeholder = {Text("请输入注册码",color = Color.Gray, fontSize = 28.sp)},
             shape = RoundedCornerShape(CORNER_FLOAT),
             colors = textFieldColors,
             leadingIcon = { Image(painterResource(R.drawable.ic_key), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
         Button(
-            modifier = Modifier
+            { if(registerAction.value=="立即绑定") login(context, navController) },
+            Modifier
                 .padding(top = 24.dp)
                 .width(480.dp)
                 .height(60.dp),
-            onClick = { if(registerAction.value=="立即绑定") login(context, navController) },
             content = {
                 Text(
                     text = registerAction.value,
@@ -114,7 +113,8 @@ fun RegisterPage(context: Context, navController: NavController){
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
         Text(
-            modifier = Modifier
+            "技术支持：法狗狗(深圳)科技有限公司 ${Build.SERIAL}",
+            Modifier
                 .padding(top = 460.dp)
                 .clickable {
                     Time.exitStack--
@@ -123,9 +123,8 @@ fun RegisterPage(context: Context, navController: NavController){
                         activity.finish()
                     }
                 },
-            text = "技术支持：法狗狗(深圳)科技有限公司",
-            fontSize = 24.sp,
-            color = Color.White
+            Color.White,
+            24.sp,
         )
     }
     BackHandler {}
