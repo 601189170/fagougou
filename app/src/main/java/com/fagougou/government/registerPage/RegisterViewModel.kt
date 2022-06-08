@@ -1,9 +1,8 @@
 package com.fagougou.government.registerPage
 
-import android.content.Context
-import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.Router
 import com.fagougou.government.model.SerialRegisterRequest
 import com.fagougou.government.model.SerialRegisterResponse
@@ -19,11 +18,11 @@ object RegisterViewModel {
     val registerCode = mutableStateOf("")
     val registerAction = mutableStateOf("立即绑定")
     var registerBalance = mutableStateOf(-1)
-    fun login(context: Context, navController: NavController){
+    fun login(navController: NavController){
         registerAction.value = "绑定中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = Client.mainRegister.register(SerialRegisterRequest(Build.SERIAL,registerCode.value)).execute()
+                val response = Client.mainRegister.register(SerialRegisterRequest(CommonApplication.serial,registerCode.value)).execute()
                 val body = response.body() ?: SerialRegisterResponse()
                 registerBalance.value = body.balance
                 if (body.balance<0){

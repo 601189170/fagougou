@@ -1,7 +1,5 @@
 package com.fagougou.government.registerPage
 
-import android.content.Context
-import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -38,25 +37,24 @@ import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
 @Composable
-fun RegisterPage(context: Context, navController: NavController){
+fun RegisterPage(navController: NavController){
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         scope.launch(Dispatchers.IO){
             while(isActive){
-                delay(3000)
+                delay(1000)
                 var body = SerialLoginResponse()
                 try {
-                    val response = mainRegister.login(SerialLoginRequest(Build.SERIAL)).execute()
+                    val response = mainRegister.login(SerialLoginRequest(CommonApplication.serial)).execute()
                     body = response.body() ?: SerialLoginResponse()
                 }catch (e:Exception){
                     handleException(e)
                 }
                 if(body.canLogin){
-                    if(registerBalance.value < 0) withContext(Dispatchers.Main){
-                        navController.navigate(Router.home)
-                    }
+                    withContext(Dispatchers.Main){ navController.navigate(Router.home) }
                     break
                 }
+                delay(1000)
             }
         }
     }
@@ -98,7 +96,7 @@ fun RegisterPage(context: Context, navController: NavController){
             leadingIcon = { Image(painterResource(R.drawable.ic_key), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
         Button(
-            { if(registerAction.value=="立即绑定") login(context, navController) },
+            { if(registerAction.value=="立即绑定") login(navController) },
             Modifier
                 .padding(top = 24.dp)
                 .width(480.dp)
@@ -113,7 +111,7 @@ fun RegisterPage(context: Context, navController: NavController){
             colors = ButtonDefaults.buttonColors(Dodgerblue)
         )
         Text(
-            "技术支持：法狗狗(深圳)科技有限公司 ${Build.SERIAL}",
+            "技术支持：法狗狗(深圳)科技有限公司 ${CommonApplication.serial}",
             Modifier
                 .padding(top = 460.dp)
                 .clickable {

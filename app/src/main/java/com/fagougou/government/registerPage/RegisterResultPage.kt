@@ -1,6 +1,5 @@
 package com.fagougou.government.registerPage
 
-import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -13,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
@@ -72,7 +72,7 @@ fun RegisterResultPage(navController: NavController){
         )
         Text(
             modifier = Modifier.padding(top = 400.dp),
-            text = "技术支持：法狗狗人工智能 v2.0 ${Build.SERIAL}",
+            text = "技术支持：法狗狗人工智能 v2.0 ${CommonApplication.serial}",
             fontSize = 20.sp,
             color = Color.White
         )

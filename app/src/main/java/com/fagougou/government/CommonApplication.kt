@@ -29,6 +29,7 @@ import java.lang.Exception
 class CommonApplication: Application(){
     companion object {
         lateinit var activity: ComponentActivity
+        val serial = if(Build.VERSION.SDK_INT>25) Build.getSerial() else Build.SERIAL
     }
 
     override fun attachBaseContext(base: Context?) {
