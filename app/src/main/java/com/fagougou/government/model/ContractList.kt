@@ -17,12 +17,10 @@ data class ContractListData(
 )
 
 data class ContractData(
-    val id: String = "",
-    val fileid: String = "",
     val folder: ContractFolder? = ContractFolder(),
     val howToUse: String? = "",
     val name: String = "",
-    val _id: String = "",
+    val id: String = "",
     val updatedAt: String = "",
 )
 

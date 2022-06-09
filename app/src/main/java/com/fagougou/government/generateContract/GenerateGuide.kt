@@ -150,7 +150,7 @@ fun GenerateGuide(navController: NavController) {
                             .width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         onClick = {
-                            DialogViewModel.confirmPrint()
+                            DialogViewModel.confirmPrint("webView")
                         },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){

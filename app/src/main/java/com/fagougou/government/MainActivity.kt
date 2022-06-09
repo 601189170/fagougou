@@ -92,6 +92,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import timber.log.Timber
 import java.lang.Long.min
 
 
@@ -180,8 +181,10 @@ class MainActivity : ComponentActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onEventMainThread(messageEvent: MessageEvent) {
         if (messageEvent.message.equals(MessageConstans.WindsViewGone) ) {
+            Timber.d("BTN receive gone")
             binding.homeBtn.visibility=View.GONE
         } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
+            Timber.d("BTN receive show")
             binding.homeBtn.visibility=View.VISIBLE
         }
     }

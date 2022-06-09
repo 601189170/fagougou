@@ -31,12 +31,12 @@ public class PdfPrintAdapter extends PrintDocumentAdapter {
     private int pageWidth;
     private PdfDocument mPdfDocument;
     private int totalpages = 1;
-    private String pdfPath;
+    private File pdfFile;
     private List<Bitmap> mlist;
 
-    public PdfPrintAdapter(Context context, String pdfPath) {
+    public PdfPrintAdapter(Context context, File pdfFile) {
         this.context = context;
-        this.pdfPath = pdfPath;
+        this.pdfFile = pdfFile;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PdfPrintAdapter extends PrintDocumentAdapter {
         PdfRenderer pdfRender = null;
         PdfRenderer.Page page = null;
         try {
-            mFileDescriptor = ParcelFileDescriptor.open(new File(pdfPath), ParcelFileDescriptor.MODE_READ_ONLY);
+            mFileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY);
             if (mFileDescriptor != null) pdfRender = new PdfRenderer(mFileDescriptor);
 
             mlist = new ArrayList<>();

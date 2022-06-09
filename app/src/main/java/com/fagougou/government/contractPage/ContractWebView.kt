@@ -22,10 +22,6 @@ import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel.BaseLoadUrl
-import com.fagougou.government.contractPage.ContractViewModel.FilePath
-import com.fagougou.government.contractPage.ContractViewModel.fileName
-import com.fagougou.government.contractPage.ContractViewModel.fileTime
-import com.fagougou.government.contractPage.ContractViewModel.fileloadId
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -46,26 +42,22 @@ fun ContractWebView(navController: NavController) {
                     .fillMaxWidth(),
                 factory = {
                     PdfRendererView(activity).apply{
-
-                        if (pdfKv.decodeString(fileloadId)!= fileTime){
-                            initWithUrl(BaseLoadUrl+ fileloadId,PdfQuality.NORMAL, fileName)
-                        }else if (File(activity.cacheDir,fileName+".pdf").exists()){
-                            initWithFile(File(activity.cacheDir,fileName+".pdf"))
-                            FilePath=activity.cacheDir.absolutePath+File.separator+ fileName+".pdf"
-                        }else{
-                            initWithUrl(BaseLoadUrl+ fileloadId, PdfQuality.NORMAL, fileName)
-                        }
-                        statusListener=object : PdfRendererView.StatusCallBack {
-                            override fun onDownloadSuccess(filePath: String) {
-                                super.onDownloadSuccess(filePath)
-                                FilePath=filePath;
-                                pdfKv.encode(fileloadId, fileTime)
+                        ContractViewModel.pdfFile?.let {
+                            val hasPdfFile = File(activity.cacheDir, "${it.id}.pdf").exists()
+                            val isNewest = pdfKv.decodeString(it.id) == it.updateAt
+                            if(hasPdfFile && isNewest) initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
+                            else {
+                                statusListener=object : PdfRendererView.StatusCallBack {
+                                    override fun onDownloadSuccess(filePath: String) {
+                                        super.onDownloadSuccess(filePath)
+                                        pdfKv.encode(it.id, it.updateAt)
+                                    }
+                                }
+                                initWithUrl(BaseLoadUrl+ it.id, PdfQuality.NORMAL, it.id)
                             }
                         }
                     }
                 },
-                update = {
-                }
             )
             Surface(modifier = Modifier
                 .fillMaxWidth()
@@ -82,18 +74,15 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .width(200.dp),
                     onClick = {
-                        QrCodeViewModel.content.value = ContractViewModel.fileUrl
-                        QrCodeViewModel.hint.value = "微信扫码下载"
+                        ContractViewModel.pdfFile?.let {
+                            QrCodeViewModel.content.value = BaseLoadUrl+ it.id
+                            QrCodeViewModel.hint.value = "微信扫码下载"
+                        }
                     },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_wechat),null)
-                            Text(
-                                modifier = Modifier.padding(start = 16.dp),
-                                text = "微信下载",
-                                color = Color.White,
-                                fontSize = 21.sp
-                            )
+                            Text("微信下载",Modifier.padding(start = 16.dp),Color.White,21.sp)
                         }
                     },
                     colors = buttonColors(backgroundColor = Dodgerblue)
@@ -103,17 +92,11 @@ fun ContractWebView(navController: NavController) {
                         .height(60.dp)
                         .padding(start = 24.dp)
                         .width(200.dp),
-                    onClick = {
-                        DialogViewModel.confirmPrint()
-                    },
+                    onClick = { DialogViewModel.confirmPrint("pdf") },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_painter),null)
-                            Text(
-                                modifier = Modifier.padding(start = 16.dp),
-                                text = "打印模板",
-                                color = Color.White,
-                                fontSize = 21.sp)
+                            Text("打印模板",Modifier.padding(start = 16.dp),Color.White,21.sp)
                         }
                     },
                     colors = buttonColors(backgroundColor = Dodgerblue)

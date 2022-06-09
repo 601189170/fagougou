@@ -17,12 +17,12 @@ class BannerPresentation(context: Context, display: Display) : Presentation(cont
         val mediaPlayer = MediaPlayer()
     }
     val binding = LayoutPresentationBinding.inflate(layoutInflater)
-    val adapter = BannerAdapter()
+    val bannerAdapter = BannerAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-//        binding.viewPager.adapter = adapter
+//        binding.viewPager.adapter = bannerAdapter
 //        CoroutineScope(Dispatchers.Default).launch{
 //            var i = 0
 //            while (isActive){
@@ -34,10 +34,8 @@ class BannerPresentation(context: Context, display: Display) : Presentation(cont
 //            }
 //        }
         mediaPlayer.setOnPreparedListener { mediaPlayer.start() }
-        mediaPlayer.setOnErrorListener { mediaPlayer, i, i2 ->
-            Log.e("MEDIAPLAYER","$i xxx $i2")
-            true
-        }
+        mediaPlayer.setOnCompletionListener {  }
+        mediaPlayer.setOnErrorListener { _, _, _ -> true }
 
         val videoCallback = object:SurfaceHolder.Callback2{
             override fun surfaceCreated(holder: SurfaceHolder) {

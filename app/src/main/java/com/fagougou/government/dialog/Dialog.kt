@@ -26,6 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.contractPage.ContractViewModel
@@ -48,6 +50,10 @@ import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
+import com.fagougou.government.utils.Tips.toast
+import timber.log.Timber
+import java.io.File
+import java.lang.Exception
 
 object DialogViewModel {
     var icon = 0
@@ -72,7 +78,7 @@ object DialogViewModel {
         secondButtonOnClick.value = {}
     }
 
-    fun confirmPrint() {
+    fun confirmPrint(mode:String) {
         GenerateContract.lastModifier = Time.stamp
         clear()
         title = "即将进行打印"
@@ -83,11 +89,20 @@ object DialogViewModel {
         firstButtonOnClick.value = { clear() }
         secondButtonOnClick.value = {
             startPrint()
-            Printer.wantPrint.value=true
-            if (!ContractViewModel.FilePath.isBlank()){
-                Printer.printPdf(ContractViewModel.FilePath)
-            }else{
-                Tips.toast("请等待加载完成")
+            when(mode){
+                "pdf" -> {
+                    try{
+                        val pdfFile = File(activity.cacheDir, "${ContractViewModel.pdfFile?.id ?: "0"}.pdf")
+                        Printer.printPdf(pdfFile)
+                    }catch (e:Exception){
+                        Timber.e(e)
+                        toast(e.toString())
+                        clear()
+                    }
+
+                }
+                "webView" -> Printer.webViewPrint.value=true
+                else -> clear()
             }
         }
     }

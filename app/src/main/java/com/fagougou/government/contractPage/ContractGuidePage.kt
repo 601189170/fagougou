@@ -35,6 +35,7 @@ import com.fagougou.government.contractPage.ContractViewModel.selectedId
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
+import com.fagougou.government.model.PdfFile
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -52,12 +53,8 @@ object ContractViewModel{
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
     val BaseLoadUrl="http://beta.products.fagougou.com/api/contract-template/pdf-stream/"
-    var officeUrl = ""
-    var fileUrl = ""
-    var fileloadId=""
-    var fileName=""
-    var fileTime=""
-    var FilePath=""
+    var pdfFile: PdfFile? = null
+
     init {
         CoroutineScope(Dispatchers.IO).launch {
             try{
@@ -88,17 +85,13 @@ object ContractViewModel{
     }
 
     fun  getTemplate(category :ContractData, navController: NavController) {
-        fileloadId=category._id
-        fileName=category.name
-        fileTime= category.updatedAt
+        pdfFile = PdfFile(category)
         CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.Main){
-                    navController.navigate(Router.contractWebView)
-                }
+            withContext(Dispatchers.Main){
+                navController.navigate(Router.contractWebView)
+            }
         }
     }
-
-
 }
 
 

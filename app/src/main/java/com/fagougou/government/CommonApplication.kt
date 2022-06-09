@@ -24,6 +24,7 @@ import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.lang.Exception
 
 class CommonApplication: Application(){
@@ -45,6 +46,7 @@ class CommonApplication: Application(){
         TTS.init(this)
         GenerateContract.init(this)
         YKFUtils.init(this)
+        Timber.plant(Timber.DebugTree())
         CoroutineScope(Dispatchers.Default).launch {
             if (!Settings.canDrawOverlays(this@CommonApplication)){
                 while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)

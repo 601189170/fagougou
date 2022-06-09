@@ -37,7 +37,7 @@ import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer.printWebView
-import com.fagougou.government.utils.Printer.wantPrint
+import com.fagougou.government.utils.Printer.webViewPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
@@ -167,9 +167,9 @@ fun ContractWebView() {
                 "utf-8",
                 null
             )
-            if (wantPrint.value) {
+            if (webViewPrint.value) {
                 printWebView(it)
-                wantPrint.value = false
+                webViewPrint.value = false
             }
         }
     )
@@ -228,7 +228,7 @@ fun GenerateContract(navController: NavController) {
                                 .width(200.dp),
                             elevation = ButtonDefaults.elevation(0.dp, 0.dp),
                             onClick = {
-                                DialogViewModel.confirmPrint()
+                                DialogViewModel.confirmPrint("webView")
                             },
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {

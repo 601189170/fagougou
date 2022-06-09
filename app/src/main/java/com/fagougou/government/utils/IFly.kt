@@ -2,7 +2,6 @@ package com.fagougou.government.utils
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.Router
@@ -11,7 +10,6 @@ import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.voiceInputMode
 import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.utils.Time.stampL
-import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
 import com.iflytek.cloud.util.ResourceUtil
 import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE
