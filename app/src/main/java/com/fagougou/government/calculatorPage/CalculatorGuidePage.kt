@@ -4,23 +4,30 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
-import com.fagougou.government.component.Header
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.component.Header
 import com.fagougou.government.homePage.HomeButton
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 import com.fagougou.government.webViewPage.WebViewPageModel
 
 @Composable
 fun CalculatorGuidePage(navController: NavController) {
+    LaunchedEffect(null){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(CommonApplication.activity.resources.openRawResourceFd(R.raw.vh_calculator))
+        mediaPlayer.prepareAsync()
+    }
     val calResMap = mapOf(
         Pair("律师费", R.drawable.cal_lawyer),
         Pair("司法鉴定", R.drawable.cal_judicial),

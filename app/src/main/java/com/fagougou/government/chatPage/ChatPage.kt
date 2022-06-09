@@ -36,14 +36,17 @@ import com.fagougou.government.model.Speaker
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
-import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.SafeBack.safeBack
-import com.fagougou.government.utils.Tips
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 @Composable
 fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat))
+        mediaPlayer.prepareAsync()
         wakeMode()
     }
     Column(

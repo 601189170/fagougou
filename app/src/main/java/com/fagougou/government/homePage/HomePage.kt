@@ -60,7 +60,7 @@ fun HomePage(context: Context, navController:NavController) {
         manager?.ZYSystemBar(0)
         mediaPlayer.stop()
         mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.virtual_home))
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_home))
         mediaPlayer.prepareAsync()
         scope.launch{
             var body = SerialLoginResponse()

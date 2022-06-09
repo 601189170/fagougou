@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
@@ -41,6 +42,7 @@ import com.fagougou.government.utils.Printer.webViewPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
@@ -178,6 +180,10 @@ fun ContractWebView() {
 @Composable
 fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_generate_contract))
+        mediaPlayer.prepareAsync()
         while (isActive) {
             delay(600)
             GenerateContract.updateContent()

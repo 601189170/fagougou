@@ -9,6 +9,7 @@ import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +31,17 @@ import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
 import androidx.compose.ui.graphics.Color as ComposeColor
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
+import com.fagougou.government.utils.Tips.toast
 
 @Composable
 fun ContractWebView(navController: NavController) {
+    LaunchedEffect(null){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_contract_web_view))
+        mediaPlayer.prepareAsync()
+    }
     Surface(color = ComposeColor.White){
         Column(modifier = Modifier.fillMaxSize()) {
             Header("合同文库",navController)
@@ -45,7 +54,9 @@ fun ContractWebView(navController: NavController) {
                         ContractViewModel.pdfFile?.let {
                             val hasPdfFile = File(activity.cacheDir, "${it.id}.pdf").exists()
                             val isNewest = pdfKv.decodeString(it.id) == it.updateAt
-                            if(hasPdfFile && isNewest) initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
+                            if(hasPdfFile && isNewest) {
+                                initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
+                            }
                             else {
                                 statusListener=object : PdfRendererView.StatusCallBack {
                                     override fun onDownloadSuccess(filePath: String) {

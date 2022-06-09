@@ -22,13 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel.ContractLists
 import com.fagougou.government.contractPage.ContractViewModel.categoryList
 import com.fagougou.government.contractPage.ContractViewModel.getContractList
-
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
 import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
@@ -40,12 +40,11 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
@@ -97,6 +96,12 @@ object ContractViewModel{
 
 @Composable
 fun Contract(navController: NavController,category: ContractData){
+    LaunchedEffect(null){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_contract))
+        mediaPlayer.prepareAsync()
+    }
     Column(
         Modifier.clickable {
             getTemplate(category, navController)

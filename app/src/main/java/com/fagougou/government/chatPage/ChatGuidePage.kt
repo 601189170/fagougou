@@ -35,8 +35,7 @@ fun ChatGuidePage(navController: NavController) {
         ZYSJ.manager?.ZYSystemBar(0)
         mediaPlayer.stop()
         mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.virtual_chat_guide)
-        )
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat_guide))
         mediaPlayer.prepareAsync()
     }
     val botResMap = mapOf(
