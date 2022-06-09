@@ -33,7 +33,7 @@ fun BotMenu() {
         onClick = {
             with(DialogViewModel) {
                 clear()
-                title = "温馨提示"
+                title = "切换领域"
                 firstButtonText.value = "取消"
                 firstButtonOnClick.value = { content.clear() }
                 secondButtonText.value = "确定"

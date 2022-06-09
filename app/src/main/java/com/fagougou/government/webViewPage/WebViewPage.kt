@@ -21,20 +21,18 @@ object WebViewPageModel{
     var title = ""
     var urlAddress = ""
     var data = ""
+
+    fun clear(){
+        title = ""
+        urlAddress = ""
+        data = ""
+    }
 }
 
 @Composable
 fun WebViewPage(navController: NavController) {
     Column {
-        Header(
-            title,
-            navController,
-            onBack = {
-                title = ""
-                urlAddress = ""
-                data = ""
-            }
-        )
+        Header(title, navController, onBack = { WebViewPageModel.clear() })
         WebView(urlAddress,data)
     }
 }

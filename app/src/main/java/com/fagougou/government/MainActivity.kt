@@ -2,11 +2,8 @@ package com.fagougou.government
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
 import android.app.ZysjSystemManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PixelFormat
@@ -14,8 +11,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.TextUtils
-import android.view.*
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -34,13 +33,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
@@ -110,10 +107,7 @@ class MainActivity : ComponentActivity() {
         }catch (e:Exception){ }
         setContent {
             GovernmentTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
+                Surface( Modifier.fillMaxSize() ) {
                     Main(this)
                     QrCode()
                     Dialog()
@@ -230,9 +224,9 @@ fun Main(context: Context) {
     Image( painterResource(R.drawable.home_background),"Background",Modifier.fillMaxSize() )
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(
-            navController = navController,
-            startDestination = Router.register,
-            modifier = Modifier.fillMaxHeight()
+            navController,
+            Router.register,
+            Modifier.fillMaxHeight()
         ) {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
@@ -261,18 +255,16 @@ fun Loading() {
     if (globalLoading.value <= 0) return
     Surface(color = Color.Transparent) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            Modifier.fillMaxSize(),
+            Arrangement.Center,
+            Alignment.CenterHorizontally
         ) {
             Surface(
-                modifier = Modifier
-                    .width(256.dp)
-                    .height(256.dp),
-                shape = RoundedCornerShape(CORNER_FLOAT),
-                color = Color(0x33000000)
+                Modifier.width(256.dp).height(256.dp),
+                RoundedCornerShape(CORNER_FLOAT),
+                Color(0x33000000)
             ) {
-                CircularProgressIndicator(modifier = Modifier.padding(48.dp))
+                CircularProgressIndicator(Modifier.padding(48.dp))
             }
         }
     }
@@ -291,7 +283,7 @@ fun initWindsSetting():WindowManager.LayoutParams{
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.TYPE_PHONE,
         0, PixelFormat.TRANSPARENT)
-    if (Build.VERSION.SDK_INT >= 26)  lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+    if (Build.VERSION.SDK_INT > 25)  lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
     else  lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
     lp.gravity = Gravity.END

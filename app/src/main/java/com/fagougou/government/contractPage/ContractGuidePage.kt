@@ -96,12 +96,6 @@ object ContractViewModel{
 
 @Composable
 fun Contract(navController: NavController,category: ContractData){
-    LaunchedEffect(null){
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_contract))
-        mediaPlayer.prepareAsync()
-    }
     Column(
         Modifier.clickable {
             getTemplate(category, navController)
@@ -147,6 +141,12 @@ fun Contract(navController: NavController,category: ContractData){
 @Composable
 fun ContractGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
+    LaunchedEffect(null){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_contract))
+        mediaPlayer.prepareAsync()
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -220,10 +220,7 @@ fun ContractGuidePage(navController: NavController) {
         }
         Row(Modifier.fillMaxSize()) {
             Surface(color = Color(0xFFFFFFFF)) {
-                Column(
-                    Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.25f),
+                Column(Modifier.fillMaxHeight().fillMaxWidth(0.25f),
                 ) {
                     LazyColumn(
                         Modifier.padding(vertical = 24.dp),

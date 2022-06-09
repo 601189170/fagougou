@@ -3,15 +3,20 @@ package com.fagougou.government.chatPage
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -39,9 +44,11 @@ import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.SafeBack.safeBack
 import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
+    val page = remember{ FocusRequester.createRefs().component1() }
     LaunchedEffect(null){
         mediaPlayer.stop()
         mediaPlayer.seekTo(0)
@@ -50,14 +57,13 @@ fun ChatPage(navController: NavController) {
         wakeMode()
     }
     Column(
-        Modifier.fillMaxHeight(),
+        Modifier.fillMaxHeight().focusRequester(page).focusable(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header(
             "智能咨询  (${selectedChatBot.value})",
             navController,
-
             {
                 with(DialogViewModel){
                     clear()
