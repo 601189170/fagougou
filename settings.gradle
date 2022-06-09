@@ -2,26 +2,38 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        // 华为开源镜像：https://mirrors.huaweicloud.com
-        maven { url 'https://repo.huaweicloud.com/repository/maven' }
-        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
+        maven {
+            credentials {
+                username "androidteam-1654741054921"
+                password "c31ddf0ad685ab7a85a462c80ebd86cf88ec826e"
+            }
+            url 'https://fagg-maven.pkg.coding.net/repository/fagougouatgovernment/androidteam/'
+        }
         google()
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
+        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        // 华为开源镜像：https://mirrors.huaweicloud.com
-        maven { url 'https://repo.huaweicloud.com/repository/maven' }
-        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
+        maven {
+            credentials {
+                username "$mavenUser"
+                password "$mavenPassword"
+            }
+            url 'https://fagg-maven.pkg.coding.net/repository/fagougouatgovernment/androidteam/'
+        }
         google()
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
+        maven { url "https://raw.githubusercontents.com/7moor-tech/video-call-sdk/master" }
     }
 }
 rootProject.name = "Government"
