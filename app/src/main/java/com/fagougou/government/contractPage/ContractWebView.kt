@@ -54,10 +54,9 @@ fun ContractWebView(navController: NavController) {
                         ContractViewModel.pdfFile?.let {
                             val hasPdfFile = File(activity.cacheDir, "${it.id}.pdf").exists()
                             val isNewest = pdfKv.decodeString(it.id) == it.updateAt
-                            if(hasPdfFile && isNewest) {
-                                initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
-                            }
+                            if(hasPdfFile && isNewest) initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
                             else {
+                                toast("正在下载合同，请稍等")
                                 statusListener=object : PdfRendererView.StatusCallBack {
                                     override fun onDownloadSuccess(filePath: String) {
                                         super.onDownloadSuccess(filePath)

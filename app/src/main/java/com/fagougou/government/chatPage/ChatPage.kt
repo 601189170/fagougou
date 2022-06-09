@@ -45,7 +45,7 @@ fun ChatPage(navController: NavController) {
     LaunchedEffect(null){
         mediaPlayer.stop()
         mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat))
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat_slient))
         mediaPlayer.prepareAsync()
         wakeMode()
     }
