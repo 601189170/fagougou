@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#101251"
+    android:paddingBottom="2dp"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -16,7 +17,7 @@
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="56dp"
+        android:paddingLeft="105dp"
         android:paddingRight="56dp"
         app:alignContent="flex_start"
         app:alignItems="center"

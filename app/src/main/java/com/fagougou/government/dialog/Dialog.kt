@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.contractPage.ContractViewModel
+
+
 import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.dialog.DialogViewModel.content
@@ -44,6 +47,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 
 object DialogViewModel {
     var icon = 0
@@ -80,6 +84,11 @@ object DialogViewModel {
         secondButtonOnClick.value = {
             startPrint()
             Printer.wantPrint.value=true
+            if (!ContractViewModel.FilePath.isBlank()){
+                Printer.printPdf(ContractViewModel.FilePath)
+            }else{
+                Tips.toast("请等待加载完成")
+            }
         }
     }
 

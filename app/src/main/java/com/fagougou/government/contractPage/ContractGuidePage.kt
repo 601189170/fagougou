@@ -1,9 +1,7 @@
 package com.fagougou.government.contractPage
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
@@ -24,39 +22,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.alibaba.fastjson.JSON
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.Header
 import com.fagougou.government.contractPage.ContractViewModel.ContractLists
 import com.fagougou.government.contractPage.ContractViewModel.categoryList
-import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.getContractList
+
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
+import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.prettyService
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
-import java.net.URLEncoder
+
 
 object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
     val ContractLists = mutableStateListOf<ContractData>()
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
+    val BaseLoadUrl="http://beta.products.fagougou.com/api/contract-template/pdf-stream/"
     var officeUrl = ""
     var fileUrl = ""
-
+    var fileloadId=""
+    var fileName=""
+    var fileTime=""
+    var FilePath=""
     init {
         CoroutineScope(Dispatchers.IO).launch {
             try{
@@ -86,26 +87,27 @@ object ContractViewModel{
         }
     }
 
-    fun  getTemplate(filed:String, navController: NavController) {
+    fun  getTemplate(category :ContractData, navController: NavController) {
+        fileloadId=category._id
+        fileName=category.name
+        fileTime= category.updatedAt
         CoroutineScope(Dispatchers.IO).launch {
-            val response = contractService.getTemplate(filed).execute()
-//            val response = prettyService.getTemplatePdf(filed).execute()
-            val body = response.body() ?: return@launch
-            withContext(Dispatchers.Main){
-                fileUrl = body.data
-                val encodedUrl = URLEncoder.encode(fileUrl,"UTF-8")
-                officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl"
-                navController.navigate(Router.contractWebView)
-            }
+                withContext(Dispatchers.Main){
+                    navController.navigate(Router.contractWebView)
+                }
         }
     }
+
+
 }
+
 
 @Composable
 fun Contract(navController: NavController,category: ContractData){
     Column(
-        Modifier.clickable { getTemplate(category.fileid, navController) }
-//        Modifier.clickable { getTemplate("5d81b017c90b3c05f8752e1e", navController) }
+        Modifier.clickable {
+            getTemplate(category, navController)
+        }
     ){
         Row(
             Modifier.padding(top = 16.dp),

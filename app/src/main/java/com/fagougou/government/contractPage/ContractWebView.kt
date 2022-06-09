@@ -21,10 +21,18 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.contractPage.ContractViewModel.BaseLoadUrl
+import com.fagougou.government.contractPage.ContractViewModel.FilePath
+import com.fagougou.government.contractPage.ContractViewModel.fileName
+import com.fagougou.government.contractPage.ContractViewModel.fileTime
+import com.fagougou.government.contractPage.ContractViewModel.fileloadId
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.MMKV.pdfKv
+import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
+import java.io.File
 import androidx.compose.ui.graphics.Color as ComposeColor
 
 @Composable
@@ -38,7 +46,22 @@ fun ContractWebView(navController: NavController) {
                     .fillMaxWidth(),
                 factory = {
                     PdfRendererView(activity).apply{
-                        initWithUrl("http://beta.products.fagougou.com/api/contract-template/pdf-stream/5d81ac96b01a9b0567a6d577")
+
+                        if (pdfKv.decodeString(fileloadId)!= fileTime){
+                            initWithUrl(BaseLoadUrl+ fileloadId,PdfQuality.NORMAL, fileName)
+                        }else if (File(activity.cacheDir,fileName+".pdf").exists()){
+                            initWithFile(File(activity.cacheDir,fileName+".pdf"))
+                            FilePath=activity.cacheDir.absolutePath+File.separator+ fileName+".pdf"
+                        }else{
+                            initWithUrl(BaseLoadUrl+ fileloadId, PdfQuality.NORMAL, fileName)
+                        }
+                        statusListener=object : PdfRendererView.StatusCallBack {
+                            override fun onDownloadSuccess(filePath: String) {
+                                super.onDownloadSuccess(filePath)
+                                FilePath=filePath;
+                                pdfKv.encode(fileloadId, fileTime)
+                            }
+                        }
                     }
                 },
                 update = {
@@ -48,7 +71,9 @@ fun ContractWebView(navController: NavController) {
                 .fillMaxWidth()
                 .height(2.dp),color = ComposeColor(0xFFEEEEEE)){}
             Row(
-                modifier = Modifier.fillMaxSize().border(1.dp, Color.LightGray, RoundedCornerShape(CORNER_FLOAT)),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(1.dp, Color.LightGray, RoundedCornerShape(CORNER_FLOAT)),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ){

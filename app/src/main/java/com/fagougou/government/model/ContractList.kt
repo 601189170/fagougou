@@ -22,6 +22,8 @@ data class ContractData(
     val folder: ContractFolder? = ContractFolder(),
     val howToUse: String? = "",
     val name: String = "",
+    val _id: String = "",
+    val updatedAt: String = "",
 )
 
 data class ContractQuery(
