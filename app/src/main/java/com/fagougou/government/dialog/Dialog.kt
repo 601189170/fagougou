@@ -45,7 +45,6 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.FileUtils
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips

@@ -1,7 +1,6 @@
 package com.fagougou.government.contractPage
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -23,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.alibaba.fastjson.JSON
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
@@ -34,29 +32,18 @@ import com.fagougou.government.contractPage.ContractViewModel.getContractList
 import com.fagougou.government.contractPage.ContractViewModel.getTemplate
 import com.fagougou.government.contractPage.ContractViewModel.searchWord
 import com.fagougou.government.contractPage.ContractViewModel.selectedId
-import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.prettyService
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.FileUtils
-import com.fagougou.government.utils.FileUtils.FILE_NAME
-import com.fagougou.government.utils.FileUtils.FILE_PATH
 
-import com.fagougou.government.utils.FileUtils.copyInputStreamToFile
-import com.fagougou.government.utils.FileUtils.isLoalFile
-import com.fagougou.government.utils.MMKV.pdfKv
-import com.fagougou.government.utils.Printer.printPdf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.*
-import java.net.URLEncoder
 
 
 object ContractViewModel{
@@ -64,6 +51,7 @@ object ContractViewModel{
     val ContractLists = mutableStateListOf<ContractData>()
     var selectedId = mutableStateOf("")
     val searchWord = mutableStateOf("")
+    val BaseLoadUrl="http://beta.products.fagougou.com/api/contract-template/pdf-stream/"
     var officeUrl = ""
     var fileUrl = ""
     var fileloadId=""
