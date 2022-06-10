@@ -1,9 +1,7 @@
 package com.fagougou.government.utils
 
 import android.text.TextUtils
-import com.alibaba.fastjson.JSON
 import com.fagougou.government.model.ContentStyle
-import timber.log.Timber
 
 object InlineRecommend {
     val questionRegex = Regex("[\n]*#question::")
@@ -58,7 +56,6 @@ object InlineRecommend {
                 resultList.add(i)
             }
         }
-        Timber.e("resultList:%s",JSON.toJSONString(resultList))
 
         for (i in resultList.indices){
             if (i==0){

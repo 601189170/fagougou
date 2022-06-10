@@ -6,7 +6,6 @@ import android.hardware.display.DisplayManager
 import android.os.Build
 import android.provider.Settings
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
@@ -19,14 +18,13 @@ import com.fagougou.government.repo.Client.apiService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.MMKV.kv
-import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.TTS
 import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
+import com.umeng.commonsdk.UMConfigure
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.lang.Exception
 
 class CommonApplication: Application(){
     companion object {
@@ -40,6 +38,8 @@ class CommonApplication: Application(){
 
     override fun onCreate() {
         super.onCreate()
+        UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
+        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
         SpeechUtility.createUtility(this, "appid=b9efca3f")
         MMKV.initialize(this)
         Bugsnag.start(this)
