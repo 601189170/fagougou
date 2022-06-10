@@ -18,6 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.fagougou.government.component.Header
 import com.fagougou.government.Router
 import com.fagougou.government.chatPage.Complex.bodyList
@@ -111,11 +114,24 @@ fun CaseButton(case: AttachmentCases,scope: CoroutineScope,navController: NavCon
 @Composable
 fun ComplexPage(navController: NavController) {
     val scope = rememberCoroutineScope()
+    val navController2 = rememberNavController()
     Surface(Modifier.fillMaxSize(), color = Color.White) {
         Column {
+            NavHost(navController2, "aaa",
+                Modifier
+                    .height(200.dp)
+                    .width(200.dp)) {
+                composable("aaa") { Text("aaa") }
+                composable("bbb") { Text("bbb") }
+            }
+            Button(onClick = { navController2.navigate("bbb") }) {
+                Text("bbb")
+            }
             Header("详细分析", navController, onBack = { Complex.clear() } )
             Row(
-                Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 if(bodyList.isNotEmpty() && caseList.isNotEmpty()){
