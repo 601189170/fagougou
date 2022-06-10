@@ -39,11 +39,11 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.SafeBack.safeBack
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -51,10 +51,7 @@ fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(null){
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat_slient))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_chat_slient)
         wakeMode()
     }
     Column(Modifier.fillMaxHeight(),Arrangement.Top,Alignment.CenterHorizontally) {

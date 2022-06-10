@@ -14,8 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
@@ -23,7 +21,6 @@ import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.presentation.BannerPresentation
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 import com.fagougou.government.utils.ZYSJ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,10 +30,7 @@ fun ChatGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null) {
         ZYSJ.manager?.ZYSystemBar(0)
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_chat_guide))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_chat_guide)
     }
     val botResMap = mapOf(
         Pair("公司财税", R.drawable.bot_tax),

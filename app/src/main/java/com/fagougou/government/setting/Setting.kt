@@ -14,16 +14,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
-import com.fagougou.government.utils.MMKV
-import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
-import com.fagougou.government.utils.ZYSJ
 import com.fagougou.government.utils.ZYSJ.hideBar
-import com.fagougou.government.utils.ZYSJ.openBar
+import com.fagougou.government.utils.ZYSJ.showBar
 
 @Composable
 fun Settings(navController: NavController) {
@@ -55,13 +49,13 @@ fun Settings(navController: NavController) {
             modifier = Modifier
                 .padding(vertical = 32.dp).padding(end = 32.dp)
                 .fillMaxWidth()
-                .clickable { openBar() },
+                .clickable { showBar() },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier
                     .padding(start = 32.dp)
-                    .clickable { openBar() },
+                    .clickable { showBar() },
                 color = Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,

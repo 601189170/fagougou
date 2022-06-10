@@ -34,6 +34,7 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -42,7 +43,6 @@ import com.fagougou.government.utils.Printer.webViewPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 import java.io.InputStreamReader
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 object GenerateContract {
     val contractList = mutableStateListOf<GenerateContractBrief>()
@@ -180,10 +180,7 @@ fun ContractWebView() {
 @Composable
 fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_generate_contract))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_generate_contract)
         while (isActive) {
             delay(600)
             GenerateContract.updateContent()

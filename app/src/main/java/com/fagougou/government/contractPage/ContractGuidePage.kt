@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
@@ -36,6 +35,7 @@ import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.model.PdfFile
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -44,7 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 object ContractViewModel{
     val categoryList = mutableStateListOf<ContractCategory>()
@@ -142,10 +141,7 @@ fun Contract(navController: NavController,category: ContractData){
 fun ContractGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_contract))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_contract)
     }
     Column(
         modifier = Modifier.fillMaxSize(),

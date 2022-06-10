@@ -5,8 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,29 +21,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.component.Header
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.ContractViewModel
+import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
-import com.fagougou.government.generateContract.GenerateContract.data
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplate
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.launch
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
 
 @Composable
 fun GenerateGuide(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(CommonApplication.activity.resources.openRawResourceFd(R.raw.vh_generate_guide))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_generate_guide)
         val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
         GenerateContract.clear()
         currentContractId.value = launchId

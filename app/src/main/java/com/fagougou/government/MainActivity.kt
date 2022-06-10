@@ -21,7 +21,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -92,19 +91,17 @@ import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.lang.Long.min
 
-
 class MainActivity : ComponentActivity() {
-    lateinit var binding: LayoutHomebtnBinding
-    var mwm: WindowManager? = null
+    lateinit var homeButtonBinding: LayoutHomebtnBinding
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
         try {
-            mwm = activity.getSystemService(WINDOW_SERVICE) as WindowManager
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
+        homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
         setContent {
             GovernmentTheme {
                 Surface( Modifier.fillMaxSize() ) {
@@ -136,15 +133,14 @@ class MainActivity : ComponentActivity() {
             intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
         }else{
-            binding=LayoutHomebtnBinding.inflate(layoutInflater)
-            binding.homeBtn.setOnClickListener {
+            homeButtonBinding.homeBtn.setOnClickListener {
                 EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
                 Printer.currentJob = null
                 startActivity(Intent(activity, MainActivity::class.java))
             }
             EventBus.getDefault().register(this)
-            binding.homeBtn.visibility=View.GONE
-            mwm?.addView(binding.root, initWindsSetting())
+            homeButtonBinding.homeBtn.visibility=View.GONE
+            windowManager.addView(homeButtonBinding.root, initWindsSetting())
         }
     }
     private fun requestPermission() {
@@ -168,7 +164,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mwm?.removeViewImmediate(binding.root)
+        windowManager.removeViewImmediate(homeButtonBinding.root)
         EventBus.getDefault().unregister(this)
     }
 
@@ -176,10 +172,10 @@ class MainActivity : ComponentActivity() {
     open fun onEventMainThread(messageEvent: MessageEvent) {
         if (messageEvent.message.equals(MessageConstans.WindsViewGone) ) {
             Timber.d("BTN receive gone")
-            binding.homeBtn.visibility=View.GONE
+            homeButtonBinding.homeBtn.visibility=View.GONE
         } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
             Timber.d("BTN receive show")
-            binding.homeBtn.visibility=View.VISIBLE
+            homeButtonBinding.homeBtn.visibility=View.VISIBLE
         }
     }
 }
@@ -223,11 +219,7 @@ fun Main(context: Context) {
     }
     Image( painterResource(R.drawable.home_background),"Background",Modifier.fillMaxSize() )
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
-        NavHost(
-            navController,
-            Router.register,
-            Modifier.fillMaxHeight()
-        ) {
+        NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(context,navController) }

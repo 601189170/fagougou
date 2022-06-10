@@ -20,13 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
-import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPlayer
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -58,10 +57,7 @@ fun HomePage(context: Context, navController:NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         manager?.ZYSystemBar(0)
-        mediaPlayer.stop()
-        mediaPlayer.seekTo(0)
-        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(R.raw.vh_home))
-        mediaPlayer.prepareAsync()
+        BannerPresentation.playVideo(R.raw.vh_home)
         scope.launch{
             var body = SerialLoginResponse()
             withContext(Dispatchers.IO){
