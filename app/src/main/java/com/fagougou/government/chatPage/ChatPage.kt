@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +49,7 @@ import com.fagougou.government.presentation.BannerPresentation.Companion.mediaPl
 @Composable
 fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
-    val page = remember{ FocusRequester.createRefs().component1() }
+    val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(null){
         mediaPlayer.stop()
         mediaPlayer.seekTo(0)
@@ -56,11 +57,7 @@ fun ChatPage(navController: NavController) {
         mediaPlayer.prepareAsync()
         wakeMode()
     }
-    Column(
-        Modifier.fillMaxHeight().focusRequester(page).focusable(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(Modifier.fillMaxHeight(),Arrangement.Top,Alignment.CenterHorizontally) {
         Header(
             "智能咨询  (${selectedChatBot.value})",
             navController,
@@ -91,15 +88,11 @@ fun ChatPage(navController: NavController) {
         var lazyHeight = 952 - if(showBotMenu.value) 436 else 0
         lazyHeight -= if(voiceInputMode.value) 220 else 80
         LazyColumn(
-            Modifier.height(lazyHeight.dp).fillMaxWidth().padding(horizontal = 12.dp),
+            Modifier.height(lazyHeight.dp).fillMaxWidth().padding(horizontal = 12.dp),listState,
             verticalArrangement = Arrangement.Top,
-            state = listState,
         ) {
             item {
-                Row(
-                    Modifier.fillMaxWidth().padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+                Row(Modifier.fillMaxWidth().padding(top = 12.dp),Arrangement.Center) {
                     Surface(
                         color = Color(0x33FFFFFF),
                         shape = RoundedCornerShape(CORNER_FLOAT)
@@ -115,13 +108,13 @@ fun ChatPage(navController: NavController) {
                     }
                 }
             }
-            items(history.size) { index -> MessageItem(history[index], index, scope, navController) }
+            items(history.size) { index -> MessageItem(history[index], index, scope, navController,keyboardController) }
             if (history.lastOrNull()?.speaker==Speaker.USER) item {
-                MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController)
+                MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController, keyboardController)
             }
-            item { Row( Modifier.fillMaxWidth().height(60.dp) ) {} }
+            item { Row( Modifier.fillMaxWidth().height(180.dp) ) {} }
         }
-        InputBox(scope)
+        InputBox(scope,keyboardController)
         if(showBotMenu.value) BotMenu()
     }
     BackHandler {}

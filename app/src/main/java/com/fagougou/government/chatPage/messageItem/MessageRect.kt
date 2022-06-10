@@ -7,13 +7,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -32,8 +33,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LawExpend(message: Message, index: Int) {
+fun LawExpend(message: Message, index: Int,keyboardController: SoftwareKeyboardController?) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -43,6 +45,7 @@ fun LawExpend(message: Message, index: Int) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
+                    keyboardController?.hide()
                     val isExpend = !message.isExpend
                     ChatViewModel.history[index] = message.copy(isExpend = isExpend)
                 }
@@ -77,11 +80,13 @@ fun LawExpend(message: Message, index: Int) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MessageRect(
     message: Message,
     index: Int,
     scope: CoroutineScope,
+    keyboardController:SoftwareKeyboardController?,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
 ) {
@@ -122,6 +127,7 @@ fun MessageRect(
                         lineHeight=38.sp,
                     ),
                     onClick = { offset ->
+                        keyboardController?.hide()
                         annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
                             ChatViewModel.getDefInfo(it.item);
                         }
@@ -131,11 +137,10 @@ fun MessageRect(
             for(question in message.inlineRecommend){
                 Text(
                     question,
-                    Modifier.clickable { scope.launch(Dispatchers.IO) {
-                        ChatViewModel.nextChat(
-                            question
-                        )
-                    } },
+                    Modifier.clickable {
+                        keyboardController?.hide()
+                        scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(question) }
+                    },
                     fontSize = 24.sp,
                     color = Dodgerblue,
                 )
@@ -148,20 +153,23 @@ fun MessageRect(
                     thickness = 2.dp,
                 )
             }
-            if (message.laws.isNotEmpty()) LawExpend(message, index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index,keyboardController)
         }
     }
 
 
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ComplexRect(
     message: Message,
     index: Int,
+    keyboardController:SoftwareKeyboardController?,
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black,
-    navController: NavController,
+    navController: NavController
+
 ) {
     Surface(
         Modifier.padding(start = 16.dp),
@@ -170,6 +178,7 @@ fun ComplexRect(
     ) {
         Column(
             modifier = Modifier.clickable {
+                keyboardController?.hide()
                 ChatViewModel.getComplex(message.complex.attachmentId, navController)
             }
         ) {
@@ -193,7 +202,7 @@ fun ComplexRect(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index)
+            if (message.laws.isNotEmpty()) LawExpend(message, index,keyboardController)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

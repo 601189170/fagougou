@@ -6,6 +6,7 @@ import android.hardware.display.DisplayManager
 import android.os.Build
 import android.provider.Settings
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap

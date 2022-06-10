@@ -17,11 +17,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -34,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputBox(scope: CoroutineScope){
+fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController?){
     if(ChatViewModel.voiceInputMode.value) Surface(
         modifier = Modifier
             .height(260.dp)
@@ -153,8 +156,7 @@ fun InputBox(scope: CoroutineScope){
                 onClick = {
                     ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
                     ChatViewModel.voiceInputMode.value = false
-                    text.freeFocus()
-                    bot.requestFocus()
+                    keyboardController?.hide()
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                 shape = RoundedCornerShape(50),

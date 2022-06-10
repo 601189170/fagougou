@@ -1,5 +1,6 @@
 package com.fagougou.government.chatPage
 
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,8 +45,8 @@ object ChatViewModel {
                     history.add(
                         Message(
                             Speaker.ROBOT,
-                            inlineRecommend = inlineRecommend,
-                            content = content,
+                            content,
+                            inlineRecommend,
                             laws = say.content.laws,
                             listDef=defDatas
                         )
@@ -54,15 +55,12 @@ object ChatViewModel {
                 }
                 "hyperlink" -> {
                     history.add(
-                        Message(
-                            Speaker.ROBOT,
-                            content = say.content.description + say.content.url
-                        )
+                        Message(Speaker.ROBOT, say.content.description + say.content.url)
                     )
                     TTS.speak(say.content.description)
                 }
                 "complex" -> {
-                    history.add(Message(Speaker.COMPLEX, content = content, complex = say.content))
+                    history.add(Message(Speaker.COMPLEX, content, complex = say.content))
                     TTS.speak(content)
                 }
             }
@@ -169,10 +167,10 @@ object ChatViewModel {
         currentProvince.value = ""
     }
 
-    fun  getDefInfo(def:String) {
+    fun getDefInfo(def:String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val strs= "#def::$def#"
-            val response = Client.apiService.define(sessionId,DefineRequest(strs)).execute()
+            val regex= "#def::$def#"
+            val response = Client.apiService.define(sessionId,DefineRequest(regex)).execute()
             val body = response.body() ?: DefineResponse()
             withContext(Dispatchers.Main){
                 with(DialogViewModel) {

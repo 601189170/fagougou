@@ -10,15 +10,16 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel
-import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.VerticalGrid
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
@@ -29,8 +30,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navController: NavController) {
+fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navController: NavController,keyboardController: SoftwareKeyboardController?) {
     Row {
         when (message.speaker){
             Speaker.OPTIONS,Speaker.USER -> {}
@@ -51,7 +53,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
-            ) { MessageRect(message, index, scope) }
+            ) { MessageRect(message, index, scope, keyboardController) }
             Speaker.USER -> Row(
                 Modifier
                     .fillMaxWidth()
@@ -59,7 +61,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
-            ) { MessageRect(message, index, scope, Dodgerblue, Color.White) }
+            ) { MessageRect(message, index, scope, keyboardController, Dodgerblue, Color.White) }
             Speaker.RECOMMEND -> Column(
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
@@ -83,9 +85,10 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                 }
                             }
                             for (question in message.recommends) Button(
-                                { scope.launch(Dispatchers.IO) {
-                                    ChatViewModel.nextChat(question)
-                                } },
+                                onClick = {
+                                    keyboardController?.hide()
+                                    scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(question) }
+                                },
                                 content = {
                                     Text("·$question", fontSize = 24.sp, color = Dodgerblue)
                                 },
@@ -94,12 +97,13 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                             )
                         } else Row(
                             modifier = Modifier.clickable {
-                                    ChatViewModel.history[index] = message.copy(isExpend = true)
-                                    if (index == ChatViewModel.history.lastIndex) scope.launch(
-                                        Dispatchers.Main) {
-                                        ChatViewModel.listState.scrollToItem(index + 2)
-                                    }
+                                keyboardController?.hide()
+                                ChatViewModel.history[index] = message.copy(isExpend = true)
+                                if (index == ChatViewModel.history.lastIndex) scope.launch(
+                                    Dispatchers.Main) {
+                                    ChatViewModel.listState.scrollToItem(index + 2)
                                 }
+                            }
                         ) {
                             Image(painterResource(R.drawable.ic_relate_question), null)
                             Text("点击查看与您情况相关的问题",Modifier.padding(start = 12.dp),Dodgerblue,24.sp,)
@@ -144,7 +148,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
-            ) { ComplexRect(message, index, navController = navController) }
+            ) { ComplexRect(message, index, keyboardController ,navController = navController) }
         }
     }
 }
