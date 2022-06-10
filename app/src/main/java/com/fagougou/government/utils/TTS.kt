@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 
 object TTS {
@@ -22,14 +23,14 @@ object TTS {
     var SpeakingProcess = 100
     var lastWord = ""
     private val mTtsInitListener = InitListener { code ->
-        Log.d( TAG,"InitListener init() code = $code")
+        Timber.d("InitListener init() code = $code")
         if (code != ErrorCode.SUCCESS) toast("初始化失败,错误码：$code")
     }
     // 初始化合成对象
     lateinit var mTts : SpeechSynthesizer
     private val mTtsListener: SynthesizerListener = object : SynthesizerListener {
         override fun onSpeakBegin() {
-            Log.d(TAG, "开始播放：" + System.currentTimeMillis())
+            Timber.d( "开始播放：%s", System.currentTimeMillis())
         }
 
         override fun onSpeakPaused() { }
@@ -40,7 +41,7 @@ object TTS {
 
         override fun onSpeakProgress(percent: Int, beginPos: Int, endPos: Int) {
             // 播放进度
-            if(percent%30 == 1)Log.d(TAG, "SpeakProgress：$percent")
+            if(percent%30 == 1)Timber.d( "SpeakProgress：$percent")
             SpeakingProcess = percent
         }
 
@@ -52,7 +53,6 @@ object TTS {
             //实时音频流输出参考
             /*if (SpeechEvent.EVENT_TTS_BUFFER == eventType) {
 				byte[] buf = obj.getByteArray(SpeechEvent.KEY_EVENT_TTS_BUFFER);
-				Log.e("MscSpeechLog", "buf is =" + buf);
 			}*/
         }
     }
@@ -92,7 +92,7 @@ object TTS {
                     val text = TTSQueue.pop()
                     delay(50)
                     mTts.startSpeaking(text, mTtsListener)
-                    Log.d(TAG, "Speak $text")
+                    Timber.d( "Speak $text")
                     lastWord = text
                 }
             }

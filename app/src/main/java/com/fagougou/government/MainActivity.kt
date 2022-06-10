@@ -171,10 +171,8 @@ class MainActivity : ComponentActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onEventMainThread(messageEvent: MessageEvent) {
         if (messageEvent.message.equals(MessageConstans.WindsViewGone) ) {
-            Timber.d("BTN receive gone")
             homeButtonBinding.homeBtn.visibility=View.GONE
         } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
-            Timber.d("BTN receive show")
             homeButtonBinding.homeBtn.visibility=View.VISIBLE
         }
     }

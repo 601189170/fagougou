@@ -1,9 +1,9 @@
 package com.fagougou.government.utils
 
 import android.text.TextUtils
-import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.fagougou.government.model.ContentStyle
+import timber.log.Timber
 
 object InlineRecommend {
     val questionRegex = Regex("[\n]*#question::")
@@ -47,51 +47,43 @@ object InlineRecommend {
     }
 
     var def="#def::"
-    var regx="#";
+    var regex="#"
 
     fun getDefData(content: String):List<ContentStyle> {
         val resultList = mutableListOf<Int>()
         val subContent = mutableListOf<ContentStyle>()
-        var max=content.length
+        val max=content.length
         for (i in content.indices){
-            if (content.get(i).toString().equals(regx)){
+            if (content[i].toString() == regex){
                 resultList.add(i)
             }
         }
-        Log.e("TAG", "resultList: "+ JSON.toJSONString(resultList))
+        Timber.e("resultList:%s",JSON.toJSONString(resultList))
 
         for (i in resultList.indices){
             if (i==0){
 
-                var startdata=content.substring(0,resultList.get(0))
-                if (!TextUtils.isEmpty(startdata)){
-                    subContent.add(ContentStyle(startdata,0))
+                val startData=content.substring(0, resultList[0])
+                if (!TextUtils.isEmpty(startData)){
+                    subContent.add(ContentStyle(startData,0))
                 }
             }else{
-                var subdata=content.substring(resultList.get(i-1),resultList.get(i))
-                if (!TextUtils.isEmpty(subdata)){
-                    if (subdata.contains(def)){
-                        var data=subdata.replace(def,"").replace(regx,"")
-                        if (!TextUtils.isEmpty(data))
-                            subContent.add(ContentStyle(data,1))
+                val subData=content.substring(resultList[i-1], resultList[i])
+                if (!TextUtils.isEmpty(subData)){
+                    if (subData.contains(def)){
+                        val data=subData.replace(def,"").replace(regex,"")
+                        if (!TextUtils.isEmpty(data)) subContent.add(ContentStyle(data,1))
                     }else{
-                        var data=subdata.replace(def,"").replace(regx,"")
-                        if (!TextUtils.isEmpty(data))
-                            subContent.add(ContentStyle(data,0))
+                        val data=subData.replace(def,"").replace(regex,"")
+                        if (!TextUtils.isEmpty(data)) subContent.add(ContentStyle(data,0))
                     }
                 }
             }
             if (i==resultList.size-1){
-                var lastdata=content.substring(resultList.get(i),max).replace(regx,"")
-                if (!TextUtils.isEmpty(lastdata)){
-                    subContent.add(ContentStyle(lastdata,0))
-                }
+                val lastData=content.substring(resultList[i],max).replace(regex,"")
+                if (!TextUtils.isEmpty(lastData)) subContent.add(ContentStyle(lastData,0))
             }
         }
-
-        Log.e("TAG", "subContent: "+ JSON.toJSONString(subContent))
         return subContent
     }
-
-
 }

@@ -28,6 +28,8 @@ import com.m7.imkfsdk.utils.statusbar.StatusBarUtils;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 public class MoorWebCenter extends KFBaseActivity {
     private TextView titlebar_name;
 	private ImageView titlebar_back;
@@ -47,7 +49,7 @@ public class MoorWebCenter extends KFBaseActivity {
 		StatusBarUtils.setColor(this, getResources().getColor(R.color.ykfsdk_all_white));
 		Intent intent = getIntent();
 		Now_Url = intent.getStringExtra("OpenUrl");
-		Log.d("OpenUrl=",Now_Url);
+		Timber.d("OpenUrl=%s",Now_Url);
 		titleName = intent.getStringExtra("titleName");
 		titlebar_name = (TextView) findViewById(R.id.titlebar_name);
 		titlebar_name.setText(titleName);

@@ -19,6 +19,8 @@ import com.m7.imkfsdk.R;
 
 import java.lang.reflect.Method;
 
+import timber.log.Timber;
+
 /**
  * <pre>
  *     @author : Trial
@@ -152,15 +154,6 @@ public class MoorDragCloseHelper {
     }
 
     /**
-     * 设置debug模式
-     *
-     * @param debug
-     */
-    public void setDebug(boolean debug) {
-        isDebug = debug;
-    }
-
-    /**
      * 开始对长按事件计时
      */
     private void checkForLongClick() {
@@ -219,7 +212,7 @@ public class MoorDragCloseHelper {
             return false;
         } else if (dragCloseListener != null && dragCloseListener.intercept()) {
             //被接口中的方法拦截，但是如果设置了点击事件，将继续执行点击逻辑
-            log("action dispatch--->");
+            Timber.d("action dispatch--->");
             if (clickListener != null) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     isPress = true;
@@ -238,7 +231,7 @@ public class MoorDragCloseHelper {
         } else {
             //不拦截
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                log("action down--->");
+                Timber.d("action down--->");
                 reset(event);
                 mLastY = event.getY();
                 mLastX = event.getX();
@@ -255,7 +248,7 @@ public class MoorDragCloseHelper {
                 //初始化数据
                 lastPointerId = event.getPointerId(0);
             } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                log("action move--->" + isSwipingToClose + "---" + mLastRawY + "---" + isInvalidTouch());
+                Timber.d("action move--->" + isSwipingToClose + "---" + mLastRawY + "---" + isInvalidTouch());
                 if (isInvalidTouch()) {
                     //无效触摸区域，则需要拦截
                     return true;
@@ -279,7 +272,7 @@ public class MoorDragCloseHelper {
                     //已经触发或者开始触发，更新view
                     mLastY = currentY;
                     mLastX = currentX;
-                    log("action move---> start close");
+                    Timber.d("action move---> start close");
 
                     //一旦移动，按则取消
                     resetClickEvent();
@@ -320,7 +313,8 @@ public class MoorDragCloseHelper {
                     return true;
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                log("action up--->" + isSwipingToClose);
+                Timber.d("action up--->" + isSwipingToClose);
+
                 if (isInvalidTouch()) {
                     //无效触摸区域，则需要拦截
                     return true;
@@ -490,17 +484,6 @@ public class MoorDragCloseHelper {
             }
         });
         animatorY.setDuration(DURATION).start();
-    }
-
-    /**
-     * 打印日志
-     *
-     * @param msg
-     */
-    private void log(String msg) {
-        if (isDebug) {
-//            Log.d(getClass().getName(), msg);
-        }
     }
 
     /**

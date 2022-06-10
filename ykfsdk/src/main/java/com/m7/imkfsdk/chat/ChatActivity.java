@@ -161,6 +161,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
+
 /**
  * 聊天界面
  *
@@ -1714,7 +1716,6 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 if (uri != null) {
                     String realPath = PickUtils.getPath(ChatActivity.this, uri);
                     picFileFullName = realPath;
-                    Log.d("发送图片消息了", "图片的本地路径是：" + picFileFullName);
                     //准备发送图片消息
                     FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
                     ArrayList fromTomsgs = new ArrayList<FromToMessage>();
@@ -1725,7 +1726,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                     resetBreakTimer();
                     sendMsgToServer(fromToMessage);
                 } else {
-                    Log.e(tag, "从相册获取图片失败");
+                    Timber.e( "从相册获取图片失败");
                 }
             }
         } else if (requestCode == PICK_FILE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

@@ -262,28 +262,24 @@ public class TextRxChatRow extends BaseChatRow {
                                 pageSnapHelper.attachToRecyclerView(holder.mRecyclerView);
                             }
 
-                            flowAdapter = new FlowAdapter(context, flowBeanArrayList, detail.flowMultiSelect, detail, new FlowAdapter.OnItemClickListenr() {
-                                @Override
-                                public void setOnButtonClickListenr(int position, boolean is, String msg) {
-//                                Toast.makeText(context, "item" + msg + " 被点击了", Toast.LENGTH_SHORT).show();
-                                    if (detail.flowMultiSelect) {
-                                        if (position < flowBeanArrayList.size()) {
+                            flowAdapter = new FlowAdapter(flowBeanArrayList, detail, (position1, is, msg) -> {
+                                if (detail.flowMultiSelect) {
+                                    if (position1 < flowBeanArrayList.size()) {
 
-                                            flowBeanArrayList.get(position).setChoose(is);
-                                            String json = new Gson().toJson(flowBeanArrayList);
-                                            detail.flowList = json;
-                                            if (is) {
-                                                chooseHash.put(position, flowBeanArrayList.get(position));
-                                            } else {
-                                                chooseHash.remove(position);
-                                            }
-                                            holder.getTv_multi_count().setText(chooseHash.size() + "");
+                                        flowBeanArrayList.get(position1).setChoose(is);
+                                        String json = new Gson().toJson(flowBeanArrayList);
+                                        detail.flowList = json;
+                                        if (is) {
+                                            chooseHash.put(position1, flowBeanArrayList.get(position1));
+                                        } else {
+                                            chooseHash.remove(position1);
                                         }
-                                    } else {
-                                        // TODO: 2019/9/2 单选发送消息
-                                        ChatActivity context1 = (ChatActivity) context;
-                                        context1.sendXbotTextMsg(msg);
+                                        holder.getTv_multi_count().setText(chooseHash.size() + "");
                                     }
+                                } else {
+                                    // TODO: 2019/9/2 单选发送消息
+                                    ChatActivity context1 = (ChatActivity) context;
+                                    context1.sendXbotTextMsg(msg);
                                 }
                             });
                             LogUtils.aTag("flowlist", flowBeanArrayList.size());
@@ -441,32 +437,25 @@ public class TextRxChatRow extends BaseChatRow {
                                 pageSnapHelper.attachToRecyclerView(holder.mRecyclerView);
                             }
 
-                            flowAdapter = new FlowAdapter(context, flowBeanArrayList, detail.flowMultiSelect, detail, new FlowAdapter.OnItemClickListenr() {
-                                @Override
-                                public void setOnButtonClickListenr(int position, boolean is, String msg) {
-//                                Toast.makeText(context, "item" + msg + " 被点击了", Toast.LENGTH_SHORT).show();
-                                    if (detail.flowMultiSelect) {
-                                        if (position < flowBeanArrayList.size()) {
-                                            flowBeanArrayList.get(position).setChoose(is);
-                                            String json = new Gson().toJson(flowBeanArrayList);
-                                            detail.flowList = json;
-//                                            MessageDao.getInstance().updateFlowList(detail._id,detail.flowList);
+                            flowAdapter = new FlowAdapter(flowBeanArrayList, detail, (position12, is, msg) -> {
+                                if (detail.flowMultiSelect) {
+                                    if (position12 < flowBeanArrayList.size()) {
+                                        flowBeanArrayList.get(position12).setChoose(is);
+                                        String json = new Gson().toJson(flowBeanArrayList);
+                                        detail.flowList = json;
 
-                                            if (is) {
-                                                chooseHash.put(position, flowBeanArrayList.get(position));
-                                            } else {
-                                                chooseHash.remove(position);
-                                            }
-
-                                            holder.getTv_multi_count().setText(chooseHash.size() + "");
-
+                                        if (is) {
+                                            chooseHash.put(position12, flowBeanArrayList.get(position12));
+                                        } else {
+                                            chooseHash.remove(position12);
                                         }
-                                    } else {
-                                        // TODO: 2019/9/2 单选发送消息
-                                        ChatActivity context1 = (ChatActivity) context;
-                                        context1.sendXbotTextMsg(msg);
-//                                        MessageDao.getInstance().updateFlowChoose(detail._id,true);
+
+                                        holder.getTv_multi_count().setText(chooseHash.size() + "");
+
                                     }
+                                } else {
+                                    ChatActivity context1 = (ChatActivity) context;
+                                    context1.sendXbotTextMsg(msg);
                                 }
                             });
                             LogUtils.aTag("flowlist", flowBeanArrayList.size());
@@ -799,10 +788,6 @@ public class TextRxChatRow extends BaseChatRow {
         }
         SpannableStringBuilder spannableString = new SpannableStringBuilder(MoorUtils.trimTrailingWhitespace(string));
         spannableString = getClickableHtml(spannableString);
-
-
-//        SpannableStringBuilder spannableString = new SpannableStringBuilder(msg);
-//        Pattern patten = Pattern.compile("\\d+[：].*+\\n", Pattern.CASE_INSENSITIVE);
 
         Pattern patten = Pattern.compile("\\d+[：].*", Pattern.CASE_INSENSITIVE);
         Matcher matcher = patten.matcher(spannableString);

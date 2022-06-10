@@ -53,6 +53,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import timber.log.Timber;
+
 /**
  * <pre>
  *     @author : Trial
@@ -497,7 +499,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Reset all state before setting/changing image or setting new rotation.
      */
     private void reset(boolean newImage) {
-        debug("reset newImage=" + newImage);
+        Timber.d("reset newImage=" + newImage);
         scale = 0f;
         scaleStart = 0f;
         vTranslate = null;
@@ -639,7 +641,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        debug("onSizeChanged %dx%d -> %dx%d", oldw, oldh, w, h);
+        Timber.d("onSizeChanged %dx%d -> %dx%d", oldw, oldh, w, h);
         PointF sCenter = getCenter();
         if (readySent && sCenter != null) {
             this.anim = null;
@@ -1332,7 +1334,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * the base layer image - the whole source subsampled as necessary.
      */
     private synchronized void initialiseBaseLayer(@NonNull Point maxTileDimensions) {
-        debug("initialiseBaseLayer maxTileDimensions=%dx%d", maxTileDimensions.x, maxTileDimensions.y);
+        Timber.d("initialiseBaseLayer maxTileDimensions=%dx%d", maxTileDimensions.x, maxTileDimensions.y);
 
         satTemp = new ScaleAndTranslate(0f, new PointF(0, 0));
         fitToBounds(true, satTemp);
@@ -1585,7 +1587,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Once source image and view dimensions are known, creates a map of sample size to tile grid.
      */
     private void initialiseTileMap(Point maxTileDimensions) {
-        debug("initialiseTileMap maxTileDimensions=%dx%d", maxTileDimensions.x, maxTileDimensions.y);
+        Timber.d("initialiseTileMap maxTileDimensions=%dx%d", maxTileDimensions.x, maxTileDimensions.y);
         this.tileMap = new LinkedHashMap<>();
         int sampleSize = fullImageSampleSize;
         int xTiles = 1;
@@ -1634,7 +1636,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Called by worker task when decoder is ready and image size and EXIF orientation is known.
      */
     private synchronized void onTilesInited(IMoorImageRegionDecoder decoder, int sWidth, int sHeight, int sOrientation) {
-        debug("onTilesInited sWidth=%d, sHeight=%d, sOrientation=%d", sWidth, sHeight, orientation);
+        Timber.d("onTilesInited sWidth=%d, sHeight=%d, sOrientation=%d", sWidth, sHeight, orientation);
         // If actual dimensions don't match the declared size, reset everything.
         if (this.sWidth > 0 && this.sHeight > 0 && (this.sWidth != sWidth || this.sHeight != sHeight)) {
             reset(false);
@@ -1672,7 +1674,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Called by worker task when a tile has loaded. Redraws the view.
      */
     private synchronized void onTileLoaded() {
-        debug("onTileLoaded");
+        Timber.d("onTileLoaded");
         checkReady();
         checkImageLoaded();
         if (isBaseLayerReady() && bitmap != null) {
@@ -1693,7 +1695,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Called by worker task when preview image is loaded.
      */
     private synchronized void onPreviewLoaded(Bitmap previewBitmap) {
-        debug("onPreviewLoaded");
+        Timber.d("onPreviewLoaded");
         if (bitmap != null || imageLoadedSent) {
             previewBitmap.recycle();
             return;
@@ -1714,7 +1716,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
      * Called by worker task when full size image bitmap is ready (tiling is disabled).
      */
     private synchronized void onImageLoaded(Bitmap bitmap, int sOrientation, boolean bitmapIsCached) {
-        debug("onImageLoaded");
+        Timber.d("onImageLoaded");
         // If actual dimensions don't match the declared size, reset everything.
         if (this.sWidth > 0 && this.sHeight > 0 && (this.sWidth != bitmap.getWidth()
                 || this.sHeight != bitmap.getHeight())) {
@@ -2230,16 +2232,6 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
         } else {
             timeF--;
             return (-change / 2f) * (timeF * (timeF - 2) - 1) + from;
-        }
-    }
-
-    /**
-     * Debug logger
-     */
-    @AnyThread
-    private void debug(String message, Object... args) {
-        if (debug) {
-            Log.d(TAG, String.format(message, args));
         }
     }
 
@@ -3052,7 +3044,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
                 IMoorDecoderFactory<? extends IMoorImageRegionDecoder> decoderFactory = decoderFactoryRef.get();
                 MoorSubsamplingScaleImageViewDragClose view = viewRef.get();
                 if (context != null && decoderFactory != null && view != null) {
-                    view.debug("TilesInitTask.doInBackground");
+                    Timber.d("TilesInitTask.doInBackground");
                     decoder = decoderFactory.make();
                     Point dimensions = decoder.init(context, source);
                     int sWidth = dimensions.x;
@@ -3112,7 +3104,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
                 IMoorImageRegionDecoder decoder = decoderRef.get();
                 Tile tile = tileRef.get();
                 if (decoder != null && tile != null && view != null && decoder.isReady() && tile.visible) {
-                    view.debug("TileLoadTask.doInBackground, tile.sRect=%s, tile.sampleSize=%d", tile.sRect,
+                    Timber.d("TileLoadTask.doInBackground, tile.sRect=%s, tile.sampleSize=%d", tile.sRect,
                             tile.sampleSize);
                     view.decoderLock.readLock().lock();
                     try {
@@ -3187,7 +3179,7 @@ public class MoorSubsamplingScaleImageViewDragClose extends View {
                 IMoorDecoderFactory<? extends IMoorImageDecoder> decoderFactory = decoderFactoryRef.get();
                 MoorSubsamplingScaleImageViewDragClose view = viewRef.get();
                 if (context != null && decoderFactory != null && view != null) {
-                    view.debug("BitmapLoadTask.doInBackground");
+                    Timber.d("BitmapLoadTask.doInBackground");
                     bitmap = decoderFactory.make().decode(context, source);
                     return view.getExifOrientation(context, sourceUri);
                 }
