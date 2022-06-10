@@ -10,11 +10,16 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ActivityUtils
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.presentation.BannerPresentation.Companion.restartVideo
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.ZYSJ
 import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.MessageConstans.*
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.chat.dialog.TaskTimeBaseDialog
 import com.m7.imkfsdk.chat.dialog.TimeoDialogListener
@@ -56,28 +61,31 @@ open class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onEventMainThread(messageEvent: MessageEvent) {
-       if (messageEvent.message .equals(MessageConstans.CloseToMain) ) {
-           ActivityUtils.finishToActivity(MainActivity::class.java, false)
-            Router.lastTouchTime = 0
-        } else if (messageEvent.message.equals(MessageConstans.CloseWait)){
-            finish()
-        }else if(messageEvent.message.equals(MessageConstans.CloseToWait)){
-           finish()
-            val intent = Intent(this, WaitActivity::class.java)
-            startActivity(intent)
-        }else if(messageEvent.message.equals(MessageConstans.RefreshTime)){
-            Router.lastTouchTime = Time.stampL
-        }
-       if (messageEvent.message .equals(MessageConstans.CloseAction) ) {
-
-            if (!diallog!!.isShowing&&!isFinishing){
-                diallog!!.RefreshShow()
+        when(messageEvent.message){
+            CloseToMain ->{
+                ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                Router.lastTouchTime = 0
             }
+            CloseToWait ->{
+                finish()
+                val intent = Intent(this, WaitActivity::class.java)
+                startActivity(intent)
+            }
+            CloseWait ->{ finish() }
+
+            RefreshTime ->{ Router.lastTouchTime = Time.stampL }
+
+            PalyVideoHumanAre ->{ restartVideo(R.raw.vh_human_area) }
+
+            PalyVideoHuman -> { restartVideo(R.raw.vh_human) }
+
+            CloseAction -> { if (diallog?.isShowing==false &&!isFinishing){ diallog?.RefreshShow() } }
         }
+
+
     }
 
 

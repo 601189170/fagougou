@@ -102,6 +102,7 @@ class MainActivity : ComponentActivity() {
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
+        permission()
         setContent {
             GovernmentTheme {
                 Surface( Modifier.fillMaxSize() ) {
@@ -110,7 +111,6 @@ class MainActivity : ComponentActivity() {
                     Dialog()
                     Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
                     Loading()
-                    requestPermission()
                 }
             }
         }
@@ -143,13 +143,15 @@ class MainActivity : ComponentActivity() {
             windowManager.addView(homeButtonBinding.root, initWindsSetting())
         }
     }
-    private fun requestPermission() {
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
-            }
+
+    private fun permission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            var mPermissionList = arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            )
+            requestPermissions(mPermissionList, 1)
         }
     }
     override fun onResume() {

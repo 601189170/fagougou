@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.AppUtils
 import com.eseid.sdtapi.*
@@ -15,12 +16,18 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
+import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.ZYSJ
+import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.chat.MessageEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 class TouristsLoginActivity : BaseActivity() {
@@ -65,10 +72,12 @@ class TouristsLoginActivity : BaseActivity() {
         esSdt.SetReadDelay(1)
         setSelectSexBg("男")
         if (AppUtils.isAppDebug()){
-            binding.edName.setText("过分接口")
-            binding.edPhone.setText("15920012647")
+            binding.edName.setText("测试用户")
+            binding.edPhone.setText("18672889523")
             binding.edCard.setText("429004199506150931")
         }
+
+        EventBus.getDefault().post(MessageEvent(MessageConstans.PalyVideoHumanAre))
     }
 
     override fun onResume() {
