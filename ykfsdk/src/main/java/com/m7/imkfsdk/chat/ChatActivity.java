@@ -465,6 +465,9 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
             }
         });
+        EventBus.getDefault().post(new MessageEvent(MessageConstans.PalyVideoHuman));
+
+
 
 //        handler.postDelayed(touchEvent,1000);
     }

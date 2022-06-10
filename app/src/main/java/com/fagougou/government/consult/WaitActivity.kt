@@ -12,6 +12,7 @@ import com.fagougou.government.databinding.ActivityWaitBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
 import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.MessageConstans.*
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.video.YKFCallManager
 import org.greenrobot.eventbus.EventBus
@@ -19,25 +20,26 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 class WaitActivity : AppCompatActivity() {
-    private var binding: ActivityWaitBinding? = null
+    lateinit var binding: ActivityWaitBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityWaitBinding.inflate(getLayoutInflater());
-        if (binding!=null){
-            val rootView: View = binding!!.root
-            setContentView(rootView)
-        }
+        binding = ActivityWaitBinding.inflate(layoutInflater);
+
+        setContentView(binding.root)
+
         ImSdkUtils.initKfHelper()
+
         ImSdkUtils.helper?.let {
             ImSdkUtils.initSdk(it)
         }
         YKFCallManager.cameraRotation=0
-        binding!!.leftBtn.setOnClickListener {
+
+        binding.leftBtn.setOnClickListener {
 
         }
-        binding!!.rightBtn.setOnClickListener {
+        binding.rightBtn.setOnClickListener {
             finish()
         }
         EventBus.getDefault().register(this);
@@ -45,17 +47,20 @@ class WaitActivity : AppCompatActivity() {
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEventMainThread(messageEvent: MessageEvent){
-        if (messageEvent.message .equals(MessageConstans.CloseToMain) ) {
-            ActivityUtils.finishToActivity(MainActivity::class.java, false)
-            Router.lastTouchTime = 0
-        }else if (messageEvent.message.equals(MessageConstans.CloseWait)){
-            finish()
-        }else if(messageEvent.message.equals(MessageConstans.CloseToWait)){
-            finish()
-            val intent = Intent(this, WaitActivity::class.java)
-            startActivity(intent)
-        }else if(messageEvent.message.equals(MessageConstans.RefreshTime)){
-            Router.lastTouchTime = Time.stampL
+        when(messageEvent.message){
+            CloseWait->{ finish() }
+
+            RefreshTime->{ Router.lastTouchTime = Time.stampL }
+
+            CloseToMain->{
+                ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                Router.lastTouchTime = 0
+            }
+            CloseToWait->{
+                finish()
+                val intent = Intent(this, WaitActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

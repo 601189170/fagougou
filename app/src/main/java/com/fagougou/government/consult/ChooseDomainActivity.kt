@@ -12,28 +12,23 @@ import com.fagougou.government.R
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 
 class ChooseDomainActivity : BaseActivity() {
-    private var binding: ActivityChooseDomainBinding? = null
+    lateinit var binding: ActivityChooseDomainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityChooseDomainBinding.inflate(layoutInflater)
-        if (binding!=null){
-            val rootView: View = binding!!.root
-            setContentView(rootView)
-        }
-//        StatusBarUtils.setColor(this, resources.getColor(R.color.white))
+
+        setContentView(binding.root)
 
         initView()
     }
     fun initView(){
-        binding!!.topLayout.tvBack.setOnClickListener { finish() }
-        binding!!.topLayout.tvWechat.setOnClickListener {
-            WechatDialog(this).show()
-        }
-        binding!!.topLayout.tvZn.setOnClickListener { finish() }
-        binding!!.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
-        binding!!.recyclerView.adapter=madapter
+        binding.topLayout.tvBack.setOnClickListener { finish() }
+        binding.topLayout.tvWechat.setOnClickListener { WechatDialog(this).show() }
+        binding.topLayout.tvZn.setOnClickListener { finish() }
+        binding.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
+        binding.recyclerView.adapter=madapter
         val botResMap = mapOf(
             Pair("公司财税", R.drawable.bot_tax),
             Pair("交通事故", R.drawable.bot_traffic),
@@ -61,7 +56,6 @@ class ChooseDomainActivity : BaseActivity() {
             @SuppressLint("SetTextI18n")
             override fun convert(holder: BaseViewHolder, item: Pair<String,Int>) {
                 holder.setImageResource(R.id.img, item.second)
-
             }
         }
 

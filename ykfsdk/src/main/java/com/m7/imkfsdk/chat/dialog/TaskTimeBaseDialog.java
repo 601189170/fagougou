@@ -127,6 +127,7 @@ public class TaskTimeBaseDialog extends Dialog implements DialogInterface.OnDism
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventBus.getDefault().post(new MessageEvent(MessageConstans.RefreshTime));
                 cancel();
             }
         });

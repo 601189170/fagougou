@@ -15,6 +15,10 @@ public class MessageConstans {
     public static String WindsViewGone="WindsViewGone";
     //打开悬浮框
     public static String WindsViewShow="WindsViewShow";
+    //播放人工登录视频
+    public static String PalyVideoHumanAre="PalyVideoHumanAre";
+    //播放人工对话视频
+    public static String PalyVideoHuman="PalyVideoHuman";
 
 
 }

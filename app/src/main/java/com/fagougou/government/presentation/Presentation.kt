@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Display
 import android.view.SurfaceHolder
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.databinding.LayoutPresentationBinding
@@ -15,6 +16,12 @@ import kotlinx.coroutines.*
 class BannerPresentation(context: Context, display: Display) : Presentation(context,display) {
     companion object{
         val mediaPlayer = MediaPlayer()
+        fun restartVideo(video :Int){
+            mediaPlayer.stop()
+            mediaPlayer.seekTo(0)
+            mediaPlayer.setDataSource(CommonApplication.activity.resources.openRawResourceFd(video))
+            mediaPlayer.prepareAsync()
+        }
     }
     val binding = LayoutPresentationBinding.inflate(layoutInflater)
     val bannerAdapter = BannerAdapter()

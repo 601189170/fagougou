@@ -30,6 +30,7 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
+import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier

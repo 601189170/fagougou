@@ -4,8 +4,8 @@ pluginManagement {
         mavenCentral()
         maven {
             credentials {
-                username "androidteam-1654741054921"
-                password "c31ddf0ad685ab7a85a462c80ebd86cf88ec826e"
+                username "androidteam-1654763897417"
+                password "2d3a1b360504458068f23a2362f13f679fc45d54"
             }
             url 'https://fagg-maven.pkg.coding.net/repository/fagougouatgovernment/androidteam/'
         }
