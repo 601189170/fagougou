@@ -3,27 +3,19 @@ package com.fagougou.government.consult
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ActivityUtils
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.presentation.BannerPresentation
-import com.fagougou.government.presentation.BannerPresentation.Companion.restartVideo
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.ZYSJ
-import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.MessageConstans.*
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.chat.dialog.TaskTimeBaseDialog
-import com.m7.imkfsdk.chat.dialog.TimeoDialogListener
-
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -62,6 +54,7 @@ open class BaseActivity : AppCompatActivity() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onEventMainThread(messageEvent: MessageEvent) {
         when(messageEvent.message){
@@ -75,20 +68,10 @@ open class BaseActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             CloseWait ->{ finish() }
-
             RefreshTime ->{ Router.lastTouchTime = Time.stampL }
-
-            PalyVideoHumanAre ->{ restartVideo(R.raw.vh_human_area) }
-
-            PalyVideoHuman -> { restartVideo(R.raw.vh_human) }
-
+            PalyVideoHumanAre ->{ BannerPresentation.playVideo(R.raw.vh_human_area) }
+            PalyVideoHuman -> { BannerPresentation.playVideo(R.raw.vh_human) }
             CloseAction -> { if (diallog?.isShowing==false &&!isFinishing){ diallog?.RefreshShow() } }
         }
-
-
     }
-
-
-
-
 }
