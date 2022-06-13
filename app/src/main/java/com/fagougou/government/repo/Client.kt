@@ -3,9 +3,9 @@ package com.fagougou.government.repo
 import android.net.ParseException
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
-import com.fagougou.government.repo.Client.globalLoading
-import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.utils.MMKV.kv
+import com.fagougou.government.repo.interceptor.BlockIntercept
+import com.fagougou.government.repo.interceptor.CommonAuthInterceptor
+import com.fagougou.government.repo.interceptor.ParametersIntercept
 import com.fagougou.government.utils.Tips.toast
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.CoroutineScope
@@ -25,67 +25,34 @@ import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
-class CommonInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val original = chain.request()
-        val requestBuilder = original.newBuilder()
-            .addHeader("Referer","https://www.fagougou.com/pc/?mkt=fefil0763c92e")
-            .addHeader("Authorization", kv.decodeString("token") ?: "")
-            .method(original.method, original.body)
-        val request = requestBuilder.build()
-        return chain.proceed(request)
-    }
-}
-
-class ParametersIntercept : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request: Request = chain.request()
-        val response = chain.proceed(request)
-        if(response.code == 200 && response.body!=null){
-            try{
-                var bodyString = response.body!!.string()
-                bodyString = bodyString
-                    .replace(",\"option\":[]","")
-                    .replace("\"option\":[{\"title\"","\"option\":{\"title\"")
-                    .replace("\"}]},\"isAnswered\"","\"}},\"isAnswered\"")
-                    .replace("\"}]}}],\"bestScore\"","\"}}}],\"bestScore\"")
-                    .replace("\n","")
-                val contentType = response.body!!.contentType()
-                val body = ResponseBody.create(contentType,bodyString)
-                return response.newBuilder().body(body).build()
-            }catch (e:Exception){
-                handleException(e)
-            }
-        }
-        return response
-    }
-}
-
-class BlockIntercept : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        globalLoading.value++
-        val request: Request = chain.request()
-        val response = chain.proceed(request)
-        globalLoading.value--
-        return response
-    }
-}
-
 object Client {
+
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com/"
     const val contractUrl = "https://law-system.fagougou-law.com/"
-    const val prettyUrl = "http://beta.products.fagougou.com/"
     const val registerUrl = "https://robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com/"
     const val generateUrl = "https://products.fagougou.com/api/"
+    const val serverlessUrl = "https://6aecd4280c024b20b2567a480678fefc.apig.cn-east-3.huaweicloudapis.com/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(BlockIntercept())
             .addInterceptor(ParametersIntercept())
-            .addInterceptor(CommonInterceptor())
+            .addInterceptor(CommonAuthInterceptor())
+            .callTimeout(12, TimeUnit.SECONDS)
+            .connectTimeout(12, TimeUnit.SECONDS)
+            .readTimeout(12, TimeUnit.SECONDS)
+            .writeTimeout(12, TimeUnit.SECONDS)
+            .build()
+    }
+
+    val noLoadClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(CommonAuthInterceptor())
             .callTimeout(12, TimeUnit.SECONDS)
             .connectTimeout(12, TimeUnit.SECONDS)
             .readTimeout(12, TimeUnit.SECONDS)
@@ -105,15 +72,6 @@ object Client {
     val contractService: ContractService by lazy {
         Retrofit.Builder()
             .baseUrl(contractUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ContractService::class.java)
-    }
-
-    val prettyService: ContractService by lazy {
-        Retrofit.Builder()
-            .baseUrl(prettyUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -147,8 +105,16 @@ object Client {
             .create(GenerateService::class.java)
     }
 
+    val serverlessService: ServerlessService by lazy {
+        Retrofit.Builder()
+            .baseUrl(serverlessUrl)
+            .client(noLoadClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ServerlessService::class.java)
+    }
+
     fun handleException(t: Throwable) {
-        globalLoading.value--
         val ex: Exception
         when (t) {
             is CancellationException -> return
