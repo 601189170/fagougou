@@ -35,7 +35,7 @@ fun Report (){
            .fillMaxSize()
            .padding(horizontal = 100.dp)) {
        Row(Modifier.padding(top = 40.dp)) {
-
+        //
            LazyVerticalGrid(userScrollEnabled = false,columns = GridCells.Fixed(5),
            content = {
                items(botResMap.toList()){ bot ->
