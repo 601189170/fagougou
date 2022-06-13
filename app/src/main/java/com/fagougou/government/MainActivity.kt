@@ -236,6 +236,7 @@ fun Main(context: Context) {
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
+//            composable(Router.about) { CaseInfo(navController) }
             composable(Router.settings) { Settings(navController) }
         }
     }

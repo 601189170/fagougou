@@ -12,3 +12,5 @@ val Shapes = Shapes(
 
 const val CORNER_FLOAT = 13f
 
+const val CORNER_FLOAT8 = 8f
+
