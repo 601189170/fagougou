@@ -23,6 +23,10 @@ object Router {
     const val webView ="webView"
     const val about ="about"
     const val settings ="settings"
+    const val rulebase ="rulebase"
+    const val aboutcase ="aboutcase"
+    const val caseinfo ="caseinfo"
+    const val Report ="Report"
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
