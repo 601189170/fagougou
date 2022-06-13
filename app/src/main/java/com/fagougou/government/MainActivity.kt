@@ -259,6 +259,7 @@ fun Loading() {
                 Color(0x33000000)
             ) {
                 CircularProgressIndicator(Modifier.padding(48.dp))
+
             }
         }
     }
