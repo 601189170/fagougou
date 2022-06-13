@@ -43,10 +43,10 @@ fun HomeButton(
     contentId: Int
 ) {
     Button(
-        modifier = modifier,
+        onClick,
+        modifier,
         shape = RoundedCornerShape(CORNER_FLOAT),
         contentPadding = PaddingValues(0.dp),
-        onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         content = { Image( painterResource(contentId), "HomeButton" ) }
     )

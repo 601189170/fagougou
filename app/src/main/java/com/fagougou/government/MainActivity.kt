@@ -245,6 +245,7 @@ fun Main(context: Context) {
 fun Loading() {
     if (routeMirror in noLoadingPages) return
     if (globalLoading.value <= 0) return
+    Timber.d("GlobalLoading:${globalLoading.value}")
     Surface(color = Color.Transparent) {
         Column(
             Modifier.fillMaxSize(),
