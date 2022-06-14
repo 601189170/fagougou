@@ -30,6 +30,7 @@ class CommonApplication: Application(){
     companion object {
         lateinit var activity: ComponentActivity
         val serial = if(Build.VERSION.SDK_INT>25) Build.getSerial() else Build.SERIAL
+        var presentation : BannerPresentation? = null
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -72,11 +73,11 @@ class CommonApplication: Application(){
         withContext(Dispatchers.Main){
             val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
             val display = displayManager.displays.getOrNull(1) ?: return@withContext
-            val presentation = BannerPresentation(this@CommonApplication, display)
+            presentation = BannerPresentation(this@CommonApplication, display)
             val windowType = if (Build.VERSION.SDK_INT >= 26) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-            presentation.window?.setType(windowType) ?: return@withContext
-            presentation.show()
+            presentation?.window?.setType(windowType) ?: return@withContext
+            presentation?.show()
         }
     }
 }

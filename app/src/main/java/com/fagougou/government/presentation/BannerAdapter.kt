@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.fagougou.government.databinding.ItemBannerBinding
 
-class BannerAdapter(val imageList:List<String>) : RecyclerView.Adapter<BannerHolder>() {
+class BannerAdapter : RecyclerView.Adapter<BannerHolder>() {
+
+    val imageList = mutableListOf("https://img.3dmgame.com/uploads/images/news/20210713/1626165488_100567.jpg")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerHolder {
         val inflater = ItemBannerBinding.inflate(LayoutInflater.from(parent.context),parent,false)

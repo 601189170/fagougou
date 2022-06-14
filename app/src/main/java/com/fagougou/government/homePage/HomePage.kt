@@ -1,7 +1,5 @@
 package com.fagougou.government.homePage
 
-import android.content.Context
-import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,12 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.model.Advertise
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -35,6 +35,8 @@ import com.fagougou.government.utils.ZYSJ.manager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Response
 
 @Composable
 fun HomeButton(
@@ -53,11 +55,22 @@ fun HomeButton(
 }
 
 @Composable
-fun HomePage(context: Context, navController:NavController) {
+fun HomePage(navController:NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         manager?.ZYSystemBar(0)
-        BannerPresentation.playVideo(R.raw.vh_home)
+        presentation?.playVideo(R.raw.vh_home)
+        Client.serverlessService.getAds(CommonApplication.serial).enqueue( object : retrofit2.Callback<Advertise>{
+            override fun onResponse(call: Call<Advertise>, response: Response<Advertise>) {
+                val list = response.body()?.ads ?: listOf()
+                presentation?.bannerAdapter?.let{
+                    it.imageList.clear()
+                    it.imageList.addAll(list)
+                    it.notifyDataSetChanged()
+                }
+            }
+            override fun onFailure(call: Call<Advertise>, t: Throwable) { }
+        })
         scope.launch{
             var body = SerialLoginResponse()
             withContext(Dispatchers.IO){

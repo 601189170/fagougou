@@ -25,17 +25,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContract.lastModifier
 import com.fagougou.government.generateContract.GenerateContract.notifier
 import com.fagougou.government.model.*
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.repo.Client.generateService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -181,7 +179,7 @@ fun ContractWebView() {
 @Composable
 fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
-        BannerPresentation.playVideo(R.raw.vh_generate_contract)
+        presentation?.playVideo(R.raw.vh_generate_contract)
         while (isActive) {
             delay(600)
             GenerateContract.updateContent()

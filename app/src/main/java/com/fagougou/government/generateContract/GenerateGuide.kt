@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
@@ -29,7 +28,7 @@ import com.fagougou.government.generateContract.GenerateContract.contractList
 import com.fagougou.government.generateContract.GenerateContract.currentContractId
 import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplate
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.launch
@@ -38,7 +37,7 @@ import kotlinx.coroutines.launch
 fun GenerateGuide(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
-        BannerPresentation.playVideo(R.raw.vh_generate_guide)
+        presentation?.playVideo(R.raw.vh_generate_guide)
         val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
         GenerateContract.clear()
         currentContractId.value = launchId

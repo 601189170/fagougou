@@ -1,17 +1,14 @@
 package com.fagougou.government.consult
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.MainActivity
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.utils.Time
 import com.m7.imkfsdk.MessageConstans.*
 import com.m7.imkfsdk.chat.MessageEvent
@@ -37,19 +34,6 @@ open class BaseActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-
-    protected open fun setStatusBar(color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-            window.statusBarColor = color
-            window.navigationBarColor = color
-            var vis = window.decorView.systemUiVisibility
-            vis = vis or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            vis = vis or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            window.decorView.systemUiVisibility = vis
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
@@ -69,8 +53,8 @@ open class BaseActivity : AppCompatActivity() {
             }
             CloseWait ->{ finish() }
             RefreshTime ->{ Router.lastTouchTime = Time.stampL }
-            PalyVideoHumanAre ->{ BannerPresentation.playVideo(R.raw.vh_human_area) }
-            PalyVideoHuman -> { BannerPresentation.playVideo(R.raw.vh_human) }
+            PalyVideoHumanAre ->{ presentation?.playVideo(R.raw.vh_human_area) }
+            PalyVideoHuman -> { presentation?.playVideo(R.raw.vh_human) }
             CloseAction -> { if (diallog?.isShowing==false &&!isFinishing){ diallog?.RefreshShow() } }
         }
     }

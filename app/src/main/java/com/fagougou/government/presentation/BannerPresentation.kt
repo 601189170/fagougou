@@ -21,66 +21,42 @@ import retrofit2.Call
 import retrofit2.Response
 
 class BannerPresentation(context: Context, display: Display) : Presentation(context,display) {
-    companion object{
-        val mediaPlayer = MediaPlayer()
-        var videoView: SurfaceView? = null
-        fun playVideo(id:Int){
-            mediaPlayer.stop()
-            mediaPlayer.seekTo(0)
-            mediaPlayer.setDataSource(activity.resources.openRawResourceFd(id))
-            videoView?.visibility = View.VISIBLE
-            mediaPlayer.prepareAsync()
-        }
-    }
+
     val binding = LayoutPresentationBinding.inflate(layoutInflater)
+    val mediaPlayer = MediaPlayer()
+    val bannerAdapter = BannerAdapter()
+    val videoCallback = object:SurfaceHolder.Callback2{
+        override fun surfaceCreated(holder: SurfaceHolder) { mediaPlayer.setSurface(holder.surface) }
+        override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) { }
+        override fun surfaceDestroyed(p0: SurfaceHolder) { }
+        override fun surfaceRedrawNeeded(p0: SurfaceHolder) { }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        videoView = binding.videoView
-        serverlessService.getAds(CommonApplication.serial).enqueue(object : retrofit2.Callback<Advertise>{
-            override fun onResponse(call: Call<Advertise>, response: Response<Advertise>) {
-                var list = response.body()?.ads
-                if(list.isNullOrEmpty()) list = listOf("https://img.lianzhixiu.com/uploads/211220/37-211220145UN12.jpg")
-                binding.viewPager.adapter = BannerAdapter(list)
-            }
-
-            override fun onFailure(call: Call<Advertise>, t: Throwable) {
-                binding.viewPager.adapter = BannerAdapter(listOf("https://img.lianzhixiu.com/uploads/211220/37-211220145UN12.jpg"))
-            }
-
-        })
+        binding.viewPager.adapter = bannerAdapter
+        mediaPlayer.setOnPreparedListener { mediaPlayer.start() }
+        mediaPlayer.setOnCompletionListener { binding.videoView.visibility = View.GONE }
+        mediaPlayer.setOnErrorListener { _, _, _ -> true }
+        binding.videoView.holder.addCallback(videoCallback)
         CoroutineScope(Dispatchers.Default).launch{
             var i = 0
             while (isActive){
-                delay(3000)
+                delay(5000)
                 if(binding.videoView.visibility == View.GONE){
                     i++
-                    withContext(Dispatchers.Main){
-                        binding.viewPager.currentItem = i
-                    }
+                    withContext(Dispatchers.Main){ binding.viewPager.currentItem = i }
                 }
             }
         }
-        mediaPlayer.setOnPreparedListener { mediaPlayer.start() }
-        mediaPlayer.setOnCompletionListener {
-            binding.videoView.visibility = View.GONE
-        }
-        mediaPlayer.setOnErrorListener { _, _, _ -> true }
+    }
 
-        val videoCallback = object:SurfaceHolder.Callback2{
-            override fun surfaceCreated(holder: SurfaceHolder) {
-                mediaPlayer.setSurface(holder.surface)
-            }
-
-            override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) { }
-
-            override fun surfaceDestroyed(p0: SurfaceHolder) { }
-
-            override fun surfaceRedrawNeeded(p0: SurfaceHolder) { }
-        }
-
-        binding.videoView.holder.addCallback(videoCallback)
+    fun playVideo(id:Int){
+        mediaPlayer.stop()
+        mediaPlayer.seekTo(0)
+        mediaPlayer.setDataSource(activity.resources.openRawResourceFd(id))
+        binding.videoView.visibility = View.VISIBLE
+        mediaPlayer.prepareAsync()
     }
 }

@@ -18,14 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.facebook.infer.annotation.Present
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel.BaseLoadUrl
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV.pdfKv
@@ -38,7 +37,7 @@ import com.fagougou.government.utils.Tips.toast
 @Composable
 fun ContractWebView(navController: NavController) {
     LaunchedEffect(null){
-        BannerPresentation.playVideo(R.raw.vh_contract_web_view)
+        presentation?.playVideo(R.raw.vh_contract_web_view)
     }
     Surface(color = ComposeColor.White){
         Column(modifier = Modifier.fillMaxSize()) {

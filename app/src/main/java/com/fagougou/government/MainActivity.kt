@@ -222,7 +222,7 @@ fun Main(context: Context) {
         NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
-            composable(Router.home) { HomePage(context,navController) }
+            composable(Router.home) { HomePage(navController) }
             composable(Router.admin) { AdminPage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }
@@ -236,7 +236,6 @@ fun Main(context: Context) {
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
-//            composable(Router.about) { CaseInfo(navController) }
             composable(Router.settings) { Settings(navController) }
         }
     }
