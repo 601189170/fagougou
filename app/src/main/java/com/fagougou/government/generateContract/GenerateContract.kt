@@ -340,11 +340,7 @@ fun GenerateContract(navController: NavController) {
                             }
                         }
                     }
-                    Spacer(
-                        Modifier
-                            .width(56.dp)
-                            .height(112.dp)
-                    )
+                    Spacer(Modifier.width(56.dp).height(112.dp))
                 }
             }
         }

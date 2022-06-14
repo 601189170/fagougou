@@ -28,6 +28,7 @@ object Time {
     }
     init {
         CoroutineScope(Dispatchers.Default).launch {
+            var lastHeartBeat = 100
             while (true){
                 delay(1000)
                 val time = System.currentTimeMillis()
@@ -36,9 +37,10 @@ object Time {
                 val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
                 timeText.value = simpleDateFormat.format(time).replace("周","星期")
                 if (exitStack < 8) exitStack++
-                if ((0..10).random() == 1) {
+                if ((0..lastHeartBeat).random() > 30) {
+                    lastHeartBeat=0
                     serverlessService.setHeartBeats(CommonApplication.serial).enqueue(heartBeatCallBack)
-                }
+                }else lastHeartBeat++
             }
         }
     }

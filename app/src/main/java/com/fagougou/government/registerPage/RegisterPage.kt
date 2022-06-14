@@ -34,6 +34,7 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.ZYSJ
 import kotlinx.coroutines.*
 
 @Composable
@@ -118,6 +119,7 @@ fun RegisterPage(navController: NavController){
                     Time.exitStack--
                     if (Time.exitStack <=0){
                         Time.exitStack =8
+                        ZYSJ.showBar()
                         activity.finish()
                     }
                 },

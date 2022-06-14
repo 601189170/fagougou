@@ -8,7 +8,8 @@ import com.fagougou.government.databinding.ItemBannerBinding
 
 class BannerAdapter : RecyclerView.Adapter<BannerHolder>() {
 
-    val imageList = mutableListOf("https://img.3dmgame.com/uploads/images/news/20210713/1626165488_100567.jpg")
+    private val defaultUrl = "https://advertise-1251511189.cos.ap-nanjing.myqcloud.com/%E8%BD%AE%E6%92%AD1.png"
+    val imageList = mutableListOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerHolder {
         val inflater = ItemBannerBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -16,14 +17,15 @@ class BannerAdapter : RecyclerView.Adapter<BannerHolder>() {
     }
 
     override fun onBindViewHolder(holder: BannerHolder, position: Int) {
-        val index = position % imageList.size
-        holder.setImage(imageList[index])
+        if(imageList.isEmpty()) holder.setImage(defaultUrl)
+        else holder.setImage(imageList[position % imageList.size])
     }
 
     override fun getItemCount() = Int.MAX_VALUE
+
 }
 
-class BannerHolder(val binding: ItemBannerBinding) : RecyclerView.ViewHolder(binding.root) {
+class BannerHolder(private val binding: ItemBannerBinding) : RecyclerView.ViewHolder(binding.root) {
     fun setImage(url: String){
         binding.image.load(url)
     }

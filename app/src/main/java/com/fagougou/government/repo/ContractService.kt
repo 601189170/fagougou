@@ -11,19 +11,6 @@ interface ContractService {
     @GET("contractTemplateCates")
     fun listCategory(): Call<ContractCategoryResponse>
 
-
     @POST("contractTemplate/list")
     fun getContractList(@Body request:ContractListRequest): Call<ContractList>
-
-
-    @GET("contractTemplate/downloadLink")
-    fun getTemplate(@Query("fileid") fileid :String): Call<TemplateBean>
-
-    @Streaming
-    @GET("api/contract-template/pdf/{id}")
-    fun getTemplatePdf(@Path("id") fileid :String): Call<TemplateBean>
-
-
-
-
 }
