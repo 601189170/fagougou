@@ -4,14 +4,11 @@ import android.view.View
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.serverlessService
-import com.fagougou.government.repo.ServerlessService
-import kotlinx.coroutines.*
-import okhttp3.Response
-import okhttp3.ResponseBody
-import retrofit2.Call
-import timber.log.Timber
+import com.fagougou.government.repo.Client
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,12 +17,6 @@ object Time {
     var stampL = 0L
     var stamp = "0"
     var exitStack = 8
-    val heartBeatCallBack = object : retrofit2.Callback<ResponseBody>{
-        override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
-            Timber.d("HeartBeat Successes")
-        }
-        override fun onFailure(call: Call<ResponseBody>, t: Throwable) { handleException(t) }
-    }
     init {
         CoroutineScope(Dispatchers.Default).launch {
             var lastHeartBeat = 100
@@ -39,7 +30,7 @@ object Time {
                 if (exitStack < 8) exitStack++
                 if ((0..lastHeartBeat).random() > 30) {
                     lastHeartBeat=0
-                    serverlessService.setHeartBeats(CommonApplication.serial).enqueue(heartBeatCallBack)
+                    Client.serverlessService.setHeartBeats(CommonApplication.serial).enqueue(Client.callBack { })
                 }else lastHeartBeat++
             }
         }

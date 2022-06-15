@@ -39,6 +39,7 @@ object Router {
     )
     val noLoadingPages = listOf(
         register,
+        home,
         chat
     )
 

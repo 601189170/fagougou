@@ -19,14 +19,10 @@ class UpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity = this
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         update()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        activity = this
     }
 
     private fun updateProgress(progress: Long, total: Long) {

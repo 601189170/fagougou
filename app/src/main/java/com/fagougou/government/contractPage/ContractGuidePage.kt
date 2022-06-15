@@ -90,6 +90,13 @@ object ContractViewModel{
             }
         }
     }
+
+    fun clear(){
+        ContractLists.clear()
+        selectedId.value = ""
+        searchWord.value = ""
+        pdfFile = null
+    }
 }
 
 
@@ -142,12 +149,14 @@ fun ContractGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         presentation?.playVideo(R.raw.vh_contract)
+        selectedId.value = categoryList.firstOrNull()?.id ?: return@LaunchedEffect
+        getContractList( selectedId.value )
     }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
     ) {
-        Header(title = "合同文库", navController = navController)
+        Header("合同文库", navController,{ContractViewModel.clear()})
         Surface(
             Modifier
                 .height(264.dp)
@@ -216,7 +225,10 @@ fun ContractGuidePage(navController: NavController) {
         }
         Row(Modifier.fillMaxSize()) {
             Surface(color = Color(0xFFFFFFFF)) {
-                Column(Modifier.fillMaxHeight().fillMaxWidth(0.25f),
+                Column(
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.25f),
                 ) {
                     LazyColumn(
                         Modifier.padding(vertical = 24.dp),

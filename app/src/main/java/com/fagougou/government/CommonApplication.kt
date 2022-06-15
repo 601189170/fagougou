@@ -31,6 +31,7 @@ class CommonApplication: Application(){
         lateinit var activity: ComponentActivity
         val serial = if(Build.VERSION.SDK_INT>25) Build.getSerial() else Build.SERIAL
         var presentation : BannerPresentation? = null
+        var currentCode = Int.MAX_VALUE
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -39,6 +40,7 @@ class CommonApplication: Application(){
 
     override fun onCreate() {
         super.onCreate()
+        currentCode = packageManager.getPackageInfo(packageName, 0).versionCode
         UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
         UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
         SpeechUtility.createUtility(this, "appid=b9efca3f")

@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONException
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.HttpException
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.SocketException
@@ -131,6 +134,17 @@ object Client {
         }
         CoroutineScope(Dispatchers.Main).launch{
             if (!ex.message.isNullOrBlank())toast(ex.message?:"")
+        }
+    }
+
+    fun <T> callBack(onSuccess:(T)->Unit): Callback<T> {
+        return object:retrofit2.Callback<T>{
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                response.body()?.let { onSuccess.invoke(it) }
+            }
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                handleException(t)
+            }
         }
     }
 }

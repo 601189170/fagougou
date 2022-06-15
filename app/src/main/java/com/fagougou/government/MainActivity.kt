@@ -111,20 +111,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val response = updateService.updateInfo().execute()
-                val body = response.body() ?: UpdateInfo()
-                val currentCode = packageManager.getPackageInfo(packageName, 0).versionCode
-                if (body.code > currentCode) withContext(Dispatchers.Main) {
-                    val intent = Intent(this@MainActivity, UpdateActivity::class.java)
-                    intent.putExtra("downloadUrl", body.url)
-                    startActivity(intent)
-                }
-            } catch (e: Exception) {
-                handleException(e)
-            }
-        }
         if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
@@ -241,10 +227,9 @@ fun Main() {
 
 @Composable
 fun Loading() {
-    if (routeMirror in noLoadingPages) return
-    if (globalLoading.value <= 0) return
     Timber.d("GlobalLoading:${globalLoading.value}")
-    Surface(color = Color.Transparent) {
+    if (routeMirror in noLoadingPages) return
+    if (globalLoading.value > 0) Surface(color = Color.Transparent) {
         Column(
             Modifier.fillMaxSize(),
             Arrangement.Center,

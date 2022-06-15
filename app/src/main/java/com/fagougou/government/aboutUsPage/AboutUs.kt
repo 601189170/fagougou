@@ -18,11 +18,8 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
-import com.fagougou.government.model.AboutUs
-import com.fagougou.government.repo.Client.handleException
+import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.serverlessService
-import retrofit2.Call
-import retrofit2.Response
 
 object AboutUsViewModel{
     var content = mutableStateListOf<String>()
@@ -32,18 +29,10 @@ object AboutUsViewModel{
 fun AboutUs(navController: NavController) {
     LaunchedEffect(null){
         serverlessService.getAboutUs(CommonApplication.serial)
-            .enqueue(
-                object : retrofit2.Callback<AboutUs>{
-                    override fun onResponse(call: Call<AboutUs>, response: Response<AboutUs>) {
-                        AboutUsViewModel.content.clear()
-                        AboutUsViewModel.content.addAll(response.body()?.content ?: listOf())
-                    }
-
-                    override fun onFailure(call: Call<AboutUs>, t: Throwable) {
-                        handleException(t)
-                    }
-                }
-            )
+            .enqueue(Client.callBack {
+                AboutUsViewModel.content.clear()
+                AboutUsViewModel.content.addAll(it.content)
+            })
     }
     Column(Modifier.fillMaxWidth(),Arrangement.Top,Alignment.CenterHorizontally) {
         Header("关于我们", navController)

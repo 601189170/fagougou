@@ -1,5 +1,6 @@
 package com.fagougou.government.homePage
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +10,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,32 +18,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
+import com.fagougou.government.CommonApplication.Companion.currentCode
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.UpdateActivity
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.model.Advertise
 import com.fagougou.government.model.SerialLoginRequest
-import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client
-import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ.manager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Response
 
 @Composable
-fun HomeButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    contentId: Int
-) {
+fun HomeButton(modifier: Modifier = Modifier, onClick: () -> Unit, contentId: Int) {
     Button(
         onClick,
         modifier,
@@ -56,52 +46,46 @@ fun HomeButton(
 
 @Composable
 fun HomePage(navController:NavController) {
-    val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         manager?.ZYSystemBar(0)
         presentation?.playVideo(R.raw.vh_home)
-        Client.serverlessService.getAds(CommonApplication.serial).enqueue( object : retrofit2.Callback<Advertise>{
-            override fun onResponse(call: Call<Advertise>, response: Response<Advertise>) {
-                val list = response.body()?.ads ?: listOf()
-                presentation?.bannerAdapter?.let{
+        Client.serverlessService.getAds(CommonApplication.serial)
+            .enqueue( Client.callBack { response ->
+                presentation?.bannerAdapter?.let {
                     it.imageList.clear()
-                    it.imageList.addAll(list)
+                    it.imageList.addAll(response.ads)
                     it.notifyDataSetChanged()
                 }
-            }
-            override fun onFailure(call: Call<Advertise>, t: Throwable) { }
-        })
-        scope.launch{
-            var body = SerialLoginResponse()
-            withContext(Dispatchers.IO){
-                try {
-                    val response = mainRegister.login(SerialLoginRequest(CommonApplication.serial)).execute()
-                    body = response.body() ?: SerialLoginResponse()
-                }catch (e:Exception){
-                    handleException(e)
-                }
-            }
-            if(!body.canLogin){
-                withContext(Dispatchers.Main){
+            })
+        Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial))
+            .enqueue( Client.callBack { response ->
+                if(!response.canLogin){
                     navController.navigate(Router.register)
-                    toast(body.errorMessage)
+                    toast(response.errorMessage)
                 }
-            }
-        }
+            })
+        Client.updateService.updateInfo()
+            .enqueue( Client.callBack {
+                if (it.code > currentCode) {
+                    val intent = Intent(activity, UpdateActivity::class.java)
+                    intent.putExtra("downloadUrl", it.url)
+                    activity.startActivity(intent)
+                }
+            })
     }
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier.fillMaxSize(),
+        Arrangement.Top,
+        Alignment.CenterHorizontally,
     ) {
         Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
                 .height(48.dp)
                 .padding(top = 8.dp,start = 40.dp,end = 40.dp)
                 .clickable { navController.navigate(Router.about) },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(R.drawable.home_logo),
