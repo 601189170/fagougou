@@ -44,8 +44,6 @@ object Complex{
     var bodyList = mutableStateListOf<AttachmentBody>()
     val caseList = mutableStateListOf<AttachmentCases>()
 
-
-
     fun clear(){
         selectPage.value = "body"
         bodyList.clear()
@@ -120,12 +118,7 @@ fun ComplexPage(navController: NavController) {
     Surface(Modifier.fillMaxSize(), color = Color.White) {
         Column {
             Header("详细分析", navController, onBack = { Complex.clear() } )
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+            Row(Modifier.fillMaxWidth().padding(vertical = 24.dp), Arrangement.SpaceEvenly) {
                 if(bodyList.isNotEmpty() && caseList.isNotEmpty()){
                     Button(
                         onClick = { selectPage.value = "body" },

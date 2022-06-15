@@ -1,7 +1,5 @@
 package com.fagougou.government.chatPage
 
-
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,16 +21,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.RePortMainModel.cases
-import com.fagougou.government.chatPage.RePortMainModel.content
-import com.fagougou.government.chatPage.RePortMainModel.laws
-import com.fagougou.government.chatPage.RePortMainModel.setTab
-import com.fagougou.government.chatPage.RePortMainModel.stepdata
-import com.fagougou.government.chatPage.RePortMainModel.sugdata
-import com.fagougou.government.chatPage.RePortMainModel.title
-import com.fagougou.government.chatPage.RePortMainModel.toplist
-import com.fagougou.government.chatPage.RePortMainModel.type
-
+import com.fagougou.government.chatPage.ReportMainModel.cases
+import com.fagougou.government.chatPage.ReportMainModel.content
+import com.fagougou.government.chatPage.ReportMainModel.laws
+import com.fagougou.government.chatPage.ReportMainModel.setTab
+import com.fagougou.government.chatPage.ReportMainModel.stepdata
+import com.fagougou.government.chatPage.ReportMainModel.sugdata
+import com.fagougou.government.chatPage.ReportMainModel.title
+import com.fagougou.government.chatPage.ReportMainModel.toplist
+import com.fagougou.government.chatPage.ReportMainModel.type
 import com.fagougou.government.component.Header
 import com.fagougou.government.model.AttachmentCases
 import com.fagougou.government.model.AttachmentContent
@@ -40,7 +37,7 @@ import com.fagougou.government.model.AttachmentLaws
 import com.fagougou.government.model.AttachmentResponse
 import com.fagougou.government.ui.theme.CORNER_FLOAT8
 
-object RePortMainModel {
+object ReportMainModel {
     var setTab=mutableStateOf(0)
     var stepdata=""
     var sugdata=""
@@ -53,7 +50,7 @@ object RePortMainModel {
 }
 
 @Composable
-fun RePortMain (navController: NavController){
+fun ReportMain (navController: NavController){
     val navController2 = rememberNavController()
     Column(Modifier.fillMaxSize()) {
     Header(title = title+"分析报告", navController = navController)
@@ -64,7 +61,6 @@ fun RePortMain (navController: NavController){
                     .padding(top = 20.dp, start = 2.dp, end = 2.dp, bottom = 2.dp)
                     .fillMaxSize(0.3f),
                 horizontalAlignment=Alignment.CenterHorizontally) {
-
                     Box(modifier = Modifier
                         .clickable {
                             setTab.value = 0

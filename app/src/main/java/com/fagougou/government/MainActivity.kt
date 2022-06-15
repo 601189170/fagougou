@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -59,12 +58,9 @@ import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
 import com.fagougou.government.model.ContentStyle
-import com.fagougou.government.model.UpdateInfo
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
 import com.fagougou.government.repo.Client.globalLoading
-import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.updateService
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
@@ -78,10 +74,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -212,14 +205,13 @@ fun Main() {
             composable(Router.chatGuide) { ChatGuidePage(navController) }
             composable(Router.chat) { ChatPage(navController) }
             composable(Router.complex) { ComplexPage(navController) }
-            composable(Router.reportMain) { RePortMain(navController) }
+            composable(Router.reportMain) { ReportMain(navController) }
             composable(Router.case) { CasePage(navController) }
             composable(Router.statistic) { StatisticPage(navController) }
             composable(Router.calculator) { CalculatorGuidePage(navController) }
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
-//            composable(Router.about) { AboutUs(navController) }
-            composable(Router.about) { ceshi() }
+            composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
 
         }

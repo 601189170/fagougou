@@ -1,16 +1,13 @@
 package com.fagougou.government.chatPage
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,14 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
-
-import com.fagougou.government.chatPage.RePortMainModel.laws
-
+import com.fagougou.government.chatPage.ReportMainModel.laws
 import com.fagougou.government.ui.theme.CORNER_FLOAT8
+
 @Composable
 fun LawsPage (navController: NavController){
-
-
     LazyColumn(
         Modifier.padding(top = 16.dp,start = 60.dp,end = 60.dp),
         horizontalAlignment=Alignment.CenterHorizontally
@@ -51,8 +45,7 @@ fun LawsPage (navController: NavController){
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 24.dp, start = 32.dp, bottom = 32.dp, end = 32.dp)) {
-
-                        Column() {
+                        Column {
                             Text(
                                 modifier = Modifier.padding(end = 50.dp).width(550.dp),
                                 fontWeight = FontWeight.Bold,
@@ -68,9 +61,7 @@ fun LawsPage (navController: NavController){
                                 color = Color(0xFF0F87FF)
                             )
                         }
-
                         Image(painterResource(if (!laws[it].isExpan) R.drawable.ic_icon_down else R.drawable.ic_icon_up), null)
-
                     }
                     if (laws[it].isExpan){
                         Column(
@@ -86,14 +77,10 @@ fun LawsPage (navController: NavController){
                                 color = Color(0xFF666666),
                                 fontSize = 20.sp
                             )
-
                         }
                     }
-
-
                 }
             }
-
         }
     }
 }

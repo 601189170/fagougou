@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.RePortMainModel.cases
+import com.fagougou.government.chatPage.ReportMainModel.cases
 import com.fagougou.government.model.AttachmentCases
 import com.fagougou.government.model.CaseResponse
 import com.fagougou.government.repo.Client

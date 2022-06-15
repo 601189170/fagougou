@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LawExpend(message: Message, index: Int,keyboardController: SoftwareKeyboardController?) {
     Column(
+        Modifier.padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -95,69 +96,66 @@ fun MessageRect(
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {
-        Column(Modifier.padding(vertical = 16.dp,horizontal = 24.dp) ) {
-            if (message.listDef.isEmpty()){
-
-
-                Text(
-                    message.content + message.complex.explanation,
-                    fontSize = 24.sp,
-                    lineHeight = 32.sp,
-                    color = textColor,
-                )
-            }else{
-                val annotatedString = buildAnnotatedString {
-                    message.listDef.forEach{
-                        if (!TextUtils.isEmpty(it.content)){
-                            if (it.style==0) append(it.content)
-                            else{
-                                pushStringAnnotation(tag = "policy", annotation = it.content)
-                                withStyle(SpanStyle(Dodgerblue)) { append(" 「"+it.content+"」 ") }
-                                pop()
+        Column(Modifier.padding(top = 16.dp) ) {
+            Column(Modifier.padding(horizontal = 24.dp)){
+                if (message.listDef.isEmpty()){
+                    Text(
+                        message.content + message.complex.explanation,
+                        fontSize = 24.sp,
+                        lineHeight = 32.sp,
+                        color = textColor,
+                    )
+                }else{
+                    val annotatedString = buildAnnotatedString {
+                        message.listDef.forEach{
+                            if (!TextUtils.isEmpty(it.content)){
+                                if (it.style==0) append(it.content)
+                                else{
+                                    pushStringAnnotation(tag = "policy", annotation = it.content)
+                                    withStyle(SpanStyle(Dodgerblue)) { append(" 「"+it.content+"」 ") }
+                                    pop()
+                                }
                             }
                         }
                     }
-                }
-                ClickableText(
-                    modifier = Modifier.padding(12.dp),
-                    text = annotatedString,
-                    style = TextStyle(
-                        color = textColor,
-                        fontSize = 24.sp,
-                        lineHeight=38.sp,
-                    ),
-                    onClick = { offset ->
-                        keyboardController?.hide()
-                        annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
-                            ChatViewModel.getDefInfo(it.item);
+                    ClickableText(
+                        modifier = Modifier.padding(12.dp),
+                        text = annotatedString,
+                        style = TextStyle(
+                            color = textColor,
+                            fontSize = 24.sp,
+                            lineHeight=38.sp,
+                        ),
+                        onClick = { offset ->
+                            keyboardController?.hide()
+                            annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
+                                ChatViewModel.getDefInfo(it.item);
+                            }
                         }
-                    }
-                )
+                    )
+                }
+                for(question in message.inlineRecommend){
+                    Text(
+                        question,
+                        Modifier.clickable {
+                            keyboardController?.hide()
+                            scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(question) }
+                        },
+                        fontSize = 24.sp,
+                        color = Dodgerblue,
+                    )
+                }
             }
-            for(question in message.inlineRecommend){
-                Text(
-                    question,
-                    Modifier.clickable {
-                        keyboardController?.hide()
-                        scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(question) }
-                    },
-                    fontSize = 24.sp,
-                    color = Dodgerblue,
-                )
-            }
-
             if (message.laws.isNotEmpty()){
                 Divider(
                     Modifier.padding(top = 16.dp),
                     color = Color(0xFFCCCCCC),
                     thickness = 2.dp,
                 )
-            }
-            if (message.laws.isNotEmpty()) LawExpend(message, index,keyboardController)
+                LawExpend(message, index,keyboardController)
+            }else Surface(Modifier.height(16.dp).width(16.dp),color = Color.Transparent) { }
         }
     }
-
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -186,7 +184,7 @@ fun ComplexRect(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp),
+                        .height(54.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) { BasicText(message.complex.title) }
@@ -198,15 +196,21 @@ fun ComplexRect(
                 lineHeight = 32.sp,
                 color = textColor,
             )
+            if (message.laws.isNotEmpty()){
+                Divider(
+                    color = Color(0xFFCCCCCC),
+                    thickness = 2.dp
+                )
+                LawExpend(message, index,keyboardController)
+            }
             Divider(
                 color = Color(0xFFCCCCCC),
                 thickness = 2.dp
             )
-            if (message.laws.isNotEmpty()) LawExpend(message, index,keyboardController)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
