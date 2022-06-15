@@ -9,7 +9,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
-import com.fagougou.government.generateContract.GenerateContract
+import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.model.Auth
 import com.fagougou.government.model.AuthRequest
 import com.fagougou.government.model.BotList
@@ -46,7 +46,7 @@ class CommonApplication: Application(){
         Bugsnag.start(this)
         IFly.init(this)
         TTS.init(this)
-        GenerateContract.init(this)
+        GenerateContractViewModel.init(this)
         YKFUtils.init(this)
         Timber.plant(Timber.DebugTree())
         CoroutineScope(Dispatchers.Default).launch {

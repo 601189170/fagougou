@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
@@ -45,13 +44,12 @@ import com.fagougou.government.dialog.DialogViewModel.secondButtonOnClick
 import com.fagougou.government.dialog.DialogViewModel.secondButtonText
 import com.fagougou.government.dialog.DialogViewModel.title
 import com.fagougou.government.dialog.DialogViewModel.type
-import com.fagougou.government.generateContract.GenerateContract
+import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
 import com.fagougou.government.utils.Tips.toast
 import timber.log.Timber
 import java.io.File
@@ -81,7 +79,7 @@ object DialogViewModel {
     }
 
     fun confirmPrint(mode:String) {
-        GenerateContract.lastModifier = Time.stamp
+        GenerateContractViewModel.lastModifier = Time.stamp
         clear()
         title = "即将进行打印"
         content.add(ContentStyle("按下确认键开始打印当前合同"))

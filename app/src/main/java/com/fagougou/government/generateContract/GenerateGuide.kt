@@ -22,10 +22,10 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.generateContract.GenerateContract.contractList
-import com.fagougou.government.generateContract.GenerateContract.currentContractId
-import com.fagougou.government.generateContract.GenerateContract.getGenerateForm
-import com.fagougou.government.generateContract.GenerateContract.getGenerateTemplate
+import com.fagougou.government.generateContract.GenerateContractViewModel.contractList
+import com.fagougou.government.generateContract.GenerateContractViewModel.currentContractId
+import com.fagougou.government.generateContract.GenerateContractViewModel.getGenerateForm
+import com.fagougou.government.generateContract.GenerateContractViewModel.getGenerateTemplate
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -37,17 +37,17 @@ fun GenerateGuide(navController: NavController) {
     LaunchedEffect(null){
         presentation?.playVideo(R.raw.vh_generate_guide)
         val launchId = contractList.firstOrNull()?.id ?: return@LaunchedEffect
-        GenerateContract.clear()
+        GenerateContractViewModel.clear()
         currentContractId.value = launchId
         scope.launch {
             getGenerateTemplate(launchId)
-            GenerateContract.updateContent()
+            GenerateContractViewModel.updateContent()
         }
         scope.launch { getGenerateForm(launchId) }
     }
     Surface(color = Color.White) {
         Column(Modifier.fillMaxSize(),Arrangement.Top,Alignment.CenterHorizontally) {
-            Header("智能文书",navController,{ GenerateContract.clear() })
+            Header("智能文书",navController,{ GenerateContractViewModel.clear() })
             Row(
                 Modifier
                     .fillMaxWidth(0.88f)
@@ -75,11 +75,11 @@ fun GenerateGuide(navController: NavController) {
                                     RoundedCornerShape(12)
                                 )
                                 .clickable {
-                                    GenerateContract.clear()
+                                    GenerateContractViewModel.clear()
                                     currentContractId.value = item.id
                                     scope.launch {
                                         getGenerateTemplate(item.id)
-                                        GenerateContract.updateContent()
+                                        GenerateContractViewModel.updateContent()
                                     }
                                     scope.launch { getGenerateForm(item.id) }
                                 },
@@ -110,7 +110,7 @@ fun GenerateGuide(navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    ContractWebView()
+                    GenerateWebView()
                 }
                 Row(
                     Modifier.fillMaxSize(),

@@ -1,10 +1,5 @@
 package com.fagougou.government.generateContract
 
-import android.content.Context
-import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.widget.LinearLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -22,159 +17,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.generateContract.GenerateContract.lastModifier
-import com.fagougou.government.generateContract.GenerateContract.notifier
-import com.fagougou.government.model.*
+import com.fagougou.government.generateContract.GenerateContractViewModel.lastModifier
+import com.fagougou.government.generateContract.GenerateContractViewModel.notifier
 import com.fagougou.government.CommonApplication.Companion.presentation
-import com.fagougou.government.repo.Client.generateService
-import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.Printer.printWebView
-import com.fagougou.government.utils.Printer.webViewPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
-import java.io.InputStreamReader
-
-object GenerateContract {
-    val contractList = mutableStateListOf<GenerateContractBrief>()
-    val currentContractId = mutableStateOf("")
-    var baseHtml = ""
-    var template = ""
-    val data = mutableStateOf("")
-    val formList = mutableStateListOf(GenerateForm())
-    val notifier = mutableStateOf("")
-    var lastModifier = Time.stamp
-
-    fun init(context: Context) {
-        val file = context.assets.open("html/generateContract.html")
-        baseHtml = InputStreamReader(file, "UTF-8").readText()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = generateService.getGeneratelist().execute()
-                val body = response.body()?.data ?: GenerateContractListResponse().data
-                contractList.addAll(body)
-            } catch (e: Exception) {
-                handleException(e)
-            }
-        }
-    }
-
-    fun clear() {
-        currentContractId.value = ""
-        template = ""
-        data.value = ""
-        formList.clear()
-        lastModifier = Time.stamp
-    }
-
-    suspend fun getGenerateForm(id: String) {
-        withContext(Dispatchers.IO) {
-            formList.clear()
-            try {
-                val response = generateService.getGenrateForm(id).execute()
-                val body = response.body()?.data ?: GenerateData()
-                formList.addAll(body.forms)
-            } catch (e: Exception) {
-                handleException(e)
-            }
-        }
-    }
-
-    suspend fun getGenerateTemplate(id: String) {
-        withContext(Dispatchers.IO) {
-            template = ""
-            try {
-                val response = generateService.getGenrateTemplete(id).execute()
-                val body = response.body()?.data ?: GenerateContractTemplete()
-                template = body.content
-            } catch (e: Exception) {
-                handleException(e)
-            }
-        }
-    }
-
-    suspend fun updateContent() {
-        withContext(Dispatchers.Default) {
-            val builder = StringBuilder()
-            for (item in formList) {
-                for (child in item.children) {
-                    with(child) {
-                        val result = when (type) {
-                            "checkbox" -> {
-                                if (selected.isNotEmpty()) {
-                                    val builder = StringBuilder()
-                                    for (select in selected) {
-                                        builder.append(values[select])
-                                    }
-                                    val result = builder.toString()
-                                    if (result.isNotEmpty()) result.substring(0, builder.lastIndex)
-                                    else ""
-                                } else ""
-                            }
-                            "select" -> {
-                                if (selected.isNotEmpty()) values[selected.first()] else ""
-                            }
-                            else -> if (input != "") input else "__________"
-                        }
-                        builder.append("${variable}:\"$result\",")
-                    }
-                }
-            }
-            val result = baseHtml
-                .replace("{{TemplateHook}}", template)
-                .replace("{{DataHook}}", builder.toString())
-                .replace(
-                    "class=\"$lastModifier",
-                    "style=\"background-color: yellow;\" class=\"$lastModifier"
-                )
-            data.value = result
-        }
-    }
-}
-
-@Composable
-fun ContractWebView() {
-    AndroidView(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(0.88f),
-        factory = {
-            WebView(CommonApplication.activity).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                setInitialScale(80)
-                settings.javaScriptEnabled = true
-                isVerticalScrollBarEnabled = false
-                isClickable = false
-                isLongClickable = false
-                webChromeClient = WebChromeClient()
-            }
-        },
-        update = {
-            it.loadDataWithBaseURL(
-                null,
-                GenerateContract.data.value,
-                "text/html; charset=utf-8",
-                "utf-8",
-                null
-            )
-            if (webViewPrint.value) {
-                printWebView(it)
-                webViewPrint.value = false
-            }
-        }
-    )
-}
 
 @Composable
 fun GenerateContract(navController: NavController) {
@@ -182,13 +36,13 @@ fun GenerateContract(navController: NavController) {
         presentation?.playVideo(R.raw.vh_generate_contract)
         while (isActive) {
             delay(600)
-            GenerateContract.updateContent()
+            GenerateContractViewModel.updateContent()
         }
     }
     Surface(color = Color.White) {
         Text(notifier.value)
         Column(Modifier.fillMaxSize(), Arrangement.Top) {
-            Header("智能文书", navController, { GenerateContract.clear() })
+            Header("智能文书", navController, { GenerateContractViewModel.clear() })
             Row(Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
@@ -196,7 +50,7 @@ fun GenerateContract(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(Modifier.fillMaxHeight(0.88f)) {
-                        ContractWebView()
+                        GenerateWebView()
                     }
                     Divider(thickness = 2.dp)
                     Row(
@@ -235,7 +89,7 @@ fun GenerateContract(navController: NavController) {
                 Column(
                     Modifier.fillMaxHeight().fillMaxWidth().verticalScroll(scrollState),
                 ) {
-                    for (item in GenerateContract.formList) {
+                    for (item in GenerateContractViewModel.formList) {
                         Text(
                             item.label,
                             Modifier.padding(top = 24.dp, start = 16.dp),

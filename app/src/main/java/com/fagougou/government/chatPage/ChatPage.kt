@@ -61,13 +61,15 @@ fun ChatPage(navController: NavController) {
                     canExit = true
                     firstButtonText.value = "已经解决"
                     firstButtonOnClick.value = {
-                        content.clear()
+                        clear()
+                        ChatViewModel.clear()
                         IFly.stopAll()
                         navController.safeBack()
                     }
                     secondButtonText.value = "转人工咨询"
                     secondButtonOnClick.value = {
-                        content.clear()
+                        clear()
+                        ChatViewModel.clear()
                         IFly.stopAll()
                         val intent = Intent(activity, TouristsLoginActivity::class.java)
                         activity.startActivity(intent)

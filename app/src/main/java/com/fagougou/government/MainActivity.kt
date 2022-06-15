@@ -3,9 +3,7 @@ package com.fagougou.government
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ZysjSystemManager
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
@@ -30,8 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -59,6 +55,7 @@ import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
 import com.fagougou.government.generateContract.GenerateContract
+import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
 import com.fagougou.government.model.ContentStyle
@@ -191,7 +188,7 @@ fun Main() {
                 if (routeRemain.value < 0) {
                     content.clear()
                     ChatViewModel.clear()
-                    GenerateContract.clear()
+                    GenerateContractViewModel.clear()
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
