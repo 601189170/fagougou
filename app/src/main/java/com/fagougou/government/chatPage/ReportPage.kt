@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
+import com.fagougou.government.Router
 import com.fagougou.government.chatPage.RePortMainModel.content
 import com.fagougou.government.chatPage.RePortMainModel.stepdata
 import com.fagougou.government.chatPage.RePortMainModel.sugdata
@@ -27,6 +28,7 @@ import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.model.AttachmentContent
 import com.fagougou.government.view.PieChartDataModel
 import com.fagougou.government.webViewPage.WebView
+import com.fagougou.government.webViewPage.WebViewPageModel
 import com.github.tehras.charts.piechart.PieChart
 import com.github.tehras.charts.piechart.PieChartData
 import com.github.tehras.charts.piechart.animation.simpleChartAnimation
@@ -36,7 +38,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Report (navController: NavController){
-    Column(Modifier.fillMaxSize().padding(horizontal = 100.dp)) {
+
+    Column(
+        Modifier
+            .verticalScroll(ScrollState(0))
+            .fillMaxSize()
+            .padding(horizontal = 100.dp)) {
         if (toplist.isNotEmpty()) topListBox()
         if (type=="pie") content?.let { chartBox(it) }
         if (!stepdata.isBlank()) stepBox()
@@ -68,32 +75,36 @@ fun topListBox() {
 
     Column(
         Modifier
-            .fillMaxSize()
-            .padding(horizontal = 100.dp)
-            .padding(top = 40.dp)
+            .height(150.dp)
     ) {
-        Row() {
-            //修改
-            LazyHorizontalGrid(modifier = Modifier.fillMaxWidth(), rows = GridCells.Fixed(1),
+
+            LazyHorizontalGrid( rows = GridCells.Fixed(1),contentPadding=PaddingValues(20.dp),userScrollEnabled = false,
                 content = {
                     items(toplist) { bot ->
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 8.dp)
-                                .background(Color(0xFFECF5FF)),
-                            text = bot,
-                            fontSize = 20.sp,
-                            color = Color(0xFF0E7AE6)
-                        )
-
+                        Column(
+                            Modifier
+                                .fillMaxSize()
+                                .padding(15.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                modifier = Modifier
+                                    .background(Color(0xFFECF5FF))
+                                    .padding(20.dp),
+                                text = bot,
+                                fontSize = 20.sp,
+                                color = Color(0xFF0E7AE6)
+                            )
+                        }
                     }
                 })
 
-        }
+
+
         Surface(
             Modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp, bottom = 40.dp)
+                .padding(top = 40.dp)
                 .height(1.dp), color = Color.Gray
         ) {
 
@@ -108,34 +119,40 @@ fun chartBox(data: AttachmentContent){
             Image(painterResource(R.drawable.ic_icon_rep1), null)
 
             Text(
-                modifier = Modifier.padding(top = 12.dp, bottom = 20.dp),
-                text = "根据案情，：" + data.title,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 12.dp),
+                text =  "根据案情，法院支持您"+data.chart.title+"为:",
                 fontSize = 24.sp,
                 color = Color(0xFF222222)
             )
             var ft1 = data.chart.data.get(0).value
             var ft2 = data.chart.data.get(1).value
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxWidth().padding(top = 10.dp), contentAlignment = Alignment.Center) {
                 val pieChartDataModel = remember { PieChartDataModel() }
                 PieChartRow(ft1 * 100, ft2 * 100, pieChartDataModel)
-                PieChartRow(75f, 25f, pieChartDataModel)
-                Column() {
-                    Image(painterResource(R.drawable.ic_icon_num), null)
+                Column(horizontalAlignment=Alignment.CenterHorizontally) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Image(painterResource(R.drawable.ic_icon_num), null)
+                        Text(
+                            modifier = Modifier.padding(bottom = 7.dp),
+                            text = "" + ft1 * 100+"%",
+                            fontSize = 24.sp,
+                            color = Color(0xFF3C8EED)
+                        )
+                    }
                     Text(
-                        text = "" + ft1 * 100,
-                        fontSize = 24.sp,
-                        color = Color(0xFF3C8EED)
+                        modifier = Modifier.padding(top=5.dp),
+                        text = data.title+"成功率",
+                        fontSize = 20.sp,
+                        color = Color(0xFF222222)
                     )
                 }
-                Text(
-                    text = "成功率",
-                    fontSize = 20.sp,
-                    color = Color(0xFF222222)
-                )
+
             }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 15.dp)
                     .background(Color(0xFFF5F7FA))
                     .padding(20.dp),
                 text = data.chart.subtitle,
@@ -187,20 +204,8 @@ fun defBox(){
 
 @Composable
 fun stepBox(){
-    Column(Modifier.padding(top = 40.dp)) {
+    Column(Modifier.padding(top = 40.dp,bottom = 20.dp)) {
         Image(painterResource(R.drawable.ic_icon_rep3), null)
-        Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.ic_icon_bq), null)
-
-
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                fontWeight = FontWeight.Bold,
-                text = "步骤流程",
-                fontSize = 20.sp,
-                color = Color(0xFF222222)
-            )
-        }
         WebView("", stepdata.replace("\n", ""))
 
         Surface(
@@ -214,12 +219,9 @@ fun stepBox(){
 
 @Composable
 fun sugBox(){
-    Column(Modifier.padding(top = 40.dp)) {
+    Column(Modifier.padding(top = 40.dp,bottom = 20.dp)) {
         Image(painterResource(R.drawable.ic_icon_rep4), null)
-        Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.ic_icon_bq), null)
-            WebView("", sugdata.replace("\n", ""))
-        }
+        WebView("", sugdata.replace("\n", ""))
     }
 }
 

@@ -218,7 +218,8 @@ fun Main() {
             composable(Router.calculator) { CalculatorGuidePage(navController) }
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
-            composable(Router.about) { AboutUs(navController) }
+//            composable(Router.about) { AboutUs(navController) }
+            composable(Router.about) { ceshi() }
             composable(Router.settings) { Settings(navController) }
 
         }

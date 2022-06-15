@@ -1,5 +1,6 @@
 package com.fagougou.government.chatPage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +22,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.R
 
 import com.fagougou.government.chatPage.RePortMainModel.laws
+
 import com.fagougou.government.ui.theme.CORNER_FLOAT8
 @Composable
 fun LawsPage (navController: NavController){
@@ -29,11 +32,13 @@ fun LawsPage (navController: NavController){
         Modifier.padding(top = 16.dp,start = 60.dp,end = 60.dp),
         horizontalAlignment=Alignment.CenterHorizontally
     ) {
-        items(laws){
+        items(laws.size){
 
             Box( modifier = Modifier
                 .padding(top = 24.dp)
-                .clickable { if (!it.isExpan) it.copy(isExpan = true) else it.copy(isExpan = false) }
+                .clickable {
+                    if (laws[it].isExpan) laws[it]= laws[it].copy(isExpan = false) else laws[it]= laws[it].copy(isExpan = true)
+                }
                 .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8))
                 ,contentAlignment = Alignment.Center){
                 Column(modifier = Modifier
@@ -49,30 +54,32 @@ fun LawsPage (navController: NavController){
 
                         Column() {
                             Text(
+                                modifier = Modifier.padding(end = 50.dp).width(550.dp),
                                 fontWeight = FontWeight.Bold,
-                                text = it.law,
+                                text = laws[it].law,
+                                letterSpacing = 1.2f.sp,
                                 fontSize = 24.sp,
                                 color = Color(0xFF222222)
                             )
                             Text(
                                 modifier = Modifier.padding(top = 8.dp),
-                                text = it.tiaoMu,
+                                text = laws[it].tiaoMu,
                                 fontSize = 20.sp,
                                 color = Color(0xFF0F87FF)
                             )
                         }
 
-                        Image(painterResource(if (!it.isExpan) R.drawable.ic_icon_down else R.drawable.ic_icon_up), null)
+                        Image(painterResource(if (!laws[it].isExpan) R.drawable.ic_icon_down else R.drawable.ic_icon_up), null)
 
                     }
-                    if (it.isExpan){
+                    if (laws[it].isExpan){
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.Start
                         ){
                             Text(
 
-                                text = it.content,
+                                text = laws[it].content,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(start = 32.dp, bottom = 32.dp, end = 24.dp),

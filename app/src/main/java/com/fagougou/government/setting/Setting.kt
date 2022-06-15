@@ -17,7 +17,9 @@ import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.utils.ZYSJ.hideBar
+import com.fagougou.government.utils.ZYSJ.reboot
 import com.fagougou.government.utils.ZYSJ.showBar
+import com.fagougou.government.utils.ZYSJ.shutdown
 
 @Composable
 fun Settings(navController: NavController) {
@@ -61,6 +63,54 @@ fun Settings(navController: NavController) {
                 lineHeight = 35.sp,
                 letterSpacing = 1.2f.sp,
                 text = "打开导航栏"
+            )
+            Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            modifier = Modifier
+                .padding(vertical = 32.dp).padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable { showBar() },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 32.dp)
+                    .clickable { reboot() },
+                color = Color.White,
+                fontSize = 24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp,
+                text = "重启"
+            )
+            Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            modifier = Modifier
+                .padding(vertical = 32.dp).padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable { showBar() },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 32.dp)
+                    .clickable { shutdown() },
+                color = Color.White,
+                fontSize = 24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp,
+                text = "关机"
             )
             Image(painterResource(R.drawable.ic_right),null)
         }

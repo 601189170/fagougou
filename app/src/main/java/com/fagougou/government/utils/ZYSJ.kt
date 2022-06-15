@@ -10,4 +10,10 @@ object ZYSJ {
 
     fun hideBar() = manager?.ZYSystemBar(0)
 
+    fun shutdown() = manager?.ZYShutdownSys()
+
+    fun reboot() = manager?.ZYRebootSys()
+
+
+
 }

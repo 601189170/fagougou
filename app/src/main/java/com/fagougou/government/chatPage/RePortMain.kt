@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,8 +47,8 @@ object RePortMainModel {
     var type=""
     var title=""
     var content: AttachmentContent?=null
-    var cases= listOf<AttachmentCases>()
-    var laws= listOf<AttachmentLaws>()
+    var cases= mutableStateListOf<AttachmentCases>()
+    var laws= mutableStateListOf<AttachmentLaws>()
     var toplist=listOf<String>()
 }
 
@@ -67,7 +68,8 @@ fun RePortMain (navController: NavController){
                     Box(modifier = Modifier
                         .clickable {
                             setTab.value = 0
-                            navController2.navigate(Router.reportpage) }
+                            navController2.navigate(Router.reportpage)
+                        }
                         .padding(top = 24.dp)
                         .width(200.dp)
                         .height(64.dp)
@@ -184,11 +186,11 @@ fun RePortMain (navController: NavController){
 
 fun setReportData(bean:AttachmentResponse){
     content=bean.data.content
-    type=bean.data.type
+    type=bean.data.content.chart.type
     title=bean.data.title
     toplist= content?.contexts!!
-    cases= bean.data.content.cases
-    laws= bean.data.content.laws
+    cases.addAll(bean.data.content.cases)
+    laws.addAll(bean.data.content.laws)
     content?.body?.forEach(){
         if (it.title.contains("行动建议")||it.title.contains("流程")){ stepdata=it.content }
         if (it.title.contains("专家")){ sugdata=it.content }
