@@ -1,13 +1,5 @@
 package com.fagougou.government.model
 
-import com.google.gson.annotations.SerializedName
-
-data class GenerateListRequest(
-    val folder: String = "60dc8f10dd7600001380730b",
-    val page: Int = 1,
-    val size: Int = 10,
-)
-
 data class GenerateContractListResponse(
     val data:GenerateContractList = GenerateContractList()
 )
@@ -18,7 +10,6 @@ data class GenerateContractList(
 
 data class GenerateContractBrief(
     val name:String = "",
-    @SerializedName("_id")
     val id:String = "",
     val howToUse:String = ""
 )

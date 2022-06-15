@@ -58,7 +58,7 @@ object GenerateContract {
         baseHtml = InputStreamReader(file, "UTF-8").readText()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = generateService.getGeneratelist(GenerateListRequest()).execute()
+                val response = generateService.getGeneratelist().execute()
                 val body = response.body()?.data ?: GenerateContractListResponse().data
                 contractList.addAll(body.list)
             } catch (e: Exception) {
@@ -196,9 +196,7 @@ fun GenerateContract(navController: NavController) {
             Row(modifier = Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
-                    Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.6f),
+                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(Modifier.fillMaxHeight(0.88f)) {
@@ -211,10 +209,8 @@ fun GenerateContract(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (false) Button(
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(200.dp),
-                            onClick = { },
+                            { },
+                            Modifier.height(60.dp).width(200.dp),
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_wechat), null)
@@ -225,13 +221,9 @@ fun GenerateContract(navController: NavController) {
                             shape = RoundedCornerShape(18)
                         )
                         Button(
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(200.dp),
+                            { DialogViewModel.confirmPrint("webView") },
+                            Modifier.height(60.dp).width(200.dp),
                             elevation = ButtonDefaults.elevation(0.dp, 0.dp),
-                            onClick = {
-                                DialogViewModel.confirmPrint("webView")
-                            },
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_painter), null)
@@ -243,16 +235,9 @@ fun GenerateContract(navController: NavController) {
                         )
                     }
                 }
-                Divider(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(1.dp)
-                )
+                Divider(Modifier.fillMaxHeight().width(1.dp))
                 Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState),
+                    Modifier.fillMaxHeight().fillMaxWidth().verticalScroll(scrollState),
                 ) {
                     for (item in GenerateContract.formList) {
                         Text(
@@ -266,11 +251,7 @@ fun GenerateContract(navController: NavController) {
                                     Modifier.padding(top = 24.dp, bottom = 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Surface(
-                                        Modifier
-                                            .height(24.dp)
-                                            .width(4.dp), color = Dodgerblue
-                                    ) { }
+                                    Surface(Modifier.height(24.dp).width(4.dp), color = Dodgerblue) { }
                                     Text(
                                         child.label,
                                         Modifier.padding(start = 12.dp),

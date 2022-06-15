@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GovernmentTheme {
                 Surface( Modifier.fillMaxSize() ) {
-                    Main(this)
+                    Main()
                     QrCode()
                     Dialog()
                     Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
@@ -145,15 +145,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun permission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            var mPermissionList = arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            )
-            requestPermissions(mPermissionList, 1)
-        }
+        val mPermissionList = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+        )
+        requestPermissions(mPermissionList, 1)
     }
+
     override fun onResume() {
         super.onResume()
         activity = this
@@ -171,7 +170,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    open fun onEventMainThread(messageEvent: MessageEvent) {
+    fun onEventMainThread(messageEvent: MessageEvent) {
         if (messageEvent.message.equals(MessageConstans.WindsViewGone) ) {
             homeButtonBinding.homeBtn.visibility=View.GONE
         } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
@@ -182,7 +181,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Main(context: Context) {
+fun Main() {
     val navController = rememberNavController()
     LaunchedEffect("UpdateNavContent") {
         while (true) {
@@ -196,7 +195,7 @@ fun Main(context: Context) {
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
-                } else if (routeRemain.value < (30L * 1000L)) {
+                } else if (routeRemain.value < Router.showTimeoutDialog) {
                     if (isShowTaskActivity()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
                     if (routeMirror == Router.chat) {
                         with(DialogViewModel) {

@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -115,20 +117,24 @@ object DialogViewModel {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Dialog() {
-    if (content.firstOrNull()?.content?.isNotBlank() == true) Surface(
-        Modifier.clickable { if(type == "nameDef")clear() },
-        color = Color(0x33000000)
-    ) {
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+    if (content.firstOrNull()?.content?.isNotBlank() == true) {
+        LocalSoftwareKeyboardController.current?.hide()
+        Surface(
+            Modifier.clickable { if(type == "nameDef")clear() },
+            color = Color(0x33000000)
         ) {
-            when (type) {
-                "button" -> ButtonDialog()
-                "nameDef" -> NameDefDialog()
+            Column(
+                Modifier.fillMaxSize(),
+                Arrangement.Center,
+                Alignment.CenterHorizontally
+            ) {
+                when (type) {
+                    "button" -> ButtonDialog()
+                    "nameDef" -> NameDefDialog()
+                }
             }
         }
     }

@@ -33,7 +33,7 @@ object Client {
     const val registerUrl = "https://robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com/"
     const val generateUrl = "https://products.fagougou.com/api/"
-    const val serverlessUrl = "https://6aecd4280c024b20b2567a480678fefc.apig.cn-east-3.huaweicloudapis.com/"
+    const val serverlessUrl = "https://hwc.infiiinity.xyz/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val okHttpClient: OkHttpClient by lazy {
