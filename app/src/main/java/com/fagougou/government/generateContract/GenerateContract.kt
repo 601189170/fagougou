@@ -1,6 +1,7 @@
 package com.fagougou.government.generateContract
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -43,6 +44,7 @@ import com.fagougou.government.utils.Printer.printWebView
 import com.fagougou.government.utils.Printer.webViewPrint
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
+import org.json.JSONArray
 import java.io.InputStreamReader
 
 object GenerateContract {
@@ -63,6 +65,7 @@ object GenerateContract {
                 val response = generateService.getGeneratelist(GenerateListRequest()).execute()
                 val body = response.body()?.data ?: GenerateContractListResponse().data
                 contractList.addAll(body.list)
+                Log.e("TAG", "contractList==>: "+contractList.size )
             } catch (e: Exception) {
                 handleException(e)
             }

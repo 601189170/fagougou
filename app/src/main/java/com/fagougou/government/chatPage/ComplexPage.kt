@@ -28,6 +28,7 @@ import com.fagougou.government.chatPage.Complex.caseList
 import com.fagougou.government.chatPage.Complex.selectPage
 import com.fagougou.government.model.AttachmentBody
 import com.fagougou.government.model.AttachmentCases
+import com.fagougou.government.model.AttachmentResponse
 import com.fagougou.government.model.CaseResponse
 import com.fagougou.government.repo.Client.apiService
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -42,6 +43,8 @@ object Complex{
     val selectPage = mutableStateOf("body")
     var bodyList = mutableStateListOf<AttachmentBody>()
     val caseList = mutableStateListOf<AttachmentCases>()
+
+
 
     fun clear(){
         selectPage.value = "body"
@@ -114,19 +117,8 @@ fun CaseButton(case: AttachmentCases,scope: CoroutineScope,navController: NavCon
 @Composable
 fun ComplexPage(navController: NavController) {
     val scope = rememberCoroutineScope()
-    val navController2 = rememberNavController()
     Surface(Modifier.fillMaxSize(), color = Color.White) {
         Column {
-            NavHost(navController2, "aaa",
-                Modifier
-                    .height(200.dp)
-                    .width(200.dp)) {
-                composable("aaa") { Text("aaa") }
-                composable("bbb") { Text("bbb") }
-            }
-            Button(onClick = { navController2.navigate("bbb") }) {
-                Text("bbb")
-            }
             Header("详细分析", navController, onBack = { Complex.clear() } )
             Row(
                 Modifier

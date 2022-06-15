@@ -15,7 +15,10 @@ data class AttachmentData(
 data class AttachmentContent(
     val chart:AttachmentChart = AttachmentChart(),
     val cases:List<AttachmentCases> = listOf(),
-    val body:List<AttachmentBody> = listOf()
+    val body:List<AttachmentBody> = listOf(),
+    val laws:List<AttachmentLaws> = listOf(),
+    val contexts:List<String> = listOf(),
+    val title:String = ""
 )
 
 data class AttachmentChart(
@@ -48,3 +51,15 @@ data class AttachmentBody(
     val title:String = "",
     val content:String = "",
 )
+
+data class AttachmentLaws(
+    @SerializedName("law")
+    val law:String = "",
+    @SerializedName("tiaoMu")
+    val tiaoMu:String = "",
+    @SerializedName("content")
+    val content:String = "",
+    @SerializedName("isExpan")
+    val isExpan:Boolean = false,
+)
+
