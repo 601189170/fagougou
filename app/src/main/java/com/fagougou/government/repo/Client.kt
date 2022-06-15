@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
 object Client {
-
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com/"
     const val contractUrl = "https://law-system.fagougou-law.com/"
