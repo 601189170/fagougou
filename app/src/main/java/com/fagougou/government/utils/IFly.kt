@@ -131,7 +131,7 @@ object IFly {
         // 设置唤醒资源路径
         mIvw.setParameter(
             SpeechConstant.IVW_RES_PATH,
-            ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/b9efca3f.jet")
+            ResourceUtil.generateResourcePath(context, RESOURCE_TYPE.assets, "ivw/59fad520.jet")
         )
     }
 

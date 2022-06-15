@@ -43,7 +43,7 @@ class CommonApplication: Application(){
         currentCode = packageManager.getPackageInfo(packageName, 0).versionCode
         UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
         UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
-        SpeechUtility.createUtility(this, "appid=b9efca3f")
+        SpeechUtility.createUtility(this, "appid=59fad520")
         MMKV.initialize(this)
         Bugsnag.start(this)
         IFly.init(this)
