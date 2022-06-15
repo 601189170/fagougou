@@ -226,6 +226,7 @@ fun Main() {
             composable(Router.chatGuide) { ChatGuidePage(navController) }
             composable(Router.chat) { ChatPage(navController) }
             composable(Router.complex) { ComplexPage(navController) }
+            composable(Router.reportMain) { RePortMain(navController) }
             composable(Router.case) { CasePage(navController) }
             composable(Router.statistic) { StatisticPage(navController) }
             composable(Router.calculator) { CalculatorGuidePage(navController) }
@@ -233,6 +234,7 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
+
         }
     }
 }

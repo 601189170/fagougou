@@ -154,9 +154,19 @@ object ChatViewModel {
             val outerBody = response.body() ?: AttachmentResponse()
             val content = outerBody.data.content
             Complex.clear()
+//            bean.value=outerBody;
             Complex.bodyList.addAll(content.body)
             Complex.caseList.addAll(content.cases)
-            withContext(Dispatchers.Main) { navController.navigate("complex") }
+            withContext(Dispatchers.Main) {
+
+                if (outerBody.data.title.contains("范本")){
+                        navController.navigate(Router.complex)
+                }else{
+                    setReportData(outerBody)
+                    navController.navigate(Router.reportMain)
+                }
+
+            }
         }
     }
 
