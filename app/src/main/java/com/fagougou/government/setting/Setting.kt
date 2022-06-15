@@ -75,13 +75,12 @@ fun Settings(navController: NavController) {
             modifier = Modifier
                 .padding(vertical = 32.dp).padding(end = 32.dp)
                 .fillMaxWidth()
-                .clickable { showBar() },
+                .clickable { reboot() },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier
-                    .padding(start = 32.dp)
-                    .clickable { reboot() },
+                    .padding(start = 32.dp),
                 color = Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
@@ -99,13 +98,12 @@ fun Settings(navController: NavController) {
             modifier = Modifier
                 .padding(vertical = 32.dp).padding(end = 32.dp)
                 .fillMaxWidth()
-                .clickable { showBar() },
+                .clickable { shutdown() },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier
-                    .padding(start = 32.dp)
-                    .clickable { shutdown() },
+                    .padding(start = 32.dp),
                 color = Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
