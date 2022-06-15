@@ -1,8 +1,6 @@
 package com.fagougou.government.generateContract
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -48,26 +46,20 @@ fun GenerateGuide(navController: NavController) {
         scope.launch { getGenerateForm(launchId) }
     }
     Surface(color = Color.White) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Header(
-                title = "智能文书",
-                navController = navController,
-                onBack = { GenerateContract.clear() }
-            )
+        Column(Modifier.fillMaxSize(),Arrangement.Top,Alignment.CenterHorizontally) {
+            Header("智能文书",navController,{ GenerateContract.clear() })
             Row(
                 Modifier
                     .fillMaxWidth(0.88f)
                     .padding(vertical = 12.dp)
+                    .horizontalScroll(rememberScrollState())
             ) {
                 for (item in contractList) {
                     Surface(
                         Modifier
                             .height(64.dp)
-                            .width(192.dp)) {
+                            .width(224.dp)
+                            .padding(end = 16.dp)) {
                         if(item.id == currentContractId.value) Row(
                             Modifier.fillMaxSize(),
                             horizontalArrangement = Arrangement.End
@@ -146,15 +138,14 @@ fun GenerateGuide(navController: NavController) {
                         colors = buttonColors(backgroundColor = Dodgerblue),
                         shape = RoundedCornerShape(16)
                     )
-                    Spacer(Modifier.width(32.dp).height(32.dp))
+                    Spacer(
+                        Modifier
+                            .width(32.dp)
+                            .height(32.dp))
                     Button(
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(180.dp),
+                        { DialogViewModel.confirmPrint("webView") },
+                        Modifier.height(60.dp).width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                        onClick = {
-                            DialogViewModel.confirmPrint("webView")
-                        },
                         content = {
                             Row( verticalAlignment = Alignment.CenterVertically ){
                                 Image(painterResource(R.drawable.ic_painter),null)

@@ -12,6 +12,14 @@
 </script>
 <div id="box"></div>
 <script>
+    Handlebars.registerHelper('ifeq', function(a, b, options) {
+        if (a == b) return options.fn(this)
+        else return options.inverse(this)
+        });
+        Handlebars.registerHelper('ifnoteq', function(a, b, options) {
+        if (a == b) return options.inverse(this)
+        else return options.fn(this)
+        });
     var source = $("#myTemplate").html();
     var template = Handlebars.compile(source);
     var context = {{{DataHook}}};

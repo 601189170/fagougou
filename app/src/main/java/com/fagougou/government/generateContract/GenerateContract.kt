@@ -60,7 +60,7 @@ object GenerateContract {
             try {
                 val response = generateService.getGeneratelist().execute()
                 val body = response.body()?.data ?: GenerateContractListResponse().data
-                contractList.addAll(body.list)
+                contractList.addAll(body)
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -188,12 +188,8 @@ fun GenerateContract(navController: NavController) {
     Surface(color = Color.White) {
         Text(notifier.value)
         Column(Modifier.fillMaxSize(), Arrangement.Top) {
-            Header(
-                title = "智能文书",
-                navController = navController,
-                onBack = { GenerateContract.clear() }
-            )
-            Row(modifier = Modifier.fillMaxSize()) {
+            Header("智能文书", navController, { GenerateContract.clear() })
+            Row(Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
                     Modifier.fillMaxHeight().fillMaxWidth(0.6f),

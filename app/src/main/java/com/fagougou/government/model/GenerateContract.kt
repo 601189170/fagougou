@@ -1,11 +1,7 @@
 package com.fagougou.government.model
 
 data class GenerateContractListResponse(
-    val data:GenerateContractList = GenerateContractList()
-)
-
-data class GenerateContractList(
-    val list:List<GenerateContractBrief> = listOf()
+    val data:List<GenerateContractBrief> = listOf()
 )
 
 data class GenerateContractBrief(

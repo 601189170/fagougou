@@ -4,21 +4,15 @@ import android.app.Presentation
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.Display
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import android.view.View
-import com.fagougou.government.CommonApplication
+import com.bugsnag.android.Bugsnag
 import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.R
 import com.fagougou.government.databinding.LayoutPresentationBinding
-import com.fagougou.government.model.Advertise
-import com.fagougou.government.repo.Client.serverlessService
-import com.fagougou.government.repo.ServerlessService
+import com.fagougou.government.utils.Tips.toast
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Response
+import java.io.IOException
 
 class BannerPresentation(context: Context, display: Display) : Presentation(context,display) {
 
@@ -57,6 +51,12 @@ class BannerPresentation(context: Context, display: Display) : Presentation(cont
         mediaPlayer.seekTo(0)
         mediaPlayer.setDataSource(activity.resources.openRawResourceFd(id))
         binding.videoView.visibility = View.VISIBLE
-        mediaPlayer.prepareAsync()
+        try {
+            mediaPlayer.prepareAsync()
+        }catch (e: IOException){
+            toast("副屏已断开")
+        }catch (e: Exception){
+            Bugsnag.notify(e)
+        }
     }
 }
