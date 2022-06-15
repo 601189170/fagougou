@@ -3,20 +3,16 @@ package com.fagougou.government.chatPage
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -39,7 +35,7 @@ import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.model.Message
 import com.fagougou.government.model.Speaker
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
@@ -51,7 +47,7 @@ fun ChatPage(navController: NavController) {
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(null){
-        BannerPresentation.playVideo(R.raw.vh_chat_slient)
+        presentation?.playVideo(R.raw.vh_chat_slient)
         wakeMode()
     }
     Column(Modifier.fillMaxHeight(),Arrangement.Top,Alignment.CenterHorizontally) {

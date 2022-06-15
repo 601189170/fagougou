@@ -35,7 +35,7 @@ import com.fagougou.government.model.ContractCategory
 import com.fagougou.government.model.ContractData
 import com.fagougou.government.model.ContractListRequest
 import com.fagougou.government.model.PdfFile
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -141,7 +141,7 @@ fun Contract(navController: NavController,category: ContractData){
 fun ContractGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
-        BannerPresentation.playVideo(R.raw.vh_contract)
+        presentation?.playVideo(R.raw.vh_contract)
     }
     Column(
         modifier = Modifier.fillMaxSize(),

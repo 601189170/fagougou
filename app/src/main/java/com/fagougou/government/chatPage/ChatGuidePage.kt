@@ -20,7 +20,7 @@ import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
 import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
-import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.utils.ZYSJ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ fun ChatGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null) {
         ZYSJ.manager?.ZYSystemBar(0)
-        BannerPresentation.playVideo(R.raw.vh_chat_guide)
+        presentation?.playVideo(R.raw.vh_chat_guide)
     }
     val botResMap = mapOf(
         Pair("公司财税", R.drawable.bot_tax),

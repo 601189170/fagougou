@@ -222,7 +222,7 @@ fun Main(context: Context) {
         NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
-            composable(Router.home) { HomePage(context,navController) }
+            composable(Router.home) { HomePage(navController) }
             composable(Router.admin) { AdminPage(navController) }
             composable(Router.contract) { ContractGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }
@@ -260,6 +260,7 @@ fun Loading() {
                 Color(0x33000000)
             ) {
                 CircularProgressIndicator(Modifier.padding(48.dp))
+
             }
         }
     }
