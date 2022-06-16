@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.ActivityUtils
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 
 import com.fagougou.government.Router
@@ -24,27 +25,19 @@ class WaitActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        CommonApplication.activity = this
         binding = ActivityWaitBinding.inflate(layoutInflater);
-
         setContentView(binding.root)
-
         ImSdkUtils.initKfHelper()
-
         ImSdkUtils.helper?.let {
             ImSdkUtils.initSdk(it)
         }
         YKFCallManager.cameraRotation=0
-
-        binding.leftBtn.setOnClickListener {
-
-        }
-        binding.rightBtn.setOnClickListener {
-            finish()
-        }
+        binding.leftBtn.setOnClickListener {}
+        binding.rightBtn.setOnClickListener { finish() }
         EventBus.getDefault().register(this);
-
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEventMainThread(messageEvent: MessageEvent){
         when(messageEvent.message){

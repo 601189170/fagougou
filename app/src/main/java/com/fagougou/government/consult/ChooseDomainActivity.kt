@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.databinding.ActivityChooseDomainBinding
 
@@ -16,11 +17,9 @@ class ChooseDomainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        activity = this
         binding = ActivityChooseDomainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         initView()
     }
     fun initView(){

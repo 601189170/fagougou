@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.ActivityUtils
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -23,10 +24,9 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Time.hideSystemUI()
+        CommonApplication.activity = this
         EventBus.getDefault().register(this)
          diallog=TaskTimeBaseDialog(this)
-
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

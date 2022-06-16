@@ -29,11 +29,14 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label,android:theme,android:allowBackup">
         <meta-data
-            android:name="design_width_in_dp"
-            android:value="1280" />
+            android:name="com.bugsnag.android.API_KEY"
+            android:value="ae73180eda276349a3eb4602b1eba951" />
         <meta-data
-            android:name="design_height_in_dp"
-            android:value="1080" />
+            android:name="UMENG_APPKEY"
+            android:value="62a2f39388ccdf4b7e90908c" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Fagougou" />
         <activity
             android:name=".consult.TouristsLoginActivity"
             android:exported="false"
@@ -63,15 +66,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.bugsnag.android.API_KEY"
-            android:value="ae73180eda276349a3eb4602b1eba951" />
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="62a2f39388ccdf4b7e90908c" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="Fagougou" />
         <receiver android:name=".BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
