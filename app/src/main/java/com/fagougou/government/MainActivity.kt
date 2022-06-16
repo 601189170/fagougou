@@ -192,7 +192,7 @@ fun Main() {
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }
-    Image( painterResource(R.drawable.home_background),"Background",Modifier.fillMaxSize() )
+    Image( painterResource(R.drawable.home_background),"Background",Modifier.height(1024.dp).width(1280.dp) )
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }

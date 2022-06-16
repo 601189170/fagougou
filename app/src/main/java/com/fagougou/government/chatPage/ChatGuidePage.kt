@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 fun ChatGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null) {
-        ZYSJ.manager?.ZYSystemBar(0)
+        ZYSJ.hideBar()
         presentation?.playVideo(R.raw.vh_chat_guide)
     }
     val botResMap = mapOf(

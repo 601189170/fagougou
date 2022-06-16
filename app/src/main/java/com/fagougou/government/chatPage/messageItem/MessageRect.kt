@@ -38,25 +38,19 @@ import kotlinx.coroutines.launch
 fun LawExpend(message: Message, index: Int,keyboardController: SoftwareKeyboardController?) {
     Column(
         Modifier.padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        Arrangement.Top,
+        Alignment.CenterHorizontally
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
+            Modifier.fillMaxWidth().clickable {
                     keyboardController?.hide()
                     val isExpend = !message.isExpend
                     ChatViewModel.history[index] = message.copy(isExpend = isExpend)
-                }
+                },
+            Arrangement.Center,
+            Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "法律依据",
-                fontSize = 20.sp,
-                color = Dodgerblue
-            )
+            Text("法律依据", Modifier.padding(16.dp), Dodgerblue, 20.sp)
             val svg = if (message.isExpend) R.drawable.ic_flod else R.drawable.ic_expend
             Image(painterResource(svg), null)
         }
@@ -67,15 +61,10 @@ fun LawExpend(message: Message, index: Int,keyboardController: SoftwareKeyboardC
             if (message.isExpend) for ((i, law) in message.laws.withIndex()) {
                 Text(
                     (i + 1).toString() + "." + law.name + law.position + ":",
-                    modifier = Modifier.padding(12.dp),
+                    Modifier.padding(12.dp),
                     fontSize = 24.sp
                 )
-                Text(
-                    law.content,
-                    Modifier.padding(bottom = 16.dp),
-                    Color(0xFF666666),
-                    20.sp
-                )
+                Text(law.content, Modifier.padding(bottom = 16.dp), Color(0xFF666666), 20.sp)
             }
         }
     }
@@ -119,8 +108,7 @@ fun MessageRect(
                         }
                     }
                     ClickableText(
-                        modifier = Modifier.padding(12.dp),
-                        text = annotatedString,
+                        annotatedString,
                         style = TextStyle(
                             color = textColor,
                             fontSize = 24.sp,
@@ -137,7 +125,7 @@ fun MessageRect(
                 for(question in message.inlineRecommend){
                     Text(
                         question,
-                        Modifier.clickable {
+                        Modifier.padding(top = 8.dp).clickable {
                             keyboardController?.hide()
                             scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(question) }
                         },
@@ -175,26 +163,24 @@ fun ComplexRect(
         color = backgroundColor,
     ) {
         Column(
-            modifier = Modifier.clickable {
+            Modifier.clickable {
                 keyboardController?.hide()
                 ChatViewModel.getComplex(message.complex.attachmentId, navController)
             }
         ) {
             Surface(color = Dodgerblue) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    Modifier.fillMaxWidth().height(54.dp),
+                    Arrangement.Center,
+                    Alignment.CenterVertically
                 ) { BasicText(message.complex.title) }
             }
             Text(
-                modifier = Modifier.padding(vertical = 16.dp,horizontal = 24.dp),
-                text = message.content + message.complex.explanation,
-                fontSize = 24.sp,
+                message.content + message.complex.explanation,
+                Modifier.padding(vertical = 16.dp,horizontal = 24.dp),
+                textColor,
+                24.sp,
                 lineHeight = 32.sp,
-                color = textColor,
             )
             if (message.laws.isNotEmpty()){
                 Divider(
@@ -208,18 +194,11 @@ fun ComplexRect(
                 thickness = 2.dp
             )
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                Modifier.fillMaxWidth().padding(16.dp),
+                Arrangement.Center,
+                Alignment.CenterVertically
             ) {
-                Text(
-                    modifier = Modifier.padding(end = 12.dp),
-                    color= Color(0xFF0E7AE6),
-                    text = "点击查看",
-                    fontSize = 20.sp,
-                )
+                Text("点击查看", Modifier.padding(end = 12.dp), Color(0xFF0E7AE6), 20.sp,)
                 val svg = R.drawable.ic_icon_right_mark
                 Image(painterResource(svg), null)
             }

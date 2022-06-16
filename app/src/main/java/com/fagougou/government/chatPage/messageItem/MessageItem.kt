@@ -62,13 +62,9 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) { MessageRect(message, index, scope, keyboardController, Dodgerblue, Color.White) }
-            Speaker.RECOMMEND -> Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .padding(vertical = 12.dp),
-            ) {
+            Speaker.RECOMMEND -> Column( Modifier.padding(vertical = 12.dp)) {
                 Surface(
-                    Modifier.padding(start = 16.dp).fillMaxWidth(),
+                    Modifier.padding(start = 16.dp),
                     shape = RoundedCornerShape(CORNER_FLOAT),
                     color = Color.White,
                 ) {
