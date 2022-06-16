@@ -17,6 +17,8 @@ import com.fagougou.government.utils.IFly
 import kotlinx.coroutines.*
 import org.libpag.PAGFile
 import org.libpag.PAGView
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 object PAG {
     lateinit var unwakePAGView: PAGView
@@ -28,8 +30,8 @@ object PAG {
             while (true) {
                 delay(50)
                 when (IFly.recognizeResult.value) {
-                    IFly.UNWAKE_TEXT -> if (unwakeAlpha < 100) unwakeAlpha += 10
-                    else -> if (unwakeAlpha > 1) unwakeAlpha -= 10
+                    IFly.UNWAKE_TEXT -> if (unwakeAlpha < 100) unwakeAlpha = min(unwakeAlpha+10,100)
+                    else -> if (unwakeAlpha > 1) unwakeAlpha = max(unwakeAlpha-10,0)
                 }
                 withContext(Dispatchers.Main) {
                     if (::unwakePAGView.isInitialized) unwakePAGView.alpha =
@@ -58,7 +60,7 @@ fun PAG(){
                     play()
                     unwakePAGView = this
                     setOnClickListener {
-                        IFly.recognizeMode()
+                        if(alpha==1f)IFly.recognizeMode()
                     }
                 }
             },

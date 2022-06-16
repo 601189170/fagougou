@@ -75,7 +75,7 @@ object IFly {
             if(isLast && selectedChatBot.value!="小笨") {
                 val result = resultBuilder.toString()
                 CoroutineScope(Dispatchers.IO).launch {
-                    if(routeMirror == Router.chat) nextChat(result)
+                    if(routeMirror == Router.chat && result.length>2) nextChat(result)
                 }
                 mIatResults.clear()
                 wakeMode()
