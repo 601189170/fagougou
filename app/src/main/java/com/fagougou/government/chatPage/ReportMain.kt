@@ -53,7 +53,7 @@ object ReportMainModel {
 fun ReportMain (navController: NavController){
     val navController2 = rememberNavController()
     Column(Modifier.fillMaxSize()) {
-    Header(title = title+"分析报告", navController = navController)
+    Header(title = title, navController = navController)
     Surface(Modifier.fillMaxSize(),color = Color.White) {
         Row(Modifier.fillMaxSize() ) {
             Column(
@@ -62,10 +62,6 @@ fun ReportMain (navController: NavController){
                     .fillMaxSize(0.3f),
                 horizontalAlignment=Alignment.CenterHorizontally) {
                     Box(modifier = Modifier
-                        .clickable {
-                            setTab.value = 0
-                            navController2.navigate(Router.reportpage)
-                        }
                         .padding(top = 24.dp)
                         .width(200.dp)
                         .height(64.dp)
@@ -73,6 +69,9 @@ fun ReportMain (navController: NavController){
                         contentAlignment = Alignment.Center) {
                         Row(
                             Modifier
+                                .clickable {
+                                    setTab.value = 0
+                                    navController2.navigate(Router.reportpage) }
                                 .fillMaxSize()
                                 .padding(2.dp)
                                 .padding()
@@ -91,17 +90,15 @@ fun ReportMain (navController: NavController){
                     }
                 if (!cases.isNullOrEmpty()) {
                     Box(modifier = Modifier
-                        .clickable {
-                            setTab.value = 1
-                            navController2.navigate(Router.casepage)
-                        }
                         .padding(top = 24.dp)
                         .width(200.dp)
                         .height(64.dp)
                         .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8)),
                         contentAlignment = Alignment.Center) {
                         Row(
-                            Modifier
+                            Modifier.clickable {
+                                    setTab.value = 1
+                                    navController2.navigate(Router.casepage) }
                                 .fillMaxSize()
                                 .padding(2.dp)
                                 .padding()
@@ -124,10 +121,6 @@ fun ReportMain (navController: NavController){
                 }
                 if (!laws.isNullOrEmpty()) {
                     Box(modifier = Modifier
-                        .clickable {
-                            setTab.value = 2
-                            navController2.navigate(Router.lawspage)
-                        }
                         .padding(top = 24.dp)
                         .width(200.dp)
                         .height(64.dp)
@@ -135,6 +128,9 @@ fun ReportMain (navController: NavController){
                         contentAlignment = Alignment.Center) {
                         Row(
                             Modifier
+                                .clickable {
+                                    setTab.value = 2
+                                    navController2.navigate(Router.lawspage) }
                                 .fillMaxSize()
                                 .padding(2.dp)
                                 .padding()
