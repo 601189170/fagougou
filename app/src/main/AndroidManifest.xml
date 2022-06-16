@@ -37,6 +37,7 @@
         <activity
             android:name=".consult.TouristsLoginActivity"
             android:exported="false"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Government"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -57,6 +58,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!--设置为launcher-->
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <meta-data
@@ -69,13 +73,10 @@
             android:name="UMENG_CHANNEL"
             android:value="Fagougou" />
         <receiver android:name=".BootBroadcastReceiver">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
-
         </receiver>
     </application>
 

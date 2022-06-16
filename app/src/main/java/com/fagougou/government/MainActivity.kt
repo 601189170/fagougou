@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -58,6 +59,7 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
+import com.fagougou.government.model.AttachmentContent
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
@@ -229,7 +231,9 @@ fun Loading() {
             Alignment.CenterHorizontally
         ) {
             Surface(
-                Modifier.width(256.dp).height(256.dp),
+                Modifier
+                    .width(256.dp)
+                    .height(256.dp),
                 RoundedCornerShape(CORNER_FLOAT),
                 Color(0x33000000)
             ) {

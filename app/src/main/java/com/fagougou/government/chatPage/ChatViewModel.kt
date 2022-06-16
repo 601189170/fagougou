@@ -1,5 +1,6 @@
 package com.fagougou.government.chatPage
 
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
@@ -157,12 +158,13 @@ object ChatViewModel {
             Complex.bodyList.addAll(content.body)
             Complex.caseList.addAll(content.cases)
             withContext(Dispatchers.Main) {
-                if (outerBody.data.title.contains("范本")){
-                        navController.navigate(Router.complex)
-                }else{
+                if (outerBody.data.title.contains("分析报告")){
                     setReportData(outerBody)
                     navController.navigate(Router.reportMain)
+                }else{
+                    navController.navigate(Router.complex)
                 }
+
             }
         }
     }
