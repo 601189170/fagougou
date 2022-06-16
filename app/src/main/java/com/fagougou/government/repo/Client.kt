@@ -11,17 +11,14 @@ import com.google.gson.JsonParseException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.*
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONException
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.InterruptedIOException
 import java.net.SocketException
-import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.net.UnknownServiceException
 import java.util.concurrent.CancellationException
@@ -44,20 +41,18 @@ object Client {
             .addInterceptor(BlockIntercept())
             .addInterceptor(ParametersIntercept())
             .addInterceptor(CommonAuthInterceptor())
-            .callTimeout(12, TimeUnit.SECONDS)
-            .connectTimeout(12, TimeUnit.SECONDS)
-            .readTimeout(12, TimeUnit.SECONDS)
-            .writeTimeout(12, TimeUnit.SECONDS)
+            .connectTimeout(10000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .writeTimeout(10000, TimeUnit.MILLISECONDS)
             .build()
     }
 
     val noLoadClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(CommonAuthInterceptor())
-            .callTimeout(12, TimeUnit.SECONDS)
-            .connectTimeout(12, TimeUnit.SECONDS)
-            .readTimeout(12, TimeUnit.SECONDS)
-            .writeTimeout(12, TimeUnit.SECONDS)
+            .connectTimeout(10000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .writeTimeout(10000, TimeUnit.MILLISECONDS)
             .build()
     }
 
@@ -116,33 +111,33 @@ object Client {
     }
 
     fun handleException(t: Throwable) {
-        val ex: Exception
+        val e: Exception
         when (t) {
             is CancellationException -> return
-            is HttpException -> ex = Exception("服务器错误")
-            is JsonParseException, is JSONException, is ParseException -> ex = Exception("解析错误")
-            is SocketException -> ex = Exception("无网络连接")
-            is SocketTimeoutException -> ex = Exception("网络连接超时")
-            is SSLHandshakeException -> ex = Exception("证书验证失败")
-            is UnknownHostException -> ex = Exception("无网络连接")
-            is UnknownServiceException -> ex = Exception("无网络连接")
-            is NumberFormatException -> ex = Exception("数字格式化异常")
+            is InterruptedIOException -> e = Exception("网络连接超时")
+            is HttpException -> e = Exception("服务器错误")
+            is JsonParseException, is JSONException, is ParseException -> e = Exception("解析错误")
+            is SocketException -> e = Exception("无网络连接")
+            is SSLHandshakeException -> e = Exception("证书验证失败")
+            is UnknownHostException -> e = Exception("无网络连接")
+            is UnknownServiceException -> e = Exception("无网络连接")
+            is NumberFormatException -> e = Exception("数字格式化异常")
             else -> {
-                ex = t as Exception
-                Bugsnag.notify(ex)
+                e = t as Exception
+                Bugsnag.notify(e)
             }
         }
         CoroutineScope(Dispatchers.Main).launch{
-            if (!ex.message.isNullOrBlank())toast(ex.message?:"")
+            if (!e.message.isNullOrBlank())toast(e.message?:"")
         }
     }
 
-    fun <T> callBack(onSuccess:(T)->Unit): Callback<T> {
+    fun <T> callBack(onSuccess:(T)->Unit): retrofit2.Callback<T> {
         return object:retrofit2.Callback<T>{
-            override fun onResponse(call: Call<T>, response: Response<T>) {
+            override fun onResponse(call: retrofit2.Call<T>, response: retrofit2.Response<T>) {
                 response.body()?.let { onSuccess.invoke(it) }
             }
-            override fun onFailure(call: Call<T>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<T>, t: Throwable) {
                 handleException(t)
             }
         }

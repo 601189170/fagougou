@@ -1,5 +1,10 @@
 package com.fagougou.government.model
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+
 data class GenerateContractListResponse(
     val data:List<GenerateContractBrief> = listOf()
 )
@@ -39,6 +44,6 @@ data class GenerateFormChild(
     val type:String = "",
     val comment:String = "",
     val values:List<String> = listOf(),
-    var input:String = "",
-    var selected:MutableSet<Int> = mutableSetOf()
+    var input: MutableState<String> = mutableStateOf(""),
+    var selected:SnapshotStateList<Int> = mutableStateListOf()
 )

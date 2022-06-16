@@ -40,6 +40,7 @@ import com.fagougou.government.repo.Client.contractService
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.ui.theme.WhiteTextFieldColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -177,11 +178,7 @@ fun ContractGuidePage(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val (text,button) = remember{ FocusRequester.createRefs() }
-                    val textFieldColors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color(0xFFFFFFFF),
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                    )
+                    val textFieldColors = WhiteTextFieldColor()
                     TextField(
                         searchWord.value,
                         { searchWord.value = it },

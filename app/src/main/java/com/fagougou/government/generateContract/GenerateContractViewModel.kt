@@ -19,7 +19,6 @@ object GenerateContractViewModel {
     var template = ""
     val data = mutableStateOf("")
     val formList = mutableStateListOf(GenerateForm())
-    val notifier = mutableStateOf("")
     var lastModifier = Time.stamp
 
     fun init(context: Context) {
@@ -91,7 +90,7 @@ object GenerateContractViewModel {
                             "select" -> {
                                 if (selected.isNotEmpty()) values[selected.first()] else ""
                             }
-                            else -> if (input != "") input else "__________"
+                            else -> if (input.value != "") input.value else "__________"
                         }
                         builder.append("${variable}:\"$result\",")
                     }

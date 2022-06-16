@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.IFly
@@ -104,12 +105,7 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                         if (state.isFocused) ChatViewModel.showBotMenu.value = false
                     }
                     .focusable(),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color.White,
-                    backgroundColor = Color(0x33FFFFFF),
-                    cursorColor = Color.White,
-                    focusedIndicatorColor = Color.Transparent
-                ),
+                colors = Alpha33WhiteTextFieldColor(),
                 placeholder = {Text("请输入问题..",color = Color.Gray, fontSize = 20.sp)},
                 textStyle = TextStyle(fontSize = 20.sp),
                 shape = RoundedCornerShape(45),
@@ -124,21 +120,26 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
 
             )
             Button(
-                modifier = Modifier
+                {
+                    ChatViewModel.showBotMenu.value = false
+                    ChatViewModel.voiceInputMode.value = true
+                },
+                Modifier
                     .padding(start = 24.dp)
                     .width(64.dp)
                     .height(64.dp),
                 content = { Image(painterResource(R.drawable.ic_microphone),null) },
-                onClick = {
-                    ChatViewModel.showBotMenu.value = false
-                    ChatViewModel.voiceInputMode.value = true
-                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                 shape = RoundedCornerShape(50),
                 contentPadding = PaddingValues(8.dp)
             )
             Button(
-                modifier = Modifier
+                {
+                    ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
+                    ChatViewModel.voiceInputMode.value = false
+                    keyboardController?.hide()
+                },
+                Modifier
                     .padding(start = 24.dp)
                     .width(64.dp)
                     .height(64.dp)
@@ -152,11 +153,6 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                         ),
                         null
                     )
-                },
-                onClick = {
-                    ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
-                    ChatViewModel.voiceInputMode.value = false
-                    keyboardController?.hide()
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                 shape = RoundedCornerShape(50),

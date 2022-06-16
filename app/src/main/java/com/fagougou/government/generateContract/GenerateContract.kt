@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,9 +25,9 @@ import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContractViewModel.lastModifier
-import com.fagougou.government.generateContract.GenerateContractViewModel.notifier
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.ui.theme.WhiteTextFieldColor
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
 
@@ -35,18 +36,19 @@ fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
         presentation?.playVideo(R.raw.vh_generate_contract)
         while (isActive) {
-            delay(600)
+            delay(1000)
             GenerateContractViewModel.updateContent()
         }
     }
     Surface(color = Color.White) {
-        Text(notifier.value)
         Column(Modifier.fillMaxSize(), Arrangement.Top) {
             Header("智能文书", navController, { GenerateContractViewModel.clear() })
             Row(Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
-                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(Modifier.fillMaxHeight(0.88f)) {
@@ -60,7 +62,9 @@ fun GenerateContract(navController: NavController) {
                     ) {
                         if (false) Button(
                             { },
-                            Modifier.height(60.dp).width(200.dp),
+                            Modifier
+                                .height(60.dp)
+                                .width(200.dp),
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_wechat), null)
@@ -72,7 +76,9 @@ fun GenerateContract(navController: NavController) {
                         )
                         Button(
                             { DialogViewModel.confirmPrint("webView") },
-                            Modifier.height(60.dp).width(200.dp),
+                            Modifier
+                                .height(60.dp)
+                                .width(200.dp),
                             elevation = ButtonDefaults.elevation(0.dp, 0.dp),
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -85,9 +91,15 @@ fun GenerateContract(navController: NavController) {
                         )
                     }
                 }
-                Divider(Modifier.fillMaxHeight().width(1.dp))
+                Divider(
+                    Modifier
+                        .fillMaxHeight()
+                        .width(1.dp))
                 Column(
-                    Modifier.fillMaxHeight().fillMaxWidth().verticalScroll(scrollState),
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState),
                 ) {
                     for (item in GenerateContractViewModel.formList) {
                         Text(
@@ -101,7 +113,10 @@ fun GenerateContract(navController: NavController) {
                                     Modifier.padding(top = 24.dp, bottom = 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Surface(Modifier.height(24.dp).width(4.dp), color = Dodgerblue) { }
+                                    Surface(
+                                        Modifier
+                                            .height(24.dp)
+                                            .width(4.dp), color = Dodgerblue) { }
                                     Text(
                                         child.label,
                                         Modifier.padding(start = 12.dp),
@@ -113,13 +128,11 @@ fun GenerateContract(navController: NavController) {
                                         Column {
                                             for ((i, option) in child.values.withIndex()) {
                                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                                    Checkbox(
-                                                        i in child.selected,
+                                                    Checkbox( i in child.selected,
                                                         {
                                                             if (it) child.selected.add(i)
                                                             else child.selected.remove(i)
                                                             lastModifier = child.variable
-                                                            notifier.value = Time.stamp
                                                         }
                                                     )
                                                     Text(option)
@@ -131,13 +144,11 @@ fun GenerateContract(navController: NavController) {
                                         Column {
                                             for ((i, option) in child.values.withIndex()) {
                                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                                    RadioButton(
-                                                        i in child.selected,
+                                                    RadioButton( i in child.selected,
                                                         {
                                                             child.selected.clear()
                                                             child.selected.add(i)
                                                             lastModifier = child.variable
-                                                            notifier.value = Time.stamp
                                                         }
                                                     )
                                                     Text(option)
@@ -146,32 +157,32 @@ fun GenerateContract(navController: NavController) {
                                         }
                                     }
                                     else -> TextField(
-                                        child.input,
-                                        { str ->
+                                        child.input.value,
+                                        {
                                             Router.lastTouchTime = Time.stampL
-                                            child.input = str
+                                            child.input.value = it
                                             lastModifier = child.variable
-                                            notifier.value = Time.stamp
                                         },
                                         Modifier
                                             .fillMaxWidth()
                                             .height(if (child.label.contains("地址")) 112.dp else 56.dp)
                                             .border(1.dp, Color.LightGray, RoundedCornerShape(18)),
-                                        keyboardOptions = if (child.label.contains("电话")) KeyboardOptions(
-                                            keyboardType = KeyboardType.Number
-                                        ) else KeyboardOptions(keyboardType = KeyboardType.Text),
-                                        colors = TextFieldDefaults.textFieldColors(
-                                            backgroundColor = Color.White,
-                                            focusedIndicatorColor = Color.Transparent,
-                                            unfocusedIndicatorColor = Color.Transparent,
-                                        ),
-                                        placeholder = { if (child.input == "") Text(child.comment) }
+                                        keyboardOptions = if (child.label.contains("电话")){
+                                            KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next)
+                                        } else {
+                                            KeyboardOptions(keyboardType = KeyboardType.Text,imeAction = ImeAction.Next)
+                                        },
+                                        colors = WhiteTextFieldColor(),
+                                        placeholder = { if (child.input.value == "") Text(child.comment) }
                                     )
                                 }
                             }
                         }
                     }
-                    Spacer(Modifier.width(56.dp).height(112.dp))
+                    Spacer(
+                        Modifier
+                            .width(56.dp)
+                            .height(112.dp))
                 }
             }
         }

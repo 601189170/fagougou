@@ -99,7 +99,6 @@ object DialogViewModel {
                         toast(e.toString())
                         clear()
                     }
-
                 }
                 "webView" -> Printer.webViewPrint.value=true
                 else -> clear()

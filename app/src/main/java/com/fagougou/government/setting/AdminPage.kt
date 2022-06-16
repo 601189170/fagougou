@@ -20,6 +20,7 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.setting.AdminPage.text
+import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 
@@ -34,12 +35,6 @@ fun AdminPage(navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Header("管理员密码",navController,{ text.value = "" })
-        val textFieldColors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color(0x44FFFFFF),
-            cursorColor = Color.White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        )
         TextField(
             text.value,
             {text.value = it},
@@ -47,11 +42,11 @@ fun AdminPage(navController: NavController){
             textStyle = TextStyle(color = Color.White, fontSize = 28.sp),
             placeholder = {Text("请输入管理员密码",color = Color.Gray, fontSize = 28.sp)},
             shape = RoundedCornerShape(CORNER_FLOAT),
-            colors = textFieldColors,
-            leadingIcon = { Image(painterResource(R.drawable.ic_key), null, modifier = Modifier.padding(horizontal = 24.dp)) }
+            colors = Alpha33WhiteTextFieldColor(),
+            leadingIcon = { Image(painterResource(R.drawable.ic_key), null, Modifier.padding(horizontal = 24.dp)) }
         )
         Button(
-            onClick = {
+            {
                 if (text.value == "faxiaomeng") {
                     text.value = ""
                     navController.popBackStack()

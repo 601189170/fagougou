@@ -30,6 +30,7 @@ import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
+import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV
@@ -77,13 +78,7 @@ fun RegisterPage(navController: NavController){
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
         BasicText("注册码绑定",192.dp,32.sp)
-        val textFieldColors = TextFieldDefaults.textFieldColors(
-            Color.White,
-            backgroundColor = Color(0x44FFFFFF),
-            cursorColor = Color.White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        )
+        val textFieldColors = Alpha33WhiteTextFieldColor()
         TextField(
             modifier = Modifier
                 .padding(top = 40.dp)

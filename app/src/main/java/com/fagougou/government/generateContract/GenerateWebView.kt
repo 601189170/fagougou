@@ -21,7 +21,7 @@ fun GenerateWebView() {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
-                setInitialScale(80)
+                setInitialScale(100)
                 settings.javaScriptEnabled = true
                 isVerticalScrollBarEnabled = false
                 isClickable = false
