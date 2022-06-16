@@ -27,7 +27,6 @@ fun LawsPage (navController: NavController){
         horizontalAlignment=Alignment.CenterHorizontally
     ) {
         items(laws.size){
-
             Box( modifier = Modifier
                 .padding(top = 24.dp)
                 .clickable {
@@ -69,9 +68,8 @@ fun LawsPage (navController: NavController){
                             horizontalAlignment = Alignment.Start
                         ){
                             Text(
-
-                                text = laws[it].content,
-                                modifier = Modifier
+                                laws[it].content,
+                                Modifier
                                     .fillMaxSize()
                                     .padding(start = 32.dp, bottom = 32.dp, end = 24.dp),
                                 color = Color(0xFF666666),

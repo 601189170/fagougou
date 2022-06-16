@@ -24,15 +24,16 @@ fun <T> VerticalGrid(
     width:Int,
     onClick:(T) -> Unit,
     selected:(T) -> Boolean = {false},
-    background:Color = Dodgerblue
+    background:Color = Dodgerblue,
+    windowWidth:Int = 1280
 ){
     val lastIndex = datas.lastIndex
-    val padding = (1280-(columnNumber*width))/(columnNumber+1)
+    val padding = (windowWidth-(columnNumber*width))/(columnNumber+1)
     val verticalPadding = if(datas.firstOrNull() is Pair<*,*>) padding/2 else padding
     for (y in 0..lastIndex step columnNumber) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .width(windowWidth.dp)
                 .padding(top =  verticalPadding.dp),
             horizontalArrangement = Arrangement.Start
         ) {

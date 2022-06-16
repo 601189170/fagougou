@@ -112,14 +112,21 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                 }
             }
             Speaker.OPTIONS -> Column(
-                modifier = Modifier
+                Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 16.dp),
+                Arrangement.Top,
+                Alignment.CenterHorizontally
             ) {
                 when (message.option.type) {
                     "radio" -> {
-                        VerticalGrid( message.option.items, 4, 64, 256,
-                            { scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(it) } }
+                        VerticalGrid(
+                            message.option.items,
+                            4,
+                            64,
+                            256,
+                            { scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(it) } },
+                            windowWidth = 1114
                         )
                     }
                     "address-with-search" -> {

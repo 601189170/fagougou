@@ -149,8 +149,10 @@ fun ContractGuidePage(navController: NavController) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(null){
         presentation?.playVideo(R.raw.vh_contract)
-        selectedId.value = categoryList.firstOrNull()?.id ?: return@LaunchedEffect
-        getContractList( selectedId.value )
+        if(ContractLists.isEmpty()){
+            selectedId.value = categoryList.firstOrNull()?.id ?: return@LaunchedEffect
+            getContractList( selectedId.value )
+        }
     }
     Column(
         modifier = Modifier.fillMaxSize(),

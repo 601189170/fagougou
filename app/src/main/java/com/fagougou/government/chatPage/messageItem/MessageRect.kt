@@ -72,9 +72,9 @@ fun LawExpend(message: Message, index: Int,keyboardController: SoftwareKeyboardC
                 )
                 Text(
                     law.content,
-                    modifier = Modifier.padding(12.dp),
-                    color = Color(0xFF666666),
-                    fontSize = 20.sp
+                    Modifier.padding(bottom = 16.dp),
+                    Color(0xFF666666),
+                    20.sp
                 )
             }
         }
