@@ -30,6 +30,7 @@ import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.ZYSJ
 import com.fagougou.government.utils.ZYSJ.manager
 
 @Composable
@@ -47,7 +48,7 @@ fun HomeButton(modifier: Modifier = Modifier, onClick: () -> Unit, contentId: In
 @Composable
 fun HomePage(navController:NavController) {
     LaunchedEffect(null){
-        manager?.ZYSystemBar(0)
+        ZYSJ.hideBar()
         presentation?.playVideo(R.raw.vh_home)
         Client.serverlessService.getAds(CommonApplication.serial)
             .enqueue( Client.callBack { response ->

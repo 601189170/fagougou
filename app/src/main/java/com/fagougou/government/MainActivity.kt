@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
         permission()
         setContent {
             GovernmentTheme {
-                Surface( Modifier.fillMaxSize() ) {
+                Surface(Modifier.height(1024.dp).width(1280.dp) ) {
                     Main()
                     QrCode()
                     Dialog()
@@ -194,7 +195,7 @@ fun Main() {
             routeMirror = navController.currentDestination?.route ?: ""
         }
     }
-    Image( painterResource(R.drawable.home_background),"Background",Modifier.fillMaxSize() )
+    Image( painterResource(R.drawable.home_background),null,Modifier.fillMaxSize(),contentScale = ContentScale.Crop )
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
         NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }
@@ -215,7 +216,6 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
-
         }
     }
 }

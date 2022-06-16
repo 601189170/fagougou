@@ -3,10 +3,8 @@ package com.fagougou.government.utils
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
-import com.fagougou.government.utils.IFly.TAG
 import com.fagougou.government.utils.IFly.mIat
 import com.fagougou.government.utils.IFly.mRecognizerListener
 import com.fagougou.government.utils.Tips.toast

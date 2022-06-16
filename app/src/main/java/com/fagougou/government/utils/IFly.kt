@@ -25,7 +25,6 @@ import java.lang.Exception
 object IFly {
     const val UNWAKE_TEXT = "请说,你好法小萌"
     const val WAKE_TEXT = "请说出您的问题"
-    val TAG = javaClass.simpleName
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
     val volumeState = mutableStateOf("=")
@@ -91,7 +90,7 @@ object IFly {
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
 
     }
-    val mWakeuperListener = object:WakeuperListener{
+    val wakeupListener = object:WakeuperListener{
         override fun onBeginOfSpeech() {
         }
 
@@ -146,7 +145,7 @@ object IFly {
         Router.lastTouchTime = stampL
         mIat.stopListening()
         recognizeResult.value = UNWAKE_TEXT
-        mIvw.startListening(mWakeuperListener)
+        mIvw.startListening(wakeupListener)
     }
 
     fun recognizeMode(){
