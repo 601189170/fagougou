@@ -15,10 +15,7 @@ import com.fagougou.government.utils.Printer
 @Composable
 fun GenerateWebView() {
     AndroidView(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(0.88f),
-        factory = {
+        {
             WebView(CommonApplication.activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -32,7 +29,8 @@ fun GenerateWebView() {
                 webChromeClient = WebChromeClient()
             }
         },
-        update = {
+        Modifier.fillMaxHeight().fillMaxWidth(0.88f),
+        {
             it.loadDataWithBaseURL(
                 null,
                 GenerateContractViewModel.data.value,

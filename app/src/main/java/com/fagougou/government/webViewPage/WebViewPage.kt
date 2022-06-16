@@ -40,8 +40,7 @@ fun WebViewPage(navController: NavController) {
 @Composable
 fun WebView(urlAddress:String, data:String){
     AndroidView(
-        modifier = Modifier.fillMaxHeight().fillMaxWidth(),
-        factory = {
+        {
             WebView(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                 setInitialScale(80)
@@ -50,6 +49,7 @@ fun WebView(urlAddress:String, data:String){
                 if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")
                 else if(urlAddress!="")loadUrl(urlAddress)
             }
-        }
+        },
+        Modifier.fillMaxHeight().fillMaxWidth()
     )
 }

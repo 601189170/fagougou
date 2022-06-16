@@ -46,10 +46,7 @@ object PAG {
 fun PAG(){
     Surface(color = Color.Transparent) {
         AndroidView(
-            modifier = Modifier
-                .height(96.dp)
-                .width(360.dp),
-            factory = {
+            {
                 PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -60,14 +57,15 @@ fun PAG(){
                     setRepeatCount(0)
                     play()
                     unwakePAGView = this
+                    setOnClickListener {
+                        IFly.recognizeMode()
+                    }
                 }
-            }
+            },
+            Modifier.height(96.dp).width(360.dp),
         )
         AndroidView(
-            modifier = Modifier
-                .height(80.dp)
-                .width(320.dp),
-            factory = {
+            {
                 PAGView(activity).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -79,7 +77,8 @@ fun PAG(){
                     play()
                     wakedPAGView = this
                 }
-            }
+            },
+            Modifier.height(80.dp).width(320.dp),
         )
     }
 }

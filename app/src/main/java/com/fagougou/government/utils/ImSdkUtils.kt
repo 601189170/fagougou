@@ -1,8 +1,5 @@
 package com.fagougou.government.utils
 
-import android.content.Context
-import android.content.Intent
-import com.fagougou.government.consult.TouristsLoginActivity
 import com.m7.imkfsdk.KfStartHelper
 import com.moor.imkf.IMChatManager
 import com.moor.imkf.requesturl.RequestUrl
