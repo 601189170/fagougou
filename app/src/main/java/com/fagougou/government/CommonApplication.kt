@@ -51,6 +51,8 @@ class CommonApplication: Application(){
         GenerateContractViewModel.init(this)
         YKFUtils.init(this)
         Timber.plant(Timber.DebugTree())
+        val crashHandler = CrashHandler()
+        Thread.setDefaultUncaughtExceptionHandler(crashHandler)
         CoroutineScope(Dispatchers.Default).launch {
             if (!Settings.canDrawOverlays(this@CommonApplication)){
                 while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
