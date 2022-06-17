@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,7 +32,10 @@ object Time {
                     lastHeartBeat=0
                     Client.serverlessService.setHeartBeats(CommonApplication.serial).enqueue(Client.callBack { })
                 }else lastHeartBeat++
-                for(method in hook.values) method.invoke()
+                for(method in hook) {
+                    Timber.d("Invoke ${method.key}")
+                    method.value.invoke()
+                }
             }
         }
     }

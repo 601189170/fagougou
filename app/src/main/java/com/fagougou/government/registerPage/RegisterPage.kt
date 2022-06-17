@@ -47,6 +47,7 @@ fun RegisterPage(navController: NavController){
             mainRegister.login(SerialLoginRequest(CommonApplication.serial)).enqueue(
                 callBack {
                     if(it.canLogin){
+                        Time.hook.remove("AutoCheckRegister")
                         kv.encode(MMKV.appId,it.appId)
                         kv.encode(MMKV.appSec,it.appSec)
                         kv.encode(MMKV.mkt,it.mkt)

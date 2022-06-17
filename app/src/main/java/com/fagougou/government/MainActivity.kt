@@ -96,6 +96,7 @@ class MainActivity : ComponentActivity() {
         }catch (e:Exception){ }
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
         permission()
+        mutableListOf<Int>()
         setContent {
             GovernmentTheme {
                 Surface(Modifier.height(1024.dp).width(1280.dp) ) {
