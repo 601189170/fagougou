@@ -1,9 +1,7 @@
 package com.fagougou.government.utils
 
-import android.view.View
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.repo.Client
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +15,7 @@ object Time {
     var stampL = 0L
     var stamp = "0"
     var exitStack = 8
+    val hook = mutableMapOf<String,()->Unit>()
     init {
         CoroutineScope(Dispatchers.Default).launch {
             var lastHeartBeat = 100
@@ -32,6 +31,7 @@ object Time {
                     lastHeartBeat=0
                     Client.serverlessService.setHeartBeats(CommonApplication.serial).enqueue(Client.callBack { })
                 }else lastHeartBeat++
+                for(method in hook.values) method.invoke()
             }
         }
     }

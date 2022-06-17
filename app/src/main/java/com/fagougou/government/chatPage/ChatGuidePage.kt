@@ -51,7 +51,7 @@ fun ChatGuidePage(navController: NavController) {
         Header(
             "智能咨询",
             navController,
-            qrCode = constWechatUrl,
+            qrCode = constWechatUrl(),
             qrCodeHint = "微信扫码咨询"
         )
         Text(

@@ -1,5 +1,7 @@
 package com.fagougou.government.model
 
+import com.google.gson.annotations.SerializedName
+
 data class SerialRegisterRequest(
     val serial: String = "",
     val register: String ="",
@@ -17,7 +19,12 @@ data class SerialLoginRequest(
 
 data class SerialLoginResponse(
     val canLogin: Boolean = false,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    @SerializedName("appid")
+    val appId:String = "",
+    @SerializedName("appsec")
+    val appSec:String = "",
+    val mkt:String = ""
 )
 
 

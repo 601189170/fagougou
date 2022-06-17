@@ -31,7 +31,7 @@ object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com/"
     const val contractUrl = "https://law-system.fagougou-law.com/"
-    const val registerUrl = "https://robot-manage-system.fagougou.com/"
+    const val registerUrl = "http://test.robot-manage-system.fagougou.com/"
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com/"
     const val generateUrl = "https://products.fagougou.com/api/"
     const val serverlessUrl = "https://hwc.infiiinity.xyz/"

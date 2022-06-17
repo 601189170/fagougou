@@ -17,14 +17,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
@@ -35,6 +33,7 @@ import com.fagougou.government.utils.Time
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -85,10 +84,7 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
     ) {
         val (text,bot) = remember{ FocusRequester.createRefs() }
         Row(
-            Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .padding(horizontal = 24.dp),
+            Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
@@ -117,12 +113,12 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                         scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(content) }
                     }
                 ),
-
             )
             Button(
                 {
                     ChatViewModel.showBotMenu.value = false
                     ChatViewModel.voiceInputMode.value = true
+                    bot.requestFocus()
                 },
                 Modifier
                     .padding(start = 24.dp)
@@ -137,14 +133,14 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                 {
                     ChatViewModel.showBotMenu.value = !ChatViewModel.showBotMenu.value
                     ChatViewModel.voiceInputMode.value = false
-                    keyboardController?.hide()
+                    bot.requestFocus()
                 },
                 Modifier
                     .padding(start = 24.dp)
                     .width(64.dp)
                     .height(64.dp)
                     .focusRequester(bot)
-                    .focusable(),
+                    .focusable().onFocusChanged { if(it.isFocused)keyboardController?.hide() },
                 content = {
                     Image(
                         painterResource(

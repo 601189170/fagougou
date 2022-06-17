@@ -47,10 +47,7 @@ fun ContractWebView(navController: NavController) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header("合同文库",navController)
             AndroidView(
-                modifier = Modifier
-                    .fillMaxHeight(0.9f)
-                    .fillMaxWidth(),
-                factory = {
+                {
                     PdfRendererView(activity).apply{
                         ContractViewModel.pdfFile?.let {
                             val hasPdfFile = File(activity.cacheDir, "${it.id}.pdf").exists()
@@ -79,6 +76,7 @@ fun ContractWebView(navController: NavController) {
                         }
                     }
                 },
+                Modifier.fillMaxHeight(0.9f).fillMaxWidth(),
             )
             Surface(modifier = Modifier
                 .fillMaxWidth()

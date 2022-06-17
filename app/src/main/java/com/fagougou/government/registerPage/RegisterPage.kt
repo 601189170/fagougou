@@ -28,36 +28,32 @@ import com.fagougou.government.registerPage.RegisterViewModel.registerAction
 import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.model.SerialLoginResponse
+import com.fagougou.government.repo.Client.callBack
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV
+import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.ZYSJ
 import kotlinx.coroutines.*
 
 @Composable
 fun RegisterPage(navController: NavController){
-    val scope = rememberCoroutineScope()
     LaunchedEffect(null){
-        scope.launch(Dispatchers.IO){
-            while(isActive){
-                delay(1000)
-                var body = SerialLoginResponse()
-                try {
-                    val response = mainRegister.login(SerialLoginRequest(CommonApplication.serial)).execute()
-                    body = response.body() ?: SerialLoginResponse()
-                }catch (e:Exception){
-                    handleException(e)
+        Time.hook["AutoCheckRegister"]={
+            mainRegister.login(SerialLoginRequest(CommonApplication.serial)).enqueue(
+                callBack {
+                    if(it.canLogin){
+                        kv.encode(MMKV.appId,it.appId)
+                        kv.encode(MMKV.appSec,it.appSec)
+                        kv.encode(MMKV.mkt,it.mkt)
+                        navController.navigate(Router.home)
+                    }
                 }
-                if(body.canLogin){
-                    withContext(Dispatchers.Main){ navController.navigate(Router.home) }
-                    break
-                }
-                delay(1000)
-            }
+            )
         }
     }
     Column(
@@ -78,7 +74,6 @@ fun RegisterPage(navController: NavController){
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
         BasicText("注册码绑定",192.dp,32.sp)
-        val textFieldColors = Alpha33WhiteTextFieldColor()
         TextField(
             modifier = Modifier
                 .padding(top = 40.dp)
@@ -88,7 +83,7 @@ fun RegisterPage(navController: NavController){
             textStyle = TextStyle(fontSize = 28.sp),
             placeholder = {Text("请输入注册码",color = Color.Gray, fontSize = 28.sp)},
             shape = RoundedCornerShape(CORNER_FLOAT),
-            colors = textFieldColors,
+            colors = Alpha33WhiteTextFieldColor(),
             leadingIcon = { Image(painterResource(R.drawable.ic_key), null, modifier = Modifier.padding(horizontal = 24.dp))}
         )
         Button(

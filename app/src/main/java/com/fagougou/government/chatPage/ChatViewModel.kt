@@ -1,7 +1,5 @@
 package com.fagougou.government.chatPage
 
-import android.util.Log
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -108,6 +106,11 @@ object ChatViewModel {
             for (bot in botListBody.data) if (bot.tyId == "") botQueryIdMap[bot.name] = bot.id
             val response = Client.apiService.startChat(botQueryIdMap[selectedChatBot.value] ?: "").execute()
             val body = response.body() ?: return
+            if(body.status=="failed"){
+                history.add(Message(Speaker.ROBOT, body.message))
+                TTS.speak(body.message)
+                return
+            }
             sessionId = body.chatData.queryId
             addChatData(body.chatData)
         } catch (e: Exception) {
@@ -131,6 +134,11 @@ object ChatViewModel {
                 .replace("啊", "")
                 .replace(" ", "")
             val response = Client.apiService.nextChat(sessionId, ChatRequest(fixMessage)).execute()
+            if(response.code() == 401){
+                history.add(Message(Speaker.ROBOT, "抱歉，由于机器人资源不足，我无法继续为您提供服务。您可以使用人工服务。"))
+                TTS.speak("抱歉，由于机器人资源不足，我无法继续为您提供服务。您可以使用人工服务。")
+                return
+            }
             val body = response.body() ?: return
             if(routeMirror == Router.chat) addChatData(body.chatData)
         } catch (e: Exception) {

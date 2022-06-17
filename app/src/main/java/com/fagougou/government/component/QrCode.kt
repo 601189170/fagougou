@@ -18,10 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.utils.MMKV
 import com.king.zxing.util.CodeUtils
 
 object QrCodeViewModel {
-    const val constWechatUrl="https://m.fagougou.com/wx/custom?mkt=ideil0957f3ae"
+    fun constWechatUrl():String{
+        val mkt = MMKV.kv.decodeString(MMKV.mkt,"")?:""
+        return "https://m.fagougou.com/wx/custom?mkt=$mkt"
+    }
     val content = mutableStateOf("")
     val hint = mutableStateOf("")
 

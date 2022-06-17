@@ -22,59 +22,34 @@ data class ChatRequest(
 )
 
 data class ChatResponse(
+    val status:String = "",
+    val message: String = "",
     @SerializedName("data")
-    val chatData:ChatData = ChatData(),
+    val chatData:ChatData = ChatData()
 )
 
 data class ChatData(
-
-    @SerializedName("queryId")
     val queryId: String = "",
-
-    @SerializedName("botSays")
     val botSays: List<BotSay> = listOf(),
-
-    @SerializedName("option")
     val option: Option = Option(),
 )
 
 data class BotSay(
-    @SerializedName("type")
     val type:String = "",
-
-    @SerializedName("content")
     val content:BotSaysContent = BotSaysContent(),
-
     @SerializedName("recommendQA")
     val recommends:List<String> = listOf(),
-
-    @SerializedName("isAnswered")
     val isAnswered:Boolean = false,
 )
 
 data class BotSaysContent(
-    @SerializedName("title")
     val title:String = "",
-
-    @SerializedName("body")
     val body:String = "",
-
-    @SerializedName("laws")
     val laws:List<Law> = listOf(),
-
-    @SerializedName("queryRecordItemId")
     val queryRecordItemId:String = "",
-
-    @SerializedName("description")
     val description:String = "",
-
-    @SerializedName("url")
     val url:String = "",
-
-    @SerializedName("attachmentId")
     val attachmentId:String = "",
-
-    @SerializedName("explanation")
     val explanation:String = "",
 )
 
@@ -83,7 +58,6 @@ data class Law(
     val name:String = "",
     @SerializedName("tiaoMu")
     val position:String = "",
-    @SerializedName("content")
     val content:String = "",
 )
 

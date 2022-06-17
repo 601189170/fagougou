@@ -23,6 +23,8 @@ fun WhiteTextFieldColor():TextFieldColors{
 @Composable
 fun Alpha33WhiteTextFieldColor():TextFieldColors{
     return TextFieldDefaults.textFieldColors(
+        Color.White,
+        cursorColor = Color.White,
         backgroundColor = Color(0x33FFFFFF),
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,

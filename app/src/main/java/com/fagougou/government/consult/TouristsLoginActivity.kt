@@ -124,7 +124,7 @@ class TouristsLoginActivity : BaseActivity() {
         binding.topLayout.tvBack.setOnClickListener { finish() }
         binding.topLayout.tvWechat.setOnClickListener {
             QrCodeViewModel.clear()
-            QrCodeViewModel.content.value = QrCodeViewModel.constWechatUrl
+            QrCodeViewModel.content.value = QrCodeViewModel.constWechatUrl()
             wechatDialog.show()
         }
         binding.topLayout.tvZn.setOnClickListener { finish() }

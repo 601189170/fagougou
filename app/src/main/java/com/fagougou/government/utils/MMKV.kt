@@ -7,6 +7,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 object MMKV {
+    val appId = "appId"
+    val appSec = "appSec"
+    val mkt = "mkt"
     val kv = MMKV.defaultMMKV()
     val pdfKv = MMKV.mmkvWithID("pdfUpdate")
 }

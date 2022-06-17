@@ -78,7 +78,7 @@ fun ChatPage(navController: NavController) {
                 }
             },
             false,
-            constWechatUrl
+            constWechatUrl()
         )
         var lazyHeight = 952 - if(showBotMenu.value) 436 else 0
         lazyHeight -= if(voiceInputMode.value) 220 else 80
