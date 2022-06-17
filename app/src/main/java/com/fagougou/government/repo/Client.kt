@@ -1,6 +1,7 @@
 package com.fagougou.government.repo
 
 import android.net.ParseException
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.repo.interceptor.BlockIntercept
@@ -18,6 +19,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.InterruptedIOException
+import java.lang.Integer.max
 import java.net.SocketException
 import java.net.UnknownHostException
 import java.net.UnknownServiceException
@@ -38,7 +40,7 @@ object Client {
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(BlockIntercept())
+            .addInterceptor(BlockIntercept(globalLoading))
             .addInterceptor(ParametersIntercept())
             .addInterceptor(CommonAuthInterceptor())
             .connectTimeout(10000, TimeUnit.MILLISECONDS)
@@ -141,5 +143,10 @@ object Client {
                 handleException(t)
             }
         }
+    }
+
+    fun MutableState<Int>.pop(){
+        val it = max(value-1,0)
+        value = it
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.bugsnag.android.Bugsnag
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
@@ -25,6 +26,8 @@ import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel.BaseLoadUrl
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.CommonApplication.Companion.presentation
+import com.fagougou.government.repo.Client
+import com.fagougou.government.repo.Client.pop
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV.pdfKv
@@ -33,6 +36,7 @@ import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
 import androidx.compose.ui.graphics.Color as ComposeColor
 import com.fagougou.government.utils.Tips.toast
+import timber.log.Timber
 
 @Composable
 fun ContractWebView(navController: NavController) {
@@ -53,11 +57,21 @@ fun ContractWebView(navController: NavController) {
                             val isNewest = pdfKv.decodeString(it.id) == it.updateAt
                             if(hasPdfFile && isNewest) initWithFile(File(activity.cacheDir, "${it.id}.pdf"))
                             else {
-                                toast("正在下载合同，请稍等")
                                 statusListener=object : PdfRendererView.StatusCallBack {
+                                    override fun onDownloadStart() {
+                                        Client.globalLoading.value++
+                                        super.onDownloadStart()
+                                    }
                                     override fun onDownloadSuccess(filePath: String) {
+                                        Client.globalLoading.pop()
                                         super.onDownloadSuccess(filePath)
                                         pdfKv.encode(it.id, it.updateAt)
+                                    }
+
+                                    override fun onError(error: Throwable) {
+                                        Client.globalLoading.pop()
+                                        super.onError(error)
+                                        Client.handleException(error)
                                     }
                                 }
                                 initWithUrl(BaseLoadUrl+ it.id, PdfQuality.NORMAL, it.id)
