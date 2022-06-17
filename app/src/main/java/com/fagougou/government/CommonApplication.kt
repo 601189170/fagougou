@@ -59,18 +59,6 @@ class CommonApplication: Application(){
                 openSecondScreen()
             }else openSecondScreen()
         }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val tokenResponse = apiService.auth(AuthRequest()).execute()
-                val tokenBody = tokenResponse.body() ?: Auth()
-                kv.encode("token", tokenBody.data.token)
-                val botListResponse = apiService.botList().execute()
-                val botListBody = botListResponse.body() ?: BotList()
-                for (bot in botListBody.data) if (bot.tyId == "") botQueryIdMap[bot.name] = bot.id
-            }catch (e: Exception){
-                handleException(e)
-            }
-        }
     }
 
     private suspend fun openSecondScreen() {

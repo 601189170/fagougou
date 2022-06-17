@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
@@ -145,6 +144,32 @@ fun Settings(navController: NavController) {
                 text = "设置"
             )
             Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            modifier = Modifier
+                .padding(vertical = 32.dp)
+                .padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable {
+                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
+                    CommonApplication.activity.startActivity(intent)
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 32.dp),
+                color = Color.White,
+                fontSize = 24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp,
+                text = "序列号:${CommonApplication.serial}"
+            )
         }
     }
 }

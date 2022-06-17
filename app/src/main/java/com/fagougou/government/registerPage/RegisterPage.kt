@@ -21,13 +21,14 @@ import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.model.*
 import com.fagougou.government.registerPage.RegisterViewModel.login
 import com.fagougou.government.registerPage.RegisterViewModel.registerCode
 import com.fagougou.government.registerPage.RegisterViewModel.registerAction
 import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
-import com.fagougou.government.model.SerialLoginRequest
-import com.fagougou.government.model.SerialLoginResponse
+import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.callBack
 import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.repo.Client.mainRegister
@@ -51,6 +52,14 @@ fun RegisterPage(navController: NavController){
                         kv.encode(MMKV.appId,it.appId)
                         kv.encode(MMKV.appSec,it.appSec)
                         kv.encode(MMKV.mkt,it.mkt)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
+                            val tokenBody = tokenResponse.body() ?: Auth()
+                            kv.encode("token", tokenBody.data.token)
+                            val botListResponse = Client.apiService.botList().execute()
+                            val botListBody = botListResponse.body() ?: BotList()
+                            for (bot in botListBody.data) if (bot.tyId == "") ChatViewModel.botQueryIdMap[bot.name] = bot.id
+                        }
                         navController.navigate(Router.home)
                     }
                 }

@@ -22,17 +22,19 @@ object RegisterViewModel {
         registerAction.value = "绑定中..."
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = Client.mainRegister.register(SerialRegisterRequest(CommonApplication.serial,registerCode.value)).execute()
-                val body = response.body() ?: SerialRegisterResponse()
-                registerBalance.value = body.balance
-                if (body.balance<0){
-                    toast(body.errorMessage)
-                    return@launch
-                }
-                registerCode.value = ""
-                withContext(Dispatchers.Main) {
-                    navController.navigate(Router.registerResult)
-                }
+                val request = SerialRegisterRequest(CommonApplication.serial,registerCode.value)
+                Client.mainRegister.register(request).enqueue(
+                    Client.callBack {
+                        it?.let {
+                            registerBalance.value = it.balance
+                            if (it.balance<0) toast(it.errorMessage)
+                            else{
+                                registerCode.value = ""
+                                navController.navigate(Router.registerResult)
+                            }
+                        }
+                    }
+                )
             } catch (e: Exception){
                 Client.handleException(e)
             }finally {
