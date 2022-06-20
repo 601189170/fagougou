@@ -27,26 +27,17 @@ object IFly {
     const val WAKE_TEXT = "请说出您的问题"
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
-    val volumeState = mutableStateOf("=")
 
     var mIatResults = mutableMapOf<String, String>()
     val mInitListener = InitListener { code ->
         if (code != ErrorCode.SUCCESS) Timber.e("讯飞初始化失败，代码%d",code)
     }
     val mRecognizerListener = object:RecognizerListener{
-        override fun onVolumeChanged(volume: Int, data: ByteArray) {
-            val stringBuilder = StringBuilder(volume+3)
-            for (i in 0..volume+3)stringBuilder.append('=')
-            volumeState.value = stringBuilder.toString()
-        }
+        override fun onVolumeChanged(volume: Int, data: ByteArray) { }
 
-        override fun onBeginOfSpeech() {
-            recognizeResult.value = WAKE_TEXT
-        }
+        override fun onBeginOfSpeech() { recognizeResult.value = WAKE_TEXT }
 
-        override fun onEndOfSpeech() {
-            volumeState.value = ""
-        }
+        override fun onEndOfSpeech() { }
 
         override fun onResult(results: RecognizerResult, isLast: Boolean) {
             val text: String = parseIatResult(results.resultString)
@@ -91,8 +82,7 @@ object IFly {
 
     }
     val wakeupListener = object:WakeuperListener{
-        override fun onBeginOfSpeech() {
-        }
+        override fun onBeginOfSpeech() { }
 
         override fun onResult(results: WakeuperResult) = recognizeMode()
 
@@ -105,6 +95,7 @@ object IFly {
         override fun onVolumeChanged(volume: Int) { }
 
     }
+
     lateinit var mIat : SpeechRecognizer
     lateinit var mIvw : VoiceWakeuper
 

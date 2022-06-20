@@ -112,5 +112,4 @@ fun ChatPage(navController: NavController) {
         InputBox(scope,keyboardController)
         if(showBotMenu.value) BotMenu()
     }
-    BackHandler {}
 }

@@ -41,14 +41,12 @@ object QrCodeViewModel {
 fun QrCode(){
     if(QrCodeViewModel.content.value.isNotBlank()) Surface( color = ColorCompose(0x33000000)) {
         Column(
-            modifier = Modifier.fillMaxSize().clickable { QrCodeViewModel.clear() },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
+            Modifier.fillMaxSize().clickable { QrCodeViewModel.clear() },
+            Arrangement.Center,
+            Alignment.CenterHorizontally
+        ) {
             Surface(
-                modifier = Modifier
-
-                    .width(272.dp)
-                    .height(320.dp),
+                Modifier.width(272.dp).height(320.dp),
                 shape = RoundedCornerShape(CORNER_FLOAT),
                 color = ColorCompose(0xFFFFFFFF)
             ) {
@@ -61,7 +59,7 @@ fun QrCode(){
                     Text(QrCodeViewModel.hint.value, fontSize = 28.sp)
                 }
             }
-            Image(modifier = Modifier.padding(32.dp),painter = painterResource(R.drawable.ic_close), contentDescription = null)
+            Image(painterResource(R.drawable.ic_close),null,Modifier.padding(32.dp))
         }
     }
 }

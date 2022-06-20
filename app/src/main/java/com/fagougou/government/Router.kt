@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 object Router {
     const val touchWaitTime = 150L*1000L
     const val showTimeoutDialog = 30L*1000L
+
     const val login = "login"
     const val register = "register"
     const val registerResult = "registerResult"
@@ -28,6 +29,7 @@ object Router {
     const val casepage ="casepage"
     const val lawspage ="lawspage"
     const val reportpage ="reportpage"
+
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
 

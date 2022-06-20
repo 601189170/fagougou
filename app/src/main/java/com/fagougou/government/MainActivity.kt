@@ -163,7 +163,7 @@ fun Main() {
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stampL
                 if (routeRemain.value < 0) {
-                    content.clear()
+                    DialogViewModel.clear()
                     ChatViewModel.clear()
                     GenerateContractViewModel.clear()
                     QrCodeViewModel.clear()

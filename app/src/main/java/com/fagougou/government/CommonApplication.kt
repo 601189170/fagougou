@@ -41,6 +41,8 @@ class CommonApplication: Application(){
     override fun onCreate() {
         super.onCreate()
         currentCode = packageManager.getPackageInfo(packageName, 0).versionCode
+        Timber.plant(Timber.DebugTree())
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler())
         UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
         UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
         SpeechUtility.createUtility(this, "appid=59fad520")
@@ -50,9 +52,6 @@ class CommonApplication: Application(){
         TTS.init(this)
         GenerateContractViewModel.init(this)
         YKFUtils.init(this)
-        Timber.plant(Timber.DebugTree())
-        val crashHandler = CrashHandler()
-        Thread.setDefaultUncaughtExceptionHandler(crashHandler)
         CoroutineScope(Dispatchers.Default).launch {
             if (!Settings.canDrawOverlays(this@CommonApplication)){
                 while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)

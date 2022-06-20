@@ -37,12 +37,7 @@ fun AboutUs(navController: NavController) {
     Column(Modifier.fillMaxWidth(),Arrangement.Top,Alignment.CenterHorizontally) {
         Header("关于我们", navController)
         Column(Modifier.width(960.dp).verticalScroll(rememberScrollState())) {
-            Image(
-                painterResource(R.drawable.about_robot),
-                null,
-                Modifier.padding(top = 32.dp)
-            )
-
+            Image(painterResource(R.drawable.about_robot), null, Modifier.padding(top = 32.dp))
             for(item in AboutUsViewModel.content) Text(
                 item,
                 Modifier.padding(top = 32.dp),
@@ -51,11 +46,8 @@ fun AboutUs(navController: NavController) {
                 letterSpacing = 1.2f.sp,
                 lineHeight = 35.sp,
             )
-
             Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 32.dp, bottom = 40.dp),
+                Modifier.fillMaxWidth().padding(top = 32.dp, bottom = 40.dp),
                 Arrangement.SpaceBetween
             ) {
                 Image(painterResource(R.drawable.about_customer_service), null)
