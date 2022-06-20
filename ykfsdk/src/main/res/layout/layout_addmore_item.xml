@@ -4,8 +4,8 @@
     android:layout_width="128dp"
     android:orientation="vertical"
     android:layout_height="wrap_content"
-    android:paddingTop="18dp"
-    android:paddingBottom="18dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
     tools:ignore="ResourceName">
     <ImageView
         android:id="@+id/img"

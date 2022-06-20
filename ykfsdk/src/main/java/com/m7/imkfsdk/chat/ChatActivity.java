@@ -2747,6 +2747,8 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
     protected void onResume() {
         super.onResume();
         isFront = true;
+        handler.removeCallbacks(touchEvent);
+        Log.e("TAG", "onResume: " );
         if (IMChatManager.getInstance().getAppContext() == null) {
             IMChatManager.getInstance().setAppContext(getApplication());
         }
@@ -2757,6 +2759,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
 
             if (isServiceRunning(this, "com.moor.imkf.SocketService")) {
                 if (!WebSocketHandler.getDefault().isConnect()) {
+                    Log.e("TAG", "onResume: TcpBreakEvent==>");
                     EventBus.getDefault().post(new TcpBreakEvent());//重连
                 }
             } else {

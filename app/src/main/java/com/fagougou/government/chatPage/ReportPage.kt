@@ -61,8 +61,8 @@ private fun PieChartRow(float1: Float,float2: Float,pieChartDataModel: PieChartD
 }
 @Composable
 fun TopListBox() {
-    Column(Modifier.height(150.dp)) {
-            LazyHorizontalGrid( rows = GridCells.Fixed(1),contentPadding=PaddingValues(20.dp),userScrollEnabled = false,
+    Column(Modifier.height(130.dp)) {
+            LazyHorizontalGrid( modifier = Modifier.height(129.dp),rows = GridCells.Fixed(1),contentPadding=PaddingValues(20.dp),userScrollEnabled = false,
                 content = {
                     items(toplist) { bot ->
                         Column(
@@ -74,7 +74,7 @@ fun TopListBox() {
                             Text(
                                 modifier = Modifier
                                     .background(Color(0xFFECF5FF))
-                                    .padding(20.dp),
+                                    .padding(horizontal = 20.dp,vertical = 10.dp),
                                 text = bot,
                                 fontSize = 20.sp,
                                 color = Color(0xFF0E7AE6)
@@ -85,7 +85,6 @@ fun TopListBox() {
         Surface(
             Modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp)
                 .height(1.dp), color = Color.Gray) {}
     }
 }
