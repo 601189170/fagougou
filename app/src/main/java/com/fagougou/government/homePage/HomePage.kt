@@ -1,6 +1,5 @@
 package com.fagougou.government.homePage
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,12 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
-import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.CommonApplication.Companion.currentCode
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.UpdateActivity
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.repo.Client
@@ -31,7 +27,6 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ
-import com.fagougou.government.utils.ZYSJ.manager
 
 @Composable
 fun HomeButton(modifier: Modifier = Modifier, onClick: () -> Unit, contentId: Int) {
@@ -50,27 +45,11 @@ fun HomePage(navController:NavController) {
     LaunchedEffect(null){
         ZYSJ.hideBar()
         presentation?.playVideo(R.raw.vh_home)
-        Client.serverlessService.getAds(CommonApplication.serial)
-            .enqueue( Client.callBack { response ->
-                presentation?.bannerAdapter?.let {
-                    it.imageList.clear()
-                    it.imageList.addAll(response.ads)
-                    it.notifyDataSetChanged()
-                }
-            })
         Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial))
             .enqueue( Client.callBack { response ->
                 if(!response.canLogin){
                     navController.navigate(Router.register)
                     toast(response.errorMessage)
-                }
-            })
-        Client.updateService.updateInfo()
-            .enqueue( Client.callBack {
-                if (it.code > currentCode) {
-                    val intent = Intent(activity, UpdateActivity::class.java)
-                    intent.putExtra("downloadUrl", it.url)
-                    activity.startActivity(intent)
                 }
             })
     }

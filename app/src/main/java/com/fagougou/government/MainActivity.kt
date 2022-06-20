@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -18,8 +17,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -37,13 +34,13 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
 import com.fagougou.government.Router.noAutoQuitList
-import com.fagougou.government.Router.noLoadingPages
 import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.Router.touchWaitTime
 import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
+import com.fagougou.government.component.Loading
 import com.fagougou.government.component.QrCode
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.consult.ChooseDomainActivity
@@ -59,15 +56,12 @@ import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
-import com.fagougou.government.model.AttachmentContent
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
-import com.fagougou.government.repo.Client.globalLoading
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
-import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time.stampL
@@ -221,30 +215,6 @@ fun Main() {
     }
 }
 
-@Composable
-fun Loading() {
-    Timber.d("GlobalLoading:${globalLoading.value}")
-    if (routeMirror in noLoadingPages) return
-    if (globalLoading.value > 0) Surface(color = Color.Transparent) {
-        Column(
-            Modifier.fillMaxSize(),
-            Arrangement.Center,
-            Alignment.CenterHorizontally
-        ) {
-            Surface(
-                Modifier
-                    .width(256.dp)
-                    .height(256.dp),
-                RoundedCornerShape(CORNER_FLOAT),
-                Color(0x33000000)
-            ) {
-                CircularProgressIndicator(Modifier.padding(48.dp))
-
-            }
-        }
-    }
-}
-
 fun isShowTaskActivity(): Boolean {
     return ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java)
         || ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)
@@ -265,8 +235,3 @@ fun initWindsSetting():WindowManager.LayoutParams{
     lp.gravity = Gravity.TOP
     return lp
 }
-
-
-
-
-
