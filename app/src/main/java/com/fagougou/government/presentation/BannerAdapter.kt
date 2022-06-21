@@ -8,7 +8,7 @@ import com.fagougou.government.databinding.ItemBannerBinding
 
 class BannerAdapter : RecyclerView.Adapter<BannerHolder>() {
 
-    private val defaultUrl = "https://advertise-1251511189.cos.ap-nanjing.myqcloud.com/%E8%BD%AE%E6%92%AD1.png"
+    private val defaultUrl = "https://api.ghser.com/random/fengjing.php"
     val imageList = mutableListOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerHolder {

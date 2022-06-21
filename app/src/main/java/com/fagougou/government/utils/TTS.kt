@@ -44,6 +44,7 @@ object TTS {
         }
 
         override fun onCompleted(error: SpeechError?) {
+            error?.let{ Timber.d(error) }
             SpeakingProcess = 100
         }
 
