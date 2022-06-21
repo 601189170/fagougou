@@ -1,7 +1,6 @@
 package com.fagougou.government.chatPage
 
 import android.content.Intent
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -68,7 +67,6 @@ fun ChatPage(navController: NavController) {
                     }
                     secondButtonText.value = "转人工咨询"
                     secondButtonOnClick.value = {
-                        clear()
                         ChatViewModel.clear()
                         IFly.stopAll()
                         val intent = Intent(activity, TouristsLoginActivity::class.java)
@@ -94,10 +92,11 @@ fun ChatPage(navController: NavController) {
                     ) {
                         Row(
                             Modifier.padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            Arrangement.Start,
+                            Alignment.CenterVertically
                         ){
                             Image(painterResource(R.drawable.ic_note),null)
-                            Spacer( Modifier.width(16.dp).height(12.dp))
+                            Spacer(Modifier.width(16.dp).height(12.dp))
                             BasicText("温馨提示：咨询过程中可拿起电话咨询，声音效果更清晰！",0.dp,20.sp)
                         }
                     }
@@ -107,7 +106,7 @@ fun ChatPage(navController: NavController) {
             if (history.lastOrNull()?.speaker==Speaker.USER) item {
                 MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController, keyboardController)
             }
-            item { Row( Modifier.fillMaxWidth().height(180.dp) ) {} }
+            item { Row(Modifier.fillMaxWidth().height(180.dp)) {} }
         }
         InputBox(scope,keyboardController)
         if(showBotMenu.value) BotMenu()

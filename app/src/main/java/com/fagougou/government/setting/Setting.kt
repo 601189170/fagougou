@@ -2,12 +2,13 @@ package com.fagougou.government.setting
 
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
+import androidx.compose.material.Divider
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
-import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.TTS
@@ -169,29 +169,39 @@ fun Settings(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
-                modifier = Modifier
-                    .padding(start = 32.dp),
+                "语速设置",
+                Modifier.padding(start = 32.dp),
                 color = Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "语速设置"
+                letterSpacing = 1.2f.sp
             )
-
-            var progress  = remember {
-               var speed=TTS.mTts.getParameter(SpeechConstant.SPEED).toFloat()/100
-                mutableStateOf(speed)
+            Text(
+                TTS.mTts.getParameter(SpeechConstant.SPEED),
+                Modifier.padding(start = 32.dp),
+                color = Color.White,
+                fontSize = 24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp
+            )
+            val progress  = remember {
+               val speed=TTS.mTts.getParameter(SpeechConstant.SPEED).toFloat()/100
+               mutableStateOf(speed)
             }
-            Slider(value = progress.value, onValueChange = {
-                progress.value = it
-                var speed=(it*100).toInt()
-                TTS.mTts.setParameter(SpeechConstant.SPEED, speed.toString())
-                MMKV.kv.encode(MMKV.robootSpeed,speed.toString())
-            },colors = SliderDefaults.colors(
-                inactiveTrackColor = Color.LightGray,
-                activeTrackColor = Color.Blue
-            ))
-
+            Slider(
+                progress.value,
+                {
+                    progress.value = it
+                    val speed=(it*100).toInt()
+                    TTS.mTts.setParameter(SpeechConstant.SPEED, speed.toString())
+                    MMKV.kv.encode(MMKV.robootSpeed,speed.toString())
+                },
+                Modifier.width(480.dp).padding(start = 32.dp),
+                colors = SliderDefaults.colors(
+                    inactiveTrackColor = Color.LightGray,
+                    activeTrackColor = Color.Blue
+                )
+            )
         }
         Divider(
             Modifier.padding(top = 5.dp),
@@ -199,7 +209,7 @@ fun Settings(navController: NavController) {
             thickness = 2.dp,
         )
         Row(
-            modifier = Modifier
+            Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
                 .fillMaxWidth()
@@ -210,13 +220,12 @@ fun Settings(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
-                modifier = Modifier
-                    .padding(start = 32.dp),
+                "序列号:${CommonApplication.serial}",
+                Modifier.padding(start = 32.dp),
                 color = Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "序列号:${CommonApplication.serial}"
+                letterSpacing = 1.2f.sp
             )
         }
 
