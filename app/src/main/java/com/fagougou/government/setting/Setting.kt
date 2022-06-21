@@ -1,6 +1,5 @@
 package com.fagougou.government.setting
 
-
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -32,23 +31,23 @@ import com.iflytek.cloud.SpeechConstant
 
 @Composable
 fun Settings(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Header(title = "设置", navController = navController)
+    Column(Modifier.fillMaxSize()) {
+        Header("设置", navController)
         Row(
-            modifier = Modifier
+            Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
                 .fillMaxWidth()
                 .clickable { hideBar() },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
             Text(
-                modifier = Modifier.padding(start = 32.dp),
-                color = Color.White,
+                "隐藏导航栏",
+                Modifier.padding(start = 32.dp),
+                Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
                 letterSpacing = 1.2f.sp,
-                text = "隐藏导航栏"
             )
             Image(painterResource(R.drawable.ic_right),null)
         }
@@ -58,22 +57,20 @@ fun Settings(navController: NavController) {
             thickness = 2.dp,
         )
         Row(
-            modifier = Modifier
+            Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
                 .fillMaxWidth()
                 .clickable { showBar() },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
             Text(
-                modifier = Modifier
-                    .padding(start = 32.dp)
-                    .clickable { showBar() },
-                color = Color.White,
-                fontSize = 24.sp,
+                "打开导航栏",
+                Modifier.padding(start = 32.dp).clickable { showBar() },
+                Color.White,
+                24.sp,
                 lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "打开导航栏"
+                letterSpacing = 1.2f.sp
             )
             Image(painterResource(R.drawable.ic_right),null)
         }
@@ -83,104 +80,95 @@ fun Settings(navController: NavController) {
             thickness = 2.dp,
         )
         Row(
-            modifier = Modifier
+            Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
                 .fillMaxWidth()
                 .clickable { reboot() },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
             Text(
-                modifier = Modifier
+                "重启",
+                Modifier
                     .padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
-                lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "重启"
-            )
-            Image(painterResource(R.drawable.ic_right),null)
-        }
-        Divider(
-            Modifier.padding(top = 5.dp),
-            color = Color(0xFFFFFFFF),
-            thickness = 2.dp,
-        )
-        Row(
-            modifier = Modifier
-                .padding(vertical = 32.dp)
-                .padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable { shutdown() },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
-                lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "关机"
-            )
-            Image(painterResource(R.drawable.ic_right),null)
-        }
-        Divider(
-            Modifier.padding(top = 5.dp),
-            color = Color(0xFFFFFFFF),
-            thickness = 2.dp,
-        )
-        Row(
-            modifier = Modifier
-                .padding(vertical = 32.dp)
-                .padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable {
-                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
-                    CommonApplication.activity.startActivity(intent)
-                },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
-                lineHeight = 35.sp,
-                letterSpacing = 1.2f.sp,
-                text = "设置"
-            )
-            Image(painterResource(R.drawable.ic_right),null)
-        }
-        Divider(
-            Modifier.padding(top = 5.dp),
-            color = Color(0xFFFFFFFF),
-            thickness = 2.dp,
-        )
-        Row(
-            modifier = Modifier
-                .padding(vertical = 32.dp)
-                .padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable {
-                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
-                    CommonApplication.activity.startActivity(intent)
-                },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                "语速设置",
-                Modifier.padding(start = 32.dp),
-                color = Color.White,
+                Color.White,
                 fontSize = 24.sp,
                 lineHeight = 35.sp,
                 letterSpacing = 1.2f.sp
             )
+            Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            Modifier
+                .padding(vertical = 32.dp)
+                .padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable { shutdown() },
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
             Text(
-                TTS.mTts.getParameter(SpeechConstant.SPEED),
+                "关机",
                 Modifier.padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
+                Color.White,
+                24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp
+            )
+            Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            Modifier
+                .padding(vertical = 32.dp)
+                .padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable {
+                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
+                    CommonApplication.activity.startActivity(intent)
+                },
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
+            Text(
+                "设置",
+                Modifier.padding(start = 32.dp),
+                Color.White,
+                24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp
+            )
+            Image(painterResource(R.drawable.ic_right),null)
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            Modifier
+                .padding(vertical = 32.dp)
+                .padding(end = 32.dp)
+                .fillMaxWidth()
+                .clickable {
+                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
+                    CommonApplication.activity.startActivity(intent)
+                },
+            Arrangement.Start,
+            Alignment.CenterVertically
+        ) {
+            Text(
+                "语速设置",
+                Modifier.padding(start = 32.dp),
+                Color.White,
+                24.sp,
                 lineHeight = 35.sp,
                 letterSpacing = 1.2f.sp
             )
@@ -196,11 +184,19 @@ fun Settings(navController: NavController) {
                     TTS.mTts.setParameter(SpeechConstant.SPEED, speed.toString())
                     MMKV.kv.encode(MMKV.robootSpeed,speed.toString())
                 },
-                Modifier.width(480.dp).padding(start = 32.dp),
+                Modifier.width(600.dp).padding(start = 32.dp),
                 colors = SliderDefaults.colors(
                     inactiveTrackColor = Color.LightGray,
                     activeTrackColor = Color.Blue
                 )
+            )
+            Text(
+                TTS.mTts.getParameter(SpeechConstant.SPEED),
+                Modifier.padding(start = 32.dp),
+                Color.White,
+                24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp
             )
         }
         Divider(
@@ -217,13 +213,13 @@ fun Settings(navController: NavController) {
                     val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
                     CommonApplication.activity.startActivity(intent)
                 },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
             Text(
                 "序列号:${CommonApplication.serial}",
                 Modifier.padding(start = 32.dp),
-                color = Color.White,
-                fontSize = 24.sp,
+                Color.White,
+                24.sp,
                 lineHeight = 35.sp,
                 letterSpacing = 1.2f.sp
             )
