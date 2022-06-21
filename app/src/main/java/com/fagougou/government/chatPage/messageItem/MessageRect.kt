@@ -81,7 +81,7 @@ fun MessageRect(
     textColor: Color = Color.Black,
 ) {
     Surface(
-        Modifier.padding(start = 16.dp),
+        Modifier.padding(start = 16.dp).widthIn(30.dp,720.dp),
         shape = RoundedCornerShape(CORNER_FLOAT),
         color = backgroundColor,
     ) {

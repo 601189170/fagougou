@@ -62,10 +62,10 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                     painter = painterResource(id = R.drawable.ic_keyboard),
                     contentDescription = null)
                 Text(
-                    modifier = Modifier.padding(top = 24.dp),
-                    text = IFly.recognizeResult.value,
-                    fontSize = 21.sp,
-                    color = Color.White
+                    IFly.recognizeResult.value,
+                    Modifier.padding(top = 24.dp).widthIn(100.dp,600.dp),
+                    Color.White,
+                    21.sp
                 )
                 Image(
                     modifier = Modifier.clickable {

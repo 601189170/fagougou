@@ -67,10 +67,12 @@ fun ChatPage(navController: NavController) {
                     }
                     secondButtonText.value = "转人工咨询"
                     secondButtonOnClick.value = {
+                        clear()
                         ChatViewModel.clear()
                         IFly.stopAll()
                         val intent = Intent(activity, TouristsLoginActivity::class.java)
                         activity.startActivity(intent)
+                        navController.safeBack()
                     }
                     content.add(ContentStyle("退出前，请确认本次咨询是否解决您的问题？"))
                 }
