@@ -67,7 +67,7 @@ object TTS {
         mTts.setParameter(SpeechConstant.VOICE_NAME,"xiaoyan")
         //mTts.setParameter(SpeechConstant.TTS_DATA_NOTIFY,"1");//支持实时音频流抛出，仅在synthesizeToUri条件下支持
         //设置合成语速
-        mTts.setParameter(SpeechConstant.SPEED,"88")
+        mTts.setParameter(SpeechConstant.SPEED,MMKV.kv.decodeString(MMKV.robootSpeed,"88"))
         //设置合成音调
         mTts.setParameter(SpeechConstant.PITCH,"45")
         //设置合成音量

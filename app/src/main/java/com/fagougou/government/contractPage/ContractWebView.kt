@@ -1,5 +1,6 @@
 package com.fagougou.government.contractPage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -76,7 +77,9 @@ fun ContractWebView(navController: NavController) {
                         }
                     }
                 },
-                Modifier.fillMaxHeight(0.9f).fillMaxWidth(),
+                Modifier
+                    .fillMaxHeight(0.9f)
+                    .fillMaxWidth(),
             )
             Surface(modifier = Modifier
                 .fillMaxWidth()

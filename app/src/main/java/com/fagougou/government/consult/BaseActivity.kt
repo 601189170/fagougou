@@ -36,6 +36,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        presentation?.mediaPlayer?.pause()
         EventBus.getDefault().unregister(this)
     }
 
