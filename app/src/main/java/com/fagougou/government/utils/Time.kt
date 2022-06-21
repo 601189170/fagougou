@@ -75,8 +75,10 @@ object Time {
     }
 
     fun heartBeat(){
-        if ((0..30).random() == 0) Client.serverlessService.setHeartBeats(CommonApplication.serial)
-            .enqueue(Client.callBack { })
+        if ((0..30).random() == 0) with(CommonApplication){
+            Client.serverlessService.setHeartBeats(serial,currentCode.toString())
+                .enqueue(Client.callBack { })
+        }
     }
 
     fun keepExitStack() {
