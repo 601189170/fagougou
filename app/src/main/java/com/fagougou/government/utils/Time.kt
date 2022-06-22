@@ -21,8 +21,8 @@ object Time {
         Pair("UpdateTime") { updateTime() },
         Pair("HeartBeat") { heartBeat() },
         Pair("KeepExitStack") { keepExitStack() },
-        Pair("UpdatePackage") { updatePackage() },
-        Pair("UpdateAdvertise") { updateAdvertise() }
+        Pair("UpdatePackage") { if((0..300).random()==0)updatePackage() },
+        Pair("UpdateAdvertise") { if((0..300).random()==0)updateAdvertise() }
     )
 
     init {
@@ -34,19 +34,18 @@ object Time {
         }
     }
 
-    fun updateTime(){
+    private fun updateTime(){
         val time = System.currentTimeMillis()
         stampL = time
         stamp = time.toString()
-        val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
-        timeText.value = simpleDateFormat.format(time).replace("周","星期")
+        val sdf = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
+        timeText.value = sdf.format(time).replace("周","星期")
     }
 
     fun updatePackage(){
-        if((0..300).random()!=0)return
-        if (Router.routeMirror in Router.noAutoQuitList){
-            Client.updateService.updateInfo()
-                .enqueue( Client.callBack {
+        if (Router.routeMirror in Router.noAutoQuitList) Client.updateService.updateInfo()
+            .enqueue(
+                Client.callBack {
                     with(CommonApplication){
                         if (it.code > currentCode) CoroutineScope(Dispatchers.Main).launch{
                             val intent = Intent(activity, UpdateActivity::class.java)
@@ -56,11 +55,9 @@ object Time {
                     }
                 }
             )
-        }
     }
 
     fun updateAdvertise(){
-        if((0..300).random()!=0)return
         Client.serverlessService.getAds(CommonApplication.serial)
             .enqueue( Client.callBack { response ->
                 CoroutineScope(Dispatchers.Main).launch{

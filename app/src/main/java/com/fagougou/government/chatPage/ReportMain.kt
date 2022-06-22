@@ -53,15 +53,16 @@ object ReportMainModel {
 fun ReportMain (navController: NavController){
     val navController2 = rememberNavController()
     Column(Modifier.fillMaxSize()) {
-    Header(title = title, navController = navController)
-    Surface(Modifier.fillMaxSize(),color = Color.White) {
-        Row(Modifier.fillMaxSize() ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 2.dp, end = 2.dp, bottom = 2.dp)
-                    .fillMaxSize(0.3f),
-                horizontalAlignment=Alignment.CenterHorizontally) {
-                    Box(modifier = Modifier
+        Header(title, navController)
+        Surface(Modifier.fillMaxSize(),color = Color.White) {
+            Row(Modifier.fillMaxSize() ) {
+                Column(
+                    Modifier
+                        .padding(top = 20.dp, start = 2.dp, end = 2.dp, bottom = 2.dp)
+                        .fillMaxSize(0.3f),
+                    horizontalAlignment=Alignment.CenterHorizontally
+                ) {
+                    Box(Modifier
                         .padding(top = 24.dp)
                         .width(200.dp)
                         .height(64.dp)
@@ -75,105 +76,109 @@ fun ReportMain (navController: NavController){
                                 .fillMaxSize()
                                 .padding(2.dp)
                                 .padding()
-                                .background(Color(if (setTab.value == 0) 0xFF0F87FF else 0xFFFFFFF))
-                            ,verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.Center) {
+                                .background(Color(if (setTab.value == 0) 0xFF0F87FF else 0xFFFFFFF)),
+                            Arrangement.Center,
+                            Alignment.CenterVertically
+                        ) {
                             Image(painterResource(if (setTab.value==0) R.drawable.ic_icon_tab1_true else R.drawable.ic_icon_tab1_false), null)
                             Text(
-                                modifier = Modifier.padding(start = 8.dp),
-                                fontWeight = FontWeight.Bold,
-                                text = "分析报告",
-                                fontSize = 24.sp,
-                                color = Color(if (setTab.value == 0) 0xFFFFFFFF else 0xFF222222)
+                                "分析报告",
+                                Modifier.padding(start = 8.dp),
+                                Color(if (setTab.value == 0) 0xFFFFFFFF else 0xFF222222),
+                                24.sp,
+                                fontWeight = FontWeight.Bold
                             )
                         }
 
                     }
-                if (!cases.isNullOrEmpty()) {
-                    Box(modifier = Modifier
-                        .padding(top = 24.dp)
-                        .width(200.dp)
-                        .height(64.dp)
-                        .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8)),
-                        contentAlignment = Alignment.Center) {
-                        Row(
-                            Modifier.clickable {
-                                    setTab.value = 1
-                                    navController2.navigate(Router.casepage) }
-                                .fillMaxSize()
-                                .padding(2.dp)
-                                .padding()
-                                .background(Color(if (setTab.value == 1) 0xFF0F87FF else 0xFFFFFFF)),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Image(
-                                painterResource(if (setTab.value == 1) R.drawable.ic_icon_tab2_true else R.drawable.ic_icon_tab2_false),
-                                null
-                            )
-                            Text(
-                                modifier = Modifier.padding(start = 8.dp),
-                                text = "相关案例",
-                                fontSize = 24.sp,
-                                color = Color(if (setTab.value == 1) 0xFFFFFFFF else 0xFF222222)
-                            )
-                        }
-                    }
-                }
-                if (!laws.isNullOrEmpty()) {
-                    Box(modifier = Modifier
-                        .padding(top = 24.dp)
-                        .width(200.dp)
-                        .height(64.dp)
-                        .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8)),
-                        contentAlignment = Alignment.Center) {
-                        Row(
+                    if (!cases.isNullOrEmpty()) {
+                        Box(
                             Modifier
-                                .clickable {
-                                    setTab.value = 2
-                                    navController2.navigate(Router.lawspage) }
-                                .fillMaxSize()
-                                .padding(2.dp)
-                                .padding()
-                                .background(Color(if (setTab.value == 2) 0xFF0F87FF else 0xFFFFFFF)),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Image(
-                                painterResource(if (setTab.value == 2) R.drawable.ic_icon_tab3_true else R.drawable.ic_icon_tab3_false),
-                                null
-                            )
-                            Text(
+                                .padding(top = 24.dp)
+                                .width(200.dp)
+                                .height(64.dp)
+                                .border(1.dp, Color(0xFFEBEDF0),
+                            RoundedCornerShape(CORNER_FLOAT8)),
+                            contentAlignment = Alignment.Center) {
+                            Row(
+                                Modifier.clickable {
+                                        setTab.value = 1
+                                        navController2.navigate(Router.casepage) }
+                                    .fillMaxSize()
+                                    .padding(2.dp)
+                                    .padding()
+                                    .background(Color(if (setTab.value == 1) 0xFF0F87FF else 0xFFFFFFF)),
+                                Arrangement.Center,
+                                Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painterResource(if (setTab.value == 1) R.drawable.ic_icon_tab2_true else R.drawable.ic_icon_tab2_false),
+                                    null
+                                )
+                                Text(
+                                    "相关案例",
+                                    Modifier.padding(start = 8.dp),
+                                    Color(if (setTab.value == 1) 0xFFFFFFFF else 0xFF222222),
+                                    24.sp,
+                                )
+                            }
+                        }
+                    }
+                    if (!laws.isNullOrEmpty()) {
+                        Box(
+                            Modifier
+                                .padding(top = 24.dp)
+                                .width(200.dp)
+                                .height(64.dp)
+                                .border(1.dp, Color(0xFFEBEDF0),
+                            RoundedCornerShape(CORNER_FLOAT8)),
+                            contentAlignment = Alignment.Center) {
+                            Row(
+                                Modifier
+                                    .clickable {
+                                        setTab.value = 2
+                                        navController2.navigate(Router.lawspage) }
+                                    .fillMaxSize()
+                                    .padding(2.dp)
+                                    .padding()
+                                    .background(Color(if (setTab.value == 2) 0xFF0F87FF else 0xFFFFFFF)),
+                                Arrangement.Center,
+                                Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painterResource(if (setTab.value == 2) R.drawable.ic_icon_tab3_true else R.drawable.ic_icon_tab3_false),
+                                    null
+                                )
+                                Text(
+                                    "法律依据",
+                                    Modifier.padding(start = 8.dp),
+                                    Color(if (setTab.value == 2) 0xFFFFFFFF else 0xFF222222),
+                                    24.sp,
+                                )
+                            }
+                        }
+                    }
 
-                                modifier = Modifier.padding(start = 8.dp),
-                                text = "法律依据",
-                                fontSize = 24.sp,
-                                color = Color(if (setTab.value == 2) 0xFFFFFFFF else 0xFF222222)
-                            )
+                }
+                Surface(
+                    Modifier.width(1.dp).fillMaxHeight(),
+                    color = Color.LightGray
+                ) {}
+                Surface(
+                    Modifier.fillMaxSize(),
+                    color = Color.White
+                ) {
+                    Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
+                        NavHost(navController2, Router.reportpage, Modifier.fillMaxHeight()) {
+                            composable(Router.lawspage) { LawsPage(navController) }
+                            composable(Router.casepage) { CasesPage(navController) }
+                            composable(Router.reportpage) { Report(navController) }
                         }
                     }
                 }
-
-            }
-            Surface(
-                Modifier
-                    .width(1.dp)
-                    .fillMaxHeight(),color = Color.LightGray) {}
-            Surface(
-                Modifier
-                    .fillMaxSize()
-                ,color = Color.White) {
-                Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
-                    NavHost(navController2, Router.reportpage, Modifier.fillMaxHeight()) {
-                        composable(Router.lawspage) { LawsPage(navController) }
-                        composable(Router.casepage) { CasesPage(navController) }
-                        composable(Router.reportpage) { Report(navController) }
-                    }
-                }
-
             }
         }
-        }
-}
+    }
 }
 
 fun setReportData(bean:AttachmentResponse){
@@ -187,19 +192,4 @@ fun setReportData(bean:AttachmentResponse){
         if (it.title.contains("行动建议")||it.title.contains("流程")){ stepdata=it.content }
         if (it.title.contains("专家")){ sugdata=it.content }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

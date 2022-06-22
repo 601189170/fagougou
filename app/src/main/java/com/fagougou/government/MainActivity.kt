@@ -64,6 +64,7 @@ import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Printer
+import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Time.stampL
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
@@ -75,7 +76,6 @@ import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import timber.log.Timber
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
@@ -89,19 +89,20 @@ class MainActivity : ComponentActivity() {
             manager = getSystemService("zysj") as ZysjSystemManager
         }catch (e:Exception){ }
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
-        permission()
-        mutableListOf<Int>()
+        getPermission()
         setContent {
             GovernmentTheme {
                 Surface(Modifier.height(1024.dp).width(1280.dp) ) {
                     Main()
                     QrCode()
                     Dialog()
-                    Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x22FFFFFF))
+                    Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x06FFFFFF))
                     Loading()
                 }
             }
         }
+        Time.updatePackage()
+        Time.updateAdvertise()
         if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun permission() {
+    private fun getPermission() {
         val mPermissionList = arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
@@ -227,7 +228,8 @@ fun initWindsSetting():WindowManager.LayoutParams{
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.TYPE_PHONE,
-        0, PixelFormat.TRANSPARENT)
+        0, PixelFormat.TRANSPARENT
+    )
     if (Build.VERSION.SDK_INT > 25)  lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
     else  lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE

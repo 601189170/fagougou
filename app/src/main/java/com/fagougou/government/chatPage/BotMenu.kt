@@ -30,7 +30,7 @@ fun BotMenu() {
         6,
         128,
         128,
-        onClick = {
+        {
             with(DialogViewModel) {
                 clear()
                 title = "切换领域"
@@ -46,7 +46,7 @@ fun BotMenu() {
                 content.add( ContentStyle( "选择更换领域后，当前的咨询记录会清除，是否确定更换？" ) )
             }
         },
-        selected = { ChatViewModel.selectedChatBot.value == it.first },
-        background = Color.Transparent
+        { ChatViewModel.selectedChatBot.value == it.first },
+        Color.Transparent
     )
 }
