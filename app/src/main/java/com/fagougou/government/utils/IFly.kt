@@ -23,7 +23,7 @@ import timber.log.Timber
 import java.lang.Exception
 
 object IFly {
-    const val UNWAKE_TEXT = "请说,你好法小萌"
+    const val UNWAKE_TEXT = "请说,你好法小萌或点击下方按钮"
     const val WAKE_TEXT = "请说出您的问题"
     val resultBuilder = StringBuilder()
     val recognizeResult = mutableStateOf(UNWAKE_TEXT)
@@ -81,6 +81,7 @@ object IFly {
         override fun onEvent(eventType: Int, arg1: Int, arg2: Int, obj: Bundle?) { }
 
     }
+
     val wakeupListener = object:WakeuperListener{
         override fun onBeginOfSpeech() { }
 
@@ -126,6 +127,7 @@ object IFly {
     }
 
     fun stopAll(){
+        resultBuilder.clear()
         recognizeResult.value = UNWAKE_TEXT
         mIat.stopListening()
         mIvw.stopListening()

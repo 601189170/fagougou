@@ -86,6 +86,7 @@ fun Header(
                                 IFly.stopAll()
                                 val intent = Intent(activity, TouristsLoginActivity::class.java)
                                 activity.startActivity(intent)
+                                navController.safeBack()
                             },
                         text = "人工",
                         fontSize = 24.sp,
