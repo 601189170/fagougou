@@ -8,6 +8,7 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Process
 import android.provider.Settings
 import android.view.Gravity
 import android.view.MotionEvent
@@ -111,7 +112,13 @@ class MainActivity : ComponentActivity() {
             homeButtonBinding.homeBtn.setOnClickListener {
                 EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
                 Printer.currentJob = null
-                startActivity(Intent(activity, MainActivity::class.java))
+
+                //重启
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                activity.startActivity(intent)
+                Process.killProcess(Process.myPid())
+
             }
             EventBus.getDefault().register(this)
             homeButtonBinding.homeBtn.visibility=View.GONE
