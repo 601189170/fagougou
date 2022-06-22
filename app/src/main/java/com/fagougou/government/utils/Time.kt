@@ -27,7 +27,7 @@ object Time {
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
-            while (true){
+            while (isActive){
                 delay(1000)
                 for(method in hook) method.value.invoke()
             }

@@ -27,7 +27,7 @@ object PAG {
     init {
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Default) {
             var unwakeAlpha = 100
-            while (true) {
+            while (isActive) {
                 delay(50)
                 when (IFly.recognizeResult.value) {
                     IFly.UNWAKE_TEXT -> if (unwakeAlpha < 100) unwakeAlpha = min(unwakeAlpha+10,100)

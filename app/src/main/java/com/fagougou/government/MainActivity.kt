@@ -66,6 +66,7 @@ import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Time.stampL
+import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -73,9 +74,11 @@ import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import timber.log.Timber
 import java.lang.Long.min
 
 class MainActivity : ComponentActivity() {
@@ -87,9 +90,12 @@ class MainActivity : ComponentActivity() {
         activity = this
         try {
             manager = getSystemService("zysj") as ZysjSystemManager
-        }catch (e:Exception){ }
+        }catch (e:Exception){
+            toast("法小萌不兼容该设备")
+        }
+
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
-        getPermission()
+
         setContent {
             GovernmentTheme {
                 Surface(Modifier.height(1024.dp).width(1280.dp) ) {
@@ -101,8 +107,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        Time.updatePackage()
-        Time.updateAdvertise()
+
+        getPermission()
         if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
@@ -117,6 +123,8 @@ class MainActivity : ComponentActivity() {
             homeButtonBinding.homeBtn.visibility=View.GONE
             windowManager.addView(homeButtonBinding.root, initWindsSetting())
         }
+        Time.updatePackage()
+        Time.updateAdvertise()
     }
 
     private fun getPermission() {
@@ -159,7 +167,7 @@ class MainActivity : ComponentActivity() {
 fun Main() {
     val navController = rememberNavController()
     LaunchedEffect("UpdateNavContent") {
-        while (true) {
+        while (isActive) {
             delay(250)
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stampL
@@ -189,11 +197,12 @@ fun Main() {
                 } else if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
             } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
+            Timber.d("routeMirror %s@%d", routeMirror, navController.hashCode())
         }
     }
     Image( painterResource(R.drawable.home_background),null,Modifier.fillMaxSize(),contentScale = ContentScale.Crop )
     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
-        NavHost(navController, Router.register, Modifier.fillMaxHeight()) {
+        NavHost(navController, Router.home, Modifier.fillMaxHeight()) {
             composable(Router.register) { RegisterPage(navController) }
             composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(navController) }

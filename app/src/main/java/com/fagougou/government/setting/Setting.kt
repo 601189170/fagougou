@@ -156,10 +156,7 @@ fun Settings(navController: NavController) {
             Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable {
-
-                },
+                .fillMaxWidth(),
             Arrangement.Start,
             Alignment.CenterVertically
         ) {
@@ -207,11 +204,7 @@ fun Settings(navController: NavController) {
             Modifier
                 .padding(vertical = 32.dp)
                 .padding(end = 32.dp)
-                .fillMaxWidth()
-                .clickable {
-                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
-                    CommonApplication.activity.startActivity(intent)
-                },
+                .fillMaxWidth(),
             Arrangement.SpaceBetween,
             Alignment.CenterVertically) {
             Text(

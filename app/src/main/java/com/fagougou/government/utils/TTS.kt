@@ -9,10 +9,7 @@ import com.fagougou.government.utils.IFly.mIat
 import com.fagougou.government.utils.IFly.mRecognizerListener
 import com.fagougou.government.utils.Tips.toast
 import com.iflytek.cloud.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
@@ -84,7 +81,7 @@ object TTS {
         // 设置参数
         setParam()
         CoroutineScope(Dispatchers.Default).launch{
-            while (true){
+            while (isActive){
                 delay(100)
                 if (TTSQueue.isNotEmpty() && SpeakingProcess==100){
                     SpeakingProcess=0
