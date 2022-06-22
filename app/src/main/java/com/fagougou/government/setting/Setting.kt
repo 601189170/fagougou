@@ -158,8 +158,7 @@ fun Settings(navController: NavController) {
                 .padding(end = 32.dp)
                 .fillMaxWidth()
                 .clickable {
-                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS)
-                    CommonApplication.activity.startActivity(intent)
+
                 },
             Arrangement.Start,
             Alignment.CenterVertically
