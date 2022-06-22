@@ -36,5 +36,4 @@ fun CasePage(navController: NavController) {
             WebView("", data.DocContent)
         }
     }
-
 }

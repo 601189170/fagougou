@@ -48,19 +48,17 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
         }
         when (message.speaker) {
             Speaker.ROBOT -> Row(
-                Modifier
-                    .fillMaxWidth(0.6f)
-                    .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                Modifier.fillMaxWidth(0.6f).padding(vertical = 12.dp),
+                Arrangement.Start,
+                Alignment.CenterVertically
             ) { MessageRect(message, index, scope, keyboardController) }
             Speaker.USER -> Row(
                 Modifier
                     .fillMaxWidth()
                     .padding(end = 20.dp)
                     .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically,
+                Arrangement.End,
+                Alignment.CenterVertically,
             ) { MessageRect(message, index, scope, keyboardController, Dodgerblue, Color.White) }
             Speaker.RECOMMEND -> Column( Modifier.padding(vertical = 12.dp)) {
                 Surface(
@@ -92,7 +90,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                                 elevation = ButtonDefaults.elevation(0.dp)
                             )
                         } else Row(
-                            modifier = Modifier.clickable {
+                            Modifier.clickable {
                                 keyboardController?.hide()
                                 ChatViewModel.history[index] = message.copy(isExpend = true)
                                 if (index == ChatViewModel.history.lastIndex) scope.launch(
@@ -146,11 +144,9 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                 }
             }
             Speaker.COMPLEX -> Row(
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                Modifier.fillMaxWidth(0.6f).padding(vertical = 16.dp),
+                Arrangement.Start,
+                Alignment.CenterVertically
             ) { ComplexRect(message, index, keyboardController ,navController = navController) }
         }
     }
