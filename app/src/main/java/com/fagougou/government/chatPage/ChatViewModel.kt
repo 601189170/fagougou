@@ -166,7 +166,8 @@ object ChatViewModel {
             Complex.bodyList.addAll(content.body)
             Complex.caseList.addAll(content.cases)
             withContext(Dispatchers.Main) {
-                if (outerBody.data.title.contains("分析报告")){
+                var chartype=outerBody.data.content.chart.data;
+                if (chartype.isNotEmpty()){
                     setReportData(outerBody)
                     navController.navigate(Router.reportMain)
                 }else{
