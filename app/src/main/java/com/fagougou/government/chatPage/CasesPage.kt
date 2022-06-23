@@ -38,35 +38,39 @@ fun CasesPage (navController: NavController){
         horizontalAlignment= Alignment.CenterHorizontally
     ) {
         items(cases){
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .clickable { getCaseSeria(it,scope,navController) }
-                .padding(top = 24.dp)
-                .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8))
-                ,contentAlignment = Alignment.CenterStart) {
-                Row(verticalAlignment= Alignment.CenterVertically ,
-                    modifier = Modifier.padding(top = 32.dp, start = 32.dp, bottom = 32.dp)) {
+            Spacer(Modifier.height(24.dp).width(24.dp))
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .border(1.dp, Color(0xFFEBEDF0), RoundedCornerShape(CORNER_FLOAT8))
+                    .clickable {
+                        getCaseSeria(it, scope, navController)
+                    },
+                contentAlignment = Alignment.CenterStart) {
+                Row(
+                    Modifier
+                        .padding(top = 32.dp, start = 32.dp, bottom = 32.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Image(painterResource(R.drawable.ic_icon_aboutcase), null)
                     Column(modifier = Modifier.padding(start = 16.dp)) {
                         Text(
+                            it.name,
                             fontWeight = FontWeight.Bold,
-                            text = it.name,
                             fontSize = 24.sp,
                             color = Color(0xFF222222)
                         )
                         Text(
-                            modifier = Modifier.padding(top = 8.dp),
-                            text = "日期："+it.date+"  "+it.court,
-                            fontSize = 20.sp,
-                            color = Color(0xFF909499)
+                            "日期："+it.date+"  "+it.court,
+                            Modifier.padding(top = 8.dp),
+                            Color(0xFF909499),
+                            20.sp
                         )
                     }
                 }
             }
         }
-
     }
-
 }
 
 

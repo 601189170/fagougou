@@ -99,15 +99,18 @@ fun ReportMain (navController: NavController){
                                 .height(64.dp)
                                 .border(1.dp, Color(0xFFEBEDF0),
                             RoundedCornerShape(CORNER_FLOAT8)),
-                            contentAlignment = Alignment.Center) {
+                            contentAlignment = Alignment.Center
+                        ) {
                             Row(
-                                Modifier.clickable {
-                                        setTab.value = 1
-                                        navController2.navigate(Router.casepage) }
+                                Modifier
                                     .fillMaxSize()
                                     .padding(2.dp)
                                     .padding()
-                                    .background(Color(if (setTab.value == 1) 0xFF0F87FF else 0xFFFFFFF)),
+                                    .background(Color(if (setTab.value == 1) 0xFF0F87FF else 0xFFFFFFF))
+                                    .clickable {
+                                        setTab.value = 1
+                                        navController2.navigate(Router.casepage)
+                                    },
                                 Arrangement.Center,
                                 Alignment.CenterVertically
                             ) {
@@ -188,7 +191,7 @@ fun setReportData(bean:AttachmentResponse){
     toplist= content?.contexts!!
     cases.addAll(bean.data.content.cases)
     laws.addAll(bean.data.content.laws)
-    content?.body?.forEach(){
+    content?.body?.forEach{
         if (it.title.contains("行动建议")||it.title.contains("流程")){ stepdata=it.content }
         if (it.title.contains("专家")){ sugdata=it.content }
     }

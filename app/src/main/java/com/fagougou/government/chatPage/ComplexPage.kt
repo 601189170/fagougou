@@ -121,13 +121,13 @@ fun ComplexPage(navController: NavController) {
             Row(Modifier.fillMaxWidth().padding(vertical = 24.dp), Arrangement.SpaceEvenly) {
                 if(bodyList.isNotEmpty() && caseList.isNotEmpty()){
                     Button(
-                        onClick = { selectPage.value = "body" },
+                        { selectPage.value = "body" },
                         content = { Text("法律建议", color = if(selectPage.value == "body")Dodgerblue else Color.Gray) },
                         colors = ButtonDefaults.buttonColors(Color.White),
                         border = BorderStroke(2.dp, if(selectPage.value == "body")Dodgerblue else Color.Gray)
                     )
                     Button(
-                        onClick = { selectPage.value = "case" },
+                        { selectPage.value = "case" },
                         content = { Text("判决案例", color = if(selectPage.value == "case")Dodgerblue else Color.Gray) },
                         colors = ButtonDefaults.buttonColors(Color.White),
                         border = BorderStroke(2.dp, if(selectPage.value == "case")Dodgerblue else Color.Gray)

@@ -216,6 +216,31 @@ fun Settings(navController: NavController) {
                 letterSpacing = 1.2f.sp
             )
         }
-
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
+        Row(
+            Modifier
+                .padding(vertical = 32.dp)
+                .padding(end = 32.dp)
+                .fillMaxWidth(),
+            Arrangement.SpaceBetween,
+            Alignment.CenterVertically) {
+            Text(
+                "版本号:${CommonApplication.currentCode}",
+                Modifier.padding(start = 32.dp),
+                Color.White,
+                24.sp,
+                lineHeight = 35.sp,
+                letterSpacing = 1.2f.sp
+            )
+        }
+        Divider(
+            Modifier.padding(top = 5.dp),
+            color = Color(0xFFFFFFFF),
+            thickness = 2.dp,
+        )
     }
 }
