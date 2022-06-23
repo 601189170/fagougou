@@ -117,7 +117,7 @@ fun MessageRect(
                         onClick = { offset ->
                             keyboardController?.hide()
                             annotatedString.getStringAnnotations("policy", offset, offset).firstOrNull()?.let {
-                                ChatViewModel.getDefInfo(it.item);
+                                ChatViewModel.getDefInfo(it.item)
                             }
                         }
                     )

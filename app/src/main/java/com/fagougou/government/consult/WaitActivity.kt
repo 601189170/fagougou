@@ -26,7 +26,7 @@ class WaitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CommonApplication.activity = this
-        binding = ActivityWaitBinding.inflate(layoutInflater);
+        binding = ActivityWaitBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ImSdkUtils.initKfHelper()
         ImSdkUtils.helper?.let {
@@ -35,7 +35,7 @@ class WaitActivity : AppCompatActivity() {
         YKFCallManager.cameraRotation=0
         binding.leftBtn.setOnClickListener {}
         binding.rightBtn.setOnClickListener { finish() }
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -59,7 +59,7 @@ class WaitActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this);//反注册EventBus
+        EventBus.getDefault().unregister(this)//反注册EventBus
     }
 
 }

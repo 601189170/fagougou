@@ -32,9 +32,7 @@ public class MessageCheckUtils {
      */
     public static boolean checkPhone(String phone) {
         if (!TextUtils.isEmpty(phone)) {
-            if (checkChinaMobile(phone) || checkChinaUnicom(phone) || checkChinaTelecom(phone)) {
-                return true;
-            }
+            return checkChinaMobile(phone) || checkChinaUnicom(phone) || checkChinaTelecom(phone);
         }
         return false;
     }
@@ -48,9 +46,7 @@ public class MessageCheckUtils {
     public static boolean checkChinaMobile(String phone) {
         if (!TextUtils.isEmpty(phone)) {
             Pattern regexp = Pattern.compile(CHINA_MOBILE_PATTERN);
-            if (regexp.matcher(phone).matches()) {
-                return true;
-            }
+            return regexp.matcher(phone).matches();
         }
         return false;
     }
@@ -65,9 +61,7 @@ public class MessageCheckUtils {
     public static boolean checkChinaUnicom(String phone) {
         if (!TextUtils.isEmpty(phone)) {
             Pattern regexp = Pattern.compile(CHINA_UNICOM_PATTERN);
-            if (regexp.matcher(phone).matches()) {
-                return true;
-            }
+            return regexp.matcher(phone).matches();
         }
         return false;
     }
@@ -82,9 +76,7 @@ public class MessageCheckUtils {
     public static boolean checkChinaTelecom(String phone) {
         if (!TextUtils.isEmpty(phone)) {
             Pattern regexp = Pattern.compile(CHINA_TELECOM_PATTERN);
-            if (regexp.matcher(phone).matches()) {
-                return true;
-            }
+            return regexp.matcher(phone).matches();
         }
         return false;
     }
@@ -94,17 +86,9 @@ public class MessageCheckUtils {
      */
     public static boolean isLegalName(String name){
         if (name.contains("·") || name.contains("•")){
-            if (name.matches("^[\u4e00-\u9fa5]+[·•][\u4e00-\u9fa5]+$")){
-                return true;
-            }else {
-                return false;
-            }
+            return name.matches("^[\u4e00-\u9fa5]+[·•][\u4e00-\u9fa5]+$");
         }else {
-            if (name.matches("^[\u4e00-\u9fa5]+$")){
-                return true;
-            }else {
-                return false;
-            }
+            return name.matches("^[\u4e00-\u9fa5]+$");
         }
     }
 
@@ -143,11 +127,7 @@ public class MessageCheckUtils {
         String mantissa = IDENTITY_MANTISSA[mantissaIndex];
 
         String lastChar = identity.substring(17);
-        if (lastChar.equalsIgnoreCase(mantissa)) {
-            return true;
-        } else {
-            return false;
-        }
+        return lastChar.equalsIgnoreCase(mantissa);
     }
 
 

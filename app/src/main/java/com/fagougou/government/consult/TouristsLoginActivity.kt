@@ -131,7 +131,7 @@ class TouristsLoginActivity : BaseActivity() {
     }
 
     fun isPost() {
-        val name = binding.edName.text.toString().trim();
+        val name = binding.edName.text.toString().trim()
         val phone = binding.edPhone.text.toString().trim()
         val cardNo = binding.edCard.text.toString().trim()
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(cardNo)) {
@@ -146,7 +146,7 @@ class TouristsLoginActivity : BaseActivity() {
     }
 
     fun PostMsg() {
-        val name = binding.edName.text.toString().trim();
+        val name = binding.edName.text.toString().trim()
         val phone = binding.edPhone.text.toString().trim()
         val cardNo = binding.edCard.text.toString().trim()
         when {

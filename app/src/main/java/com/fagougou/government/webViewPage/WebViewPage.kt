@@ -46,7 +46,7 @@ fun WebView(urlAddress:String, data:String){
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                 setInitialScale(80)
                 settings.javaScriptEnabled = true
-                settings.textZoom=((settings.getTextZoom() * 1.2).toInt());
+                settings.textZoom=((settings.textZoom * 1.2).toInt())
 
                 webChromeClient = WebChromeClient()
                 if(data!="")loadData(data,"text/html; charset=utf-8", "utf-8")

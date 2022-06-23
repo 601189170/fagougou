@@ -166,7 +166,7 @@ object ChatViewModel {
             Complex.bodyList.addAll(content.body)
             Complex.caseList.addAll(content.cases)
             withContext(Dispatchers.Main) {
-                var chartype=outerBody.data.content.chart.data;
+                var chartype=outerBody.data.content.chart.data
                 if (chartype.isNotEmpty()){
                     setReportData(outerBody)
                     navController.navigate(Router.reportMain)

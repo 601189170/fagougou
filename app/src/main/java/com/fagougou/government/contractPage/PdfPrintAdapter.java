@@ -26,12 +26,12 @@ import java.util.List;
 
 public class PdfPrintAdapter extends PrintDocumentAdapter {
 
-    private Context context;
+    private final Context context;
     private int pageHeight;
     private int pageWidth;
     private PdfDocument mPdfDocument;
     private int totalpages = 1;
-    private File pdfFile;
+    private final File pdfFile;
     private List<Bitmap> mlist;
 
     public PdfPrintAdapter(Context context, File pdfFile) {

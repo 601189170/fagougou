@@ -4,7 +4,7 @@ import com.fagougou.government.repo.Client
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 
 class ParametersIntercept : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -20,7 +20,7 @@ class ParametersIntercept : Interceptor {
                     .replace("\"}]}}],\"bestScore\"","\"}}}],\"bestScore\"")
                     .replace("\n","")
                 val contentType = response.body!!.contentType()
-                val body = ResponseBody.create(contentType,bodyString)
+                val body = bodyString.toResponseBody(contentType)
                 return response.newBuilder().body(body).build()
             }catch (e:Exception){
                 Client.handleException(e)

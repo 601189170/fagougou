@@ -26,7 +26,7 @@ class ChooseDomainActivity : BaseActivity() {
         binding.topLayout.tvBack.setOnClickListener { finish() }
         binding.topLayout.tvWechat.setOnClickListener { WechatDialog(this).show() }
         binding.topLayout.tvZn.setOnClickListener { finish() }
-        binding.recyclerView.setLayoutManager(GridLayoutManager(this, 5))
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 5)
         binding.recyclerView.adapter=madapter
         val botResMap = mapOf(
             Pair("公司财税", R.drawable.bot_tax),

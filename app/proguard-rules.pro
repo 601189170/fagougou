@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.fagougou.repo.**,** {*;}
+-keep class !com.fagougou.**,com.fagougou.repo.**,** {*;}
+-keepattributes Signature
