@@ -6,7 +6,7 @@
 
     </solid>
      <stroke
-        android:color="@color/dialog_bg_wihte"
+        android:color="@color/dialog_bg_white"
          android:width="1dp">
 
     </stroke>

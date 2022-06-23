@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/top_layout"
-        layout="@layout/layout_top_titile">
+        layout="@layout/layout_top_title">
 
     </include>
 
@@ -139,7 +139,8 @@
                 android:layout_marginLeft="40dp"
                 android:id="@+id/img_man"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription">
 
             </ImageView>
             <TextView
@@ -163,7 +164,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/img_mark_man"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription">
 
             </ImageView>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,7 +189,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="40dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription">
 
             </ImageView>
             <TextView
@@ -210,7 +213,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/img_mark_woman"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription">
 
             </ImageView>
 

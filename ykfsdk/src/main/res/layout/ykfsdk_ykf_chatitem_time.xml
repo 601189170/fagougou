@@ -26,7 +26,7 @@
         android:visibility="gone"
         android:background="@drawable/bottom_chat_tips_bg"
         android:paddingHorizontal="20dp"
-        android:textColor="@color/dialog_bg_wihte"
+        android:textColor="@color/dialog_bg_white"
         android:layout_below="@+id/chatting_time_tv"
         android:drawableLeft="@drawable/icon_tips"
         android:drawablePadding="4dp"

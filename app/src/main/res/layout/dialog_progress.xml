@@ -12,7 +12,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/fagougou"
-        android:layout_marginRight="4dp"/>
+        android:layout_marginRight="4dp"
+        tools:ignore="ContentDescription" />
     <TextView
         android:id="@+id/tvDialogTitle"
         android:layout_width="match_parent"
@@ -21,16 +22,17 @@
         android:textSize="14sp"
         android:textColor="@color/app_dialog_title_color"
         android:text="@string/app_updater_progress_notification_title"/>
+
     <TextView
         android:id="@+id/tvProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDialogTitle"
         android:layout_marginTop="10dp"
+        android:lineSpacingMultiplier="1.2"
         android:text="@string/app_updater_start_notification_content"
-        android:textSize="14sp"
         android:textColor="@color/app_dialog_content_color"
-        android:lineSpacingMultiplier="1.2" />
+        android:textSize="14sp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
