@@ -77,7 +77,7 @@ object DialogViewModel {
     }
 
     fun confirmPrint(mode:String) {
-        GenerateContractViewModel.lastModifier = Time.stamp
+        GenerateContractViewModel.lastModifier = Time.stamp.toString()
         clear()
         title = "即将进行打印"
         content.add(ContentStyle("按下确认键开始打印当前合同"))

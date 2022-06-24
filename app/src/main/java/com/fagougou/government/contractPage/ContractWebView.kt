@@ -97,8 +97,7 @@ fun ContractWebView(navController: NavController) {
                         .width(200.dp),
                     onClick = {
                         ContractViewModel.pdfFile?.let {
-                            QrCodeViewModel.content.value = BaseLoadUrl+ it.id
-                            QrCodeViewModel.hint.value = "微信扫码下载"
+                            QrCodeViewModel.set(BaseLoadUrl+ it.id,"微信扫码下载")
                         }
                     },
                     content = {

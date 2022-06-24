@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.AppUtils
 import com.eseid.sdtapi.*
@@ -16,15 +15,12 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.ActivityReadCardMsgBinding
-import com.fagougou.government.presentation.BannerPresentation
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
-import com.fagougou.government.utils.ZYSJ
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.MessageEvent
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -76,7 +72,6 @@ class TouristsLoginActivity : BaseActivity() {
             binding.edPhone.setText("18672889523")
             binding.edCard.setText("429004199506150931")
         }
-
         EventBus.getDefault().post(MessageEvent(MessageConstans.PalyVideoHumanAre))
     }
 
@@ -91,7 +86,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
-                Router.lastTouchTime = Time.stampL
+                Router.lastTouchTime = Time.stamp
                 isPost()
                 binding.tipsName.visibility =
                     if (MessageCheckUtils.isLegalName(editable.toString())) View.GONE else View.VISIBLE
@@ -101,7 +96,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
-                Router.lastTouchTime = Time.stampL
+                Router.lastTouchTime = Time.stamp
                 isPost()
                 binding.tipsPhone.visibility =
                     if (MessageCheckUtils.checkPhone(editable.toString())) View.GONE else View.VISIBLE
@@ -111,7 +106,7 @@ class TouristsLoginActivity : BaseActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
-                Router.lastTouchTime = Time.stampL
+                Router.lastTouchTime = Time.stamp
                 isPost()
                 binding.tipsCard.visibility =
                     if (MessageCheckUtils.isLegalPattern(editable.toString())) View.GONE else View.VISIBLE
@@ -123,8 +118,7 @@ class TouristsLoginActivity : BaseActivity() {
         binding.btnPost.setOnClickListener { PostMsg() }
         binding.topLayout.tvBack.setOnClickListener { finish() }
         binding.topLayout.tvWechat.setOnClickListener {
-            QrCodeViewModel.clear()
-            QrCodeViewModel.content.value = QrCodeViewModel.constWechatUrl()
+            QrCodeViewModel.set(QrCodeViewModel.constWechatUrl(),"微信扫码查看")
             wechatDialog.show()
         }
         binding.topLayout.tvZn.setOnClickListener { finish() }

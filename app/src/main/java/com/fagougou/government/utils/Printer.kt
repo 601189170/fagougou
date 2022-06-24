@@ -9,8 +9,6 @@ import android.webkit.WebView
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.ContractViewModel
-import com.fagougou.government.contractPage.ContractWebView
 import com.fagougou.government.contractPage.PdfPrintAdapter
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.utils.Tips.toast
@@ -44,7 +42,7 @@ object Printer {
         CoroutineScope(Dispatchers.Default).launch {
             while (currentJob!=null){
                 delay(250)
-                Router.lastTouchTime = Time.stampL
+                Router.lastTouchTime = Time.stamp
                 when {
                     currentJob?.isCompleted == true -> currentJob = null
                     currentJob?.isFailed == true -> {

@@ -159,7 +159,7 @@ fun GenerateContract(navController: NavController) {
                                     else -> TextField(
                                         child.input.value,
                                         {
-                                            Router.lastTouchTime = Time.stampL
+                                            Router.lastTouchTime = Time.stamp
                                             child.input.value = it
                                             lastModifier = child.variable
                                         },

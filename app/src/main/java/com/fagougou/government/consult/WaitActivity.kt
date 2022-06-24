@@ -2,7 +2,6 @@ package com.fagougou.government.consult
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.CommonApplication
@@ -12,7 +11,6 @@ import com.fagougou.government.Router
 import com.fagougou.government.databinding.ActivityWaitBinding
 import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.Time
-import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.MessageConstans.*
 import com.m7.imkfsdk.chat.MessageEvent
 import com.m7.imkfsdk.video.YKFCallManager
@@ -43,7 +41,7 @@ class WaitActivity : AppCompatActivity() {
         when(messageEvent.message){
             CloseWait->{ finish() }
 
-            RefreshTime->{ Router.lastTouchTime = Time.stampL }
+            RefreshTime->{ Router.lastTouchTime = Time.stamp }
 
             CloseToMain->{
                 ActivityUtils.finishToActivity(MainActivity::class.java, false)

@@ -67,10 +67,9 @@ fun Header(
                 Alignment.CenterVertically
             ) {
                 if(qrCode.isNotBlank()) Row(
-                    Modifier.fillMaxHeight().clickable {
-                        QrCodeViewModel.content.value = qrCode
-                        QrCodeViewModel.hint.value = qrCodeHint
-                    },
+                    Modifier
+                        .fillMaxHeight()
+                        .clickable { QrCodeViewModel.set(qrCode,qrCodeHint) },
                     Arrangement.Start,
                     Alignment.CenterVertically
                 ){

@@ -15,6 +15,7 @@ class WechatDialog(context: Context) : BaseDialog(context, R.style.shareDialog) 
         binding = WechatLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.code.setImageBitmap(QrCodeViewModel.bitmap())
+        binding.tvHint.text = QrCodeViewModel.hint
         binding.close.setOnClickListener{
             QrCodeViewModel.clear()
             cancel()

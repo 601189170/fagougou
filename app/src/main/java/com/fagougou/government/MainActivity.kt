@@ -42,7 +42,7 @@ import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
 import com.fagougou.government.component.Loading
-import com.fagougou.government.component.QrCode
+import com.fagougou.government.component.GlobalQrCode
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.consult.ChooseDomainActivity
 import com.fagougou.government.consult.TouristsLoginActivity
@@ -66,7 +66,7 @@ import com.fagougou.government.statisticPage.StatisticPage
 import com.fagougou.government.ui.theme.GovernmentTheme
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Time.stampL
+import com.fagougou.government.utils.Time.stamp
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
@@ -94,22 +94,8 @@ class MainActivity : ComponentActivity() {
         }catch (e:Exception){
             toast("法小萌不兼容该设备")
         }
-
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
 
-        setContent {
-            GovernmentTheme {
-                Surface(Modifier.height(1024.dp).width(1280.dp) ) {
-                    Main()
-                    QrCode()
-                    Dialog()
-                    Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x06FFFFFF))
-                    Loading()
-                }
-            }
-        }
-
-        getPermission()
         if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
@@ -130,6 +116,18 @@ class MainActivity : ComponentActivity() {
             homeButtonBinding.homeBtn.visibility=View.GONE
             windowManager.addView(homeButtonBinding.root, initWindsSetting())
         }
+        getPermission()
+        setContent {
+            GovernmentTheme {
+                Surface(Modifier.height(1024.dp).width(1280.dp) ) {
+                    Main()
+                    GlobalQrCode()
+                    Dialog()
+                    Text("${min(routeRemain.value / 1000L, 150L)}", color = Color(0x06FFFFFF))
+                    Loading()
+                }
+            }
+        }
         Time.updatePackage()
         Time.updateAdvertise()
     }
@@ -149,7 +147,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        lastTouchTime = stampL
+        lastTouchTime = stamp
         return super.dispatchTouchEvent(ev)
     }
 
@@ -177,7 +175,7 @@ fun Main() {
         while (isActive) {
             delay(250)
             if (routeMirror !in noAutoQuitList) {
-                routeRemain.value = touchWaitTime + lastTouchTime - stampL
+                routeRemain.value = touchWaitTime + lastTouchTime - stamp
                 if (routeRemain.value < 0) {
                     DialogViewModel.clear()
                     ChatViewModel.clear()
@@ -204,7 +202,7 @@ fun Main() {
                 } else if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
             } else routeRemain.value = Long.MAX_VALUE
             routeMirror = navController.currentDestination?.route ?: ""
-            Timber.d("routeMirror %s@%d", routeMirror, navController.hashCode())
+            if((0..7).random()==0)Timber.d("routeMirror %s@%d", routeMirror, navController.hashCode())
         }
     }
     Image( painterResource(R.drawable.home_background),null,Modifier.fillMaxSize(),contentScale = ContentScale.Crop )

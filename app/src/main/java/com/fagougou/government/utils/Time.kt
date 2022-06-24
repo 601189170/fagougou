@@ -13,16 +13,15 @@ import java.util.*
 object Time {
 
     val timeText = mutableStateOf("")
-    var stampL = 0L
-    var stamp = "0"
+    var stamp = 0L
     var exitStack = 8
 
     val hook = mutableMapOf(
         Pair("UpdateTime") { updateTime() },
         Pair("HeartBeat") { heartBeat() },
         Pair("KeepExitStack") { keepExitStack() },
-        Pair("UpdatePackage") { if((0..300).random()==0)updatePackage() },
-        Pair("UpdateAdvertise") { if((0..300).random()==0)updateAdvertise() }
+        Pair("UpdatePackage") { if((0..180).random()==0)updatePackage() },
+        Pair("UpdateAdvertise") { if((0..180).random()==0)updateAdvertise() }
     )
 
     init {
@@ -36,18 +35,17 @@ object Time {
 
     private fun updateTime(){
         val time = System.currentTimeMillis()
-        stampL = time
-        stamp = time.toString()
+        stamp = time
         val sdf = SimpleDateFormat("yyyy年MM月dd日 E HH:mm", Locale.getDefault())
         timeText.value = sdf.format(time).replace("周","星期")
     }
 
     fun updatePackage(){
-        if (Router.routeMirror in Router.noAutoQuitList) Client.updateService.updateInfo()
-            .enqueue(
+        if (Router.routeMirror in Router.noAutoQuitList) {
+            Client.updateService.updateInfo().enqueue(
                 Client.callBack {
-                    with(CommonApplication){
-                        if (it.code > currentCode) CoroutineScope(Dispatchers.Main).launch{
+                    with(CommonApplication) {
+                        if (it.code > currentCode) CoroutineScope(Dispatchers.Main).launch {
                             val intent = Intent(activity, UpdateActivity::class.java)
                             intent.putExtra("downloadUrl", it.url)
                             activity.startActivity(intent)
@@ -55,6 +53,7 @@ object Time {
                     }
                 }
             )
+        }
     }
 
     fun updateAdvertise(){

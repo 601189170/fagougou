@@ -8,16 +8,9 @@ import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
-import com.fagougou.government.chatPage.ChatViewModel.botQueryIdMap
 import com.fagougou.government.generateContract.GenerateContractViewModel
-import com.fagougou.government.model.Auth
-import com.fagougou.government.model.AuthRequest
-import com.fagougou.government.model.BotList
 import com.fagougou.government.presentation.BannerPresentation
-import com.fagougou.government.repo.Client.apiService
-import com.fagougou.government.repo.Client.handleException
 import com.fagougou.government.utils.IFly
-import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.TTS
 import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
@@ -29,7 +22,7 @@ import timber.log.Timber
 class CommonApplication: Application(){
     companion object {
         lateinit var activity: ComponentActivity
-        val serial = if(Build.VERSION.SDK_INT>25) Build.getSerial() else Build.SERIAL
+        val serial = if(Build.VERSION.SDK_INT in (26..28) ) Build.getSerial() else if(Build.VERSION.SDK_INT<26) Build.SERIAL else "EJT8XS3DSY"
         var presentation : BannerPresentation? = null
         var currentCode = Int.MAX_VALUE
     }

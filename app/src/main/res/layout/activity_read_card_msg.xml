@@ -193,16 +193,18 @@
                 tools:ignore="ContentDescription">
 
             </ImageView>
+
             <TextView
                 android:id="@+id/tv_woman"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/img_woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="女性"
                 android:textColor="#303133"
                 android:textSize="24sp"
-                android:text="女性"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/img_woman"
+                app:layout_constraintTop_toTopOf="parent">
 
             </TextView>
 

@@ -33,7 +33,6 @@ import com.fagougou.government.utils.Time
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -91,7 +90,7 @@ fun InputBox(scope: CoroutineScope,keyboardController:SoftwareKeyboardController
                 ChatViewModel.textInputContent.value,
                 {
                     ChatViewModel.textInputContent.value = it
-                    Router.lastTouchTime = Time.stampL
+                    Router.lastTouchTime = Time.stamp
                 },
                 Modifier
                     .fillMaxWidth(0.85f)

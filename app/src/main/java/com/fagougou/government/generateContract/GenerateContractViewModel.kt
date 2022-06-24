@@ -19,7 +19,7 @@ object GenerateContractViewModel {
     var template = ""
     val data = mutableStateOf("")
     val formList = mutableStateListOf(GenerateForm())
-    var lastModifier = Time.stamp
+    var lastModifier = Time.stamp.toString()
 
     fun init(context: Context) {
         val file = context.assets.open("html/generateContract.html")
@@ -40,7 +40,7 @@ object GenerateContractViewModel {
         template = ""
         data.value = ""
         formList.clear()
-        lastModifier = Time.stamp
+        lastModifier = Time.stamp.toString()
     }
 
     suspend fun getGenerateForm(id: String) {

@@ -30,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        Router.lastTouchTime = Time.stampL
+        Router.lastTouchTime = Time.stamp
         return super.dispatchTouchEvent(ev)
     }
 
@@ -53,7 +53,7 @@ open class BaseActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             CloseWait ->{ finish() }
-            RefreshTime ->{ Router.lastTouchTime = Time.stampL }
+            RefreshTime ->{ Router.lastTouchTime = Time.stamp }
             PalyVideoHumanAre ->{ presentation?.playVideo(R.raw.vh_human_area) }
             PalyVideoHuman -> { presentation?.playVideo(R.raw.vh_human) }
             CloseAction -> { if (diallog?.isShowing==false &&!isFinishing){ diallog?.RefreshShow() } }
