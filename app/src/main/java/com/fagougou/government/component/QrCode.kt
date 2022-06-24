@@ -28,8 +28,10 @@ object QrCodeViewModel {
     }
     val content = mutableStateOf("")
     val hint = mutableStateOf("")
+    val fileQRcode = mutableStateOf("")
 
     fun bitmap() = CodeUtils.createQRCode(content.value, 256, null, Color.BLACK)
+    fun FileUploadBitmap() = CodeUtils.createQRCode(fileQRcode.value, 256, null, Color.BLACK)
 
     fun clear(){
         content.value = ""

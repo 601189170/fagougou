@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CameraView">
+        <attr name="face_type" format="enum">
+            <enum name="detect" value="1"/>
+            <enum name="liveness" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>
