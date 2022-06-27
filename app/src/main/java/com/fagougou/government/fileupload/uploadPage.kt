@@ -1,6 +1,7 @@
 package com.fagougou.government.fileupload
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,18 +21,41 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
+import com.fagougou.government.chatPage.Case
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.model.CaseResponse
+import com.fagougou.government.model.uploadBean
+import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
+import kotlinx.coroutines.*
 import timber.log.Timber
+object uploadModel{
+
+    var navController2:NavController?=null
+
+    init {
+        CoroutineScope(Dispatchers.Default).launch(Dispatchers.Default) {
+            while (true){
+                delay(1500)
+                val response = Client.serverlessService.uploadFile(CommonApplication.serial + "_" + System.currentTimeMillis() / 1000 + ".pdf").execute()
+               if (response.code()==200){
+                   val body = response.body() ?: uploadBean("")
+                   withContext(Dispatchers.Main){
+                       navController2?.navigate(Router.previewload)
+                   }
+               }
+
+            }
+        }
+    }
+}
 
 @Composable
-
 fun uploadPage(navController: NavController) {
-
+    uploadModel.navController2 = navController
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
-
     LaunchedEffect( null ){
         val url = "https://a.b/selfPrint?taskId="+Time.stamp+"_"+(0..999999).random()
         uploadBitmap.value=QrCodeViewModel.bitmap(url)

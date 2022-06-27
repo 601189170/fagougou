@@ -123,4 +123,5 @@ dependencies {
     implementation 'com.umeng.umsdk:common:9.4.7'
     implementation 'com.umeng.umsdk:asms:1.4.0'
 
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 }

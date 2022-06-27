@@ -8,21 +8,51 @@
 
    <WebView
        android:id="@+id/web"
+       android:layout_marginBottom="75dp"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 
    </WebView>
-
+   <LinearLayout
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       android:background="@color/white"
+       android:orientation="horizontal"
+       android:gravity="center"
+       android:layout_width="match_parent"
+       android:layout_height="75dp">
    <Button
+       android:layout_margin="5dp"
+       android:paddingHorizontal="@dimen/dp_10"
+       android:background="@drawable/contract_btn_bg"
        app:layout_constraintLeft_toLeftOf="parent"
        app:layout_constraintRight_toRightOf="parent"
        android:text="返回"
+       android:textSize="20sp"
+       android:textColor="@color/white"
        android:id="@+id/btn_cancel"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        tools:ignore="MissingConstraints">
 
    </Button>
+      <Button
+          android:layout_margin="5dp"
+          android:paddingHorizontal="@dimen/dp_10"
+          android:background="@drawable/contract_btn_bg"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          android:text="打印报告"
+          android:textSize="20sp"
+          android:textColor="@color/white"
+          android:id="@+id/btn_print"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:ignore="MissingConstraints">
+
+      </Button>
+   </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

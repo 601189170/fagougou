@@ -37,24 +37,30 @@
 
     </TextView>
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/img"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/page_num"
-        android:layout_marginTop="20dp"
-        android:layout_width="300dp"
-        android:layout_height="500dp">
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="180dp"
+        android:layout_marginTop="175dp"
+        android:layout_marginBottom="75dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp" />
     <LinearLayout
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
         <Button
+            android:layout_margin="5dp"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:background="@drawable/contract_btn_bg"
             android:text="取消"
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -64,6 +70,9 @@
             tools:ignore="MissingConstraints">
         </Button>
         <Button
+            android:layout_margin="5dp"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:background="@drawable/contract_btn_bg"
             android:text="重新扫描当前页"
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -74,6 +83,9 @@
         </Button>
 
         <Button
+            android:layout_margin="5dp"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:background="@drawable/contract_btn_bg"
             android:text="扫描下一页"
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -84,6 +96,9 @@
         </Button>
 
         <Button
+            android:layout_margin="5dp"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:background="@drawable/contract_btn_bg"
             android:text="已全部扫描完成"
             android:textColor="@color/white"
             android:textSize="20dp"

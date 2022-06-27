@@ -16,4 +16,7 @@ interface ServerlessService {
     @GET("GetAboutUs")
     fun getAboutUs(@Query("serial") serial:String): Call<AboutUs>
 
+    @GET("https://upload-1251511189.cos.ap-nanjing.myqcloud.com/{serial}")
+    fun uploadFile(@Path("serial") serial:String): Call<uploadBean>
+
 }

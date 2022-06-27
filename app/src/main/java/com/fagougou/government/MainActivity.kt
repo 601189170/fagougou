@@ -53,6 +53,8 @@ import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
+import com.fagougou.government.fileupload.previewload
+import com.fagougou.government.fileupload.resultWebviewPage
 import com.fagougou.government.fileupload.scanupload
 import com.fagougou.government.fileupload.uploadPage
 import com.fagougou.government.generateContract.GenerateContract
@@ -233,6 +235,8 @@ fun Main() {
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { uploadPage(navController) }
             composable(Router.scanupload) { scanupload(navController) }
+            composable(Router.resultWebview) { resultWebviewPage(navController) }
+            composable(Router.previewload) { previewload(navController) }
         }
     }
 }

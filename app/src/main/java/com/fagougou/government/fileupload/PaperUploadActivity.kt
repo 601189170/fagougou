@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.FileUtils
 import com.bumptech.glide.Glide
 import com.fagougou.government.databinding.ActivityUploadLayoutBinding
 import com.fagougou.government.databinding.ItemPreviewLayoutBinding
+import com.fagougou.government.utils.Printer
 import java.io.File
 
 
@@ -45,18 +46,15 @@ class PaperUploadActivity : AppCompatActivity() {
         }
 
         //showScan
+        binding.scanLayout.img.rotation=270f
         binding.scanLayout.btnCancel.setOnClickListener { finish() }
         binding.scanLayout.btnReScan.setOnClickListener {
             file?.let { it1 -> filelist.remove(it1)
                     FileUtils.delete(it1) }
             setWorkStatus(showCamera)
         }
-        binding.scanLayout.btnGoScan.setOnClickListener {
-            setWorkStatus(showCamera)
-        }
-        binding.scanLayout.btnScanDone.setOnClickListener {
-            setWorkStatus(showPreview)
-        }
+        binding.scanLayout.btnGoScan.setOnClickListener { setWorkStatus(showCamera) }
+        binding.scanLayout.btnScanDone.setOnClickListener { setWorkStatus(showPreview) }
 
         //showPreview
         binding.previewLayout.viewPager.adapter = imgAdapter
@@ -68,6 +66,7 @@ class PaperUploadActivity : AppCompatActivity() {
         //showWebview
         initWebViewSettings(binding.webviewLayout.web)
         binding.webviewLayout.btnCancel.setOnClickListener { finish() }
+        binding.webviewLayout.btnPrint.setOnClickListener { Printer.printWebView(binding.webviewLayout.web) }
     }
     fun setWorkStatus(status:Int){
         binding.cameraLayout.allLayout.visibility=View.GONE
@@ -120,7 +119,8 @@ class PaperUploadActivity : AppCompatActivity() {
 
     class BannerHolder(private val binding: ItemPreviewLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun setImage(file: File){
-            Glide.with(binding.root.context).load(file).into(binding.image)
+            binding.img.rotation=270f
+            Glide.with(binding.root.context).load(file).into(binding.img)
         }
     }
 
@@ -150,9 +150,9 @@ class PaperUploadActivity : AppCompatActivity() {
 //		webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
         // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
         webSetting.cacheMode = WebSettings.LOAD_NO_CACHE
-
         // this.getSettingsExtension().setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);//extension
-        // settings 的设计
     }
+
+
 
 }

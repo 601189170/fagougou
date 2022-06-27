@@ -31,6 +31,8 @@ object Router {
     const val reportpage ="reportpage"
     const val upload ="upload"
     const val scanupload ="scanupload"
+    const val resultWebview ="resultWebview"
+    const val previewload ="previewload"
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
