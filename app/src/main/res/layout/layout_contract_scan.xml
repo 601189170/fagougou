@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/all_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:text="正在扫描文档中"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:id="@+id/top_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+    </TextView>
+
+
+    <TextView
+        android:text="当前页预览（第1页）"
+        android:textColor="@color/black"
+        android:textSize="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_text"
+        android:layout_marginTop="30dp"
+        android:id="@+id/page_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+    </TextView>
+
+    <ImageView
+        android:id="@+id/img"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/page_num"
+        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="500dp">
+    </ImageView>
+    <LinearLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+        </Button>
+        <Button
+            android:text="重新扫描当前页"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:id="@+id/btn_re_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+        </Button>
+
+        <Button
+            android:text="扫描下一页"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:id="@+id/btn_go_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+        </Button>
+
+        <Button
+            android:text="已全部扫描完成"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:id="@+id/btn_scan_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+        </Button>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

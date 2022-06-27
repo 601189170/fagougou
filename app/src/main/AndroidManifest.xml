@@ -53,6 +53,9 @@
             android:name=".UpdateActivity"
             android:exported="false" />
         <activity
+            android:name=".fileupload.PaperUploadActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"

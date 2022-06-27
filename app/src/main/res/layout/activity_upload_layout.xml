@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/camera_layout"
+        android:visibility="gone"
+        layout="@layout/layout_contract_camera">
+    </include>
+
+    <include
+        android:id="@+id/scan_layout"
+        android:visibility="gone"
+        layout="@layout/layout_contract_scan">
+    </include>
+
+    <include
+        android:id="@+id/preview_layout"
+        android:visibility="gone"
+        layout="@layout/layout_contract_preview">
+    </include>
+
+    <include
+        android:id="@+id/webview_layout"
+        android:visibility="gone"
+        layout="@layout/layout_contract_webview">
+    </include>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

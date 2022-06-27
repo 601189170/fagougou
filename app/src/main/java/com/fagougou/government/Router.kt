@@ -29,6 +29,8 @@ object Router {
     const val casepage ="casepage"
     const val lawspage ="lawspage"
     const val reportpage ="reportpage"
+    const val upload ="upload"
+    const val scanupload ="scanupload"
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE

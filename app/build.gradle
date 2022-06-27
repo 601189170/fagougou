@@ -87,6 +87,7 @@ dependencies {
     implementation files("libs/libEsSdtApi-1.0.aar")
     implementation files('libs/ZY-Interface.jar')
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation files('libs\\itextpdf-5.5.5.jar')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

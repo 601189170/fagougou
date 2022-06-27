@@ -53,6 +53,8 @@ import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
+import com.fagougou.government.fileupload.scanupload
+import com.fagougou.government.fileupload.uploadPage
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
@@ -136,7 +138,7 @@ class MainActivity : ComponentActivity() {
         val mPermissionList = arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO
+            Manifest.permission.RECORD_AUDIO,
         )
         requestPermissions(mPermissionList, 1)
     }
@@ -224,8 +226,13 @@ fun Main() {
             composable(Router.calculator) { CalculatorGuidePage(navController) }
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
-            composable(Router.about) { AboutUs(navController) }
+            composable(Router.about) {
+//                AboutUs(navController)
+                uploadPage(navController)
+            }
             composable(Router.settings) { Settings(navController) }
+            composable(Router.upload) { uploadPage(navController) }
+            composable(Router.scanupload) { scanupload(navController) }
         }
     }
 }

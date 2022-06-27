@@ -39,6 +39,8 @@ object QrCodeViewModel {
         _hint.value = hint
     }
 
+    fun FileUploadBitmap():Bitmap = bitmap()
+
     fun bitmap(): Bitmap = CodeUtils.createQRCode(content, 200, null, Color.BLACK)
 
     fun clear(){
