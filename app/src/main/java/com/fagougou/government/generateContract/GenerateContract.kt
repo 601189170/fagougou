@@ -46,9 +46,7 @@ fun GenerateContract(navController: NavController) {
             Row(Modifier.fillMaxSize()) {
                 val scrollState = rememberScrollState()
                 Column(
-                    Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.6f),
+                    Modifier.fillMaxHeight().fillMaxWidth(0.6f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(Modifier.fillMaxHeight(0.88f)) {
@@ -60,7 +58,7 @@ fun GenerateContract(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (false) Button(
+                        Button(
                             { },
                             Modifier
                                 .height(60.dp)
@@ -113,15 +111,8 @@ fun GenerateContract(navController: NavController) {
                                     Modifier.padding(top = 24.dp, bottom = 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Surface(
-                                        Modifier
-                                            .height(24.dp)
-                                            .width(4.dp), color = Dodgerblue) { }
-                                    Text(
-                                        child.label,
-                                        Modifier.padding(start = 12.dp),
-                                        fontSize = 18.sp
-                                    )
+                                    Surface(Modifier.height(24.dp).width(4.dp), color = Dodgerblue) { }
+                                    Text(child.label, Modifier.padding(start = 12.dp), fontSize = 18.sp)
                                 }
                                 when (child.type) {
                                     "checkbox" -> {
@@ -179,10 +170,7 @@ fun GenerateContract(navController: NavController) {
                             }
                         }
                     }
-                    Spacer(
-                        Modifier
-                            .width(56.dp)
-                            .height(112.dp))
+                    Spacer(Modifier.width(56.dp).height(112.dp))
                 }
             }
         }
