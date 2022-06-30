@@ -38,6 +38,8 @@ class CommonApplication: Application(){
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler())
         UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
         UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
+        // 支持在子进程中统计自定义事件
+        UMConfigure.setProcessEvent(true);
         SpeechUtility.createUtility(this, "appid=59fad520")
         MMKV.initialize(this)
         Bugsnag.start(this)

@@ -73,3 +73,5 @@ fun GlobalQrCode(){
         }
     }
 }
+
+

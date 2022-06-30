@@ -1,12 +1,10 @@
-package com.fagougou.government.fileupload
+package com.fagougou.government.contractReviewPage
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -21,16 +19,14 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.Case
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.model.CaseResponse
 import com.fagougou.government.model.uploadBean
 import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
-import timber.log.Timber
+
 object uploadModel{
 
     var navController2:NavController?=null

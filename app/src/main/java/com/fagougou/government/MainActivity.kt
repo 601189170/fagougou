@@ -38,7 +38,6 @@ import com.fagougou.government.Router.noAutoQuitList
 import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.Router.touchWaitTime
-import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
 import com.fagougou.government.component.Loading
@@ -53,17 +52,19 @@ import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
-import com.fagougou.government.fileupload.previewload
-import com.fagougou.government.fileupload.resultWebviewPage
-import com.fagougou.government.fileupload.scanupload
-import com.fagougou.government.fileupload.uploadPage
+import com.fagougou.government.contractReviewPage.previewload
+import com.fagougou.government.contractReviewPage.resultWebviewPage
+import com.fagougou.government.contractReviewPage.scanupload
+import com.fagougou.government.contractReviewPage.uploadPage
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
+import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
+import com.fagougou.government.selfhelp.SelfPrintPage
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
@@ -231,12 +232,16 @@ fun Main() {
             composable(Router.about) {
 //                AboutUs(navController)
                 uploadPage(navController)
+//                LawyersPage(navController)
+//                SelfPrintPage(navController)
             }
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { uploadPage(navController) }
             composable(Router.scanupload) { scanupload(navController) }
             composable(Router.resultWebview) { resultWebviewPage(navController) }
             composable(Router.previewload) { previewload(navController) }
+            composable(Router.self) { LawyersPage(navController) }
+            composable(Router.lawyer) { SelfPrintPage(navController) }
         }
     }
 }

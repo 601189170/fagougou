@@ -1,6 +1,5 @@
-package com.fagougou.government.fileupload
+package com.fagougou.government.contractReviewPage
 
-import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,20 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
-import com.fagougou.government.R
-import com.fagougou.government.Router
-import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
-import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractPage.ContractViewModel
-import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.generateContract.GenerateWebView
 import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.pop
 import com.fagougou.government.ui.theme.CORNER_FLOAT

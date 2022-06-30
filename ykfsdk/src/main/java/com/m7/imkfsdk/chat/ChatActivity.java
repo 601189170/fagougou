@@ -3627,6 +3627,7 @@ public class ChatActivity extends KFBaseActivity implements OnClickListener
                 .setExten(exten);
         YKFCallHelper.openCall(callInfoBean);
 
+
     }
     /**
      * 打开本地相册

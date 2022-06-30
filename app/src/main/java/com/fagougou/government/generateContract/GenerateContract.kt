@@ -1,12 +1,9 @@
 package com.fagougou.government.generateContract
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.runtime.*
@@ -26,11 +23,15 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContractViewModel.lastModifier
 import com.fagougou.government.CommonApplication.Companion.presentation
+import com.fagougou.government.generateContract.GenerateContractModel.readhtml
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.ui.theme.WhiteTextFieldColor
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
+object GenerateContractModel{
+    val readhtml = mutableStateOf(false)
 
+}
 @Composable
 fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
@@ -60,8 +61,7 @@ fun GenerateContract(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (false) Button(
-                            { },
+                         Button({readhtml.value=true },
                             Modifier
                                 .height(60.dp)
                                 .width(200.dp),
