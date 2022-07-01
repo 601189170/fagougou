@@ -1,6 +1,7 @@
 package com.fagougou.government.chatPage
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,6 +40,8 @@ import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.IFly.wakeMode
 import com.fagougou.government.utils.SafeBack.safeBack
+import com.fagougou.government.utils.UMConstans
+import com.umeng.analytics.MobclickAgent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -83,11 +86,17 @@ fun ChatPage(navController: NavController) {
         var lazyHeight = 952 - if(showBotMenu.value) 436 else 0
         lazyHeight -= if(voiceInputMode.value) 220 else 80
         LazyColumn(
-            Modifier.height(lazyHeight.dp).fillMaxWidth().padding(horizontal = 12.dp),listState,
+            Modifier
+                .height(lazyHeight.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),listState,
             verticalArrangement = Arrangement.Top,
         ) {
             item {
-                Row(Modifier.fillMaxWidth().padding(top = 12.dp),Arrangement.Center) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),Arrangement.Center) {
                     Surface(
                         color = Color(0x33FFFFFF),
                         shape = RoundedCornerShape(CORNER_FLOAT)
@@ -98,7 +107,10 @@ fun ChatPage(navController: NavController) {
                             Alignment.CenterVertically
                         ){
                             Image(painterResource(R.drawable.ic_note),null)
-                            Spacer(Modifier.width(16.dp).height(12.dp))
+                            Spacer(
+                                Modifier
+                                    .width(16.dp)
+                                    .height(12.dp))
                             BasicText("温馨提示：咨询过程中可拿起电话咨询，声音效果更清晰！",0.dp,20.sp)
                         }
                     }
@@ -108,7 +120,10 @@ fun ChatPage(navController: NavController) {
             if (history.lastOrNull()?.speaker==Speaker.USER) item {
                 MessageItem(Message(Speaker.ROBOT, content = ". . ."), -1, scope, navController, keyboardController)
             }
-            item { Row(Modifier.fillMaxWidth().height(180.dp)) {} }
+            item { Row(
+                Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)) {} }
         }
         InputBox(scope,keyboardController)
         if(showBotMenu.value) BotMenu()

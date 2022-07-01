@@ -38,6 +38,7 @@ import com.fagougou.government.Router.noAutoQuitList
 import com.fagougou.government.Router.routeMirror
 import com.fagougou.government.Router.routeRemain
 import com.fagougou.government.Router.touchWaitTime
+import com.fagougou.government.aboutUsPage.AboutUs
 import com.fagougou.government.calculatorPage.CalculatorGuidePage
 import com.fagougou.government.chatPage.*
 import com.fagougou.government.component.Loading
@@ -73,12 +74,14 @@ import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Time.stamp
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.greenrobot.eventbus.EventBus
@@ -148,7 +151,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        MobclickAgent.onResume(this);
         activity = this
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(this);
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -188,6 +197,7 @@ fun Main() {
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                    UMConstans.setIntoClick(UMConstans.home_page)
                 } else if (routeRemain.value < Router.showTimeoutDialog) {
                     if (isShowTaskActivity()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
                     if (routeMirror == Router.chat) {

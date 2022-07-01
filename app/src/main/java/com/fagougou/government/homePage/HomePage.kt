@@ -26,7 +26,12 @@ import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ
+import com.umeng.analytics.MobclickAgent
+
+
+
 
 @Composable
 fun HomeButton(modifier: Modifier = Modifier, onClick: () -> Unit, contentId: Int) {
@@ -62,7 +67,7 @@ fun HomePage(navController:NavController) {
             Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .padding(top = 8.dp,start = 40.dp,end = 40.dp)
+                .padding(top = 8.dp, start = 40.dp, end = 40.dp)
                 .clickable { navController.navigate(Router.about) },
             Arrangement.SpaceBetween,
             Alignment.CenterVertically
@@ -83,6 +88,7 @@ fun HomePage(navController:NavController) {
                     .height(264.dp),
                 onClick = {
                     navController.navigate(Router.chatGuide)
+                    UMConstans.setIntoClick(UMConstans.home_ask)
                 },
                 contentId = R.drawable.home_ask
             )
@@ -91,7 +97,9 @@ fun HomePage(navController:NavController) {
                     .padding(horizontal = 24.dp)
                     .width(216.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.generateGuide) },
+                onClick = { navController.navigate(Router.generateGuide)
+                    UMConstans.setIntoClick(UMConstans.home_generate_contract)
+                },
                 contentId = R.drawable.home_generate_contract
             )
 
@@ -99,7 +107,9 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(216.dp)
                     .height(264.dp),
-                onClick = { navController.navigate(Router.contract) },
+                onClick = { navController.navigate(Router.contract)
+                    UMConstans.setIntoClick(UMConstans.home_document)
+                },
                 contentId = R.drawable.home_document
             )
         }
@@ -108,7 +118,9 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(288.dp)
                     .height(120.dp),
-                onClick = {  navController.navigate(Router.calculator)  },
+                onClick = {  navController.navigate(Router.calculator)
+                    UMConstans.setIntoClick(UMConstans.home_calculator)
+                },
                 contentId = R.drawable.home_calculator
             )
             HomeButton(
@@ -132,8 +144,8 @@ fun HomePage(navController:NavController) {
                 .padding(top = 225.dp)
                 .clickable {
                     Time.exitStack--
-                    if (Time.exitStack<=0){
-                        Time.exitStack=8
+                    if (Time.exitStack <= 0) {
+                        Time.exitStack = 8
                         navController.navigate(Router.admin)
                     }
                 },
