@@ -22,7 +22,11 @@ import timber.log.Timber
 class CommonApplication: Application(){
     companion object {
         lateinit var activity: ComponentActivity
-        val serial = if(Build.VERSION.SDK_INT in (26..28) ) Build.getSerial() else if(Build.VERSION.SDK_INT<26) Build.SERIAL else "EJT8XS3DSY"
+        val serial = when(Build.VERSION.SDK_INT) {
+            in (26..28) -> Build.getSerial()
+            25 -> Build.SERIAL
+            else -> "EJT8XS3DSY"
+        }
         var presentation : BannerPresentation? = null
         var currentCode = Int.MAX_VALUE
     }
@@ -45,12 +49,12 @@ class CommonApplication: Application(){
         TTS.init(this)
         GenerateContractViewModel.init(this)
         YKFUtils.init(this)
-        CoroutineScope(Dispatchers.Default).launch {
-            if (!Settings.canDrawOverlays(this@CommonApplication)){
-                while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
-                openSecondScreen()
-            }else openSecondScreen()
-        }
+//        CoroutineScope(Dispatchers.Default).launch {
+//            if (!Settings.canDrawOverlays(this@CommonApplication)){
+//                while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
+//                openSecondScreen()
+//            }else openSecondScreen()
+//        }
     }
 
     private suspend fun openSecondScreen() {
