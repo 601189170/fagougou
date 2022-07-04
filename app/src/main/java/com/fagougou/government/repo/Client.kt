@@ -49,6 +49,15 @@ object Client {
             .build()
     }
 
+    val justLoadClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor(BlockIntercept(globalLoading))
+            .connectTimeout(10000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .writeTimeout(10000, TimeUnit.MILLISECONDS)
+            .build()
+    }
+
     val noLoadClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)

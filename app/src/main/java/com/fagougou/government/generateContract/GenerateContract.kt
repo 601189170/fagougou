@@ -23,14 +23,12 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.generateContract.GenerateContractViewModel.lastModifier
 import com.fagougou.government.CommonApplication.Companion.presentation
-import com.fagougou.government.generateContract.GenerateContractModel.readhtml
+import com.fagougou.government.generateContract.GenerateContractViewModel.html2Doc
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.ui.theme.WhiteTextFieldColor
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
-object GenerateContractModel{
-    val readhtml = mutableStateOf(false)
-}
+
 @Composable
 fun GenerateContract(navController: NavController) {
     LaunchedEffect(null) {
@@ -58,10 +56,12 @@ fun GenerateContract(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                         Button({readhtml.value=true },
-                            Modifier
-                                .height(60.dp)
-                                .width(200.dp),
+                        Button(
+                            {
+                                val fileName = (Time.stamp+(0..999999).random()).toString()
+                                html2Doc(fileName,GenerateContractViewModel.handleBarsResult)
+                            },
+                            Modifier.height(60.dp).width(200.dp),
                             content = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Image(painterResource(R.drawable.ic_wechat), null)

@@ -3,13 +3,20 @@ package com.fagougou.government.generateContract
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import timber.log.Timber
+import java.io.IOException
 import java.io.InputStreamReader
 
 object GenerateContractViewModel {
@@ -17,6 +24,7 @@ object GenerateContractViewModel {
     val currentContractId = mutableStateOf("")
     var baseHtml = ""
     var template = ""
+    var handleBarsResult = ""
     val data = mutableStateOf("")
     val formList = mutableStateListOf(GenerateForm())
     var lastModifier = Time.stamp.toString()
@@ -105,5 +113,19 @@ object GenerateContractViewModel {
                 )
             data.value = result
         }
+    }
+
+    fun html2Doc(fileName:String, htmlString: String){
+        val resultString = htmlString
+            .substring(1,htmlString.length-1)
+            .replace("\\n","")
+            .replace("\\u003C","<")
+        val fileBody = resultString.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", fileName, fileBody)
+            .build();
+        val request = Request.Builder().url("https://products.fagougou.com/api/convert/from/html/to/docx").post(requestBody).build()
+        Client.justLoadClient.newCall(request).enqueue(Html2DocCallback())
     }
 }

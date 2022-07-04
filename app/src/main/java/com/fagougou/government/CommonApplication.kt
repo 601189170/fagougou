@@ -51,12 +51,12 @@ class CommonApplication: Application(){
         TTS.init(this)
         GenerateContractViewModel.init(this)
         YKFUtils.init(this)
-//        CoroutineScope(Dispatchers.Default).launch {
-//            if (!Settings.canDrawOverlays(this@CommonApplication)){
-//                while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
-//                openSecondScreen()
-//            }else openSecondScreen()
-//        }
+        CoroutineScope(Dispatchers.Default).launch {
+            if (!Settings.canDrawOverlays(this@CommonApplication)){
+                while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
+                openSecondScreen()
+            }else openSecondScreen()
+        }
     }
 
     private suspend fun openSecondScreen() {
