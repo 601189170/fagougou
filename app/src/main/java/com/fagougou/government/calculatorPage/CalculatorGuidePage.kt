@@ -11,16 +11,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.homePage.HomeButton
+import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.webViewPage.WebViewPageModel
+import com.umeng.analytics.MobclickAgent
 
 @Composable
 fun CalculatorGuidePage(navController: NavController) {
+
     LaunchedEffect(null){
         presentation?.playVideo(R.raw.vh_calculator)
     }

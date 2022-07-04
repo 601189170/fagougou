@@ -1,6 +1,7 @@
 package com.fagougou.government.repo
 
 import com.fagougou.government.model.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -13,4 +14,8 @@ interface GenerateService {
 
     @GET("getTemplateForms/{id}")
     fun getGenrateForm(@Path("id") id :String): Call<GenerateContractResponse>
+
+    @Multipart
+    @POST("convert/from/html/to/docx")
+    fun getDocFile(@Part part: MultipartBody.Part): Call<String>
 }

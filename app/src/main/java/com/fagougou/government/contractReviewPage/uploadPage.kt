@@ -1,4 +1,4 @@
-package com.fagougou.government.fileupload
+package com.fagougou.government.contractReviewPage
 
 import android.content.Intent
 import android.util.Log
@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -21,17 +20,17 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.Case
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.model.CaseResponse
+import com.fagougou.government.contractReviewPage.uploadModel.taskIdValue
 import com.fagougou.government.model.uploadBean
 import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
-import timber.log.Timber
+
 object uploadModel{
+    var taskIdValue="";
 
     var navController2:NavController?=null
 
@@ -39,7 +38,7 @@ object uploadModel{
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Default) {
             while (true){
                 delay(1500)
-                val response = Client.serverlessService.uploadFile(CommonApplication.serial + "_" + System.currentTimeMillis() / 1000 + ".pdf").execute()
+                val response = Client.serverlessService.uploadFile(taskIdValue + ".pdf").execute()
                if (response.code()==200){
                    val body = response.body() ?: uploadBean("")
                    withContext(Dispatchers.Main){
@@ -57,7 +56,9 @@ fun uploadPage(navController: NavController) {
     uploadModel.navController2 = navController
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect( null ){
-        val url = "https://a.b/selfPrint?taskId="+Time.stamp+"_"+(0..999999).random()
+        taskIdValue=""+Time.stamp+"_"+(0..999999).random()
+//        val url = "https://a.b/selfPrint?taskId="+Time.stamp+"_"+(0..999999).random()
+        val url = "https://a.b/selfPrint?taskId="+taskIdValue
         uploadBitmap.value=QrCodeViewModel.bitmap(url)
     }
 
@@ -70,7 +71,9 @@ fun uploadPage(navController: NavController) {
         BasicText( "请使用文件上传方式",160.dp)
         BasicText("二选一即可", 100.dp,21.sp )
         Row(
-            Modifier.padding(horizontal = 100.dp).padding(top = 50.dp)
+            Modifier
+                .padding(horizontal = 100.dp)
+                .padding(top = 50.dp)
         ) {
             Box(
                 Modifier

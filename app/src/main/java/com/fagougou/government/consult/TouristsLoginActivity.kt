@@ -10,6 +10,7 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.AppUtils
 import com.eseid.sdtapi.*
+import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -19,8 +20,10 @@ import com.fagougou.government.utils.ImSdkUtils
 import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.UMConstans
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.MessageEvent
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -71,12 +74,15 @@ class TouristsLoginActivity : BaseActivity() {
             binding.edName.setText("测试用户")
             binding.edPhone.setText("18672889523")
             binding.edCard.setText("429004199506150931")
+            UMConstans.setIntoClickByArea(UMConstans.home_dd,"无")
+
         }
         EventBus.getDefault().post(MessageEvent(MessageConstans.PalyVideoHumanAre))
     }
 
     override fun onResume() {
         super.onResume()
+        MobclickAgent.onResume(this);
         activity = this
         esSdt.Start(this, sdtCB, { _, msg -> Timber.d(msg) }, sdtStatusCB)
     }
@@ -186,5 +192,6 @@ class TouristsLoginActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         esSdt.Stop()
+        MobclickAgent.onPause(this);
     }
 }

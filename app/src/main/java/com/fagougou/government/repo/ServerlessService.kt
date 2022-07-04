@@ -1,6 +1,9 @@
 package com.fagougou.government.repo
 
-import com.fagougou.government.model.*
+import com.fagougou.government.model.AboutUs
+import com.fagougou.government.model.Advertise
+import com.fagougou.government.model.uploadBean
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -18,5 +21,6 @@ interface ServerlessService {
 
     @GET("https://upload-1251511189.cos.ap-nanjing.myqcloud.com/{serial}")
     fun uploadFile(@Path("serial") serial:String): Call<uploadBean>
+
 
 }

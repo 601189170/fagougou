@@ -15,6 +15,7 @@ import com.fagougou.government.utils.TTS
 import com.iflytek.cloud.SpeechUtility
 import com.moor.imkf.utils.YKFUtils
 import com.tencent.mmkv.MMKV
+import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -42,6 +43,7 @@ class CommonApplication: Application(){
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler())
         UMConfigure.preInit(this,"62a2f39388ccdf4b7e90908c","Fagougou")
         UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"")
+        MobclickAgent.setDebugMode(true)
         SpeechUtility.createUtility(this, "appid=59fad520")
         MMKV.initialize(this)
         Bugsnag.start(this)

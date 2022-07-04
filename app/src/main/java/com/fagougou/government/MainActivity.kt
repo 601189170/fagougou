@@ -53,17 +53,19 @@ import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
-import com.fagougou.government.fileupload.previewload
-import com.fagougou.government.fileupload.resultWebviewPage
-import com.fagougou.government.fileupload.scanupload
-import com.fagougou.government.fileupload.uploadPage
+import com.fagougou.government.contractReviewPage.previewload
+import com.fagougou.government.contractReviewPage.resultWebviewPage
+import com.fagougou.government.contractReviewPage.scanupload
+import com.fagougou.government.contractReviewPage.uploadPage
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
 import com.fagougou.government.homePage.HomePage
+import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
+import com.fagougou.government.selfhelp.SelfPrintPage
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
@@ -72,12 +74,14 @@ import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Time.stamp
 import com.fagougou.government.utils.Tips.toast
+import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.greenrobot.eventbus.EventBus
@@ -147,7 +151,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        MobclickAgent.onResume(this);
         activity = this
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(this);
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -187,6 +197,7 @@ fun Main() {
                     QrCodeViewModel.clear()
                     navController.popBackStack(Router.home, false)
                     ActivityUtils.finishToActivity(MainActivity::class.java, false)
+                    UMConstans.setIntoClick(UMConstans.home_page)
                 } else if (routeRemain.value < Router.showTimeoutDialog) {
                     if (isShowTaskActivity()) EventBus.getDefault().post(MessageEvent(MessageConstans.CloseAction))
                     if (routeMirror == Router.chat) {
@@ -231,12 +242,16 @@ fun Main() {
             composable(Router.about) {
 //                AboutUs(navController)
                 uploadPage(navController)
+//                LawyersPage(navController)
+//                SelfPrintPage(navController)
             }
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { uploadPage(navController) }
             composable(Router.scanupload) { scanupload(navController) }
             composable(Router.resultWebview) { resultWebviewPage(navController) }
             composable(Router.previewload) { previewload(navController) }
+            composable(Router.self) { LawyersPage(navController) }
+            composable(Router.lawyer) { SelfPrintPage(navController) }
         }
     }
 }

@@ -18,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
@@ -27,8 +29,11 @@ import com.fagougou.government.generateContract.GenerateContractViewModel.curren
 import com.fagougou.government.generateContract.GenerateContractViewModel.getGenerateForm
 import com.fagougou.government.generateContract.GenerateContractViewModel.getGenerateTemplate
 import com.fagougou.government.CommonApplication.Companion.presentation
+import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.UMConstans
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.launch
 
 @Composable

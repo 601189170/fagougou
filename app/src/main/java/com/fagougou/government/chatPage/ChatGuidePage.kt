@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.chatPage.ChatViewModel.selectedChatBot
@@ -21,7 +22,9 @@ import com.fagougou.government.chatPage.ChatViewModel.startChat
 import com.fagougou.government.homePage.HomeButton
 import com.fagougou.government.component.QrCodeViewModel.constWechatUrl
 import com.fagougou.government.CommonApplication.Companion.presentation
+import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -85,6 +88,7 @@ fun ChatGuidePage(navController: NavController) {
                                 selectedChatBot.value = bot.first
                                 scope.launch(Dispatchers.IO) { startChat() }
                                 navController.navigate("chat")
+                                UMConstans.setIntoClickByArea(UMConstans.home_ask_area,selectedChatBot.value)
                             },
                             contentId = bot.second
                         )
