@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.github.tehras.charts.piechart.PieChartData
 
 class PieChartDataModel {
   private var colors = mutableListOf(

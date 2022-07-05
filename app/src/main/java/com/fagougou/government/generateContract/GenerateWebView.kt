@@ -21,6 +21,7 @@ fun GenerateWebView() {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
+                setOnLongClickListener { return@setOnLongClickListener true }
                 setInitialScale(100)
                 settings.javaScriptEnabled = true
                 isVerticalScrollBarEnabled = false

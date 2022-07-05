@@ -1,4 +1,4 @@
-package com.github.tehras.charts.piechart.renderer
+package com.fagougou.government.view.piechart.animation.renderer
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import com.github.tehras.charts.piechart.PieChartData.Slice
+import com.fagougou.government.view.PieChartData.Slice
 
 class SimpleSliceDrawer(private val sliceThickness: Float = 25f) : SliceDrawer {
   init {

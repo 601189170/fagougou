@@ -27,8 +27,8 @@ import com.fagougou.government.model.AttachmentContent
 import com.fagougou.government.view.PieChartDataModel
 import com.fagougou.government.webViewPage.WebView
 import com.github.tehras.charts.piechart.PieChart
-import com.github.tehras.charts.piechart.PieChartData
-import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
+import com.fagougou.government.view.PieChartData
+import com.fagougou.government.view.piechart.animation.renderer.SimpleSliceDrawer
 
 @Composable
 fun Report (navController: NavController){

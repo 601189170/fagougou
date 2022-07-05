@@ -1,4 +1,4 @@
-package com.github.tehras.charts.piechart
+package com.fagougou.government.view
 
 internal object PieChartUtils {
   fun calculateAngle(

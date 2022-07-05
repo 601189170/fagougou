@@ -3,7 +3,6 @@ package com.github.tehras.charts.piechart
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -14,11 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.tehras.charts.piechart.PieChartUtils.calculateAngle
-import com.github.tehras.charts.piechart.animation.simpleChartAnimation
+import com.fagougou.government.view.PieChartData
+import com.fagougou.government.view.PieChartUtils.calculateAngle
+import com.fagougou.government.view.piechart.animation.simpleChartAnimation
 
-import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
-import com.github.tehras.charts.piechart.renderer.SliceDrawer
+import com.fagougou.government.view.piechart.animation.renderer.SimpleSliceDrawer
+import com.fagougou.government.view.piechart.animation.renderer.SliceDrawer
 
 @Composable
 fun PieChart(
@@ -44,10 +44,10 @@ fun PieChart(
 
 @Composable
 private fun DrawChart(
-  pieChartData: PieChartData,
-  modifier: Modifier,
-  progress: Float,
-  sliceDrawer: SliceDrawer
+    pieChartData: PieChartData,
+    modifier: Modifier,
+    progress: Float,
+    sliceDrawer: SliceDrawer
 ) {
   val slices = pieChartData.slices
 

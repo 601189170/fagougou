@@ -1,9 +1,9 @@
-package com.github.tehras.charts.piechart.renderer
+package com.fagougou.government.view.piechart.animation.renderer
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import com.github.tehras.charts.piechart.PieChartData.Slice
+import com.fagougou.government.view.PieChartData.Slice
 
 interface SliceDrawer {
   fun drawSlice(
