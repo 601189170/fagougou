@@ -1,20 +1,16 @@
 package com.fagougou.government.selfhelp
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.fagougou.government.Router
-import com.fagougou.government.component.*
+import com.fagougou.government.component.Header
+import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.component.SelfHelpBase
 import com.fagougou.government.model.StepModel
 import com.fagougou.government.repo.Client
 import com.fagougou.government.selfhelp.SelfPrintPageModel.generateSelfPrintUrl
@@ -65,9 +61,6 @@ fun SelfPrintPage(navController: NavController) {
         Alignment.CenterHorizontally
     ) {
         Header("自助打印", navController,{QrCodeViewModel.clear()} )
-        Surface(Modifier.fillMaxSize()) {
-            ExBackground(stepModel)
-            ExContent()
-        }
+        SelfHelpBase(stepModel) { }
     }
 }

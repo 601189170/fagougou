@@ -1,29 +1,22 @@
 package com.fagougou.government.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.fagougou.government.R
 import com.fagougou.government.model.StepModel
 
 @Composable
-fun ExBackground(stepModel: StepModel) {
+fun SelfHelpBase(stepModel:StepModel,content: @Composable () -> Unit) {
     Surface(
         Modifier.fillMaxSize(),
-        color = Color(0xFFF5F7FA),
+        color = Color(0xFFF5F7FA)
     ) {
         Column(Modifier.fillMaxWidth()) {
             Surface{
@@ -35,6 +28,15 @@ fun ExBackground(stepModel: StepModel) {
                     StepGraph(stepModel)
                 }
             }
+        }
+        Surface(
+            Modifier
+                .fillMaxSize()
+                .padding(top = 168.dp, start = 24.dp, end = 24.dp),
+            color = Color.White,
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        ) {
+            content()
         }
     }
 }

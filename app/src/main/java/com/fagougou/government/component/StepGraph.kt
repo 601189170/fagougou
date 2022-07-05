@@ -32,7 +32,7 @@ fun StepGraph(stepModel: StepModel) {
             if(i!=0){
                 Column {
                     Spacer(Modifier.height(22.dp))
-                    Surface(Modifier.width(128.dp).height(4.dp).padding(horizontal = 16.dp),color = Color.White.copy(alpha = baseAlpha)) {}
+                    Surface(Modifier.width(128.dp).height(4.dp).padding(horizontal = 13.dp),color = Color.White.copy(alpha = baseAlpha)) {}
                 }
             }
             Column(
@@ -41,16 +41,19 @@ fun StepGraph(stepModel: StepModel) {
                 Alignment.CenterHorizontally
             ) {
                 Surface(
-                    Modifier
-                        .width(48.dp)
-                        .height(48.dp),
+                    Modifier.width(54.dp).height(54.dp),
                     color = Color.Transparent
                 ) {
                     Canvas(Modifier.fillMaxSize()) {
+                        if(i==stepModel.currentIndex.value) drawCircle(
+                            color = Color.White.copy(alpha = 0.5f),
+                            center = Offset(x=size.width/2,y=size.height/2),
+                            radius = size.width/2f
+                        )
                         drawCircle(
                             color = Color.White.copy(alpha = baseAlpha),
-                            center = Offset(x=size.width/2f,y=size.height/2),
-                            radius = size.width/2
+                            center = Offset(x=size.width/2,y=size.height/2),
+                            radius = size.width/2.25f
                         )
                     }
                     Row(
@@ -64,13 +67,13 @@ fun StepGraph(stepModel: StepModel) {
                             Text(
                                 (i+1).toString(),
                                 color = Dodgerblue.copy(alpha = baseAlpha),
-                                fontSize = 21.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                     }
                 }
-                BasicText(step,16.dp,21.sp,Color.White.copy(alpha = baseAlpha))
+                BasicText(step,13.dp,21.sp,Color.White.copy(alpha = baseAlpha))
             }
         }
     }

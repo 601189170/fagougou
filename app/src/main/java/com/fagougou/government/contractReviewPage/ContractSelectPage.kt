@@ -2,16 +2,14 @@ package com.fagougou.government.contractReviewPage
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.fagougou.government.component.ExBackground
-import com.fagougou.government.component.ExContent
 import com.fagougou.government.component.Header
+import com.fagougou.government.component.SelfHelpBase
 import com.fagougou.government.model.StepModel
 
 @Composable
@@ -26,9 +24,6 @@ fun ContractSelectPage(navController: NavController) {
         Modifier.fillMaxSize(),
     ) {
         Header("智能合同审核", navController )
-        Surface(Modifier.fillMaxSize()) {
-            ExBackground(stepModel)
-            ExContent()
-        }
+        SelfHelpBase(stepModel) {}
     }
 }
