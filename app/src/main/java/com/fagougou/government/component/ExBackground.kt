@@ -20,8 +20,7 @@ import com.fagougou.government.R
 import com.fagougou.government.model.StepModel
 
 @Composable
-fun ExBackground() {
-    val stepModel = remember{ StepModel(mutableStateListOf("选择类型","文件上传","文档预览","查看报告"),mutableStateOf(1)) }
+fun ExBackground(stepModel: StepModel) {
     Surface(
         Modifier.fillMaxSize(),
         color = Color(0xFFF5F7FA),
@@ -38,10 +37,4 @@ fun ExBackground() {
             }
         }
     }
-}
-
-@Preview(widthDp = 1280, heightDp = 1024)
-@Composable
-fun PreviewGreeting() {
-    ExBackground()
 }

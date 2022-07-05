@@ -26,8 +26,9 @@ fun StepGraph(stepModel: StepModel) {
         Alignment.Top
     ) {
         for((i,step) in stepModel.steps.withIndex()){
-            val isFinished = i<=stepModel.currentIndex.value
-            val baseAlpha = if(isFinished) 1f else 0.6f
+            val isOpened = i<=stepModel.currentIndex.value
+            val isFinished = i<stepModel.currentIndex.value
+            val baseAlpha = if(isOpened) 1f else 0.6f
             if(i!=0){
                 Column {
                     Spacer(Modifier.height(22.dp))
@@ -61,7 +62,7 @@ fun StepGraph(stepModel: StepModel) {
                             Image(painterResource(R.drawable.ic_tick),null)
                         }else{
                             Text(
-                                i.toString(),
+                                (i+1).toString(),
                                 color = Dodgerblue.copy(alpha = baseAlpha),
                                 fontSize = 21.sp,
                                 fontWeight = FontWeight.Bold
