@@ -236,19 +236,15 @@ fun Main() {
             composable(Router.calculator) { CalculatorGuidePage(navController) }
             composable(Router.contractWebView) { ContractWebView(navController) }
             composable(Router.webView) { WebViewPage(navController) }
-            composable(Router.about) {
-//                AboutUs(navController)
-//                ContractSelectPage(navController)
-//                LawyersPage(navController)
-                SelfPrintPage(navController)
-            }
+            composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { UploadPage(navController) }
-            composable(Router.scanupload) { Scanupload(navController) }
+            composable(Router.scanUpload) { Scanupload(navController) }
             composable(Router.resultWebview) { ResultWebviewPage(navController) }
-            composable(Router.previewload) { Previewload(navController) }
+            composable(Router.previewLoad) { Previewload(navController) }
             composable(Router.self) { SelfPrintPage(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
+            composable(Router.examination) { ContractSelectPage(navController) }
         }
     }
 }

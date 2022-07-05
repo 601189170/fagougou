@@ -22,46 +22,40 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractReviewPage.uploadModel.ispost
-import com.fagougou.government.contractReviewPage.uploadModel.ossUrl
-import com.fagougou.government.contractReviewPage.uploadModel.taskIdValue
-import com.fagougou.government.contractReviewPage.uploadModel.uploadBitmap
+import com.fagougou.government.contractReviewPage.UpLoadModel.ossUrl
+import com.fagougou.government.contractReviewPage.UpLoadModel.taskId
+import com.fagougou.government.contractReviewPage.UpLoadModel.uploadBitmap
 import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.*
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
+import timber.log.Timber
 
-object uploadModel{
+
+object UpLoadModel{
     const val ossUrl = "https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
-    var taskIdValue=""
-    var ispost= mutableStateOf(false)
+    var taskId = ""
     val uploadBitmap = mutableStateOf( QrCodeViewModel.bitmap("null") )
 }
 
 @Composable
 fun UploadPage(navController: NavController) {
     LaunchedEffect(null) {
-        taskIdValue=""+Time.stamp+"_"+(0..999999).random()
-        val url = "$ossUrl$taskIdValue.pdf"
+        taskId=""+Time.stamp+"_"+(0..999999).random()
+        val url = "$ossUrl$taskId.pdf"
         uploadBitmap.value=QrCodeViewModel.bitmap(url)
-        while (!ispost.value){
-            delay(1500)
-            val request = Request.Builder().url(Client.fileuploadUrl+ taskIdValue +".pdf").get().build()
-            Client.noLoadClient.newCall(request).enqueue(object : Callback {
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.code==200){
-                        ispost.value=true
-                        navController.navigate(Router.previewload)
+        withContext(Dispatchers.IO) {
+            while (isActive) {
+                delay(1500)
+                Timber.d("Checking upload for ${taskId}.pdf")
+                val request = Request.Builder().url(Client.fileuploadUrl+taskId +".pdf").get().build()
+                val response = Client.noLoadClient.newCall(request).execute()
+                if (response.code == 200) {
+                    withContext(Dispatchers.Main){
+                        navController.navigate(Router.previewLoad)
                     }
                 }
-                override fun onFailure(call: Call, e: IOException) {
-                    Bugsnag.notify(e)
-                }
-            })
+            }
         }
     }
     Column(
@@ -79,7 +73,7 @@ fun UploadPage(navController: NavController) {
         ) {
             Box(
                 Modifier
-                    .clickable { navController.navigate(Router.scanupload) }
+                    .clickable { navController.navigate(Router.scanUpload) }
                     .background(Color.Gray)
                     .width(200.dp)
                     .height(200.dp)){

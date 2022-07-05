@@ -54,7 +54,7 @@ fun SelfPrintPage(navController: NavController) {
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){
-                        navController.navigate(Router.previewload)
+                        navController.navigate(Router.previewLoad)
                     }
                 }
             }

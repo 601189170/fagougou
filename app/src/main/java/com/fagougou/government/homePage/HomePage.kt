@@ -79,24 +79,33 @@ fun HomePage(navController:NavController) {
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
-        BasicText( "欢迎使用",160.dp)
-        BasicText( "智能法律服务系统",8.dp,28.sp)
-        Row( modifier = Modifier.padding(top = 48.dp) ) {
+
+        BasicText( "欢迎使用智能法律服务系统",130.dp,32.sp)
+        Row( modifier = Modifier.padding(top = 36.dp) ) {
             HomeButton(
                 modifier = Modifier
-                    .width(432.dp)
-                    .height(264.dp),
-                onClick = {
-                    navController.navigate(Router.chatGuide)
-                    UMConstans.setIntoClick(UMConstans.home_ask)
-                },
+                    .padding(horizontal = 12.dp)
+                    .width(444.dp)
+                    .height(224.dp),
+                onClick = { navController.navigate(Router.chatGuide)
+                    UMConstans.setIntoClick(UMConstans.home_ask) },
                 contentId = R.drawable.home_ask
             )
             HomeButton(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .width(216.dp)
-                    .height(264.dp),
+                    .padding(horizontal = 12.dp)
+                    .width(444.dp)
+                    .height(224.dp),
+                onClick = { navController.navigate(Router.lawyer) },
+                contentId = R.drawable.home_lawyers
+            )
+
+        }
+        Row(Modifier.padding(top = 24.dp)) {
+            HomeButton(
+                modifier = Modifier
+                    .width(210.dp)
+                    .height(224.dp),
                 onClick = { navController.navigate(Router.generateGuide)
                     UMConstans.setIntoClick(UMConstans.home_generate_contract)
                 },
@@ -105,12 +114,26 @@ fun HomePage(navController:NavController) {
 
             HomeButton(
                 modifier = Modifier
-                    .width(216.dp)
-                    .height(264.dp),
-                onClick = { navController.navigate(Router.contract)
-                    UMConstans.setIntoClick(UMConstans.home_document)
-                },
+                    .padding(horizontal = 24.dp)
+                    .width(210.dp)
+                    .height(224.dp),
+                onClick = { navController.navigate(Router.contract) },
                 contentId = R.drawable.home_document
+            )
+            HomeButton(
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .width(210.dp)
+                    .height(224.dp),
+                onClick = { navController.navigate(Router.examination) },
+                contentId = R.drawable.home_examination
+            )
+            HomeButton(
+                modifier = Modifier
+                    .width(210.dp)
+                    .height(224.dp),
+                onClick = { navController.navigate(Router.self) },
+                contentId = R.drawable.home_self
             )
         }
         Row( modifier = Modifier.padding(top = 24.dp) ) {
@@ -119,8 +142,7 @@ fun HomePage(navController:NavController) {
                     .width(288.dp)
                     .height(120.dp),
                 onClick = {  navController.navigate(Router.calculator)
-                    UMConstans.setIntoClick(UMConstans.home_calculator)
-                },
+                    UMConstans.setIntoClick(UMConstans.home_calculator) },
                 contentId = R.drawable.home_calculator
             )
             HomeButton(
@@ -141,7 +163,7 @@ fun HomePage(navController:NavController) {
         }
         Text(
             modifier = Modifier
-                .padding(top = 225.dp)
+                .padding(top = 115.dp)
                 .clickable {
                     Time.exitStack--
                     if (Time.exitStack <= 0) {

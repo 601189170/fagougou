@@ -35,7 +35,7 @@ fun Scanupload(navController: NavController) {
         )
         Box(
             Modifier
-                .clickable { navController.navigate(Router.previewload) }
+                .clickable { navController.navigate(Router.previewLoad) }
                 .padding(start = 50.dp)
                 .width(500.dp)
                 .height(500.dp),

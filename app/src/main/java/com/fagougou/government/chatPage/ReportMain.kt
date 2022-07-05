@@ -72,7 +72,7 @@ fun ReportMain (navController: NavController){
                             Modifier
                                 .clickable {
                                     setTab.value = 0
-                                    navController2.navigate(Router.reportpage) }
+                                    navController2.navigate(Router.reportPage) }
                                 .fillMaxSize()
                                 .padding(2.dp)
                                 .padding()
@@ -109,7 +109,7 @@ fun ReportMain (navController: NavController){
                                     .background(Color(if (setTab.value == 1) 0xFF0F87FF else 0xFFFFFFF))
                                     .clickable {
                                         setTab.value = 1
-                                        navController2.navigate(Router.casepage)
+                                        navController2.navigate(Router.casePage)
                                     },
                                 Arrangement.Center,
                                 Alignment.CenterVertically
@@ -140,7 +140,7 @@ fun ReportMain (navController: NavController){
                                 Modifier
                                     .clickable {
                                         setTab.value = 2
-                                        navController2.navigate(Router.lawspage) }
+                                        navController2.navigate(Router.lawsPage) }
                                     .fillMaxSize()
                                     .padding(2.dp)
                                     .padding()
@@ -172,10 +172,10 @@ fun ReportMain (navController: NavController){
                     color = Color.White
                 ) {
                     Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
-                        NavHost(navController2, Router.reportpage, Modifier.fillMaxHeight()) {
-                            composable(Router.lawspage) { LawsPage(navController) }
-                            composable(Router.casepage) { CasesPage(navController) }
-                            composable(Router.reportpage) { Report(navController) }
+                        NavHost(navController2, Router.reportPage, Modifier.fillMaxHeight()) {
+                            composable(Router.lawsPage) { LawsPage(navController) }
+                            composable(Router.casePage) { CasesPage(navController) }
+                            composable(Router.reportPage) { Report(navController) }
                         }
                     }
                 }
