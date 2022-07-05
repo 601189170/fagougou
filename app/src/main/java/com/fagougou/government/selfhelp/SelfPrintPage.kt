@@ -1,7 +1,6 @@
 package com.fagougou.government.selfhelp
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,53 +20,44 @@ import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.repo.Client
-import com.fagougou.government.selfhelp.SelfPrintPageModel.taskIdValue
+import com.fagougou.government.selfhelp.SelfPrintPageModel.generateSelfPrintUrl
+import com.fagougou.government.selfhelp.SelfPrintPageModel.taskId
 import com.fagougou.government.utils.Time
-import kotlinx.coroutines.*
-import okhttp3.Call
-import okhttp3.Callback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
+import timber.log.Timber
 
 object SelfPrintPageModel{
-
-    var taskIdValue=""
-
-
+    var taskId = ""
+    fun generateSelfPrintUrl(taskId:String):String{
+        val selfPrintUrl = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
+        return "$selfPrintUrl$taskId#/"
+    }
 }
 
 @SuppressLint("CoroutineCreationDuringComposition", "UnrememberedMutableState", )
 @Composable
 fun SelfPrintPage(navController: NavController) {
-
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
-    LaunchedEffect( null ){
-        taskIdValue =""+Time.stamp+"_"+(0..999999).random()
-
-        val url = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="+taskIdValue+"#/"
-
-        uploadBitmap.value=QrCodeViewModel.bitmap(url)
-    }
-    var ispost= mutableStateOf(false);
     LaunchedEffect(null) {
-        while (!ispost.value){
-            delay(1500)
-            val request = Request.Builder().url(Client.fileuploadUrl+taskIdValue+".pdf").get().build()
-             Client.noLoadClient.newCall(request).enqueue(object : Callback{
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.code==200){
-                        CoroutineScope(Dispatchers.IO).launch(Dispatchers.Main) {
-                            withContext(Dispatchers.Main) {
-                                ispost.value=true
-                                navController.navigate(Router.previewload)
-                            }
-                        }
+        taskId = "${Time.stamp}_"+(0..999999).random()
+        val url = generateSelfPrintUrl(taskId)
+        uploadBitmap.value=QrCodeViewModel.bitmap(url)
+        withContext(Dispatchers.IO){
+            while (isActive){
+                delay(1500)
+                Timber.d("Checking upload for $taskId.pdf")
+                val request = Request.Builder().url(Client.fileuploadUrl+taskId+".pdf").get().build()
+                val response = Client.noLoadClient.newCall(request).execute()
+                if (response.code == 200) {
+                    withContext(Dispatchers.Main){
+                        navController.navigate(Router.previewload)
                     }
                 }
-                override fun onFailure(call: Call, e: IOException) {
-                }
-            })
+            }
         }
     }
 

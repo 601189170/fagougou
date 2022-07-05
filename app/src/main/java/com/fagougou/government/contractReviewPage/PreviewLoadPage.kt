@@ -29,25 +29,18 @@ import com.fagougou.government.utils.SafeBack.safeBack
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 
-object previewModel{
-
-
-}
 @Composable
 fun Previewload(navController: NavController) {
-
     Surface(color = Color.White){
         Column(modifier = Modifier.fillMaxSize()) {
             Header("文档预览",navController)
             AndroidView(
                 {
                     PdfRendererView(activity).apply{
-                        initWithUrl(Client.fileuploadUrl+ SelfPrintPageModel.taskIdValue +".pdf", PdfQuality.NORMAL, "")
+                        initWithUrl(Client.fileuploadUrl+ SelfPrintPageModel.taskId +".pdf", PdfQuality.NORMAL, "")
                     }
                 },
-                Modifier
-                    .fillMaxHeight(0.9f)
-                    .fillMaxWidth(),
+                Modifier.fillMaxHeight(0.9f).fillMaxWidth(),
             )
             Surface(modifier = Modifier
                 .fillMaxWidth()

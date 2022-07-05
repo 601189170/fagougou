@@ -23,6 +23,7 @@ import com.fagougou.government.component.BasicText
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractReviewPage.uploadModel.ispost
+import com.fagougou.government.contractReviewPage.uploadModel.ossUrl
 import com.fagougou.government.contractReviewPage.uploadModel.taskIdValue
 import com.fagougou.government.contractReviewPage.uploadModel.uploadBitmap
 import com.fagougou.government.repo.Client
@@ -35,6 +36,7 @@ import okhttp3.Response
 import java.io.IOException
 
 object uploadModel{
+    const val ossUrl = "https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
     var taskIdValue=""
     var ispost= mutableStateOf(false)
     val uploadBitmap = mutableStateOf( QrCodeViewModel.bitmap("null") )
@@ -44,7 +46,7 @@ object uploadModel{
 fun UploadPage(navController: NavController) {
     LaunchedEffect(null) {
         taskIdValue=""+Time.stamp+"_"+(0..999999).random()
-        val url = "https://a.b/selfPrint?taskId=$taskIdValue"
+        val url = "$ossUrl$taskIdValue.pdf"
         uploadBitmap.value=QrCodeViewModel.bitmap(url)
         while (!ispost.value){
             delay(1500)
