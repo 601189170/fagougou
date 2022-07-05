@@ -3,10 +3,12 @@ package com.fagougou.government.repo
 import com.fagougou.government.model.AboutUs
 import com.fagougou.government.model.Advertise
 import com.fagougou.government.model.uploadBean
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.util.*
 
 interface ServerlessService {
 
@@ -18,9 +20,5 @@ interface ServerlessService {
 
     @GET("GetAboutUs")
     fun getAboutUs(@Query("serial") serial:String): Call<AboutUs>
-
-    @GET("https://upload-1251511189.cos.ap-nanjing.myqcloud.com/{serial}")
-    fun uploadFile(@Path("serial") serial:String): Call<uploadBean>
-
 
 }

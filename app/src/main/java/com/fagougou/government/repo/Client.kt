@@ -8,6 +8,7 @@ import com.fagougou.government.repo.interceptor.BlockIntercept
 import com.fagougou.government.repo.interceptor.CommonAuthInterceptor
 import com.fagougou.government.repo.interceptor.ParametersIntercept
 import com.fagougou.government.utils.Tips.toast
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
+
 object Client {
     var globalLoading = mutableStateOf(0)
     const val url = "https://api.fagougou.com/"
@@ -35,6 +37,7 @@ object Client {
     const val updateUrl = "https://fagougou-1251511189.cos.ap-nanjing.myqcloud.com/"
     const val generateUrl = "https://products.fagougou.com/api/"
     const val serverlessUrl = "https://hwc.infiiinity.xyz/"
+    const val fileuploadUrl = "https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val okHttpClient: OkHttpClient by lazy {
@@ -121,7 +124,6 @@ object Client {
             .build()
             .create(ServerlessService::class.java)
     }
-
     fun handleException(t: Throwable) {
         val e: Exception
         when (t) {

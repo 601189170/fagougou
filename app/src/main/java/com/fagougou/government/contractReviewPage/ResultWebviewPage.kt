@@ -29,7 +29,7 @@ import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
 
 @Composable
-fun resultWebviewPage(navController: NavController) {
+fun ResultWebviewPage(navController: NavController) {
     Surface(color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header("智能审查结果", navController)

@@ -2,6 +2,7 @@ package com.fagougou.government.contractReviewPage
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.fagougou.government.Router
 
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
@@ -32,7 +34,7 @@ fun ContractSelectPage(navController: NavController) {
         Alignment.CenterHorizontally
     ) {
         Header("合同类型", navController,{QrCodeViewModel.clear()} )
-        LazyHorizontalGrid( modifier = Modifier.fillMaxSize(),rows = GridCells.Fixed(1),contentPadding=PaddingValues(20.dp),userScrollEnabled = false,
+        LazyHorizontalGrid( rows = GridCells.Fixed(1),contentPadding=PaddingValues(20.dp),userScrollEnabled = false,
             content = {
                 items(6) { bot ->
                     Column(
@@ -43,6 +45,7 @@ fun ContractSelectPage(navController: NavController) {
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier
+                                .clickable { navController.navigate(Router.upload) }
                                 .background(Color(0xFFECF5FF))
                                 .padding(horizontal = 20.dp,vertical = 10.dp),
                             text = "劳动合同",

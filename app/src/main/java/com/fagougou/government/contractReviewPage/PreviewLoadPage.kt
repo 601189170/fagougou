@@ -18,8 +18,9 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractReviewPage.previewModel.Baseloadurl
-import com.fagougou.government.contractReviewPage.uploadModel.taskIdValue
+
+import com.fagougou.government.repo.Client
+import com.fagougou.government.selfhelp.SelfPrintPageModel
 
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -29,11 +30,11 @@ import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 
 object previewModel{
-    var Baseloadurl="https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
+
 
 }
 @Composable
-fun previewload(navController: NavController) {
+fun Previewload(navController: NavController) {
 
     Surface(color = Color.White){
         Column(modifier = Modifier.fillMaxSize()) {
@@ -41,12 +42,7 @@ fun previewload(navController: NavController) {
             AndroidView(
                 {
                     PdfRendererView(activity).apply{
-
-
-//                      initWithUrl(ContractViewModel.BaseLoadUrl + it.id, PdfQuality.NORMAL, it.id)
-                        initWithUrl(Baseloadurl+taskIdValue+".pdf", PdfQuality.NORMAL, "")
-
-
+                        initWithUrl(Client.fileuploadUrl+ SelfPrintPageModel.taskIdValue +".pdf", PdfQuality.NORMAL, "")
                     }
                 },
                 Modifier
