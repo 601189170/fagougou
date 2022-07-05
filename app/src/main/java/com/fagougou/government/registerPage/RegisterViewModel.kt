@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.Router
+import com.fagougou.government.model.BaseViewModel
 import com.fagougou.government.model.SerialRegisterRequest
 import com.fagougou.government.model.SerialRegisterResponse
 import com.fagougou.government.repo.Client
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-object RegisterViewModel {
+object RegisterViewModel:BaseViewModel {
     val registerCode = mutableStateOf("")
     val registerAction = mutableStateOf("立即绑定")
     var registerBalance = mutableStateOf(-1)
@@ -41,5 +42,11 @@ object RegisterViewModel {
                 registerAction.value = "立即绑定"
             }
         }
+    }
+
+    override fun clear() {
+        registerCode.value = ""
+        registerAction.value = "立即绑定"
+        registerBalance.value = -1
     }
 }

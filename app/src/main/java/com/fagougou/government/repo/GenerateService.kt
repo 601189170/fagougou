@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface GenerateService {
+
     @GET("contractTemplates")
     fun getGeneratelist(): Call<GenerateContractListResponse>
 
@@ -15,7 +16,4 @@ interface GenerateService {
     @GET("getTemplateForms/{id}")
     fun getGenrateForm(@Path("id") id :String): Call<GenerateContractResponse>
 
-    @Multipart
-    @POST("convert/from/html/to/docx")
-    fun getDocFile(@Part part: MultipartBody.Part): Call<String>
 }

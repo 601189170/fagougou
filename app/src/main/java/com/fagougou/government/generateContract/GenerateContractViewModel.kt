@@ -19,7 +19,9 @@ import timber.log.Timber
 import java.io.IOException
 import java.io.InputStreamReader
 
-object GenerateContractViewModel {
+object GenerateContractViewModel:BaseViewModel {
+    const val convertUrl = "https://products.fagougou.com/api/convert/from/html/to/docx"
+
     val contractList = mutableStateListOf<GenerateContractBrief>()
     val currentContractId = mutableStateOf("")
     var baseHtml = ""
@@ -43,7 +45,7 @@ object GenerateContractViewModel {
         }
     }
 
-    fun clear() {
+    override fun clear() {
         currentContractId.value = ""
         template = ""
         data.value = ""
@@ -125,7 +127,7 @@ object GenerateContractViewModel {
             .setType(MultipartBody.FORM)
             .addFormDataPart("file", fileName, fileBody)
             .build();
-        val request = Request.Builder().url("https://products.fagougou.com/api/convert/from/html/to/docx").post(requestBody).build()
+        val request = Request.Builder().url(convertUrl).post(requestBody).build()
         Client.justLoadClient.newCall(request).enqueue(Html2DocCallback())
     }
 }
