@@ -64,7 +64,7 @@ fun UploadPage(navController: NavController) {
         Alignment.CenterHorizontally
     ) {
         Header("合同审查", navController,{QrCodeViewModel.clear()} )
-        BasicText( "请使用文件上传方式",160.dp)
+        BasicText( "请选择文件上传方式",160.dp)
         BasicText("二选一即可", 100.dp,21.sp )
         Row(
             Modifier

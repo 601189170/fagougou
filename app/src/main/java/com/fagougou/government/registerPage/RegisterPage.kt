@@ -5,10 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,44 +25,39 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.model.*
+import com.fagougou.government.model.Auth
+import com.fagougou.government.model.AuthRequest
+import com.fagougou.government.model.BotList
+import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.registerPage.RegisterViewModel.login
-import com.fagougou.government.registerPage.RegisterViewModel.registerCode
 import com.fagougou.government.registerPage.RegisterViewModel.registerAction
-import com.fagougou.government.registerPage.RegisterViewModel.registerBalance
+import com.fagougou.government.registerPage.RegisterViewModel.registerCode
 import com.fagougou.government.repo.Client
-import com.fagougou.government.repo.Client.callBack
-import com.fagougou.government.repo.Client.handleException
-import com.fagougou.government.repo.Client.mainRegister
 import com.fagougou.government.ui.theme.Alpha33WhiteTextFieldColor
 import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV
-import com.fagougou.government.utils.MMKV.kv
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.ZYSJ
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun RegisterPage(navController: NavController){
     LaunchedEffect(null){
         Time.hook["AutoCheckRegister"]={
-            mainRegister.login(SerialLoginRequest(CommonApplication.serial)).enqueue(
-                callBack {
-                    if(it.canLogin){
-                        Time.hook.remove("AutoCheckRegister")
-                        kv.encode(MMKV.appId,it.appId)
-                        kv.encode(MMKV.appSec,it.appSec)
-                        kv.encode(MMKV.mkt,it.mkt)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
-                            val tokenBody = tokenResponse.body() ?: Auth()
-                            kv.encode("token", tokenBody.data.token)
-                            val botListResponse = Client.apiService.botList().execute()
-                            val botListBody = botListResponse.body() ?: BotList()
-                            for (bot in botListBody.data) if (bot.tyId == "") ChatViewModel.botQueryIdMap[bot.name] = bot.id
+            Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial)).enqueue(
+                Client.callBack { response->
+                    response?.let{
+                        if (it.canLogin) {
+                            Time.hook.remove("AutoCheckRegister")
+                            MMKV.setAuthData(it)
+                            val routePath=navController.currentBackStackEntry?.destination?.route?:""
+                            Timber.d(routePath)
+                            if(routePath!=Router.home)navController.navigate(Router.home)
                         }
-                        navController.navigate(Router.home)
                     }
                 }
             )

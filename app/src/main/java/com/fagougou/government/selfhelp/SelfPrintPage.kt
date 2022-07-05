@@ -1,6 +1,5 @@
 package com.fagougou.government.selfhelp
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +37,6 @@ object SelfPrintPageModel{
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition", "UnrememberedMutableState", )
 @Composable
 fun SelfPrintPage(navController: NavController) {
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
@@ -67,7 +65,7 @@ fun SelfPrintPage(navController: NavController) {
         Alignment.CenterHorizontally
     ) {
         Header("自助打印", navController,{QrCodeViewModel.clear()} )
-        BasicText( "请使用文件上传方式",160.dp)
+        BasicText( "请使用微信扫码上传",160.dp)
         Row(
             Modifier
                 .padding(horizontal = 100.dp)

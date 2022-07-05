@@ -100,7 +100,7 @@ object ChatViewModel {
         try {
             val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
             val tokenBody = tokenResponse.body() ?: Auth()
-            MMKV.kv.encode("token", tokenBody.data.token)
+            MMKV.kv.encode(MMKV.token, tokenBody.data.token)
             val botListResponse = Client.apiService.botList().execute()
             val botListBody = botListResponse.body() ?: BotList()
             for (bot in botListBody.data) if (bot.tyId == "") botQueryIdMap[bot.name] = bot.id

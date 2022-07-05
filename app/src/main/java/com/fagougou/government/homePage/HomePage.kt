@@ -20,17 +20,22 @@ import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.model.Auth
+import com.fagougou.government.model.AuthRequest
+import com.fagougou.government.model.BotList
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
+import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ
-import com.umeng.analytics.MobclickAgent
-
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -51,10 +56,12 @@ fun HomePage(navController:NavController) {
         ZYSJ.hideBar()
         presentation?.playVideo(R.raw.vh_home)
         Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial))
-            .enqueue( Client.callBack { response ->
-                if(!response.canLogin){
-                    navController.navigate(Router.register)
-                    toast(response.errorMessage)
+            .enqueue( Client.callBack {
+                it?.let {
+                    if(!it.canLogin){
+                        navController.navigate(Router.register)
+                        toast(it.errorMessage)
+                    }else MMKV.setAuthData(it)
                 }
             })
     }
@@ -73,21 +80,22 @@ fun HomePage(navController:NavController) {
             Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.home_logo),
-                contentDescription = "Company Logo",
-                modifier = Modifier.height(32.dp)
+                painterResource(R.drawable.home_logo),
+                null,
+                Modifier.height(32.dp)
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
 
         BasicText( "欢迎使用智能法律服务系统",130.dp,32.sp)
-        Row( modifier = Modifier.padding(top = 36.dp) ) {
+        Row( Modifier.padding(top = 36.dp) ) {
             HomeButton(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .width(444.dp)
                     .height(224.dp),
-                onClick = { navController.navigate(Router.chatGuide)
+                onClick = {
+                    navController.navigate(Router.chatGuide)
                     UMConstans.setIntoClick(UMConstans.home_ask) },
                 contentId = R.drawable.home_ask
             )
@@ -106,7 +114,8 @@ fun HomePage(navController:NavController) {
                 modifier = Modifier
                     .width(210.dp)
                     .height(224.dp),
-                onClick = { navController.navigate(Router.generateGuide)
+                onClick = {
+                    navController.navigate(Router.generateGuide)
                     UMConstans.setIntoClick(UMConstans.home_generate_contract)
                 },
                 contentId = R.drawable.home_generate_contract
