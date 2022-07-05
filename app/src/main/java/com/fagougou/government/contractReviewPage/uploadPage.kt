@@ -31,33 +31,13 @@ import kotlinx.coroutines.*
 
 object uploadModel{
     var taskIdValue="";
-
-    var navController2:NavController?=null
-
-    init {
-        CoroutineScope(Dispatchers.Default).launch(Dispatchers.Default) {
-            while (true){
-                delay(1500)
-                val response = Client.serverlessService.uploadFile(taskIdValue + ".pdf").execute()
-               if (response.code()==200){
-                   val body = response.body() ?: uploadBean("")
-                   withContext(Dispatchers.Main){
-                       navController2?.navigate(Router.previewload)
-                   }
-               }
-
-            }
-        }
-    }
 }
 
 @Composable
 fun uploadPage(navController: NavController) {
-    uploadModel.navController2 = navController
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect( null ){
         taskIdValue=""+Time.stamp+"_"+(0..999999).random()
-//        val url = "https://a.b/selfPrint?taskId="+Time.stamp+"_"+(0..999999).random()
         val url = "https://a.b/selfPrint?taskId="+taskIdValue
         uploadBitmap.value=QrCodeViewModel.bitmap(url)
     }
