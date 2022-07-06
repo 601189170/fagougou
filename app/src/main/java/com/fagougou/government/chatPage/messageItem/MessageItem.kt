@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.fagougou.government.R
 import com.fagougou.government.chatPage.ChatViewModel
+import com.fagougou.government.component.GridButtonItem
 import com.fagougou.government.component.VerticalGrid
 import com.fagougou.government.model.CityMap
 import com.fagougou.government.model.Message
@@ -43,12 +44,18 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                         null,
                         Modifier.padding(start = 24.dp, top = 16.dp)
                     )
-                } else Box(Modifier.padding(start = 16.dp).height(48.dp).width(56.dp))
+                } else Box(
+                    Modifier
+                        .padding(start = 16.dp)
+                        .height(48.dp)
+                        .width(56.dp))
             }
         }
         when (message.speaker) {
             Speaker.ROBOT -> Row(
-                Modifier.fillMaxWidth(0.6f).padding(vertical = 12.dp),
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(vertical = 12.dp),
                 Arrangement.Start,
                 Alignment.CenterVertically
             ) { MessageRect(message, index, scope, keyboardController) }
@@ -117,34 +124,55 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                         VerticalGrid(
                             message.option.items,
                             4,
-                            64,
-                            256,
-                            { scope.launch(Dispatchers.IO) { ChatViewModel.nextChat(it) } },
-                            windowWidth = 1114
-                        )
+                            18.dp,
+                            64.dp,
+                            256.dp,
+                        ){ modifier,data->
+                            GridButtonItem(modifier,data, Dodgerblue){
+                                scope.launch(Dispatchers.IO) {
+                                    ChatViewModel.nextChat(it)
+                                }
+                            }
+                        }
                     }
                     "address-with-search" -> {
                         if (ChatViewModel.currentProvince.value == "") {
                             val provinceList = CityMap.provinceList.keys.toList()
-                            VerticalGrid(provinceList, 6, 48, 192,
-                                {  ChatViewModel.currentProvince.value = it }
-                            )
+                            VerticalGrid(
+                                dataList = provinceList,
+                                columnNumber = 6,
+                                verticalSpacer = 18.dp,
+                                contentHeight = 48.dp,
+                                contentWidth = 192.dp
+                            ) { modifier,data->
+                                GridButtonItem(modifier,data, Dodgerblue){
+                                    ChatViewModel.currentProvince.value = it
+                                }
+                            }
                         } else {
                             val cityList = CityMap.provinceList[ChatViewModel.currentProvince.value] ?: listOf()
-                            VerticalGrid(cityList, 6, 48, 192,
-                                {
+                            VerticalGrid(
+                                dataList = cityList,
+                                columnNumber = 6,
+                                verticalSpacer = 18.dp,
+                                contentHeight = 48.dp,
+                                contentWidth = 192.dp
+                            ) { modifier,data->
+                                GridButtonItem(modifier,data, Dodgerblue){
                                     scope.launch(Dispatchers.IO) {
                                         ChatViewModel.nextChat("${ChatViewModel.currentProvince.value}-$it")
                                         ChatViewModel.currentProvince.value = ""
                                     }
                                 }
-                            )
+                            }
                         }
                     }
                 }
             }
             Speaker.COMPLEX -> Row(
-                Modifier.fillMaxWidth(0.6f).padding(vertical = 16.dp),
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(vertical = 16.dp),
                 Arrangement.Start,
                 Alignment.CenterVertically
             ) { ComplexRect(message, index, keyboardController ,navController = navController) }

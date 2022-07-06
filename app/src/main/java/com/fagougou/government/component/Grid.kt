@@ -1,6 +1,5 @@
 package com.fagougou.government.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -9,75 +8,52 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fagougou.government.R
 import com.fagougou.government.ui.theme.Dodgerblue
 
 @Composable
 fun <T> VerticalGrid(
-    datas:List<T>,
+    dataList:List<T>,
     columnNumber:Int,
-    height: Int,
-    width:Int,
-    onClick:(T) -> Unit,
-    selected:(T) -> Boolean = {false},
-    background:Color = Dodgerblue,
-    windowWidth:Int = 1280,
+    verticalSpacer:Dp,
+    contentHeight:Dp,
+    contentWidth:Dp,
+    content:@Composable (Modifier,T)->Unit
 ){
-    val lastIndex = datas.lastIndex
-    val padding = (windowWidth-(columnNumber*width))/(columnNumber+1)
-    val verticalPadding = if(datas.firstOrNull() is Pair<*,*>) padding/2 else padding
-    for (y in 0..lastIndex step columnNumber) {
-        Row(
-            modifier = Modifier
-                .width(windowWidth.dp)
-                .padding(top =  verticalPadding.dp),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            for (x in 0 until columnNumber) {
-                val i = y + x
-                if (y + x <= lastIndex) GridItem(datas[i], height.dp , (width+padding).dp, padding.dp, onClick, selected, background)
+    Column {
+        val itemModifier = Modifier.height(contentHeight).width(contentWidth)
+        for (y in 0..dataList.lastIndex step columnNumber) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = verticalSpacer),
+                Arrangement.SpaceEvenly,
+                Alignment.CenterVertically
+            ) {
+                for (x in 0 until columnNumber) {
+                    val i = y + x
+                    if (i <= dataList.lastIndex) content(itemModifier,dataList[i])
+                    else Spacer(itemModifier)
+                }
             }
         }
     }
 }
 
 @Composable
-fun <T> GridItem(data:T, height: Dp, width:Dp, padding:Dp, onClick: (T) -> Unit, selected:(T) -> Boolean, background:Color = Dodgerblue){
-    Column(
-        modifier = Modifier.width(width).padding(start = padding),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Button(
-            modifier = Modifier.height(height).fillMaxWidth(),
-            onClick = { onClick.invoke( data )},
-            colors = ButtonDefaults.buttonColors(background),
-            content = {
-                Surface(color = Color.Transparent) {
-                    when(data) {
-                        is String -> BasicText(data, 0.dp, 21.sp)
-                        is Pair<*,*> -> Image(painterResource(data.second as Int),null)
-                    }
-                    if(selected.invoke(data)) Column(
-                        modifier = Modifier.width(width),
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Image(painterResource(R.drawable.ic_select_note), "Selected")
-                    }
-                }
-            },
-            contentPadding = PaddingValues(
-                when(data) {
-                    is String -> 4.dp
-                    else -> 0.dp
-                }
-            ),
-            elevation = ButtonDefaults.elevation(0.dp)
-        )
-        if(data is Pair<*,*>)BasicText( data.first as String, 12.dp, 18.sp )
-    }
+fun GridButtonItem(modifier:Modifier, data:String, background:Color = Dodgerblue, onClick: (String) -> Unit){
+    Button(
+        { onClick.invoke(data)},
+        modifier,
+        colors = ButtonDefaults.buttonColors(background),
+        content = {
+            Surface(color = Color.Transparent) {
+                BasicText(data, 0.dp, 21.sp)
+            }
+        },
+        contentPadding = PaddingValues(4.dp),
+        elevation = ButtonDefaults.elevation(0.dp)
+    )
 }

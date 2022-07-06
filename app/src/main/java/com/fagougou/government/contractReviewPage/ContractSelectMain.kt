@@ -20,32 +20,29 @@ import com.fagougou.government.model.StepModel
 
 @Composable
 fun ContractSelectMain(navController: NavController) {
-    val navController2 = rememberNavController()
-
     Column(
         Modifier.fillMaxSize(),
     ) {
         Header("智能合同审核", navController )
-        val stepModel = remember{ StepModel(
-            mutableStateListOf("选择类型","文件上传","文档预览","完成打印"),
-            mutableStateOf(0)
-        ) }
-
+        val stepModel = remember{
+            StepModel(
+                mutableStateListOf("选择类型","文件上传","文档预览","完成打印"),
+                mutableStateOf(0)
+            )
+        }
+        val navController2 = rememberNavController()
         SelfHelpBase(stepModel){
             Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xF3F3F3F3)),
-                horizontalAlignment = Alignment.CenterHorizontally
+                Modifier.fillMaxSize().background(Color(0xF3F3F3F3)),
+                Arrangement.Top,
+                Alignment.CenterHorizontally
             ) {
-                Column( Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally ) {
-                    NavHost(navController2, Router.contractSelectPage, Modifier.fillMaxHeight()) {
-                        composable(Router.contractSelectPage) { ContractSelectPage(navController2) }
-                        composable(Router.upload) { UploadGuidePage(navController2) }
-                        composable(Router.scanUpload) { ScanUpload(navController2) }
-                        composable(Router.previewLoad) { Previewload(navController2) }
-                        composable(Router.resultWebview) { ResultWebviewPage(navController2) }
-                    }
+                NavHost(navController2, Router.contractSelectPage, Modifier.fillMaxHeight()) {
+                    composable(Router.contractSelectPage) { ContractSelectPage(navController2) }
+                    composable(Router.upload) { UploadGuidePage(navController2) }
+                    composable(Router.scanUpload) { ScanUpload(navController2) }
+                    composable(Router.previewLoad) { Previewload(navController2) }
+                    composable(Router.resultWebview) { ResultWebviewPage(navController2) }
                 }
             }
         }

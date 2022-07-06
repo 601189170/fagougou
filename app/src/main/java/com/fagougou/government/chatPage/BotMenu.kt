@@ -1,18 +1,16 @@
 package com.fagougou.government.chatPage
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.fagougou.government.R
+import com.fagougou.government.chatPage.bottom.BotItem
 import com.fagougou.government.component.VerticalGrid
-import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.model.ContentStyle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun BotMenu() {
-    val scope = rememberCoroutineScope()
     val botResMap = mapOf(
         Pair("公司财税", R.drawable.bot_square_tax),
         Pair("交通事故", R.drawable.bot_square_traffic),
@@ -25,28 +23,8 @@ fun BotMenu() {
         Pair("消费维权", R.drawable.bot_square_consumer),
         Pair("民间借贷", R.drawable.bot_square_loan),
     )
-    VerticalGrid(
-        botResMap.toList(),
-        6,
-        128,
-        128,
-        {
-            with(DialogViewModel) {
-                clear()
-                title = "切换领域"
-                firstButtonText.value = "取消"
-                firstButtonOnClick.value = { content.clear() }
-                secondButtonText.value = "确定"
-                secondButtonOnClick.value = {
-                    content.clear()
-                    ChatViewModel.showBotMenu.value = false
-                    ChatViewModel.selectedChatBot.value = it.first
-                    scope.launch(Dispatchers.IO) { ChatViewModel.startChat() }
-                }
-                content.add( ContentStyle( "选择更换领域后，当前的咨询记录会清除，是否确定更换？" ) )
-            }
-        },
-        { ChatViewModel.selectedChatBot.value == it.first },
-        Color.Transparent
-    )
+    Spacer(Modifier.height(40.dp))
+    VerticalGrid(botResMap.toList(),6,36.dp,164.dp,128.dp){ modifier, pair ->
+        BotItem(modifier, pair)
+    }
 }
