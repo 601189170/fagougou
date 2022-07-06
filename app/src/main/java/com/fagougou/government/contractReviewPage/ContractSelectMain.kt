@@ -42,7 +42,7 @@ fun ContractSelectMain(navController: NavController) {
                     NavHost(navController2, Router.contractSelectPage, Modifier.fillMaxHeight()) {
                         composable(Router.contractSelectPage) { ContractSelectPage(navController2) }
                         composable(Router.upload) { UploadPage(navController2) }
-                        composable(Router.scanUpload) { Scanupload(navController2) }
+                        composable(Router.scanUpload) { ScanUpload(navController2) }
                         composable(Router.resultWebview) { ResultWebviewPage(navController2) }
                     }
                 }

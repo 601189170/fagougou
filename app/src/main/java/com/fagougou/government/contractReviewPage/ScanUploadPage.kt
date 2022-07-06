@@ -19,7 +19,7 @@ import com.fagougou.government.utils.SafeBack.safeBack
 
 @Composable
 
-fun Scanupload(navController: NavController) {
+fun ScanUpload(navController: NavController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),

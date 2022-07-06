@@ -1,4 +1,4 @@
-package com.fagougou.government.contractPage;
+package com.fagougou.government.contractLibraryPage;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -1,6 +1,5 @@
-package com.fagougou.government.contractPage
+package com.fagougou.government.contractLibraryPage
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,12 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.bugsnag.android.Bugsnag
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractPage.ContractViewModel.BaseLoadUrl
+import com.fagougou.government.contractLibraryPage.ContractViewModel.BaseLoadUrl
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.repo.Client
@@ -36,11 +34,9 @@ import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
 import androidx.compose.ui.graphics.Color as ComposeColor
-import com.fagougou.government.utils.Tips.toast
-import timber.log.Timber
 
 @Composable
-fun ContractWebView(navController: NavController) {
+fun ContractContent(navController: NavController) {
     LaunchedEffect(null){
         presentation?.playVideo(R.raw.vh_contract_web_view)
     }

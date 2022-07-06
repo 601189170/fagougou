@@ -9,7 +9,7 @@ import android.webkit.WebView
 import androidx.compose.runtime.mutableStateOf
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
-import com.fagougou.government.contractPage.PdfPrintAdapter
+import com.fagougou.government.contractLibraryPage.PdfPrintAdapter
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.utils.Tips.toast
 import com.m7.imkfsdk.MessageConstans

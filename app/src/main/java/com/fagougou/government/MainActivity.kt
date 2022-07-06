@@ -47,8 +47,8 @@ import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.consult.ChooseDomainActivity
 import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
-import com.fagougou.government.contractPage.ContractGuidePage
-import com.fagougou.government.contractPage.ContractWebView
+import com.fagougou.government.contractLibraryPage.LibraryGuidePage
+import com.fagougou.government.contractLibraryPage.ContractContent
 import com.fagougou.government.contractReviewPage.*
 import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
@@ -224,7 +224,7 @@ fun Main() {
             composable(Router.registerResult) { RegisterResultPage(navController) }
             composable(Router.home) { HomePage(navController) }
             composable(Router.admin) { AdminPage(navController) }
-            composable(Router.contract) { ContractGuidePage(navController) }
+            composable(Router.contract) { LibraryGuidePage(navController) }
             composable(Router.generateGuide) { GenerateGuide(navController) }
             composable(Router.generateContract) { GenerateContract(navController) }
             composable(Router.chatGuide) { ChatGuidePage(navController) }
@@ -234,12 +234,12 @@ fun Main() {
             composable(Router.case) { CasePage(navController) }
             composable(Router.statistic) { StatisticPage(navController) }
             composable(Router.calculator) { CalculatorGuidePage(navController) }
-            composable(Router.contractWebView) { ContractWebView(navController) }
+            composable(Router.contractWebView) { ContractContent(navController) }
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { UploadPage(navController) }
-            composable(Router.scanUpload) { Scanupload(navController) }
+            composable(Router.scanUpload) { ScanUpload(navController) }
             composable(Router.resultWebview) { ResultWebviewPage(navController) }
             composable(Router.previewLoad) { Previewload(navController) }
             composable(Router.self) { SelfPrintPage(navController) }

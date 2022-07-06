@@ -17,7 +17,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractPage.ContractViewModel
+import com.fagougou.government.contractLibraryPage.ContractViewModel
 import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.pop
 import com.fagougou.government.ui.theme.CORNER_FLOAT

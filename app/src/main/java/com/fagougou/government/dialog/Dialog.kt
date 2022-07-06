@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.contractPage.ContractViewModel
+import com.fagougou.government.contractLibraryPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.dialog.DialogViewModel.content
