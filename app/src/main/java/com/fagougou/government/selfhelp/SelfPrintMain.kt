@@ -19,7 +19,6 @@ import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.component.SelfHelpBase
 import com.fagougou.government.contractReviewPage.*
 import com.fagougou.government.model.StepModel
-import com.fagougou.government.repo.Client
 
 
 @Composable
@@ -47,16 +46,16 @@ fun SelfPrintMain(navController: NavController) {
                         stepModel.currentIndex.value=0
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2,"self")
-                        stepModel.currentIndex.value=0
-                    }
-                    composable(Router.previewLoad) {
-                        Previewload(navController2,navController, "self")
+                        Uploading(navController2)
                         stepModel.currentIndex.value=1
                     }
-                    composable(Router.resultWebview) {
-                        PrintCompletePage(navController)
+                    composable(Router.previewLoad) {
+                        PreviewLoad(navController2,navController, Router.printComplete)
                         stepModel.currentIndex.value=2
+                    }
+                    composable(Router.printComplete) {
+                        PrintCompletePage(navController)
+                        stepModel.currentIndex.value=3
                     }
                 }
             }

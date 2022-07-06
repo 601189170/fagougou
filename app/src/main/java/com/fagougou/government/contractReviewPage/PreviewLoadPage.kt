@@ -30,7 +30,7 @@ import com.rajat.pdfviewer.PdfRendererView
 import timber.log.Timber
 
 @Composable
-fun Previewload(navController2: NavController,navController: NavController,pageType:String) {
+fun PreviewLoad(navController2: NavController, navController: NavController, routeTarget:String) {
     Surface(color = Color.White){
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -96,8 +96,7 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                             secondButtonText.value = "确定"
                             secondButtonOnClick.value = {
                                 content.clear()
-
-                                navController2.navigate(if (pageType!="self") Router.upload else Router.self)
+                                navController2.navigate(routeTarget)
                             }
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }

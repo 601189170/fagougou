@@ -17,7 +17,6 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.SelfHelpBase
 import com.fagougou.government.model.StepModel
-import com.fagougou.government.repo.Client
 
 @Composable
 fun ContractSelectMain(navController: NavController) {
@@ -50,11 +49,11 @@ fun ContractSelectMain(navController: NavController) {
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2,"")
+                        Uploading(navController2)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.previewLoad) {
-                        Previewload(navController2,navController, "")
+                        PreviewLoad(navController2,navController, Router.resultWebview)
                         stepModel.currentIndex.value=2
                     }
                     composable(Router.resultWebview) {

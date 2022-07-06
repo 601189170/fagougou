@@ -28,7 +28,7 @@ import timber.log.Timber
 
 @Composable
 
-fun Uploading(navController: NavController,pageType:String) {
+fun Uploading(navController: NavController) {
     LaunchedEffect(null) {
         withContext(Dispatchers.IO){
             while (isActive){
@@ -81,7 +81,7 @@ fun Uploading(navController: NavController,pageType:String) {
             fontSize = 20.sp,
             color = Color(0xFFFF423E)
         )
-        if (pageType!="self") Button(modifier = Modifier
+        Button(modifier = Modifier
             .padding(top = 36.dp)
                 .height(64.dp)
                 .width(200.dp),

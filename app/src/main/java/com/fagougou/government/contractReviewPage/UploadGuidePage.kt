@@ -26,7 +26,6 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.contractReviewPage.UploadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UploadModel.selectId
 import com.fagougou.government.contractReviewPage.UploadModel.taskId
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
@@ -41,7 +40,6 @@ import timber.log.Timber
 
 object UploadModel{
     var taskId = ""
-    var selectId= mutableStateOf(0)
     fun generateSelfPrintUrl(taskId:String):String{
         val url = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
         return "$url$taskId#/"
@@ -50,6 +48,7 @@ object UploadModel{
 
 @Composable
 fun UploadGuidePage(navController: NavController) {
+    val selectId = remember { mutableStateOf(0) }
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
@@ -88,10 +87,14 @@ fun UploadGuidePage(navController: NavController) {
         ) {
             Surface(
                 Modifier
-                    .clickable { selectId.value= 1 }
+                    .clickable { selectId.value = 1 }
                     .width(416.dp)
                     .height(408.dp)
-                    .border(1.dp, Color(if (selectId.value==1) 0xFF007BFF else 0xFFEBEDF0),RoundedCornerShape(8.dp )),
+                    .border(
+                        1.dp,
+                        Color(if (selectId.value == 1) 0xFF007BFF else 0xFFEBEDF0),
+                        RoundedCornerShape(8.dp)
+                    ),
                 shape = RoundedCornerShape(8.dp )) {
                 Column(Modifier.padding(top = 32.dp,start = 64.dp,end = 64.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painter = painterResource(id = R.drawable.img_code), contentDescription =null )
@@ -105,16 +108,19 @@ fun UploadGuidePage(navController: NavController) {
                 Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.End) {
                     if (selectId.value==1)Image(painterResource(R.drawable.ic_icon_select_true), null)
                 }
-
             }
 
             Surface(
                 Modifier
                     .padding(start = 24.dp)
-                    .clickable { selectId.value= 2}
+                    .clickable { selectId.value = 2 }
                     .width(416.dp)
                     .height(408.dp)
-                    .border(1.dp, Color(if (selectId.value==2) 0xFF007BFF else 0xFFEBEDF0),RoundedCornerShape(8.dp )),
+                    .border(
+                        1.dp,
+                        Color(if (selectId.value == 2) 0xFF007BFF else 0xFFEBEDF0),
+                        RoundedCornerShape(8.dp)
+                    ),
                 shape = RoundedCornerShape(8.dp )) {
                 Column(Modifier.padding(top = 32.dp,start = 64.dp,end = 64.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painter = painterResource(id = R.drawable.img_camera), contentDescription =null )
@@ -149,6 +155,5 @@ fun UploadGuidePage(navController: NavController) {
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
         )
-
     }
 }
