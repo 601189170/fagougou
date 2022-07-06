@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -63,7 +64,6 @@ fun UploadPage(navController: NavController) {
         Arrangement.Top,
         Alignment.CenterHorizontally
     ) {
-        Header("合同审查", navController,{QrCodeViewModel.clear()} )
         BasicText( "请选择文件上传方式",160.dp)
         BasicText("二选一即可", 100.dp,21.sp )
         Row(
@@ -77,7 +77,6 @@ fun UploadPage(navController: NavController) {
                     .background(Color.Gray)
                     .width(200.dp)
                     .height(200.dp)){
-                Image(uploadBitmap.value.asImageBitmap(),null)
             }
             Box(
                 Modifier

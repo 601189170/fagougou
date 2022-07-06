@@ -36,6 +36,7 @@ object Router {
     const val lawyer ="lawyer"
     const val self ="self"
     const val examination ="examination"
+    const val contractSelectPage ="contractSelectPage"
 
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE

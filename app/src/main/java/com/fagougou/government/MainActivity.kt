@@ -1,5 +1,6 @@
 package com.fagougou.government
 
+import ContractSelectMain
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ZysjSystemManager
@@ -244,7 +245,7 @@ fun Main() {
             composable(Router.previewLoad) { Previewload(navController) }
             composable(Router.self) { SelfPrintPage(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
-            composable(Router.examination) { ContractSelectPage(navController) }
+            composable(Router.examination) { ContractSelectMain(navController) }
         }
     }
 }
