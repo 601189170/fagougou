@@ -1,13 +1,12 @@
 package com.fagougou.government.contractReviewPage
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,14 +17,35 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.component.BasicText
+import com.fagougou.government.repo.Client
+import com.fagougou.government.selfhelp.SelfPrintPageModel
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.SafeBack.safeBack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import okhttp3.Request
+import timber.log.Timber
 
 @Composable
 
 fun Uploading(navController: NavController,pageType:String) {
-
+    LaunchedEffect(null) {
+        withContext(Dispatchers.IO){
+            while (isActive){
+                delay(1000)
+                Timber.d("Checking upload for ${SelfPrintPageModel.taskId}.pdf")
+                val request = Request.Builder().url(Client.fileuploadUrl+ SelfPrintPageModel.taskId +".pdf").get().build()
+                val response = Client.noLoadClient.newCall(request).execute()
+                if (response.code == 200) {
+                    withContext(Dispatchers.Main){
+                        SelfPrintPageModel.taskId = ""
+                        navController.navigate(Router.previewLoad)
+                    }
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -44,7 +64,6 @@ fun Uploading(navController: NavController,pageType:String) {
         )
         Row(
             Modifier
-                .clickable { navController.navigate(Router.previewLoad) }
                 .padding(horizontal = 100.dp)
                 .padding(top = 28.dp)
         ) {
@@ -65,22 +84,18 @@ fun Uploading(navController: NavController,pageType:String) {
             fontSize = 20.sp,
             color = Color(0xFFFF423E)
         )
-        if (pageType!="self")
-        Button(modifier = Modifier
+        if (pageType!="self") Button(modifier = Modifier
             .padding(top = 36.dp)
                 .height(64.dp)
                 .width(200.dp),
             onClick = {
-                navController.popBackStack() },
+                navController.popBackStack()
+            },
             content = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("返回上一级", Modifier.padding(start = 16.dp), Color.White, 21.sp)
                 } },
             colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
-                )
-
-
-
-
+        )
     }
 }

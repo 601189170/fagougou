@@ -48,7 +48,8 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                     Modifier
                         .padding(start = 16.dp)
                         .height(48.dp)
-                        .width(56.dp))
+                        .width(56.dp)
+                )
             }
         }
         when (message.speaker) {
@@ -124,7 +125,7 @@ fun MessageItem(message: Message, index: Int, scope: CoroutineScope, navControll
                         VerticalGrid(
                             message.option.items,
                             4,
-                            18.dp,
+                            36.dp,
                             64.dp,
                             256.dp,
                         ){ modifier,data->

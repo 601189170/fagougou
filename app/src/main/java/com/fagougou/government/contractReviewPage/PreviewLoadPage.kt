@@ -37,6 +37,7 @@ import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun Previewload(navController2: NavController,navController: NavController,pageType:String) {
@@ -56,30 +57,27 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                 AndroidView(
                     {
                         PdfRendererView(activity).apply{
-                            initWithUrl(if (pageType!="self")Client.fileuploadUrl+ UpLoadModel.taskId +".pdf" else Client.fileuploadUrl+ SelfPrintPageModel.taskId +".pdf", PdfQuality.NORMAL, "")
+                            val url = Client.fileuploadUrl+ if (pageType!="self")UpLoadModel.taskId else SelfPrintPageModel.taskId +".pdf"
+                            Timber.d(url)
+                            initWithUrl(url, PdfQuality.NORMAL, "")
                         }
                     },
                     Modifier.fillMaxSize()
                 )
                 Row(
-                    Modifier.padding(16.dp),horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.Bottom) {
-
-                        Image( painterResource(R.drawable.ic_icon_full_screen),null )
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 40.dp)
-                                .clickable { },
-                            text = "全屏",
-                            fontSize = 20.sp,
-                            color = Color(0xFF606366)
-                        )
-
-
+                    Modifier.padding(16.dp),horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.Bottom
+                ) {
+                    Image( painterResource(R.drawable.ic_icon_full_screen),null )
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 40.dp)
+                            .clickable { },
+                        text = "全屏",
+                        fontSize = 20.sp,
+                        color = Color(0xFF606366)
+                    )
                 }
-
-
             }
-
             Surface(modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp),color = Color(0xFFDCE1E6)
@@ -114,7 +112,6 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
                     }
-
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(

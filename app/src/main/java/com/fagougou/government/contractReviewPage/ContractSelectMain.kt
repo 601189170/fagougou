@@ -41,16 +41,26 @@ fun ContractSelectMain(navController: NavController) {
                 Alignment.CenterHorizontally
             ) {
                 NavHost(navController2, Router.contractSelectPage, Modifier.fillMaxHeight()) {
-                    composable(Router.contractSelectPage) { ContractSelectPage(navController2)
-                        stepModel.currentIndex.value=0}
-                    composable(Router.upload) { UploadGuidePage(navController2)
-                        stepModel.currentIndex.value=1}
-                    composable(Router.uploading) { Uploading(navController2,"")
-                        stepModel.currentIndex.value=1}
-                    composable(Router.previewLoad) { Previewload(navController2,navController, "")
-                        stepModel.currentIndex.value=2}
-                    composable(Router.resultWebview) { ResultWebviewPage(navController)
-                        stepModel.currentIndex.value=3}
+                    composable(Router.contractSelectPage) {
+                        ContractSelectPage(navController2)
+                        stepModel.currentIndex.value=0
+                    }
+                    composable(Router.upload) {
+                        UploadGuidePage(navController2)
+                        stepModel.currentIndex.value=1
+                    }
+                    composable(Router.uploading) {
+                        Uploading(navController2,"")
+                        stepModel.currentIndex.value=1
+                    }
+                    composable(Router.previewLoad) {
+                        Previewload(navController2,navController, "")
+                        stepModel.currentIndex.value=2
+                    }
+                    composable(Router.resultWebview) {
+                        ResultWebviewPage(navController)
+                        stepModel.currentIndex.value=3
+                    }
                 }
             }
         }

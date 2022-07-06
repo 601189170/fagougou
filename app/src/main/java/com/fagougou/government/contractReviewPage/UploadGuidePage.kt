@@ -2,7 +2,6 @@ package com.fagougou.government.contractReviewPage
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,41 +13,34 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.bugsnag.android.Bugsnag
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.component.BasicText
-import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.consult.ChooseDomainActivity
-import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.contractReviewPage.UpLoadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UpLoadModel.ossUrl
 import com.fagougou.government.contractReviewPage.UpLoadModel.selectId
 import com.fagougou.government.contractReviewPage.UpLoadModel.taskId
 import com.fagougou.government.contractReviewPage.UpLoadModel.uploadBitmap
 import com.fagougou.government.repo.Client
-import com.fagougou.government.selfhelp.SelfPrintPageModel
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber
 
 
 object UpLoadModel{
-    const val ossUrl = "https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
     var taskId = ""
     val uploadBitmap = mutableStateOf( QrCodeViewModel.bitmap("null") )
     var selectId= mutableStateOf(0)

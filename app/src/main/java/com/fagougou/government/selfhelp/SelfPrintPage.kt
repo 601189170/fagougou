@@ -32,8 +32,8 @@ import timber.log.Timber
 object SelfPrintPageModel{
     var taskId = ""
     fun generateSelfPrintUrl(taskId:String):String{
-        val selfPrintUrl = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
-        return "$selfPrintUrl$taskId#/"
+        val selfPrintUrl = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com"
+        return "$selfPrintUrl/?taskId=$taskId#/"
     }
 }
 
@@ -46,9 +46,9 @@ fun SelfPrintPage(navController: NavController) {
         uploadBitmap.value=QrCodeViewModel.bitmap(url)
         withContext(Dispatchers.IO){
             while (isActive){
-                delay(1500)
-                Timber.d("Checking upload for $taskId.pdf")
-                val request = Request.Builder().url(Client.fileuploadUrl+taskId+".pdf").get().build()
+                delay(1000)
+                Timber.d("Checking upload for $taskId.tmp")
+                val request = Request.Builder().url(Client.fileuploadUrl+taskId+".tmp").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){

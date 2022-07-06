@@ -42,18 +42,24 @@ fun SelfPrintMain(navController: NavController) {
                 Alignment.CenterHorizontally
             ) {
                 NavHost(navController2, Router.self, Modifier.fillMaxHeight()) {
-                    composable(Router.self) { SelfPrintPage(navController2)
-                        stepModel.currentIndex.value=0}
-                    composable(Router.uploading) { Uploading(navController2,"self")
-                        stepModel.currentIndex.value=0}
-                    composable(Router.previewLoad) { Previewload(navController2,navController, "self")
-                        stepModel.currentIndex.value=1}
-                    composable(Router.resultWebview) { PrintCompletePage(navController)
-                        stepModel.currentIndex.value=2}
-
-                }
+                    composable(Router.self) {
+                        SelfPrintPage(navController2)
+                        stepModel.currentIndex.value=0
+                    }
+                    composable(Router.uploading) {
+                        Uploading(navController2,"self")
+                        stepModel.currentIndex.value=0
+                    }
+                    composable(Router.previewLoad) {
+                        Previewload(navController2,navController, "self")
+                        stepModel.currentIndex.value=1
+                    }
+                    composable(Router.resultWebview) {
+                        PrintCompletePage(navController)
+                        stepModel.currentIndex.value=2
+                    }
                 }
             }
         }
-
+    }
 }
