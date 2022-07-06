@@ -7,6 +7,7 @@ import android.print.PrintJob
 import android.print.PrintManager
 import android.webkit.WebView
 import androidx.compose.runtime.mutableStateOf
+import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
 import com.fagougou.government.contractLibraryPage.PdfPrintAdapter
@@ -32,11 +33,12 @@ object Printer {
         printFromAdapter(PdfPrintAdapter( activity, file ))
     }
 
-    fun printFromAdapter(adapter:PrintDocumentAdapter){
+    fun printFromAdapter(adapter:PrintDocumentAdapter,navController: NavController?=null){
         if(currentJob!=null){
             toast("请等待当前打印任务完成")
             return
         }
+
         currentJob = printManager.print("打印合同", adapter, PrintAttributes.Builder().build())
         EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewShow))
         CoroutineScope(Dispatchers.Default).launch {
@@ -44,7 +46,10 @@ object Printer {
                 delay(250)
                 Router.lastTouchTime = Time.stamp
                 when {
-                    currentJob?.isCompleted == true -> currentJob = null
+                    currentJob?.isCompleted == true ->  {
+                        currentJob = null
+                        navController?.navigate(Router.printComplete)
+                    }
                     currentJob?.isFailed == true -> {
                         currentJob = null
                         toast("打印任务已失败")
