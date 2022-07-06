@@ -39,7 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun Previewload(navController: NavController) {
+fun Previewload(navController2: NavController,navController: NavController,pageType:String) {
     Surface(color = Color.White){
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -56,21 +56,25 @@ fun Previewload(navController: NavController) {
                 AndroidView(
                     {
                         PdfRendererView(activity).apply{
-                            initWithUrl(Client.fileuploadUrl+ UpLoadModel.taskId +".pdf", PdfQuality.NORMAL, "")
+                            initWithUrl(if (pageType!="self")Client.fileuploadUrl+ UpLoadModel.taskId +".pdf" else Client.fileuploadUrl+ SelfPrintPageModel.taskId +".pdf", PdfQuality.NORMAL, "")
                         }
                     },
                     Modifier.fillMaxSize()
                 )
-                Row( Modifier.fillMaxSize().padding(16.dp),horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.Bottom) {
+                Row(
+                    Modifier.padding(16.dp),horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.Bottom) {
 
-                    Image( painterResource(R.drawable.ic_icon_full_screen),null )
-                    Text(
-                        modifier = Modifier.padding( top = 40.dp)
-                            .clickable {      },
-                        text = "全屏",
-                        fontSize = 20.sp,
-                        color = Color(0xFF606366)
-                    )
+                        Image( painterResource(R.drawable.ic_icon_full_screen),null )
+                        Text(
+                            modifier = Modifier
+                                .padding(top = 40.dp)
+                                .clickable { },
+                            text = "全屏",
+                            fontSize = 20.sp,
+                            color = Color(0xFF606366)
+                        )
+
+
                 }
 
 
@@ -104,7 +108,8 @@ fun Previewload(navController: NavController) {
                             secondButtonText.value = "确定"
                             secondButtonOnClick.value = {
                                 content.clear()
-                                navController.navigate(Router.upload)
+
+                                navController2.navigate(if (pageType!="self") Router.upload else Router.self)
                             }
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
@@ -117,6 +122,7 @@ fun Previewload(navController: NavController) {
                         .height(64.dp)
                         .width(200.dp),
                     onClick = { //调用审查接口
+                        navController.navigate(Router.home)
                         navController.navigate(Router.resultWebview) },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){

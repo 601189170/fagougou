@@ -41,6 +41,8 @@ object QrCodeViewModel {
 
     fun bitmap(url: String = content): Bitmap = CodeUtils.createQRCode(url, 200, null, Color.BLACK)
 
+    fun bitmap(url: String = content,height:Int): Bitmap = CodeUtils.createQRCode(url, height, null, Color.BLACK)
+
     fun clear(){
         _content.value = ""
         _hint.value = ""

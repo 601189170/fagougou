@@ -73,39 +73,10 @@ fun ResultWebviewPage(navController: NavController) {
                         }
                     }
                 },
-                Modifier
-                    .fillMaxHeight(0.9f)
-                    .fillMaxWidth(),
+                Modifier.fillMaxSize(),
             )
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp), color = Color(0xFFEEEEEE)
-            ) {}
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(1.dp, Color.LightGray, RoundedCornerShape(CORNER_FLOAT)),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    modifier = Modifier
-                        .height(60.dp)
-                        .width(200.dp),
-                    onClick = {
-                        navController.safeBack()
-                    },
-                    content = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-//                            Image(painterResource(R.drawable.ic_wechat),null)
-                            Text("返回", Modifier.padding(start = 16.dp), Color.White, 21.sp)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
-                )
 
-            }
+
         }
     }
 }

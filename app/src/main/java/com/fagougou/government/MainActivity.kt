@@ -62,6 +62,7 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
+import com.fagougou.government.selfhelp.SelfPrintMain
 import com.fagougou.government.selfhelp.SelfPrintPage
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
@@ -239,10 +240,8 @@ fun Main() {
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
             composable(Router.upload) { UploadGuidePage(navController) }
-            composable(Router.scanUpload) { ScanUpload(navController) }
             composable(Router.resultWebview) { ResultWebviewPage(navController) }
-            composable(Router.previewLoad) { Previewload(navController) }
-            composable(Router.self) { SelfPrintPage(navController) }
+            composable(Router.self) { SelfPrintMain(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
             composable(Router.examination) { ContractSelectMain(navController) }
         }

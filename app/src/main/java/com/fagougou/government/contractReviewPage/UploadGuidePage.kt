@@ -72,7 +72,7 @@ fun UploadGuidePage(navController: NavController) {
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){
-                        navController.navigate(Router.scanUpload)
+                        navController.navigate(Router.uploading)
                         QrCodeViewModel.clear()
                     }
                 }

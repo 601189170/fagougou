@@ -24,7 +24,7 @@ import com.fagougou.government.utils.SafeBack.safeBack
 
 @Composable
 
-fun ScanUpload(navController: NavController) {
+fun Uploading(navController: NavController,pageType:String) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -50,7 +50,7 @@ fun ScanUpload(navController: NavController) {
         ) {
 
             Image(painter = painterResource(id = R.drawable.img_phone_step1), contentDescription =null )
-            Image(modifier = Modifier.padding(horizontal = 24.dp),painter = painterResource(id = R.drawable.img_phone_right), contentDescription =null )
+            Image(modifier = Modifier.padding(horizontal = 24.dp).padding(vertical = 167.dp),painter = painterResource(id = R.drawable.img_phone_right), contentDescription =null )
             Image(painter = painterResource(id = R.drawable.img_phone_step2), contentDescription =null )
         }
         Text(
@@ -65,6 +65,7 @@ fun ScanUpload(navController: NavController) {
             fontSize = 20.sp,
             color = Color(0xFFFF423E)
         )
+        if (pageType!="self")
         Button(modifier = Modifier
             .padding(top = 36.dp)
                 .height(64.dp)

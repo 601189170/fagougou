@@ -30,7 +30,7 @@ object Router {
     const val lawsPage ="lawsPage"
     const val reportPage ="reportPage"
     const val upload ="upload"
-    const val scanUpload ="scanUpload"
+    const val uploading ="uploading"
     const val resultWebview ="resultWebview"
     const val previewLoad ="previewLoad"
     const val lawyer ="lawyer"
