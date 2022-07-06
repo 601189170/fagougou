@@ -49,7 +49,7 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                         PdfRendererView(activity).apply{
                             val url = Client.fileuploadUrl+ UploadModel.taskId +".pdf"
                             Timber.d(url)
-                            initWithUrl(url, PdfQuality.NORMAL, "")
+                            initWithUrl(url, PdfQuality.NORMAL, "0")
                         }
                     },
                     Modifier.fillMaxSize()
@@ -102,6 +102,7 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
                     }
+
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(
@@ -109,11 +110,11 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                         .height(64.dp)
                         .width(200.dp),
                     onClick = { //调用审查接口
-                        navController.navigate(Router.home)
-                        navController.navigate(Router.resultWebview) },
+                              if (pageType!="self") navController.navigate(Router.resultWebview)  else DialogViewModel.confirmPrint("pdf")
+                              },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
-                            Text("开始审核",Modifier,Color.White,24.sp)
+                            Text(if(pageType!="self") "开始审核" else "开始打印",Modifier,Color.White,24.sp)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)

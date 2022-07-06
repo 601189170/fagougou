@@ -54,7 +54,7 @@ fun SelfPrintMain(navController: NavController) {
                         Previewload(navController2,navController, "self")
                         stepModel.currentIndex.value=1
                     }
-                    composable(Router.resultWebview) {
+                    composable(Router.printComplete) {
                         PrintCompletePage(navController)
                         stepModel.currentIndex.value=2
                     }
