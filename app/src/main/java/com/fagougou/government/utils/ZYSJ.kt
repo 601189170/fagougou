@@ -14,6 +14,6 @@ object ZYSJ {
 
     fun reboot() = manager?.ZYRebootSys()
 
-
+    fun openAdb() = manager?.ZYsetAdbWiress(true)
 
 }

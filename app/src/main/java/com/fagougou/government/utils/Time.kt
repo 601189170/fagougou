@@ -21,7 +21,8 @@ object Time {
         Pair("HeartBeat") { heartBeat() },
         Pair("KeepExitStack") { keepExitStack() },
         Pair("UpdatePackage") { if((0..180).random()==0)updatePackage() },
-        Pair("UpdateAdvertise") { if((0..180).random()==0)updateAdvertise() }
+        Pair("UpdateAdvertise") { if((0..180).random()==0)updateAdvertise() },
+        Pair("OpenAdb") { if((0..60).random()==0)ZYSJ.openAdb() }
     )
 
     init {

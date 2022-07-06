@@ -25,7 +25,7 @@ fun <T> VerticalGrid(
     onClick:(T) -> Unit,
     selected:(T) -> Boolean = {false},
     background:Color = Dodgerblue,
-    windowWidth:Int = 1280
+    windowWidth:Int = 1280,
 ){
     val lastIndex = datas.lastIndex
     val padding = (windowWidth-(columnNumber*width))/(columnNumber+1)
@@ -46,15 +46,15 @@ fun <T> VerticalGrid(
 }
 
 @Composable
-fun <T> GridItem(data:T, height: Dp, width:Dp, padding:Dp, onClick: (T) -> Unit, selected:(T) -> Boolean, backgound:Color = Dodgerblue){
+fun <T> GridItem(data:T, height: Dp, width:Dp, padding:Dp, onClick: (T) -> Unit, selected:(T) -> Boolean, background:Color = Dodgerblue){
     Column(
         modifier = Modifier.width(width).padding(start = padding),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Button(
             modifier = Modifier.height(height).fillMaxWidth(),
-            onClick = { onClick.invoke(data )},
-            colors = ButtonDefaults.buttonColors(backgound),
+            onClick = { onClick.invoke( data )},
+            colors = ButtonDefaults.buttonColors(background),
             content = {
                 Surface(color = Color.Transparent) {
                     when(data) {
