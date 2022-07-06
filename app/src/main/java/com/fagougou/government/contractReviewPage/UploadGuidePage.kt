@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,10 +25,9 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractReviewPage.UpLoadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UpLoadModel.selectId
-import com.fagougou.government.contractReviewPage.UpLoadModel.taskId
-import com.fagougou.government.contractReviewPage.UpLoadModel.uploadBitmap
+import com.fagougou.government.contractReviewPage.UploadModel.generateSelfPrintUrl
+import com.fagougou.government.contractReviewPage.UploadModel.selectId
+import com.fagougou.government.contractReviewPage.UploadModel.taskId
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
@@ -39,19 +39,18 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber
 
-
-object UpLoadModel{
+object UploadModel{
     var taskId = ""
-    val uploadBitmap = mutableStateOf( QrCodeViewModel.bitmap("null") )
     var selectId= mutableStateOf(0)
     fun generateSelfPrintUrl(taskId:String):String{
-        val Url = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
-        return "$Url$taskId#/"
+        val url = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
+        return "$url$taskId#/"
     }
 }
 
 @Composable
 fun UploadGuidePage(navController: NavController) {
+    val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
         val url = generateSelfPrintUrl(taskId)
@@ -59,13 +58,13 @@ fun UploadGuidePage(navController: NavController) {
         withContext(Dispatchers.IO) {
             while (isActive) {
                 delay(1500)
-                Timber.d("Checking upload for ${taskId}.pdf")
-                val request = Request.Builder().url(Client.fileuploadUrl+taskId +".pdf").get().build()
+                Timber.d("Checking upload for ${taskId}.tmp")
+                val request = Request.Builder().url(Client.fileuploadUrl+taskId +".tmp").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){
-                        navController.navigate(Router.uploading)
                         QrCodeViewModel.clear()
+                        navController.navigate(Router.uploading)
                     }
                 }
             }

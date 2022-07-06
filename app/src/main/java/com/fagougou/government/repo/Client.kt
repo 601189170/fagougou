@@ -63,8 +63,6 @@ object Client {
 
     val noLoadClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(CommonAuthInterceptor())
             .connectTimeout(10000, TimeUnit.MILLISECONDS)
             .readTimeout(10000, TimeUnit.MILLISECONDS)
             .writeTimeout(10000, TimeUnit.MILLISECONDS)

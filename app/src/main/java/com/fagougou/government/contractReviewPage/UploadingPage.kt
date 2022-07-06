@@ -18,7 +18,6 @@ import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.repo.Client
-import com.fagougou.government.selfhelp.SelfPrintPageModel
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,12 +33,11 @@ fun Uploading(navController: NavController,pageType:String) {
         withContext(Dispatchers.IO){
             while (isActive){
                 delay(1000)
-                Timber.d("Checking upload for ${SelfPrintPageModel.taskId}.pdf")
-                val request = Request.Builder().url(Client.fileuploadUrl+ SelfPrintPageModel.taskId +".pdf").get().build()
+                Timber.d("Checking upload for ${UploadModel.taskId}.pdf")
+                val request = Request.Builder().url(Client.fileuploadUrl+ UploadModel.taskId +".pdf").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){
-                        SelfPrintPageModel.taskId = ""
                         navController.navigate(Router.previewLoad)
                     }
                 }
@@ -67,7 +65,6 @@ fun Uploading(navController: NavController,pageType:String) {
                 .padding(horizontal = 100.dp)
                 .padding(top = 28.dp)
         ) {
-
             Image(painter = painterResource(id = R.drawable.img_phone_step1), contentDescription =null )
             Image(modifier = Modifier.padding(horizontal = 24.dp).padding(vertical = 167.dp),painter = painterResource(id = R.drawable.img_phone_right), contentDescription =null )
             Image(painter = painterResource(id = R.drawable.img_phone_step2), contentDescription =null )

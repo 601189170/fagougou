@@ -2,7 +2,6 @@ package com.fagougou.government.contractReviewPage
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,23 +18,15 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.ChatViewModel
-import com.fagougou.government.component.BasicText
-import com.fagougou.government.component.Header
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 
 import com.fagougou.government.repo.Client
-import com.fagougou.government.selfhelp.SelfPrintPageModel
 
-import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
 
-import com.fagougou.government.utils.SafeBack.safeBack
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -57,7 +47,7 @@ fun Previewload(navController2: NavController,navController: NavController,pageT
                 AndroidView(
                     {
                         PdfRendererView(activity).apply{
-                            val url = Client.fileuploadUrl+ if (pageType!="self")UpLoadModel.taskId else SelfPrintPageModel.taskId +".pdf"
+                            val url = Client.fileuploadUrl+ UploadModel.taskId +".pdf"
                             Timber.d(url)
                             initWithUrl(url, PdfQuality.NORMAL, "")
                         }
