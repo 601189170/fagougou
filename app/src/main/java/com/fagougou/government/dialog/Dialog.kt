@@ -76,7 +76,7 @@ object DialogViewModel {
         secondButtonOnClick.value = {}
     }
 
-    fun confirmPrint(mode:String,type:Int=1) {
+    fun confirmPrint(file:File? = null) {
         GenerateContractViewModel.lastModifier = Time.stamp.toString()
         clear()
         title = "即将进行打印"
@@ -87,19 +87,15 @@ object DialogViewModel {
         firstButtonOnClick.value = { clear() }
         secondButtonOnClick.value = {
             startPrint()
-            when(mode){
-                "pdf" -> {
-                    try{
-                        val pdfFile = File(activity.cacheDir, if (type==1) "0.pdf" else "${ContractViewModel.pdfFile?.id ?: "0"}.pdf")
-                        Printer.printPdf(pdfFile)
-                    }catch (e:Exception){
-                        Timber.e(e)
-                        toast(e.toString())
-                        clear()
-                    }
+            if(file==null)Printer.webViewPrint.value=true
+            file?.let{
+                try{
+                    Printer.printPdf(it)
+                }catch (e:Exception){
+                    Timber.e(e)
+                    toast(e.toString())
+                    clear()
                 }
-                "webView" -> Printer.webViewPrint.value=true
-                else -> clear()
             }
         }
     }

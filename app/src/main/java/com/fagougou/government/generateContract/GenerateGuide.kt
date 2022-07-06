@@ -148,7 +148,7 @@ fun GenerateGuide(navController: NavController) {
                             .width(32.dp)
                             .height(32.dp))
                     Button(
-                        { DialogViewModel.confirmPrint("webView") },
+                        { DialogViewModel.confirmPrint() },
                         Modifier.height(60.dp).width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         content = {

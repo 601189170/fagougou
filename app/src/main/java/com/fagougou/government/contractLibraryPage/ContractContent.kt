@@ -109,7 +109,9 @@ fun ContractContent(navController: NavController) {
                         .height(60.dp)
                         .padding(start = 24.dp)
                         .width(200.dp),
-                    onClick = { DialogViewModel.confirmPrint("pdf") },
+                    onClick = {
+                        DialogViewModel.confirmPrint(File(activity.cacheDir, "${ContractViewModel.pdfFile?.id ?: "0"}.pdf"))
+                    },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
                             Image(painterResource(R.drawable.ic_painter),null)

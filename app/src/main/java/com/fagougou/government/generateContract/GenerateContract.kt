@@ -72,7 +72,7 @@ fun GenerateContract(navController: NavController) {
                             shape = RoundedCornerShape(18)
                         )
                         Button(
-                            { DialogViewModel.confirmPrint("webView") },
+                            { DialogViewModel.confirmPrint() },
                             Modifier
                                 .height(60.dp)
                                 .width(200.dp),

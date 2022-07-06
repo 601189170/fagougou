@@ -28,6 +28,7 @@ import com.fagougou.government.ui.theme.Dodgerblue
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import timber.log.Timber
+import java.io.File
 
 @Composable
 fun PreviewLoad(navController2: NavController, navController: NavController, routeTarget:String) {
@@ -49,7 +50,7 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                         PdfRendererView(activity).apply{
                             val url = Client.fileuploadUrl+ UploadModel.taskId +".pdf"
                             Timber.d(url)
-                            initWithUrl(url, PdfQuality.NORMAL, "0")
+                            initWithUrl(url, PdfQuality.NORMAL, "selfPrint")
                         }
                     },
                     Modifier.fillMaxSize()
@@ -108,12 +109,20 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                     modifier = Modifier
                         .height(64.dp)
                         .width(200.dp),
-                    onClick = { //调用审查接口
-                              if (pageType!="self") navController.navigate(Router.resultWebview)  else DialogViewModel.confirmPrint("pdf")
-                              },
+                    onClick = {
+                        when (routeTarget) {
+                            Router.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
+                            Router.resultWebview -> navController.navigate(Router.resultWebview)
+                        }
+                    },
                     content = {
                         Row( verticalAlignment = Alignment.CenterVertically ){
-                            Text(if(pageType!="self") "开始审核" else "开始打印",Modifier,Color.White,24.sp)
+                            val note = when(routeTarget){
+                                Router.printComplete -> "开始打印"
+                                Router.resultWebview -> "开始审核"
+                                else -> ""
+                            }
+                            Text(note,Modifier,Color.White,24.sp)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
