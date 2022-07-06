@@ -17,7 +17,7 @@ import com.fagougou.government.Router
 
 @Composable
 fun ContractSelectPage(navController: NavController) {
-    Column {
+    Column (horizontalAlignment = Alignment.CenterHorizontally){
         Text(
             "请选择合同类型",
             Modifier.padding( top = 40.dp),

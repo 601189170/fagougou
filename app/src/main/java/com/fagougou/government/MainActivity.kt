@@ -238,7 +238,7 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
-            composable(Router.upload) { UploadPage(navController) }
+            composable(Router.upload) { UploadGuidePage(navController) }
             composable(Router.scanUpload) { ScanUpload(navController) }
             composable(Router.resultWebview) { ResultWebviewPage(navController) }
             composable(Router.previewLoad) { Previewload(navController) }
