@@ -8,6 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +33,7 @@ import timber.log.Timber
 import java.io.File
 
 @Composable
-fun PreviewLoad(navController2: NavController, navController: NavController, routeTarget:String) {
+fun PreviewLoad(navController2: NavController, navController: NavController, fullScreenMode: MutableState<Boolean>, routeTarget:String) {
     Surface(color = Color.White){
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -63,7 +64,7 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                     Text(
                         modifier = Modifier
                             .padding(top = 40.dp)
-                            .clickable { },
+                            .clickable { fullScreenMode.value = !fullScreenMode.value },
                         text = "全屏",
                         fontSize = 20.sp,
                         color = Color(0xFF606366)
@@ -113,7 +114,6 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                         when (routeTarget) {
                             Router.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
                             Router.resultWebview -> {
-                                navController.navigate(Router.home)
                                 navController.navigate(Router.resultWebview)
                             }
                         }
@@ -135,14 +135,13 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
     }
     Printer.isPrint.value=false
     LaunchedEffect(null) {
-        withContext(Dispatchers.IO) {
+        if(routeTarget==Router.printComplete)withContext(Dispatchers.Default) {
             while (isActive){
                 delay(250)
                 Router.lastTouchTime = Time.stamp
                 if (Printer.isPrint.value){
                     withContext(Dispatchers.Main){
-                        navController.navigate(Router.home)
-                        navController.navigate(Router.printComplete)
+                        navController.navigate(routeTarget)
                         Printer.isPrint.value=false
                     }
                 }

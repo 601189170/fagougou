@@ -25,14 +25,14 @@ import com.fagougou.government.model.StepModel
 fun SelfPrintMain(navController: NavController) {
     val navController2 = rememberNavController()
     val stepModel = remember{ StepModel(mutableStateListOf("文件上传","文档预览","完成打印"),mutableStateOf(0)) }
+    val fullScreenMode = remember{ mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize(),
         Arrangement.Top,
         Alignment.CenterHorizontally
     ) {
         Header("自助打印", navController,{QrCodeViewModel.clear()} )
-
-        SelfHelpBase(stepModel){
+        SelfHelpBase(stepModel,fullScreenMode){
             Column(
                 Modifier
                     .fillMaxSize()
@@ -46,16 +46,16 @@ fun SelfPrintMain(navController: NavController) {
                         stepModel.currentIndex.value=0
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2,Router.printComplete)
-                        stepModel.currentIndex.value=1
+                        Uploading(navController2)
+                        stepModel.currentIndex.value=0
                     }
                     composable(Router.previewLoad) {
-                        PreviewLoad(navController2,navController, Router.printComplete)
+                        PreviewLoad(navController2,navController, fullScreenMode,Router.printComplete)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.printComplete) {
                         PrintCompletePage(navController)
-                        stepModel.currentIndex.value=3
+                        stepModel.currentIndex.value=2
                     }
                 }
             }

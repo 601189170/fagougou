@@ -2,10 +2,7 @@ package com.fagougou.government.contractReviewPage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +18,16 @@ import com.fagougou.government.model.StepModel
 @Composable
 fun ContractSelectMain(navController: NavController) {
     val navController2 = rememberNavController()
-
+    val fullScreenMode = remember{ mutableStateOf(false) }
+    val stepModel = remember{ StepModel(
+        mutableStateListOf("选择类型","文件上传","文档预览","完成打印"),
+        mutableStateOf(0)
+    ) }
     Column(
-        Modifier.fillMaxSize(),
+        Modifier.fillMaxSize()
     ) {
         Header("智能合同审核", navController )
-        val stepModel = remember{ StepModel(
-            mutableStateListOf("选择类型","文件上传","文档预览","完成打印"),
-            mutableStateOf(0)
-        ) }
-
-        SelfHelpBase(stepModel){
+        SelfHelpBase(stepModel,fullScreenMode){
             Column(
                 Modifier
                     .fillMaxSize()
@@ -49,11 +45,11 @@ fun ContractSelectMain(navController: NavController) {
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2,Router.resultWebview)
+                        Uploading(navController2)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.previewLoad) {
-                        PreviewLoad(navController2,navController, Router.resultWebview)
+                        PreviewLoad(navController2,navController,fullScreenMode, Router.resultWebview)
                         stepModel.currentIndex.value=2
                     }
                     composable(Router.resultWebview) {
