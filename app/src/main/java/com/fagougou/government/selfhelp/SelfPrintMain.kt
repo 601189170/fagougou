@@ -46,12 +46,12 @@ fun SelfPrintMain(navController: NavController) {
                         stepModel.currentIndex.value=0
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2)
+                        Uploading(navController2,Router.printComplete)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.previewLoad) {
                         PreviewLoad(navController2,navController, Router.printComplete)
-                        stepModel.currentIndex.value=2
+                        stepModel.currentIndex.value=1
                     }
                     composable(Router.printComplete) {
                         PrintCompletePage(navController)

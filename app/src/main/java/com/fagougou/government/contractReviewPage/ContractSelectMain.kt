@@ -49,7 +49,7 @@ fun ContractSelectMain(navController: NavController) {
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.uploading) {
-                        Uploading(navController2)
+                        Uploading(navController2,Router.resultWebview)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.previewLoad) {

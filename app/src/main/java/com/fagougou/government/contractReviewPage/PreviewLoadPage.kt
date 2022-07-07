@@ -1,5 +1,6 @@
 package com.fagougou.government.contractReviewPage
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -7,6 +8,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,15 +26,23 @@ import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.repo.Client
 
 import com.fagougou.government.ui.theme.Dodgerblue
+import com.fagougou.government.utils.Printer
+import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
+import com.m7.imkfsdk.MessageConstans
+import com.m7.imkfsdk.chat.MessageEvent
 
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
+import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
 
 @Composable
 fun PreviewLoad(navController2: NavController, navController: NavController, routeTarget:String) {
     Surface(color = Color.White){
+
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 modifier = Modifier.padding( top = 40.dp),
@@ -112,7 +122,10 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                     onClick = {
                         when (routeTarget) {
                             Router.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
-                            Router.resultWebview -> navController.navigate(Router.resultWebview)
+                            Router.resultWebview -> {
+                                navController.navigate(Router.home)
+                                navController.navigate(Router.resultWebview)
+                            }
                         }
                     },
                     content = {
@@ -129,5 +142,25 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                 )
             }
         }
+
     }
+    Printer.isPrint.value=false
+    LaunchedEffect(null) {
+        withContext(Dispatchers.IO) {
+            while (isActive){
+                delay(250)
+                Router.lastTouchTime = Time.stamp
+                if (Printer.isPrint.value){
+                    withContext(Dispatchers.Main){
+                        navController.navigate(Router.home)
+                        navController.navigate(Router.printComplete)
+                        Printer.isPrint.value=false
+                    }
+                }
+
+            }
+        }
+    }
+
+
 }

@@ -62,6 +62,7 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
+import com.fagougou.government.selfhelp.PrintCompletePage
 import com.fagougou.government.selfhelp.SelfPrintMain
 import com.fagougou.government.selfhelp.SelfPrintPage
 import com.fagougou.government.setting.AdminPage
@@ -244,6 +245,7 @@ fun Main() {
             composable(Router.self) { SelfPrintMain(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
             composable(Router.examination) { ContractSelectMain(navController) }
+            composable(Router.printComplete) { PrintCompletePage(navController) }
         }
     }
 }

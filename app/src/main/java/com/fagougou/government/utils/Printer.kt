@@ -24,6 +24,7 @@ object Printer {
     var webViewPrint = mutableStateOf(false)
     val printManager = activity.getSystemService(Context.PRINT_SERVICE) as PrintManager
     var currentJob : PrintJob? = null
+    var isPrint = mutableStateOf(false)
 
     fun printWebView(webView: WebView){
         printFromAdapter(webView.createPrintDocumentAdapter("打印合同"))
@@ -33,7 +34,7 @@ object Printer {
         printFromAdapter(PdfPrintAdapter( activity, file ))
     }
 
-    fun printFromAdapter(adapter:PrintDocumentAdapter,navController: NavController?=null){
+    fun printFromAdapter(adapter:PrintDocumentAdapter){
         if(currentJob!=null){
             toast("请等待当前打印任务完成")
             return
@@ -47,8 +48,8 @@ object Printer {
                 Router.lastTouchTime = Time.stamp
                 when {
                     currentJob?.isCompleted == true ->  {
+                        isPrint.value=true
                         currentJob = null
-                        navController?.navigate(Router.printComplete)
                     }
                     currentJob?.isFailed == true -> {
                         currentJob = null
