@@ -31,8 +31,8 @@ fun SelfPrintPage(navController: NavController) {
     val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect(null) {
         taskId = "${Time.stamp}_"+(0..999999).random()
-        val url = generateSelfPrintUrl(taskId)
-        uploadBitmap.value=QrCodeViewModel.bitmap(url)
+        val url = generateSelfPrintUrl(taskId,"selfPrint")
+        uploadBitmap.value=QrCodeViewModel.bitmap(url,120)
         withContext(Dispatchers.IO){
             while (isActive){
                 delay(1000)
@@ -48,34 +48,26 @@ fun SelfPrintPage(navController: NavController) {
             }
         }
     }
-
-
     Column(
         Modifier.fillMaxSize(),
         Arrangement.Top,
         Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding( top = 32.dp),
-            text = "微信扫码打印",
+            "微信扫码打印",
+            Modifier.padding( top = 32.dp),
             fontSize = 28.sp,
             color = Color(0xFF303133)
         )
         Text(
-            modifier = Modifier.padding( top = 8.dp),
-            text = "使用微信扫描以下二维码，上传文件成功后即可快速打印",
+            "使用微信扫描以下二维码，上传文件成功后即可快速打印",
+            Modifier.padding( top = 8.dp),
             fontSize = 20.sp,
             color = Color(0xFF303133)
         )
-
-            Box(Modifier.padding(top = 44.dp),contentAlignment= Alignment.Center) {
-                Image(painter = painterResource(id = R.drawable.img_print_code), contentDescription =null )
-                Image(QrCodeViewModel.bitmap(generateSelfPrintUrl(taskId),120).asImageBitmap(),null)
-            }
-
-
-
-
+        Box(Modifier.padding(top = 44.dp),contentAlignment= Alignment.Center) {
+            Image(painter = painterResource(id = R.drawable.img_print_code), contentDescription =null )
+            Image(uploadBitmap.value.asImageBitmap(),null)
+        }
     }
-
 }

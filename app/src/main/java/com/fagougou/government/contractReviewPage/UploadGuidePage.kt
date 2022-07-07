@@ -40,23 +40,21 @@ import timber.log.Timber
 
 object UploadModel{
     var taskId = ""
-    fun generateSelfPrintUrl(taskId:String):String{
+    fun generateSelfPrintUrl(taskId:String,route:String):String{
         val url = "https://www-1251511189.cos-website.ap-nanjing.myqcloud.com/?taskId="
-        return "$url$taskId#/"
+        return "$url$taskId#/$route"
     }
 }
 
 @Composable
 fun UploadGuidePage(navController: NavController) {
     val selectId = remember { mutableStateOf(0) }
-    val uploadBitmap = remember{ mutableStateOf( QrCodeViewModel.bitmap("null") ) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
-        val url = generateSelfPrintUrl(taskId)
-        uploadBitmap.value=QrCodeViewModel.bitmap(url)
         withContext(Dispatchers.IO) {
             while (isActive) {
                 delay(1500)
+                if(selectId.value!=1)continue
                 Timber.d("Checking upload for ${taskId}.tmp")
                 val request = Request.Builder().url(Client.fileuploadUrl+taskId +".tmp").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
@@ -75,8 +73,8 @@ fun UploadGuidePage(navController: NavController) {
         Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding( top = 40.dp),
-            text = "请选择文件上传方式",
+            "请选择文件上传方式",
+            Modifier.padding( top = 40.dp),
             fontSize = 28.sp,
             color = Color(0xFF303133)
         )
@@ -99,8 +97,8 @@ fun UploadGuidePage(navController: NavController) {
                 Column(Modifier.padding(top = 32.dp,start = 64.dp,end = 64.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painter = painterResource(id = R.drawable.img_code), contentDescription =null )
                     Text(
-                        modifier = Modifier.padding(top = 28.dp),
-                        text = "使用微信扫码上传",
+                        "使用微信扫码上传",
+                        Modifier.padding(top = 28.dp),
                         fontSize = 24.sp,
                         color = Color.Black
                     )
@@ -139,21 +137,19 @@ fun UploadGuidePage(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(40.dp))
         Button(
-            modifier = Modifier
-                .height(64.dp)
-                .width(200.dp),
-            onClick = {
+            {
                 when(selectId.value){
-                    1 -> QrCodeViewModel.set(generateSelfPrintUrl(taskId),"微信扫码上传")
+                    1 -> QrCodeViewModel.set(generateSelfPrintUrl(taskId,"contractReview"),"微信扫码上传")
                     2 -> activity.startActivity(Intent(activity, PaperUploadActivity::class.java))
                     else -> { Tips.toast("请选择上传方式") }
-                } },
-            content = {
-                Row( verticalAlignment = Alignment.CenterVertically ){
-                    Text("立即上传",Modifier.padding(start = 16.dp),Color.White,21.sp)
                 }
             },
+            Modifier.height(64.dp).width(200.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
-        )
+        ){
+            Row( verticalAlignment = Alignment.CenterVertically ){
+                Text("立即上传",Modifier.padding(start = 16.dp),Color.White,21.sp)
+            }
+        }
     }
 }

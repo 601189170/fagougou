@@ -1,6 +1,5 @@
 package com.fagougou.government.contractReviewPage
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -22,27 +21,19 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
-
 import com.fagougou.government.repo.Client
-
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
-import com.m7.imkfsdk.MessageConstans
-import com.m7.imkfsdk.chat.MessageEvent
-
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.*
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
 
 @Composable
 fun PreviewLoad(navController2: NavController, navController: NavController, routeTarget:String) {
     Surface(color = Color.White){
-
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 modifier = Modifier.padding( top = 40.dp),
@@ -112,7 +103,6 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
                     }
-
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(
@@ -142,7 +132,6 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                 )
             }
         }
-
     }
     Printer.isPrint.value=false
     LaunchedEffect(null) {
@@ -157,10 +146,7 @@ fun PreviewLoad(navController2: NavController, navController: NavController, rou
                         Printer.isPrint.value=false
                     }
                 }
-
             }
         }
     }
-
-
 }
