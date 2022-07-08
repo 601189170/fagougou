@@ -47,7 +47,7 @@ object UploadModel{
 }
 
 @Composable
-fun UploadGuidePage(navController: NavController) {
+fun UploadGuidePage(navController: NavController,navControllerMain: NavController) {
     val selectId = remember { mutableStateOf(0) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
@@ -140,7 +140,8 @@ fun UploadGuidePage(navController: NavController) {
             {
                 when(selectId.value){
                     1 -> QrCodeViewModel.set(generateSelfPrintUrl(taskId,"contractReview"),"微信扫码上传")
-                    2 -> activity.startActivity(Intent(activity, PaperUploadActivity::class.java))
+//                    2 -> activity.startActivity(Intent(activity, PaperUploadActivity::class.java))
+                    2 -> navControllerMain.navigate(Router.Camera)
                     else -> { Tips.toast("请选择上传方式") }
                 }
             },

@@ -41,7 +41,7 @@ fun ContractSelectMain(navController: NavController) {
                         stepModel.currentIndex.value=0
                     }
                     composable(Router.upload) {
-                        UploadGuidePage(navController2)
+                        UploadGuidePage(navController2,navController)
                         stepModel.currentIndex.value=1
                     }
                     composable(Router.uploading) {

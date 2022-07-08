@@ -19,6 +19,8 @@ public class MessageConstans {
     public static String PalyVideoHumanAre="PalyVideoHumanAre";
     //播放人工对话视频
     public static String PalyVideoHuman="PalyVideoHuman";
+    //测试
+    public static String ceshi="ceshi";
 
 
 }

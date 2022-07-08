@@ -427,78 +427,8 @@ public class CameraView extends TextureView implements
 
     }
 
-           /**
-            * @param imgPaths          图片地址
-            * @param pdf_save_address  pdf保存地址
-            */
-           public  void imageToPDF(String imgPaths, File pdf_save_address) {
-               try {
-                   Document document = new Document();
-                   // 创建PdfWriter对象
-                   PdfWriter.getInstance(document, new FileOutputStream(pdf_save_address));
-                   document.open();
-                   Image img = Image.getInstance(imgPaths);
-                   float scale = ((document.getPageSize().getWidth() - document.leftMargin()
-                           - document.rightMargin() - 0) / img.getWidth()) * 100;
-                   img.scalePercent(scale);
-                   img.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
-                   document.add(img);
-                   document.close();
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-           }
-           public String MergePdf2() throws Exception {
-               //pdf合并工具类
-               PDFMergerUtility mergePdf = new PDFMergerUtility();
 
-               String folder = "D:/testfile";
-               String destinationFileName = "mergedTest.pdf";
-               String[] filesInFolder = getFiles(folder);
 
-               for(int i = 0; i < filesInFolder.length; i++){
-                   //循环添加要合并的pdf存放的路径
-                   //File.separatorChar 与系统有关的默认名称分隔符。此字段被初始化为包含系统属性 file.separator 值的第一个字符。在 UNIX 系统上，此字段的值为 '/'；在 Microsoft Windows 系统上，它为 '\'。
-                   mergePdf.addSource(folder + File.separatorChar + filesInFolder[i]);
-               }
-               //设置合并生成pdf文件名称
-               mergePdf.setDestinationFileName(folder + File.separator + destinationFileName);
-               //合并pdf
-               mergePdf.mergeDocuments();
-               return "index4";
-           }
-
-           public String MergePdf() throws Exception
-           {
-               //pdf合并工具类
-               PDFMergerUtility mergePdf = new PDFMergerUtility();
-
-               String folder = "D:/testfile";
-               String destinationFileName = "mergedTest.pdf";
-               String[] filesInFolder = getFiles(folder);
-
-               for(int i = 0; i < filesInFolder.length; i++){
-                   //循环添加要合并的pdf存放的路径
-                   //File.separatorChar 与系统有关的默认名称分隔符。此字段被初始化为包含系统属性 file.separator 值的第一个字符。在 UNIX 系统上，此字段的值为 '/'；在 Microsoft Windows 系统上，它为 '\'。
-                   mergePdf.addSource(folder + File.separatorChar + filesInFolder[i]);
-               }
-               //设置合并生成pdf文件名称
-               mergePdf.setDestinationFileName(folder + File.separator + destinationFileName);
-               //合并pdf
-               mergePdf.mergeDocuments();
-               return "index4";
-           }
-           private String[] getFiles(String folder) throws IOException { //获取文件夹下的全部文件
-               File _folder = new File(folder);
-               String[] filesInFolder;
-
-               if(_folder.isDirectory()){
-                   filesInFolder = _folder.list();
-                   return filesInFolder;
-               } else {
-                   throw new IOException("Path is not a directory");
-               }
-           }
 
     public int getPreviewWidth() {
         if (mPreviewRect == null)

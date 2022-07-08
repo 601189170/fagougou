@@ -239,12 +239,12 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
-            composable(Router.upload) { UploadGuidePage(navController) }
             composable(Router.resultWebview) { ResultWebviewPage(navController) }
             composable(Router.self) { SelfPrintMain(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
             composable(Router.examination) { ContractSelectMain(navController) }
             composable(Router.printComplete) { PrintCompletePage(navController) }
+            composable(Router.Camera) { CameraPage(navController) }
         }
     }
 }

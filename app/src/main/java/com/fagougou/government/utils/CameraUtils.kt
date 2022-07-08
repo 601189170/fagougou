@@ -11,11 +11,12 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.fagougou.government.model.ContractFolder
+import com.iflytek.cloud.SynthesizerListener
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import java.io.File
 
 
-object CamareUtils {
+object CameraUtils {
 
     private const val TAG = "CameraXBasic"
 
@@ -23,6 +24,7 @@ object CamareUtils {
 
     var imageCapture: ImageCapture? = null
 
+    var photoFile:File?=null
 
     fun initCamera(context: Context, previewView: PreviewView) {
 
@@ -67,47 +69,35 @@ object CamareUtils {
 
 
 
-    fun takePhoto(context: Context):String {
+    fun takePhoto(context: Context) {
 
         // Create timestamped output file to hold the image
 
-        val photoFile=File(context.cacheDir, System.currentTimeMillis().toString() + ".jpg")
+        photoFile=File(context.cacheDir, System.currentTimeMillis().toString() + ".jpg")
 
         // Create output options object which contains file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile!!).build()
 
 
         imageCapture?.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                }
+            ImgAddCallback)
 
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo capture succeeded: $savedUri"
-                    Log.d(TAG, msg)
-
-
-                }
-            })
-
-        return photoFile.path
     }
 
+     var ImgAddCallback: ImageCapture.OnImageSavedCallback = object : ImageCapture.OnImageSavedCallback {
+        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+            Log.e(TAG, "onImageSaved: ", )
 
-    @Throws(java.lang.Exception::class)
-    fun MergePdf2(listfile:List<String>,path: String) {
-        //pdf合并工具类
-        val mergePdf = PDFMergerUtility()
-
-        listfile.forEach(){
-            mergePdf.addSource(it)
         }
-        //设置合并生成pdf文件名称
-        mergePdf.destinationFileName = path
-        //合并pdf
-        mergePdf.mergeDocuments()
+
+        override fun onError(exception: ImageCaptureException) {
+            Log.e(TAG, "onError: ", )
+
+        }
+
     }
+
+
 }
