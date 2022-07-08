@@ -22,7 +22,7 @@ import com.fagougou.government.model.StepModel
 
 @Composable
 fun SelfPrintMain(navController: NavController) {
-    val navController2 = rememberNavController()
+    val subNavController = rememberNavController()
     val stepModel = remember{ StepModel(mutableStateListOf("文件上传","文档预览","完成打印"),mutableStateOf(0)) }
     val fullScreenMode = remember{ mutableStateOf(false) }
     Column(
@@ -30,22 +30,22 @@ fun SelfPrintMain(navController: NavController) {
     ) {
         if(!fullScreenMode.value)Header("自助打印", navController, {QrCodeViewModel.clear()} )
         SelfHelpBase(stepModel,fullScreenMode){
-            NavHost(navController2, Router.self, Modifier.fillMaxHeight()) {
-                composable(Router.self) {
-                    SelfPrintPage(navController2)
+            NavHost(subNavController, Router.SelfPrint.guide, Modifier.fillMaxHeight()) {
+                composable(Router.SelfPrint.guide) {
+                    SelfPrintPage(subNavController)
                     stepModel.currentIndex.value=0
                 }
-                composable(Router.uploading) {
-                    Uploading(navController2)
+                composable(Router.Upload.waiting) {
+                    Uploading(subNavController)
                     stepModel.currentIndex.value=0
                 }
-                composable(Router.previewLoad) {
-                    PreviewLoad(navController2,navController, fullScreenMode,Router.printComplete)
+                composable(Router.Upload.pdfPreview) {
+                    PreviewLoad(subNavController,navController, fullScreenMode,Router.SelfPrint.printComplete)
                     stepModel.currentIndex.value=1
                 }
-                composable(Router.printComplete) {
-                    PrintCompletePage(navController)
-                    stepModel.currentIndex.value=2
+                composable(Router.SelfPrint.printComplete) {
+                    PrintCompletePage(subNavController,navController)
+                    stepModel.currentIndex.value=3
                 }
             }
         }

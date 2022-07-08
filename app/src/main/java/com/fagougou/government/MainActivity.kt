@@ -44,7 +44,6 @@ import com.fagougou.government.chatPage.*
 import com.fagougou.government.component.Loading
 import com.fagougou.government.component.GlobalQrCode
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.component.uploadGroup.UploadGuidePage
 import com.fagougou.government.consult.ChooseDomainActivity
 import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
@@ -63,7 +62,6 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
-import com.fagougou.government.selfPrint.PrintCompletePage
 import com.fagougou.government.selfPrint.SelfPrintMain
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
@@ -124,7 +122,10 @@ class MainActivity : ComponentActivity() {
         getPermission()
         setContent {
             GovernmentTheme {
-                Surface(Modifier.height(1024.dp).width(1280.dp) ) {
+                Surface(
+                    Modifier
+                        .height(1024.dp)
+                        .width(1280.dp) ) {
                     Main()
                     GlobalQrCode()
                     Dialog()
@@ -238,12 +239,9 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
-            composable(Router.upload) { UploadGuidePage(navController) }
-            composable(Router.resultWebview) { ResultWebviewPage(navController) }
-            composable(Router.self) { SelfPrintMain(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
-            composable(Router.examination) { ContractSelectMain(navController) }
-            composable(Router.printComplete) { PrintCompletePage(navController) }
+            composable(Router.selfPrint) { SelfPrintMain(navController) }
+            composable(Router.contractReview) { ContractSelectMain(navController) }
         }
     }
 }

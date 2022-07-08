@@ -34,7 +34,6 @@ import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber
@@ -64,7 +63,7 @@ fun UploadGuidePage(navController: NavController) {
             }
         }
         QrCodeViewModel.clear()
-        navController.navigate(Router.uploading)
+        navController.navigate(Router.Upload.waiting)
     }
     Column(
         Modifier.fillMaxSize(),

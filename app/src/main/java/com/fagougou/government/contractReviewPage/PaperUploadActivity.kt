@@ -2,7 +2,6 @@ package com.fagougou.government.contractReviewPage
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,8 @@ import com.blankj.utilcode.util.FileUtils
 import com.bumptech.glide.Glide
 import com.fagougou.government.databinding.ActivityUploadLayoutBinding
 import com.fagougou.government.databinding.ItemPreviewLayoutBinding
-import com.fagougou.government.utils.CamareUtils
+import com.fagougou.government.utils.CameraUtils
 import com.fagougou.government.utils.Printer
-import com.j256.ormlite.stmt.query.In
-import java.io.File
 
 
 class PaperUploadActivity : AppCompatActivity() {
@@ -36,7 +33,7 @@ class PaperUploadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        CamareUtils.initCamera(this,binding.cameraLayout.camera)
+        CameraUtils.initCamera(this,binding.cameraLayout.camera)
         initView()
         setWorkStatus(showCamera)
         setPhotoType(0)
@@ -76,7 +73,7 @@ class PaperUploadActivity : AppCompatActivity() {
         //showCamera
         binding.close.setOnClickListener { finish() }
         binding.cameraLayout.goScan.setOnClickListener {
-            file=CamareUtils.takePhoto(this)
+            file=CameraUtils.takePhoto(this)
             file?.let { it1 -> filelist.add(it1) }
             if (type==0)setWorkStatus(showPreview) else showMoreLayout(true)
 

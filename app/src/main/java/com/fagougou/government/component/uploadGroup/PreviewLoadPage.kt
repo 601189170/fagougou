@@ -34,7 +34,7 @@ import timber.log.Timber
 import java.io.File
 
 @Composable
-fun PreviewLoad(navController2: NavController, navController: NavController, fullScreenMode: MutableState<Boolean>, routeTarget:String) {
+fun PreviewLoad(subNavController: NavController, navController: NavController, fullScreenMode: MutableState<Boolean>, routeTarget:String) {
     Surface(color = Color.White){
         Column(Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
             if(!fullScreenMode.value)Text(
@@ -93,7 +93,7 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
                             secondButtonOnClick.value = {
                                 content.clear()
                                 fullScreenMode.value = false
-                                navController2.popBackStack(Router.uploading,true)
+                                subNavController.popBackStack(Router.Upload.waiting,true)
                             }
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
@@ -114,16 +114,16 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
                     onClick = {
                         fullScreenMode.value = false
                         when (routeTarget) {
-                            Router.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
-                            Router.resultWebview ->  navController.navigate(Router.resultWebview)
+                            Router.SelfPrint.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
+                            Router.ContractReview.result ->  navController.navigate(Router.ContractReview.result)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
                     elevation = ButtonDefaults.elevation(0.dp,0.dp),
                 ){
                     val note = when(routeTarget){
-                        Router.printComplete -> "开始打印"
-                        Router.resultWebview -> "开始审核"
+                        Router.SelfPrint.printComplete -> "开始打印"
+                        Router.ContractReview.result -> "开始审核"
                         else -> ""
                     }
                     Text(note,Modifier,Color.White,24.sp)
@@ -133,13 +133,13 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
     }
     Printer.isPrint.value=false
     LaunchedEffect(null) {
-        if(routeTarget==Router.printComplete)withContext(Dispatchers.Default) {
+        if(routeTarget==Router.SelfPrint.printComplete)withContext(Dispatchers.Default) {
             while (isActive){
                 delay(250)
                 Router.lastTouchTime = Time.stamp
                 if (Printer.isPrint.value){
                     withContext(Dispatchers.Main){
-                        navController.navigate(routeTarget)
+                        subNavController.navigate(routeTarget)
                         Printer.isPrint.value=false
                     }
                 }

@@ -22,7 +22,7 @@ import com.fagougou.government.model.StepModel
 
 @Composable
 fun ContractSelectMain(navController: NavController) {
-    val navController2 = rememberNavController()
+    val subNavController = rememberNavController()
     val stepModel = remember{ StepModel(mutableStateListOf("选择类型","文件上传","文档预览","完成审查"), mutableStateOf(0)) }
     val fullScreenMode = remember{ mutableStateOf(false) }
     Column(
@@ -30,24 +30,28 @@ fun ContractSelectMain(navController: NavController) {
     ) {
         if(!fullScreenMode.value)Header("智能合同审核", navController )
         SelfHelpBase(stepModel,fullScreenMode){
-            NavHost(navController2, Router.contractSelectPage, Modifier.fillMaxHeight()) {
-                composable(Router.contractSelectPage) {
-                    ContractSelectPage(navController2)
+            NavHost(subNavController, Router.ContractReview.classify, Modifier.fillMaxHeight()) {
+                composable(Router.ContractReview.classify) {
+                    ContractSelectPage(subNavController)
                     stepModel.currentIndex.value=0
                 }
-                composable(Router.upload) {
-                    UploadGuidePage(navController2)
+                composable(Router.ContractReview.guide) {
+                    UploadGuidePage(subNavController)
                     stepModel.currentIndex.value=1
                 }
-                composable(Router.uploading) {
-                    Uploading(navController2)
+                composable(Router.ContractReview.camera) {
+                    UploadGuidePage(subNavController)
                     stepModel.currentIndex.value=1
                 }
-                composable(Router.previewLoad) {
-                    PreviewLoad(navController2,navController,fullScreenMode, Router.resultWebview)
+                composable(Router.Upload.waiting) {
+                    Uploading(subNavController)
+                    stepModel.currentIndex.value=1
+                }
+                composable(Router.Upload.pdfPreview) {
+                    PreviewLoad(subNavController,navController,fullScreenMode, Router.ContractReview.result)
                     stepModel.currentIndex.value=2
                 }
-                composable(Router.resultWebview) {
+                composable(Router.ContractReview.result) {
                     ResultWebviewPage(navController)
                     stepModel.currentIndex.value=3
                 }

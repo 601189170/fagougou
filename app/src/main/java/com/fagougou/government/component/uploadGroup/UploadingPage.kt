@@ -40,7 +40,7 @@ fun Uploading(navController: NavController) {
                 code = response.code
             }
         }
-        navController.navigate(Router.previewLoad)
+        navController.navigate(Router.Upload.pdfPreview)
     }
     Column(
         modifier = Modifier.fillMaxSize(),

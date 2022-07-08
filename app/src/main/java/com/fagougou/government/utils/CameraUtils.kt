@@ -1,6 +1,5 @@
 package com.fagougou.government.utils
 
-
 import android.content.Context
 import android.net.Uri
 import android.util.Size
@@ -12,30 +11,23 @@ import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
 import java.io.File
 
+object CameraUtils {
 
-object CamareUtils {
-    var preview: Preview? = null
-    var imageCapture: ImageCapture? = null
+    private val imageCapture = ImageCapture.Builder()
+        .setTargetResolution(Size(2592, 1944))
+        .build()
+
     fun initCamera(context: Context, previewView: PreviewView) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            // Preview
-            preview = Preview.Builder().build()
-            imageCapture = ImageCapture.Builder()
-                .setTargetResolution(Size(2592, 1944))
-                .build()//拍照用例配置
-            // Select back camera
+            val preview = Preview.Builder().build()
             val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 
             try {
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
-
                 // Bind use cases to camera
-
-
                 (context as LifecycleOwner?)?.let {
                     cameraProvider.bindToLifecycle(
                         it,
@@ -44,10 +36,7 @@ object CamareUtils {
                         imageCapture,
                     )
                 }
-
-
-                preview?.setSurfaceProvider(previewView.surfaceProvider)
-
+                preview.setSurfaceProvider(previewView.surfaceProvider)
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -55,29 +44,22 @@ object CamareUtils {
         }, ContextCompat.getMainExecutor(context))
     }
 
-
-
     fun takePhoto(context: Context):String {
-
-        // Create timestamped output file to hold the image
-
         val photoFile=File(context.cacheDir, System.currentTimeMillis().toString() + ".jpg")
-
-        // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-
-        imageCapture?.takePicture(
+        imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
             object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
+                override fun onError(e: ImageCaptureException) {
+                    Timber.e(e)
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                 }
-            })
+            }
+        )
 
         return photoFile.path
     }
