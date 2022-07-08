@@ -1,4 +1,4 @@
-package com.fagougou.government.selfhelp
+package com.fagougou.government.selfPrint
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ fun SelfPrintMain(navController: NavController) {
         Arrangement.Top,
         Alignment.CenterHorizontally
     ) {
-        Header("自助打印", navController,{QrCodeViewModel.clear()} )
+        if(!fullScreenMode.value)Header("自助打印", navController,{QrCodeViewModel.clear()} )
         SelfHelpBase(stepModel,fullScreenMode){
             Column(
                 Modifier

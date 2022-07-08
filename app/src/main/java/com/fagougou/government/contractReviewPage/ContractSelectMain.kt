@@ -26,7 +26,7 @@ fun ContractSelectMain(navController: NavController) {
     Column(
         Modifier.fillMaxSize()
     ) {
-        Header("智能合同审核", navController )
+        if(!fullScreenMode.value)Header("智能合同审核", navController )
         SelfHelpBase(stepModel,fullScreenMode){
             Column(
                 Modifier

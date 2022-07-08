@@ -17,7 +17,7 @@ import com.fagougou.government.model.StepModel
 fun SelfHelpBase(stepModel:StepModel, fullScreenMode: MutableState<Boolean>, content: @Composable () -> Unit) {
     Surface(
         Modifier.fillMaxSize(),
-        color = Color(0xFFF5F7FA)
+        color = Color(0xFFEEEEEE)
     ) {
         if (!fullScreenMode.value)Column(Modifier.fillMaxWidth()) {
             Surface{

@@ -1,4 +1,4 @@
-package com.fagougou.government.selfhelp
+package com.fagougou.government.selfPrint
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -55,19 +55,19 @@ fun SelfPrintPage(navController: NavController) {
     ) {
         Text(
             "微信扫码打印",
-            Modifier.padding( top = 32.dp),
+            Modifier.padding( top = 36.dp),
             fontSize = 28.sp,
             color = Color(0xFF303133)
         )
         Text(
             "使用微信扫描以下二维码，上传文件成功后即可快速打印",
-            Modifier.padding( top = 8.dp),
+            Modifier.padding( top = 16.dp),
             fontSize = 20.sp,
             color = Color(0xFF303133)
         )
-        Box(Modifier.padding(top = 44.dp),contentAlignment= Alignment.Center) {
-            Image(painter = painterResource(id = R.drawable.img_print_code), contentDescription =null )
-            Image(uploadBitmap.value.asImageBitmap(),null)
+        Box(Modifier.padding(top = 48.dp),contentAlignment= Alignment.Center) {
+            Image(painterResource(R.drawable.img_print_code), null, Modifier.padding(top = 16.dp) )
+            Image(uploadBitmap.value.asImageBitmap(),"QR Code")
         }
     }
 }

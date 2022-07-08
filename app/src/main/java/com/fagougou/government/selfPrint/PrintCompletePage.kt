@@ -1,8 +1,7 @@
-package com.fagougou.government.selfhelp
+package com.fagougou.government.selfPrint
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
@@ -14,32 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractLibraryPage.ContractViewModel
-import com.fagougou.government.dialog.DialogViewModel
-import com.fagougou.government.model.ContentStyle
-import com.fagougou.government.repo.Client
-import com.fagougou.government.repo.Client.pop
-import com.fagougou.government.ui.theme.CORNER_FLOAT
 import com.fagougou.government.ui.theme.Dodgerblue
-import com.fagougou.government.utils.MMKV
-import com.fagougou.government.utils.SafeBack.safeBack
-import com.rajat.pdfviewer.PdfQuality
-import com.rajat.pdfviewer.PdfRendererView
-import java.io.File
 
 @Composable
 fun PrintCompletePage(navController: NavController) {
     Surface(color = Color.White) {
         Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
-            Header("打印成功", navController)
-
-            Image(modifier = Modifier.padding(top = 176.dp),painter = painterResource(id = R.drawable.img_phone_step2), contentDescription =null )
+            Image(modifier = Modifier.padding(top = 128.dp),painter = painterResource(id = R.drawable.img_phone_step2), contentDescription =null )
             Text(
                 modifier = Modifier.padding( top = 32.dp),
                 text = "打印成功",

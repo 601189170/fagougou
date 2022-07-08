@@ -35,8 +35,8 @@ import java.io.File
 @Composable
 fun PreviewLoad(navController2: NavController, navController: NavController, fullScreenMode: MutableState<Boolean>, routeTarget:String) {
     Surface(color = Color.White){
-        Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
+        Column(Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
+            if(!fullScreenMode.value)Text(
                 modifier = Modifier.padding( top = 40.dp),
                 text = "文档预览",
                 fontSize = 28.sp,
@@ -44,9 +44,10 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
             )
             Surface(
                 Modifier
-                    .fillMaxHeight(0.8f)
+                    .height(if(fullScreenMode.value) 912.dp else 568.dp)
                     .fillMaxWidth()
-                    .padding(28.dp)) {
+                    .padding(if(fullScreenMode.value)0.dp else 28.dp)
+            ){
                 AndroidView(
                     {
                         PdfRendererView(activity).apply{
@@ -76,21 +77,12 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
                 .height(2.dp),color = Color(0xFFDCE1E6)
             ){}
             Row(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                Modifier.fillMaxSize(),
+                Arrangement.Center,
+                Alignment.CenterVertically
             ){
                 Button(
-                    modifier = Modifier
-                        .height(64.dp)
-                        .width(200.dp),
-                    content = { Text("返回上一级",Modifier,Dodgerblue,24.sp) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                    border = BorderStroke(2.dp, Dodgerblue),
-                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
-                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                    onClick = {
+                    {
                         with(DialogViewModel) {
                             clear()
                             title = "温馨提示"
@@ -99,37 +91,40 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
                             secondButtonText.value = "确定"
                             secondButtonOnClick.value = {
                                 content.clear()
-                                navController2.navigate(routeTarget)
+                                fullScreenMode.value = false
+                                navController2.popBackStack(Router.uploading,true)
                             }
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
-                    }
-                )
+                    },
+                    Modifier.height(64.dp).width(200.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    border = BorderStroke(2.dp, Dodgerblue),
+                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
+                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
+                ){ Text("返回上一级",Modifier,Dodgerblue,24.sp) }
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(
                     modifier = Modifier
                         .height(64.dp)
                         .width(200.dp),
                     onClick = {
+                        fullScreenMode.value = false
                         when (routeTarget) {
                             Router.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
-                            Router.resultWebview -> {
-                                navController.navigate(Router.resultWebview)
-                            }
+                            Router.resultWebview ->  navController.navigate(Router.resultWebview)
                         }
                     },
-                    content = {
-                        Row( verticalAlignment = Alignment.CenterVertically ){
-                            val note = when(routeTarget){
-                                Router.printComplete -> "开始打印"
-                                Router.resultWebview -> "开始审核"
-                                else -> ""
-                            }
-                            Text(note,Modifier,Color.White,24.sp)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
-                )
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
+                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
+                ){
+                    val note = when(routeTarget){
+                        Router.printComplete -> "开始打印"
+                        Router.resultWebview -> "开始审核"
+                        else -> ""
+                    }
+                    Text(note,Modifier,Color.White,24.sp)
+                }
             }
         }
     }

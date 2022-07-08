@@ -65,9 +65,9 @@ fun Uploading(navController: NavController) {
                 .padding(horizontal = 100.dp)
                 .padding(top = 28.dp)
         ) {
-            Image(painter = painterResource(id = R.drawable.img_phone_step1), contentDescription =null )
-            Image(modifier = Modifier.padding(horizontal = 24.dp).padding(vertical = 167.dp),painter = painterResource(id = R.drawable.img_phone_right), contentDescription =null )
-            Image(painter = painterResource(id = R.drawable.img_phone_step2), contentDescription =null )
+            Image(painterResource(id = R.drawable.img_phone_step1), null )
+            Image(painterResource(R.drawable.img_phone_right), null, Modifier.padding(horizontal = 24.dp).padding(vertical = 167.dp) )
+            Image(painterResource(id = R.drawable.img_phone_step2), null )
         }
         Text(
             modifier = Modifier.padding( top = 28.dp),

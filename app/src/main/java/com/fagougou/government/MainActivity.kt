@@ -62,9 +62,8 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
-import com.fagougou.government.selfhelp.PrintCompletePage
-import com.fagougou.government.selfhelp.SelfPrintMain
-import com.fagougou.government.selfhelp.SelfPrintPage
+import com.fagougou.government.selfPrint.PrintCompletePage
+import com.fagougou.government.selfPrint.SelfPrintMain
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
 import com.fagougou.government.statisticPage.StatisticPage
