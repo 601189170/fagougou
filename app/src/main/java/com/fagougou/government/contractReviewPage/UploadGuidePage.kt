@@ -51,21 +51,19 @@ fun UploadGuidePage(navController: NavController) {
     val selectId = remember { mutableStateOf(0) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
+        var code = 0
         withContext(Dispatchers.IO) {
-            while (isActive) {
+            while (code!=200) {
                 delay(1500)
                 if(selectId.value!=1)continue
                 Timber.d("Checking upload for ${taskId}.tmp")
                 val request = Request.Builder().url(Client.fileuploadUrl+taskId +".tmp").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
-                if (response.code == 200) {
-                    withContext(Dispatchers.Main){
-                        QrCodeViewModel.clear()
-                        navController.navigate(Router.uploading)
-                    }
-                }
+                code = response.code
             }
         }
+        QrCodeViewModel.clear()
+        navController.navigate(Router.uploading)
     }
     Column(
         Modifier.fillMaxSize(),

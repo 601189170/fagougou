@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.Dispatchers
@@ -30,19 +31,17 @@ import timber.log.Timber
 
 fun Uploading(navController: NavController) {
     LaunchedEffect(null) {
+        var code = 0
         withContext(Dispatchers.IO){
-            while (isActive){
+            while (code!=200){
                 delay(1000)
                 Timber.d("Checking upload for ${UploadModel.taskId}.pdf")
                 val request = Request.Builder().url(Client.fileuploadUrl+ UploadModel.taskId +".pdf").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
-                if (response.code == 200) {
-                    withContext(Dispatchers.Main){
-                        navController.navigate(Router.previewLoad)
-                    }
-                }
+                code = response.code
             }
         }
+        navController.navigate(Router.previewLoad)
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -66,7 +65,10 @@ fun Uploading(navController: NavController) {
                 .padding(top = 28.dp)
         ) {
             Image(painterResource(id = R.drawable.img_phone_step1), null )
-            Image(painterResource(R.drawable.img_phone_right), null, Modifier.padding(horizontal = 24.dp).padding(vertical = 167.dp) )
+            Image(painterResource(R.drawable.img_phone_right), null,
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(vertical = 167.dp) )
             Image(painterResource(id = R.drawable.img_phone_step2), null )
         }
         Text(
@@ -83,15 +85,12 @@ fun Uploading(navController: NavController) {
         )
         Button(modifier = Modifier
             .padding(top = 36.dp)
-                .height(64.dp)
-                .width(200.dp),
+            .height(64.dp)
+            .width(200.dp),
             onClick = {
                 navController.popBackStack()
             },
-            content = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("返回上一级", Modifier.padding(start = 16.dp), Color.White, 21.sp)
-                } },
+            content = { BasicText("返回上一级",0.dp,21.sp) },
             colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
         )
     }

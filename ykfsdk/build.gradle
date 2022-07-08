@@ -1,17 +1,18 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
     compileSdkVersion 30
-    lintOptions {
-        abortOnError false
-    }
     resourcePrefix "ykfsdk_"
     defaultConfig {
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 7
-        versionName "4.1.0"
         multiDexEnabled true
+    }
+    lint {
+        abortOnError false
     }
 }
 dependencies {
@@ -29,7 +30,7 @@ dependencies {
 }
 
 configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+    resolutionStrategy.eachDependency { details ->
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {

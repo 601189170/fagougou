@@ -3,31 +3,21 @@ package com.fagougou.government.utils
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.util.Size
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import com.fagougou.government.model.ContractFolder
-import org.apache.pdfbox.multipdf.PDFMergerUtility
+import timber.log.Timber
 import java.io.File
 
 
 object CamareUtils {
-
-    private const val TAG = "CameraXBasic"
-
     var preview: Preview? = null
-
     var imageCapture: ImageCapture? = null
-
-
     fun initCamera(context: Context, previewView: PreviewView) {
-
-        var cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -58,8 +48,8 @@ object CamareUtils {
 
                 preview?.setSurfaceProvider(previewView.surfaceProvider)
 
-            } catch (exc: Exception) {
-                Log.e("TAG", "Use case binding failed", exc)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
 
         }, ContextCompat.getMainExecutor(context))
@@ -86,28 +76,9 @@ object CamareUtils {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo capture succeeded: $savedUri"
-                    Log.d(TAG, msg)
-
-
                 }
             })
 
         return photoFile.path
-    }
-
-
-    @Throws(java.lang.Exception::class)
-    fun MergePdf2(listfile:List<String>,path: String) {
-        //pdf合并工具类
-        val mergePdf = PDFMergerUtility()
-
-        listfile.forEach(){
-            mergePdf.addSource(it)
-        }
-        //设置合并生成pdf文件名称
-        mergePdf.destinationFileName = path
-        //合并pdf
-        mergePdf.mergeDocuments()
     }
 }

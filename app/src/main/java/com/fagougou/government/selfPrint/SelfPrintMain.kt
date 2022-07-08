@@ -1,14 +1,13 @@
 package com.fagougou.government.selfPrint
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,9 +16,9 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.component.SelfHelpBase
-import com.fagougou.government.contractReviewPage.*
+import com.fagougou.government.contractReviewPage.PreviewLoad
+import com.fagougou.government.contractReviewPage.Uploading
 import com.fagougou.government.model.StepModel
-
 
 @Composable
 fun SelfPrintMain(navController: NavController) {
@@ -28,35 +27,25 @@ fun SelfPrintMain(navController: NavController) {
     val fullScreenMode = remember{ mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize(),
-        Arrangement.Top,
-        Alignment.CenterHorizontally
     ) {
-        if(!fullScreenMode.value)Header("自助打印", navController,{QrCodeViewModel.clear()} )
+        if(!fullScreenMode.value)Header("自助打印", navController, {QrCodeViewModel.clear()} )
         SelfHelpBase(stepModel,fullScreenMode){
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color(0xF3F3F3F3)),
-                Arrangement.Top,
-                Alignment.CenterHorizontally
-            ) {
-                NavHost(navController2, Router.self, Modifier.fillMaxHeight()) {
-                    composable(Router.self) {
-                        SelfPrintPage(navController2)
-                        stepModel.currentIndex.value=0
-                    }
-                    composable(Router.uploading) {
-                        Uploading(navController2)
-                        stepModel.currentIndex.value=0
-                    }
-                    composable(Router.previewLoad) {
-                        PreviewLoad(navController2,navController, fullScreenMode,Router.printComplete)
-                        stepModel.currentIndex.value=1
-                    }
-                    composable(Router.printComplete) {
-                        PrintCompletePage(navController)
-                        stepModel.currentIndex.value=2
-                    }
+            NavHost(navController2, Router.self, Modifier.fillMaxHeight()) {
+                composable(Router.self) {
+                    SelfPrintPage(navController2)
+                    stepModel.currentIndex.value=0
+                }
+                composable(Router.uploading) {
+                    Uploading(navController2)
+                    stepModel.currentIndex.value=0
+                }
+                composable(Router.previewLoad) {
+                    PreviewLoad(navController2,navController, fullScreenMode,Router.printComplete)
+                    stepModel.currentIndex.value=1
+                }
+                composable(Router.printComplete) {
+                    PrintCompletePage(navController)
+                    stepModel.currentIndex.value=2
                 }
             }
         }

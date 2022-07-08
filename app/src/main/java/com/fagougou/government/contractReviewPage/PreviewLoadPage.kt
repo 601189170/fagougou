@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
+import com.fagougou.government.component.BasicText
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.repo.Client
@@ -44,9 +45,9 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
             )
             Surface(
                 Modifier
-                    .height(if(fullScreenMode.value) 912.dp else 568.dp)
+                    .height(if (fullScreenMode.value) 912.dp else 568.dp)
                     .fillMaxWidth()
-                    .padding(if(fullScreenMode.value)0.dp else 28.dp)
+                    .padding(if (fullScreenMode.value) 0.dp else 28.dp)
             ){
                 AndroidView(
                     {
@@ -97,12 +98,14 @@ fun PreviewLoad(navController2: NavController, navController: NavController, ful
                             content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
                         }
                     },
-                    Modifier.height(64.dp).width(200.dp),
+                    Modifier
+                        .height(64.dp)
+                        .width(200.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                     border = BorderStroke(2.dp, Dodgerblue),
                     contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
                     elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                ){ Text("返回上一级",Modifier,Dodgerblue,24.sp) }
+                ){ BasicText("返回上一级", color = Dodgerblue) }
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(
                     modifier = Modifier
