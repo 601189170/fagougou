@@ -76,7 +76,6 @@ import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
