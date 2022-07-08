@@ -1,5 +1,6 @@
 package com.fagougou.government.homePage
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -96,7 +97,8 @@ fun HomePage(navController:NavController) {
                     .height(224.dp),
                 onClick = {
                     navController.navigate(Router.chatGuide)
-                    UMConstans.setIntoClick(UMConstans.home_ask) },
+                    UMConstans.setIntoClick(UMConstans.home_ask)
+                          },
                 contentId = R.drawable.home_ask
             )
             HomeButton(

@@ -2,6 +2,7 @@ package com.fagougou.government.contractReviewPage
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,36 +14,72 @@ import com.blankj.utilcode.util.FileUtils
 import com.bumptech.glide.Glide
 import com.fagougou.government.databinding.ActivityUploadLayoutBinding
 import com.fagougou.government.databinding.ItemPreviewLayoutBinding
+import com.fagougou.government.utils.CamareUtils
 import com.fagougou.government.utils.Printer
+import com.j256.ormlite.stmt.query.In
 import java.io.File
 
 
 class PaperUploadActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityUploadLayoutBinding
-    var file:File?=null
+    var file:String?=null
     val showCamera=1
     val showScan=2
     val showPreview=3
     val showWebview=4
-    val filelist = mutableListOf<File>()
+    val filelist = mutableListOf<String>()
     var imgAdapter=ImgAdapter()
     var url="https://www.baidu.com/"
+    var type=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        CamareUtils.initCamera(this,binding.cameraLayout.camera)
         initView()
         setWorkStatus(showCamera)
+        setPhotoType(0)
+        showMoreLayout(false)
     }
-
+    fun setPhotoType(i:Int){
+        when(i){
+            0-> {
+                type=0
+                binding.cameraLayout.one.isChecked=true
+                binding.cameraLayout.more.isChecked=false
+            }
+            1-> {
+                type=1
+                binding.cameraLayout.one.isChecked=false
+                binding.cameraLayout.more.isChecked=true
+            }
+        }
+    }
+    fun showMoreLayout(boolean: Boolean){
+        when(boolean){
+            false-> {
+                binding.cameraLayout.moreRightLayout.visibility=View.GONE
+                binding.cameraLayout.moreLeftLayout.visibility=View.GONE
+            }
+            true-> {
+                binding.cameraLayout.moreRightLayout.visibility=View.VISIBLE
+                binding.cameraLayout.moreLeftLayout.visibility=View.VISIBLE
+            }
+        }
+    }
     fun initView(){
+        binding.cameraLayout.one.setOnClickListener { setPhotoType(0) }
+        binding.cameraLayout.more.setOnClickListener { setPhotoType(1) }
+        binding.cameraLayout.moreRightLayout.setOnClickListener {  }
+        binding.cameraLayout.moreLeftLayout.setOnClickListener { setWorkStatus(showPreview) }
         //showCamera
-        binding.cameraLayout.close.setOnClickListener { finish() }
+        binding.close.setOnClickListener { finish() }
         binding.cameraLayout.goScan.setOnClickListener {
-            file=binding.cameraLayout.camera.nv21()
+            file=CamareUtils.takePhoto(this)
             file?.let { it1 -> filelist.add(it1) }
-            setWorkStatus(showScan)
+            if (type==0)setWorkStatus(showPreview) else showMoreLayout(true)
+
         }
 
         //showScan
@@ -58,8 +95,8 @@ class PaperUploadActivity : AppCompatActivity() {
 
         //showPreview
         binding.previewLayout.viewPager.adapter = imgAdapter
-        binding.previewLayout.btnCancel.setOnClickListener { finish() }
-        binding.previewLayout.btnPost.setOnClickListener {
+        binding.previewLayout.preGoOnScan.setOnClickListener { setWorkStatus(showCamera) }
+        binding.previewLayout.preNext.setOnClickListener {
             //提交合同审查
             setWorkStatus(showWebview)
         }
@@ -77,21 +114,21 @@ class PaperUploadActivity : AppCompatActivity() {
             showCamera->{
                 binding.cameraLayout.allLayout.visibility=View.VISIBLE
             }
-            showScan->{
-                binding.scanLayout.allLayout.visibility=View.VISIBLE
-                Glide.with(this).load(file).into(binding.scanLayout.img)
-                binding.scanLayout.pageNum.text="当前页预览第("+filelist.size+")页"
-            }
+//            showScan->{
+//                binding.scanLayout.allLayout.visibility=View.VISIBLE
+//                Glide.with(this).load(file).into(binding.scanLayout.img)
+//                binding.scanLayout.pageNum.text="当前页预览第("+filelist.size+")页"
+//            }
             showPreview->{
                 binding.previewLayout.allLayout.visibility=View.VISIBLE
-                binding.previewLayout.pageNum.text="共"+filelist.size+"页"
+                binding.previewLayout.pageNum.text="当前预览（"+filelist.size+"页)"
                 imgAdapter.imageList=filelist
                 imgAdapter.notifyDataSetChanged()
             }
-            showWebview->{
-                binding.webviewLayout.allLayout.visibility=View.VISIBLE
-                binding.webviewLayout.web.loadUrl(url)
-            }
+//            showWebview->{
+//                binding.webviewLayout.allLayout.visibility=View.VISIBLE
+//                binding.webviewLayout.web.loadUrl(url)
+//            }
         }
 
     }
@@ -99,7 +136,7 @@ class PaperUploadActivity : AppCompatActivity() {
     class ImgAdapter : RecyclerView.Adapter<BannerHolder>() {
 
 
-        var imageList = mutableListOf<File>()
+        var imageList = mutableListOf<String>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerHolder {
             val inflater = ItemPreviewLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -118,15 +155,14 @@ class PaperUploadActivity : AppCompatActivity() {
 
 
     class BannerHolder(private val binding: ItemPreviewLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun setImage(file: File){
-            binding.img.rotation=270f
+        fun setImage(file: String){
+            binding.img.rotation=90f
             Glide.with(binding.root.context).load(file).into(binding.img)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.cameraLayout.camera.releaseCamera()
         filelist.forEach { FileUtils.delete(it)}
     }
 

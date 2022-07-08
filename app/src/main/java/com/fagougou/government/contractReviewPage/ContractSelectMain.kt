@@ -31,7 +31,7 @@ fun ContractSelectMain(navController: NavController) {
             Column(
                 Modifier
                     .fillMaxSize()
-                    .background(Color(0xF3F3F3F3)),
+                    .background(Color.White),
                 Arrangement.Top,
                 Alignment.CenterHorizontally
             ) {

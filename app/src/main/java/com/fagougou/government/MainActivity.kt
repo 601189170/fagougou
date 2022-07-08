@@ -101,7 +101,6 @@ class MainActivity : ComponentActivity() {
             toast("法小萌不兼容该设备")
         }
         homeButtonBinding=LayoutHomebtnBinding.inflate(layoutInflater)
-
         if (!Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:$packageName")
@@ -143,6 +142,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
         )
         requestPermissions(mPermissionList, 1)
     }
