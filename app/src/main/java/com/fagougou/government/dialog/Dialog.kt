@@ -28,10 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.contractLibraryPage.ContractViewModel
 import com.fagougou.government.dialog.DialogViewModel.canExit
 import com.fagougou.government.dialog.DialogViewModel.clear
 import com.fagougou.government.dialog.DialogViewModel.content
@@ -51,7 +49,6 @@ import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 
 object DialogViewModel {
     var icon = 0

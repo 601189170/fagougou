@@ -124,7 +124,10 @@ class MainActivity : ComponentActivity() {
         getPermission()
         setContent {
             GovernmentTheme {
-                Surface(Modifier.height(1024.dp).width(1280.dp) ) {
+                Surface(
+                    Modifier
+                        .height(1024.dp)
+                        .width(1280.dp) ) {
                     Main()
                     GlobalQrCode()
                     Dialog()
@@ -179,7 +182,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Main() {
     val navController = rememberNavController()
@@ -245,6 +247,8 @@ fun Main() {
             composable(Router.examination) { ContractSelectMain(navController) }
             composable(Router.printComplete) { PrintCompletePage(navController) }
             composable(Router.Camera) { CameraPage(navController) }
+            composable(Router.selfPrint) { SelfPrintMain(navController) }
+            composable(Router.contractReview) { ContractSelectMain(navController) }
         }
     }
 }

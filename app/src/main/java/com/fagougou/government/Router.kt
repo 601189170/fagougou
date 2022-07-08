@@ -7,7 +7,6 @@ object Router {
     const val touchWaitTime = 150L * 1000L
     const val showTimeoutDialog = 30L * 1000L
 
-    const val login = "login"
     const val register = "register"
     const val registerResult = "registerResult"
     const val home = "home"
@@ -29,17 +28,24 @@ object Router {
     const val casePage = "casePage"
     const val lawsPage = "lawsPage"
     const val reportPage = "reportPage"
-    const val upload = "upload"
-    const val uploading = "uploading"
-    const val resultWebview = " resultWebview"
-    const val previewLoad = "previewLoad"
     const val lawyer = "lawyer"
-    const val self = "self"
-    const val examination = "examination"
-    const val contractSelectPage = "contractSelectPage"
-    const val printComplete = "printComplete"
+    const val selfPrint = "selfPrint"
+    const val contractReview = "contractReview"
+    object Upload {
+        const val waiting = "upload/waiting"
+        const val pdfPreview = " upload/pdfPreview"
+    }
+    object SelfPrint{
+        const val guide = "SelfPrint/guide"
+        const val printComplete = "selfPrint/printComplete"
+    }
+    object ContractReview{
+        const val classify = "contractReview/classify"
+        const val guide = "contractReview/guide"
+        const val camera = "contractReview/camera"
+        const val result = "contractReview/result"
+    }
     const val Camera = "Camera"
-
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
 

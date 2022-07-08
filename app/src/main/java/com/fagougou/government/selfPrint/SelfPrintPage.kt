@@ -16,8 +16,8 @@ import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.repo.Client
-import com.fagougou.government.contractReviewPage.UploadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UploadModel.taskId
+import com.fagougou.government.component.uploadGroup.UploadModel.generateSelfPrintUrl
+import com.fagougou.government.component.uploadGroup.UploadModel.taskId
 import com.fagougou.government.utils.Time
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,7 +41,7 @@ fun SelfPrintPage(navController: NavController) {
                 val response = Client.noLoadClient.newCall(request).execute()
                 if (response.code == 200) {
                     withContext(Dispatchers.Main){
-                        navController.navigate(Router.uploading)
+                        navController.navigate(Router.Upload.waiting)
                         QrCodeViewModel.clear()
                     }
                 }

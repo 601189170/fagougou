@@ -1,6 +1,5 @@
 package com.fagougou.government.homePage
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,11 +20,7 @@ import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
-import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.component.BasicText
-import com.fagougou.government.model.Auth
-import com.fagougou.government.model.AuthRequest
-import com.fagougou.government.model.BotList
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -34,9 +29,6 @@ import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -114,10 +106,8 @@ fun HomePage(navController:NavController) {
         }
         Row(Modifier.padding(top = 24.dp)) {
             HomeButton(
-                modifier = Modifier
-                    .width(210.dp)
-                    .height(224.dp),
-                onClick = {
+                Modifier.width(210.dp).height(224.dp),
+                {
                     navController.navigate(Router.generateGuide)
                     UMConstans.setIntoClick(UMConstans.home_generate_contract)
                 },
@@ -125,56 +115,53 @@ fun HomePage(navController:NavController) {
             )
 
             HomeButton(
-                modifier = Modifier
+                Modifier
                     .padding(horizontal = 24.dp)
                     .width(210.dp)
                     .height(224.dp),
-                onClick = { navController.navigate(Router.contract) },
+                { navController.navigate(Router.contract) },
                 contentId = R.drawable.home_document
             )
             HomeButton(
-                modifier = Modifier
+                Modifier
                     .padding(end = 24.dp)
                     .width(210.dp)
                     .height(224.dp),
-                onClick = { navController.navigate(Router.examination) },
+                { navController.navigate(Router.contractReview) },
                 contentId = R.drawable.home_examination
             )
             HomeButton(
-                modifier = Modifier
-                    .width(210.dp)
-                    .height(224.dp),
-                onClick = { navController.navigate(Router.self) },
-                contentId = R.drawable.home_self
+                Modifier.width(210.dp).height(224.dp),
+                { navController.navigate(Router.selfPrint) },
+                R.drawable.home_self
             )
         }
-        Row( modifier = Modifier.padding(top = 24.dp) ) {
+        Row( Modifier.padding(top = 24.dp) ) {
             HomeButton(
-                modifier = Modifier
-                    .width(288.dp)
-                    .height(120.dp),
-                onClick = {  navController.navigate(Router.calculator)
+                Modifier.width(288.dp).height(120.dp),
+                {  navController.navigate(Router.calculator)
                     UMConstans.setIntoClick(UMConstans.home_calculator) },
                 contentId = R.drawable.home_calculator
             )
             HomeButton(
-                modifier = Modifier
+                Modifier
                     .padding(horizontal = 24.dp)
                     .width(288.dp)
                     .height(120.dp),
-                onClick = { navController.navigate(Router.statistic) },
+                { navController.navigate(Router.statistic) },
                 contentId = R.drawable.home_statistic
             )
             HomeButton(
-                modifier = Modifier
+                Modifier
                     .width(288.dp)
                     .height(120.dp),
-                onClick = { navController.navigate(Router.about) },
+                { navController.navigate(Router.about) },
                 contentId = R.drawable.home_about
             )
         }
         Text(
-            modifier = Modifier
+            "技术支持：法狗狗人工智能 v2.0",
+            Modifier
                 .padding(top = 115.dp)
                 .clickable {
                     Time.exitStack--
@@ -183,7 +170,6 @@ fun HomePage(navController:NavController) {
                         navController.navigate(Router.admin)
                     }
                 },
-            text = "技术支持：法狗狗人工智能 v2.0",
             fontSize = 21.sp,
             color = Color.White
         )

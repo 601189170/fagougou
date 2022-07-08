@@ -1,4 +1,4 @@
-package com.fagougou.government.contractReviewPage
+package com.fagougou.government.component.uploadGroup
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -25,15 +25,15 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractReviewPage.UploadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UploadModel.taskId
+import com.fagougou.government.component.uploadGroup.UploadModel.generateSelfPrintUrl
+import com.fagougou.government.component.uploadGroup.UploadModel.taskId
+import com.fagougou.government.contractReviewPage.PaperUploadActivity
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber
@@ -51,21 +51,19 @@ fun UploadGuidePage(navController: NavController,navControllerMain: NavControlle
     val selectId = remember { mutableStateOf(0) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
+        var code = 0
         withContext(Dispatchers.IO) {
-            while (isActive) {
+            while (code!=200) {
                 delay(1500)
                 if(selectId.value!=1)continue
                 Timber.d("Checking upload for ${taskId}.tmp")
                 val request = Request.Builder().url(Client.fileuploadUrl+taskId +".tmp").get().build()
                 val response = Client.noLoadClient.newCall(request).execute()
-                if (response.code == 200) {
-                    withContext(Dispatchers.Main){
-                        QrCodeViewModel.clear()
-                        navController.navigate(Router.uploading)
-                    }
-                }
+                code = response.code
             }
         }
+        QrCodeViewModel.clear()
+        navController.navigate(Router.Upload.waiting)
     }
     Column(
         Modifier.fillMaxSize(),

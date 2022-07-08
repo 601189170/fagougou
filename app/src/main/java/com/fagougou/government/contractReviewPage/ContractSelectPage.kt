@@ -31,7 +31,7 @@ fun ContractSelectPage(navController: NavController) {
             Card(
                 modifier
                     .shadow(6.dp)
-                    .clickable { navController.navigate(Router.upload) },
+                    .clickable { navController.navigate(Router.ContractReview.guide) },
             ){
                 Column(
                     Modifier,

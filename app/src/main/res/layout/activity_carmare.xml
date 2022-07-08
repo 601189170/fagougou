@@ -8,12 +8,6 @@
     tools:context=".MainActivity">
 
 
-
-    <com.fagougou.government.view.CameraView
-        android:id="@+id/viewFinder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <Button
         android:id="@+id/camera_capture_button"
         android:layout_width="100dp"
