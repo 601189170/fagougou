@@ -15,6 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.fagougou.government.Router
 import com.fagougou.government.component.Header
 import com.fagougou.government.component.SelfHelpBase
+import com.fagougou.government.component.uploadGroup.PreviewLoad
+import com.fagougou.government.component.uploadGroup.UploadGuidePage
+import com.fagougou.government.component.uploadGroup.Uploading
 import com.fagougou.government.model.StepModel
 
 @Composable

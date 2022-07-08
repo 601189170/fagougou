@@ -44,6 +44,7 @@ import com.fagougou.government.chatPage.*
 import com.fagougou.government.component.Loading
 import com.fagougou.government.component.GlobalQrCode
 import com.fagougou.government.component.QrCodeViewModel
+import com.fagougou.government.component.uploadGroup.UploadGuidePage
 import com.fagougou.government.consult.ChooseDomainActivity
 import com.fagougou.government.consult.TouristsLoginActivity
 import com.fagougou.government.consult.WaitActivity
@@ -179,7 +180,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Main() {
     val navController = rememberNavController()

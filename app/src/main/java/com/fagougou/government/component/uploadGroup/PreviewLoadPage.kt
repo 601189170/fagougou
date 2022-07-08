@@ -1,4 +1,4 @@
-package com.fagougou.government.contractReviewPage
+package com.fagougou.government.component.uploadGroup
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*

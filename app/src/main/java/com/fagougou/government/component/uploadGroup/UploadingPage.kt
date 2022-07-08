@@ -1,4 +1,4 @@
-package com.fagougou.government.contractReviewPage
+package com.fagougou.government.component.uploadGroup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -22,7 +22,6 @@ import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber

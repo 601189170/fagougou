@@ -1,4 +1,4 @@
-package com.fagougou.government.contractReviewPage
+package com.fagougou.government.component.uploadGroup
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -25,8 +25,9 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
-import com.fagougou.government.contractReviewPage.UploadModel.generateSelfPrintUrl
-import com.fagougou.government.contractReviewPage.UploadModel.taskId
+import com.fagougou.government.component.uploadGroup.UploadModel.generateSelfPrintUrl
+import com.fagougou.government.component.uploadGroup.UploadModel.taskId
+import com.fagougou.government.contractReviewPage.PaperUploadActivity
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
