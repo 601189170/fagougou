@@ -27,6 +27,7 @@ import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.*
@@ -115,7 +116,8 @@ fun PreviewLoad(subNavController: NavController, navController: NavController, f
                         fullScreenMode.value = false
                         when (routeTarget) {
                             Router.SelfPrint.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
-                            Router.ContractReview.result ->  navController.navigate(Router.ContractReview.result)
+//                            Router.ContractReview.result ->  navController.navigate(Router.ContractReview.result)
+                            Router.ContractReview.result ->  Tips.toast("暂未开放功能")
                         }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),

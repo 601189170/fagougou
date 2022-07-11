@@ -3,7 +3,7 @@ package com.fagougou.government.utils
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
-import org.apache.pdfbox.multipdf.PDFMergerUtility
+
 import java.io.File
 import java.io.FileOutputStream
 
@@ -29,18 +29,18 @@ object PdfUtils {
             e.printStackTrace()
         }
     }
-
-    @Throws(java.lang.Exception::class)
-    fun MergePdf(listfile:List<String>,path: String) {
-        //pdf合并工具类
-        val mergePdf = PDFMergerUtility()
-
-        listfile.forEach(){
-            mergePdf.addSource(it)
-        }
-        //设置合并生成pdf文件名称
-        mergePdf.destinationFileName = path
-        //合并pdf
-        mergePdf.mergeDocuments()
-    }
+//
+//    @Throws(java.lang.Exception::class)
+//    fun MergePdf(listfile:List<String>,path: String) {
+//        //pdf合并工具类
+//        val mergePdf = PDFMergerUtility()
+//
+//        listfile.forEach(){
+//            mergePdf.addSource(it)
+//        }
+//        //设置合并生成pdf文件名称
+//        mergePdf.destinationFileName = path
+//        //合并pdf
+//        mergePdf.mergeDocuments()
+//    }
 }

@@ -14,13 +14,14 @@ import java.io.File
 
 @Composable
 
-fun PhotoImge (filePath:String){
+fun PhotoImge (filePath:String,float: Float=-90f){
     AndroidView(
         {
             PhotoView(CommonApplication.activity).apply {
+                rotation=float
                 Glide.with(this).load(File(filePath)).into(this)
             }
         },
-        modifier = Modifier.width(518.dp).height(732.dp)
+        modifier = Modifier.height(760.dp).width(650.dp)
     )
 }

@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.fagougou.government.model.ContractFolder
 import com.iflytek.cloud.SynthesizerListener
-import org.apache.pdfbox.multipdf.PDFMergerUtility
+
 import java.io.File
 
 
@@ -20,24 +20,25 @@ object CameraUtils {
 
     private const val TAG = "CameraXBasic"
 
-    var preview: Preview? = null
 
-    var imageCapture: ImageCapture? = null
+    private val imageCapture = ImageCapture.Builder()
+        .setTargetResolution(Size(2592, 1944))
+        .build()
+
 
     var photoFile:File?=null
 
     fun initCamera(context: Context, previewView: PreviewView) {
 
         var cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+        val preview = Preview.Builder().build()
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             // Preview
-            preview = Preview.Builder().build()
-            imageCapture = ImageCapture.Builder()
-                .setTargetResolution(Size(2592, 1944))
-                .build()//拍照用例配置
+
+
             // Select back camera
             val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 
@@ -58,7 +59,7 @@ object CameraUtils {
                 }
 
 
-                preview?.setSurfaceProvider(previewView.surfaceProvider)
+                preview.setSurfaceProvider(previewView.surfaceProvider)
 
             } catch (exc: Exception) {
                 Log.e("TAG", "Use case binding failed", exc)
@@ -79,7 +80,7 @@ object CameraUtils {
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile!!).build()
 
 
-        imageCapture?.takePicture(
+        imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
             ImgAddCallback)
@@ -88,12 +89,11 @@ object CameraUtils {
 
      var ImgAddCallback: ImageCapture.OnImageSavedCallback = object : ImageCapture.OnImageSavedCallback {
         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-            Log.e(TAG, "onImageSaved: ", )
+
 
         }
 
         override fun onError(exception: ImageCaptureException) {
-            Log.e(TAG, "onError: ", )
 
         }
 

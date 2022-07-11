@@ -1,6 +1,7 @@
 package com.fagougou.government.contractReviewPage
 
 import android.util.Log
+import android.view.View
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.PreviewView
@@ -28,12 +29,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.blankj.utilcode.util.FileUtils
+import com.bumptech.glide.Glide
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.contractReviewPage.CamareModel.fileList
 import com.fagougou.government.contractReviewPage.CamareModel.index
+import com.fagougou.government.contractReviewPage.CamareModel.isOnly
 import com.fagougou.government.contractReviewPage.CamareModel.isPhoto
+import com.fagougou.government.contractReviewPage.CamareModel.rePhoto
 import com.fagougou.government.contractReviewPage.CamareModel.showFile
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
@@ -46,126 +51,187 @@ import com.fagougou.government.utils.CameraUtils
 import com.fagougou.government.utils.CameraUtils.ImgAddCallback
 import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Tips
+import com.github.chrisbanes.photoview.PhotoView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.rajat.pdfviewer.PdfRendererView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 object CamareModel{
+    //拍照状态
     var isPhoto=mutableStateOf(true)
-
+    //重拍
+    var rePhoto=mutableStateOf(false)
+    //文件列表
     var showFile=mutableStateOf(false)
-
+    //文件存储
     var fileList= mutableStateListOf<String>()
 
     var index=mutableStateOf(1)
-
+    //单张or多张
+    var isOnly=mutableStateOf(true)
 }
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CameraPage(navController: NavController) {
-    val pagerState = rememberPagerState()
+
     Box(Modifier.fillMaxSize()) {
-        if (!showFile.value) {
+        val pagerState = rememberPagerState(fileList.size)
+
             Column(modifier = Modifier.fillMaxSize()) {
-                AndroidView(
-                    {
-                        PreviewView(activity).apply {
-                            CameraUtils.initCamera(activity, this)
-
-                            ImgAddCallback =object : ImageCapture.OnImageSavedCallback{
-                                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                    isPhoto.value=true
-                                    CameraUtils.photoFile?.let { it1 -> fileList.add(it1.path) }
-                                    Tips.toast("拍照成功")
-
-                                }
-                                override fun onError(exception: ImageCaptureException) {
-                                    isPhoto.value=true
-                                    Tips.toast("拍照失败")
-                                }
-
-                            }
+               Box() {
 
 
-                        }
-                    },
-                    modifier = Modifier
-                        .height(836.dp)
-                        .fillMaxWidth()
-                )
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(188.dp)
-                        .background(Color.Black), contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                   AndroidView(
+                       {
+                           PreviewView(activity).apply {
+                               CameraUtils.initCamera(activity, this)
+                               visibility = if (!showFile.value) View.VISIBLE else View.GONE
+                               ImgAddCallback = object : ImageCapture.OnImageSavedCallback {
+                                   override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+
+                                       isPhoto.value = true
+                                       CameraUtils.photoFile?.let {
+                                            if (rePhoto.value) fileList[pagerState.currentPage] = it.path else fileList.add(it.path)
+                                       }
+                                       if (rePhoto.value||isOnly.value) {
+                                           showFile.value = true
+                                           rePhoto.value=false
+                                       }
+
+                                       Tips.toast("拍照成功")
+
+                                   }
+
+                                   override fun onError(exception: ImageCaptureException) {
+                                       isPhoto.value = true
+                                       Tips.toast("拍照失败")
+                                   }
+
+                               }
+
+
+                           }
+                       },
+                       modifier = Modifier
+                           .height(836.dp)
+                           .fillMaxWidth()
+                   )
+                   if (!rePhoto.value)
+                   Box(modifier = Modifier
+                       .fillMaxWidth()
+                       .padding(top = 750.dp)
+                       .width(200.dp)
+                       .height(50.dp), contentAlignment = Alignment.Center){
+                       Row(verticalAlignment = Alignment.CenterVertically) {
+                           Text(
+                               "拍单张",
+                               modifier = Modifier
+                                   .clickable { isOnly.value = true }
+                                   .background(if (isOnly.value) Color.White else Color.Black),
+                               fontSize = 20.sp,
+                               color = if (isOnly.value) Color.Black else Color.White
+                           )
+                           Text(
+                               "拍多张",
+                               modifier = Modifier
+                                   .clickable { isOnly.value = false }
+                                   .background(if (!isOnly.value) Color.White else Color.Black),
+                               fontSize = 20.sp,
+                               color = if (!isOnly.value) Color.Black else Color.White
+                           )
+                       } }
+               }
+
+                if (!showFile.value)
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(188.dp)
+                            .background(Color.Black), contentAlignment = Alignment.Center
                     ) {
-                        if (fileList.isNotEmpty())
-                            Box(
-                                Modifier
-                                    .padding(end = 150.dp)
-                                    .height(98.dp)
-                                    .width(76.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            if (fileList.isNotEmpty()&& !rePhoto.value)
+                                Box(
+                                    Modifier
+                                        .padding(end = 150.dp)
+                                        .height(98.dp)
+                                        .width(76.dp)
+                                        .clickable { showFile.value = true }
+                                ) {
+                                    Image(
+                                        rememberImagePainter(File(fileList[fileList.size - 1])),
+                                        modifier = Modifier
+                                            .rotate(-90f)
+                                            .height(88.dp)
+                                            .width(66.dp),
+                                        contentDescription = null
+                                    )
+                                    Row(
+                                        Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Surface(modifier = Modifier
+                                            .height(24.dp)
+                                            .width(40.dp),
+                                            color = Color.Blue,
+                                            shape = RoundedCornerShape(12.dp),
+                                            content = {
+                                                Text(
+                                                    "" + fileList.size,
+                                                    fontSize = 16.sp,
+                                                    color = Color.White,
+                                                    modifier = Modifier.padding(start = 15.dp)
+                                                )
+                                            })
+
+                                    }
+
+                                }
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.clickable {
+                                    if (isPhoto.value) {
+                                        isPhoto.value = false
+                                        CameraUtils.takePhoto(activity)
+                                    }
+                                }) {
                                 Image(
-                                    rememberImagePainter(File(fileList[fileList.size - 1])),
-                                    modifier = Modifier
-                                        .rotate(-90f)
-                                        .height(88.dp)
-                                        .width(66.dp),
+                                    painter = painterResource(id = R.drawable.img_camare),
                                     contentDescription = null
                                 )
-                                Row(
-                                    Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.End) {
-
-                                    Surface( modifier = Modifier
-                                        .height(24.dp)
-                                        .width(40.dp),color = Color.Blue, shape = RoundedCornerShape(12.dp),content = {
-                                        Text("" + fileList.size, fontSize = 16.sp, color = Color.White,modifier = Modifier.padding(start = 15.dp))
-                                    })
-
-                                }
-
+                                Text(
+                                    "点击扫描",
+                                    Modifier.padding(top = 16.dp),
+                                    fontSize = 20.sp,
+                                    color = Color.White
+                                )
                             }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.clickable {
-                                if (isPhoto.value){
-                                    isPhoto.value=false
-                                    CameraUtils.takePhoto(activity)
-                                }
-                            }) {
-                            Image(
-                                painter = painterResource(id = R.drawable.img_camare),
-                                contentDescription = null
-                            )
-                            Text(
-                                "点击扫描",
-                                Modifier.padding(top = 16.dp),
-                                fontSize = 20.sp,
-                                color = Color.White
-                            )
+                            if (fileList.isNotEmpty()&& !rePhoto.value)
+                                Text(
+                                    "完成扫描",
+                                    fontSize = 20.sp,
+                                    color = Color.White,
+                                    modifier = Modifier
+                                        .padding(start = 150.dp)
+                                        .clickable { showFile.value = true })
                         }
-                        if (fileList.isNotEmpty())
-                            Text(
-                            "完成扫描",
-                            fontSize = 20.sp,
-                            color = Color.White,
-                            modifier = Modifier
-                                .padding(start = 150.dp)
-                                .clickable { showFile.value = true })
+
+
                     }
 
 
-                }
-
             }
-        }else{
 
+        if (showFile.value)
             Column(modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFE7E8E9)),horizontalAlignment =Alignment.CenterHorizontally) {
@@ -179,38 +245,35 @@ fun CameraPage(navController: NavController) {
                     fontSize = 20.sp,
                     color = Color(0xFF606366),
                     modifier = Modifier
-                        .padding(top = 8.dp)
-                        .clickable { showFile.value = true })
-                Row(Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.Center) {
-                    Image(painter = painterResource(id = R.drawable.img_left), contentDescription = null,modifier = Modifier
-                        .padding(start = 180.dp)
-                        .clickable {
-                            if (pagerState.currentPage != 0){
-                                index.value=pagerState.currentPage - 1
-                            }
-
-
-                        })
+                        .padding(top = 8.dp))
+                Box(
+                    Modifier
+                        .fillMaxWidth().height(800.dp), contentAlignment = Alignment.Center) {
                     HorizontalPager(
                         count = fileList.size,
                         state = pagerState,
-                        modifier = Modifier
-                            .padding(top = 24.dp)
-                            .width(550.dp)
-                            .height(760.dp)
+                        modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
                     ) { index ->
-                        if(index in 0 .. fileList.size-1){
+                        if(index in 0 until fileList.size){
                             PhotoImge(fileList[index])
                         }
+                        CamareModel.index.value=pagerState.currentPage + 1
                     }
-                    Image(painter = painterResource(id = R.drawable.img_right), contentDescription = null,modifier = Modifier
-                        .padding(end = 180.dp)
-                        .clickable {
-                            if (pagerState.currentPage != fileList.size - 1){
-                               index.value=pagerState.currentPage + 1
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Image(painter = painterResource(id =if (pagerState.currentPage==0) R.drawable.ic_banner_left_false else R.drawable.ic_banner_left_true), contentDescription = null,modifier = Modifier.padding(start = 180.dp)
+                            .clickable {
+                                if (pagerState.currentPage != 0){
+                                    CoroutineScope(Dispatchers.Main).launch { pagerState.scrollToPage(page = pagerState.currentPage-1, pageOffset = 0f) }
+                                }
+                            })
+                        Image(painter = painterResource(id = if (pagerState.currentPage== fileList.size-1) R.drawable.ic_banner_right_false else R.drawable.ic_banner_right_true ), contentDescription = null,modifier = Modifier.padding(end = 180.dp)
+                            .clickable {
+                                if (pagerState.currentPage != fileList.size - 1){
+                                    CoroutineScope(Dispatchers.Main).launch { pagerState.scrollToPage(page = pagerState.currentPage+1, pageOffset = 0f) }
+                                }
+                            })
+                    }
 
-                            }
-                        })
 
                 }
 
@@ -228,7 +291,8 @@ fun CameraPage(navController: NavController) {
                             .height(60.dp)
                             .width(200.dp),
                         onClick = {
-                            fileList.remove(fileList[pagerState.currentPage])
+                            rePhoto.value=true
+                            isOnly.value=true
                             showFile.value=false
                         },
                         content = {
@@ -274,29 +338,43 @@ fun CameraPage(navController: NavController) {
 
 
             }
-        }
+
 
         Surface(Modifier.padding(start = 24.dp,top = 24.dp),color = Color(0x50000000),
             shape = RoundedCornerShape(32.dp)) {
-            Row(verticalAlignment =Alignment.CenterVertically,horizontalArrangement = Arrangement.Center,modifier = Modifier.width(136.dp).height(64.dp).clickable {
-                with(DialogViewModel) {
-                    clear()
-                    title = "温馨提示"
-                    firstButtonText.value = "取消"
-                    firstButtonOnClick.value = { content.clear() }
-                    secondButtonText.value = "确定"
-                    secondButtonOnClick.value = {
-                        content.clear()
-                        navController.popBackStack()
+            Row(verticalAlignment =Alignment.CenterVertically,horizontalArrangement = Arrangement.Center,modifier = Modifier
+                .width(136.dp)
+                .height(64.dp)
+                .clickable {
+                    with(DialogViewModel) {
+                        clear()
+                        title = "温馨提示"
+                        firstButtonText.value = "取消"
+                        firstButtonOnClick.value = { content.clear() }
+                        secondButtonText.value = "确定"
+                        secondButtonOnClick.value = {
+                            content.clear()
+                            navController.popBackStack()
+                            clearData()
+                        }
+                        content.add(ContentStyle("返回后将丢失本次上传的图片"))
                     }
-                    content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
-                }
-            }) {
+                }) {
                 Image(painter = painterResource(id = R.drawable.ic_back), contentDescription =null )
                 Text("返回", Modifier.padding(start = 5.dp), fontSize = 20.sp, color = Color.White)
             }
         }
 
     }
+
+}
+
+fun clearData(){
+    showFile.value=false
+    rePhoto.value=false
+    fileList.forEach { FileUtils.delete(it)}
+    fileList.clear()
+    index.value=1
+    isOnly.value=true
 }
 

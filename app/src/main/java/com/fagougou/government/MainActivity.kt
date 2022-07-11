@@ -191,6 +191,7 @@ fun Main() {
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stamp
                 if (routeRemain.value < 0) {
+                    clearData()
                     DialogViewModel.clear()
                     ChatViewModel.clear()
                     GenerateContractViewModel.clear()
@@ -241,11 +242,7 @@ fun Main() {
             composable(Router.webView) { WebViewPage(navController) }
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
-            composable(Router.resultWebview) { ResultWebviewPage(navController) }
-            composable(Router.self) { SelfPrintMain(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
-            composable(Router.examination) { ContractSelectMain(navController) }
-            composable(Router.printComplete) { PrintCompletePage(navController) }
             composable(Router.Camera) { CameraPage(navController) }
             composable(Router.selfPrint) { SelfPrintMain(navController) }
             composable(Router.contractReview) { ContractSelectMain(navController) }

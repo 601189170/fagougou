@@ -36,11 +36,11 @@ fun ContractSelectMain(navController: NavController) {
                     stepModel.currentIndex.value=0
                 }
                 composable(Router.ContractReview.guide) {
-                    UploadGuidePage(subNavController)
+                    UploadGuidePage(subNavController,navController)
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.ContractReview.camera) {
-                    UploadGuidePage(subNavController)
+                    UploadGuidePage(subNavController,navController)
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.Upload.waiting) {
