@@ -50,6 +50,7 @@ import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.contractLibraryPage.LibraryGuidePage
 import com.fagougou.government.contractLibraryPage.ContractContent
 import com.fagougou.government.contractReviewPage.*
+import com.fagougou.government.contractReviewPage.CameraModel.clearData
 import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
@@ -123,7 +124,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GovernmentTheme {
                 Surface(
-                    Modifier.height(1024.dp).width(1280.dp)
+                    Modifier.fillMaxWidth()
                 ) {
                     Main()
                     GlobalQrCode()

@@ -28,7 +28,7 @@ fun ContractSelectMain(navController: NavController) {
     Column(
         Modifier.fillMaxSize()
     ) {
-        if(!fullScreenMode.value)Header("智能合同审核", navController )
+        if(!fullScreenMode.value)Header("智能合同审查", navController, isCases = true)
         SelfHelpBase(stepModel,fullScreenMode){
             NavHost(subNavController, Router.ContractReview.classify, Modifier.fillMaxHeight()) {
                 composable(Router.ContractReview.classify) {

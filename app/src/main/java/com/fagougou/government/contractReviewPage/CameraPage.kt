@@ -1,6 +1,6 @@
 package com.fagougou.government.contractReviewPage
 
-import android.util.Log
+
 import android.view.View
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -15,14 +15,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,39 +28,33 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.blankj.utilcode.util.FileUtils
-import com.bumptech.glide.Glide
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
-import com.fagougou.government.Router
-import com.fagougou.government.contractReviewPage.CamareModel.fileList
-import com.fagougou.government.contractReviewPage.CamareModel.index
-import com.fagougou.government.contractReviewPage.CamareModel.isOnly
-import com.fagougou.government.contractReviewPage.CamareModel.isPhoto
-import com.fagougou.government.contractReviewPage.CamareModel.rePhoto
-import com.fagougou.government.contractReviewPage.CamareModel.showFile
+import com.fagougou.government.contractReviewPage.CameraModel.clearData
+import com.fagougou.government.contractReviewPage.CameraModel.fileList
+import com.fagougou.government.contractReviewPage.CameraModel.index
+import com.fagougou.government.contractReviewPage.CameraModel.isOnly
+import com.fagougou.government.contractReviewPage.CameraModel.isPhoto
+import com.fagougou.government.contractReviewPage.CameraModel.rePhoto
+import com.fagougou.government.contractReviewPage.CameraModel.showFile
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.repo.Client
-import com.fagougou.government.repo.Client.pop
-
-
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.CameraUtils
 import com.fagougou.government.utils.CameraUtils.ImgAddCallback
-import com.fagougou.government.utils.MMKV
 import com.fagougou.government.utils.Tips
-import com.github.chrisbanes.photoview.PhotoView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
-object CamareModel{
+
+
+object CameraModel{
     //拍照状态
     var isPhoto=mutableStateOf(true)
     //重拍
@@ -75,10 +67,20 @@ object CamareModel{
     var index=mutableStateOf(1)
     //单张or多张
     var isOnly=mutableStateOf(true)
+
+    fun clearData(){
+        showFile.value=false
+        rePhoto.value=false
+        fileList.forEach { FileUtils.delete(it)}
+        fileList.clear()
+        index.value=1
+        isOnly.value=true
+    }
 }
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CameraPage(navController: NavController) {
+    val scope = rememberCoroutineScope()
 
     Box(Modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(fileList.size)
@@ -94,7 +96,6 @@ fun CameraPage(navController: NavController) {
                                visibility = if (!showFile.value) View.VISIBLE else View.GONE
                                ImgAddCallback = object : ImageCapture.OnImageSavedCallback {
                                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-
                                        isPhoto.value = true
                                        CameraUtils.photoFile?.let {
                                             if (rePhoto.value) fileList[pagerState.currentPage] = it.path else fileList.add(it.path)
@@ -248,28 +249,43 @@ fun CameraPage(navController: NavController) {
                         .padding(top = 8.dp))
                 Box(
                     Modifier
-                        .fillMaxWidth().height(800.dp), contentAlignment = Alignment.Center) {
+                        .fillMaxWidth()
+                        .height(800.dp), contentAlignment = Alignment.Center) {
                     HorizontalPager(
                         count = fileList.size,
                         state = pagerState,
-                        modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+                        modifier = Modifier
+                            .padding(top = 24.dp)
+                            .fillMaxWidth()
                     ) { index ->
                         if(index in 0 until fileList.size){
                             PhotoImge(fileList[index])
                         }
-                        CamareModel.index.value=pagerState.currentPage + 1
+                        CameraModel.index.value=pagerState.currentPage + 1
                     }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Image(painter = painterResource(id =if (pagerState.currentPage==0) R.drawable.ic_banner_left_false else R.drawable.ic_banner_left_true), contentDescription = null,modifier = Modifier.padding(start = 180.dp)
+                        Image(painter = painterResource(id =if (pagerState.currentPage==0) R.drawable.ic_banner_left_false else R.drawable.ic_banner_left_true), contentDescription = null,modifier = Modifier
+                            .padding(start = 180.dp)
                             .clickable {
-                                if (pagerState.currentPage != 0){
-                                    CoroutineScope(Dispatchers.Main).launch { pagerState.scrollToPage(page = pagerState.currentPage-1, pageOffset = 0f) }
+                                if (pagerState.currentPage != 0) {
+                                    scope.launch(Dispatchers.Main) {
+                                        pagerState.scrollToPage(
+                                            page = pagerState.currentPage - 1,
+                                            pageOffset = 0f
+                                        )
+                                    }
                                 }
                             })
-                        Image(painter = painterResource(id = if (pagerState.currentPage== fileList.size-1) R.drawable.ic_banner_right_false else R.drawable.ic_banner_right_true ), contentDescription = null,modifier = Modifier.padding(end = 180.dp)
+                        Image(painter = painterResource(id = if (pagerState.currentPage== fileList.size-1) R.drawable.ic_banner_right_false else R.drawable.ic_banner_right_true ), contentDescription = null,modifier = Modifier
+                            .padding(end = 180.dp)
                             .clickable {
-                                if (pagerState.currentPage != fileList.size - 1){
-                                    CoroutineScope(Dispatchers.Main).launch { pagerState.scrollToPage(page = pagerState.currentPage+1, pageOffset = 0f) }
+                                if (pagerState.currentPage != fileList.size - 1) {
+                                    scope.launch(Dispatchers.Main) {
+                                        pagerState.scrollToPage(
+                                            page = pagerState.currentPage + 1,
+                                            pageOffset = 0f
+                                        )
+                                    }
                                 }
                             })
                     }
@@ -369,12 +385,7 @@ fun CameraPage(navController: NavController) {
 
 }
 
-fun clearData(){
-    showFile.value=false
-    rePhoto.value=false
-    fileList.forEach { FileUtils.delete(it)}
-    fileList.clear()
-    index.value=1
-    isOnly.value=true
-}
+
+
+
 

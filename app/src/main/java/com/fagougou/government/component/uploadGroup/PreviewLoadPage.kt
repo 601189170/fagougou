@@ -72,15 +72,16 @@ fun PreviewLoad(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Image(painterResource(R.drawable.ic_icon_full_screen), null)
-                    Text(
-                        "全屏",
-                        Modifier
-                            .padding(top = 40.dp)
-                            .clickable { fullScreenMode.value = !fullScreenMode.value },
-                        fontSize = 20.sp,
-                        color = Color(0xFF606366)
-                    )
+                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.width(90.dp).height(35.dp).background(Color.White)) {
+                        Image(painterResource(R.drawable.ic_icon_full_screen), null)
+                        Text(
+                            "全屏",
+                            Modifier.clickable { fullScreenMode.value = !fullScreenMode.value },
+                            fontSize = 20.sp,
+                            color = Color(0xFF303133)
+                        )
+                    }
+
                 }
             }
             Surface(
