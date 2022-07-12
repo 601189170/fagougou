@@ -51,10 +51,11 @@ fun HomePage(navController:NavController) {
         Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial))
             .enqueue( Client.callBack {
                 it?.let {
-                    if(!it.canLogin){
+                     if(it.canLogin) MMKV.setAuthData(it)
+                     else {
                         navController.navigate(Router.register)
                         toast(it.errorMessage)
-                    }else MMKV.setAuthData(it)
+                    }
                 }
             })
     }

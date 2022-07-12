@@ -261,11 +261,11 @@ fun initWindsSetting():WindowManager.LayoutParams{
     val lp = WindowManager.LayoutParams(
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.TYPE_PHONE,
-        0, PixelFormat.TRANSPARENT
+        if (Build.VERSION.SDK_INT > 25) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+        0,
+        PixelFormat.TRANSPARENT
     )
-    if (Build.VERSION.SDK_INT > 25)  lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-    else  lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
     lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
     lp.gravity = Gravity.END
     lp.gravity = Gravity.TOP

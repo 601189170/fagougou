@@ -25,13 +25,13 @@ object MMKV {
         kv.encode(appId, it.appId)
         kv.encode(appSec, it.appSec)
         kv.encode(mkt, it.mkt)
-        CoroutineScope(Dispatchers.IO).launch {
+        kotlin.runCatching {
             val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
             val tokenBody = tokenResponse.body() ?: Auth()
             kv.encode(token, tokenBody.data.token)
             val botListResponse = Client.apiService.botList().execute()
             val botListBody = botListResponse.body() ?: BotList()
             for (bot in botListBody.data) ChatViewModel.botQueryIdMap[bot.name] = bot.id
-        }
+        }.onFailure { Client.handleException(it) }
     }
 }

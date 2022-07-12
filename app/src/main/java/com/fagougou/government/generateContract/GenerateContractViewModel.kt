@@ -3,11 +3,9 @@ package com.fagougou.government.generateContract
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.model.*
 import com.fagougou.government.repo.Client
 import com.fagougou.government.utils.Time
-import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,8 +13,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import timber.log.Timber
-import java.io.IOException
 import java.io.InputStreamReader
 
 object GenerateContractViewModel:BaseViewModel {
@@ -88,12 +84,12 @@ object GenerateContractViewModel:BaseViewModel {
                         val result = when (type) {
                             "checkbox" -> {
                                 if (selected.isNotEmpty()) {
-                                    val builder = StringBuilder()
+                                    val stringBuilder = StringBuilder()
                                     for (select in selected) {
-                                        builder.append(values[select])
+                                        stringBuilder.append(values[select])
                                     }
-                                    val result = builder.toString()
-                                    if (result.isNotEmpty()) result.substring(0, builder.lastIndex)
+                                    val result = stringBuilder.toString()
+                                    if (result.isNotEmpty()) result.substring(0, stringBuilder.lastIndex)
                                     else ""
                                 } else ""
                             }

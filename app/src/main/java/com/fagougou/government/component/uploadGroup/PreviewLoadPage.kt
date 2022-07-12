@@ -28,7 +28,6 @@ import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
-import com.fagougou.government.utils.Tips
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.*
@@ -38,7 +37,6 @@ import java.io.File
 @Composable
 fun PreviewLoad(
     subNavController: NavController,
-    navController: NavController,
     fullScreenMode: MutableState<Boolean>,
     routeTarget: String
 ) {

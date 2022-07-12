@@ -40,7 +40,7 @@ fun SelfPrintMain(navController: NavController) {
                     stepModel.currentIndex.value=0
                 }
                 composable(Router.Upload.pdfPreview) {
-                    PreviewLoad(subNavController,navController, fullScreenMode,Router.SelfPrint.printComplete)
+                    PreviewLoad(subNavController, fullScreenMode,Router.SelfPrint.printComplete)
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.SelfPrint.printComplete) {

@@ -48,7 +48,7 @@ fun ContractSelectMain(navController: NavController) {
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.Upload.pdfPreview) {
-                    PreviewLoad(subNavController,navController,fullScreenMode, Router.ContractReview.result)
+                    PreviewLoad(subNavController,fullScreenMode, Router.ContractReview.result)
                     stepModel.currentIndex.value=2
                 }
                 composable(Router.ContractReview.result) {

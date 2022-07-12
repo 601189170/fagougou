@@ -67,7 +67,7 @@ fun GenerateGuide(navController: NavController) {
                             .padding(end = 16.dp)) {
                         if(item.id == currentContractId.value) Row(
                             Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.End
+                            Arrangement.End
                         ){
                             Image(painterResource(R.drawable.ic_blue_select),null)
                         }
@@ -88,8 +88,8 @@ fun GenerateGuide(navController: NavController) {
                                     }
                                     scope.launch { getGenerateForm(item.id) }
                                 },
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                            Arrangement.Center,
+                            Alignment.CenterVertically,
                         ){
                             Image(painterResource(R.drawable.ic_word), null )
                             Spacer(
@@ -105,44 +105,42 @@ fun GenerateGuide(navController: NavController) {
                 Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.88f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                Arrangement.Top,
+                Alignment.CenterHorizontally
             ) {
                 Row(
                     Modifier
                         .fillMaxWidth()
                         .height(750.dp)
                         .border(1.dp, Color.LightGray, RoundedCornerShape(CORNER_FLOAT)),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    Arrangement.Center,
+                    Alignment.CenterVertically
                 ){
                     GenerateWebView()
                 }
                 Row(
                     Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    Arrangement.Center,
+                    Alignment.CenterVertically
                 ){
                     Button(
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(180.dp),
-                        elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                        onClick = {
+                        {
                             navController.navigate(Router.generateContract)
                         },
-                        content = {
-                            Row( verticalAlignment = Alignment.CenterVertically ){
-                                Image(painterResource(R.drawable.ic_edit),null)
-                                Text(
-                                    modifier = Modifier.padding(start = 16.dp),
-                                    text = "填写模板",
-                                    color = Color.White,
-                                    fontSize = 21.sp)
-                            }
-                        },
+                        Modifier.height(60.dp).width(180.dp),
+                        elevation = ButtonDefaults.elevation(0.dp,0.dp),
                         colors = buttonColors(backgroundColor = Dodgerblue),
                         shape = RoundedCornerShape(16)
-                    )
+                    ){
+                        Row( verticalAlignment = Alignment.CenterVertically ){
+                            Image(painterResource(R.drawable.ic_edit),null)
+                            Text(
+                                "填写模板",
+                                Modifier.padding(start = 16.dp),
+                                color = Color.White,
+                                fontSize = 21.sp)
+                        }
+                    }
                     Spacer(
                         Modifier
                             .width(32.dp)
@@ -151,19 +149,18 @@ fun GenerateGuide(navController: NavController) {
                         { DialogViewModel.confirmPrint() },
                         Modifier.height(60.dp).width(180.dp),
                         elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                        content = {
-                            Row( verticalAlignment = Alignment.CenterVertically ){
-                                Image(painterResource(R.drawable.ic_painter),null)
-                                Text(
-                                    modifier = Modifier.padding(start = 16.dp),
-                                    text = "打印合同",
-                                    color = Color.White,
-                                    fontSize = 21.sp)
-                            }
-                        },
                         colors = buttonColors(backgroundColor = Dodgerblue),
                         shape = RoundedCornerShape(16)
-                    )
+                    ){
+                        Row( verticalAlignment = Alignment.CenterVertically ){
+                            Image(painterResource(R.drawable.ic_painter),null)
+                            Text(
+                                "打印合同",
+                                Modifier.padding(start = 16.dp),
+                                color = Color.White,
+                                fontSize = 21.sp)
+                        }
+                    }
                 }
             }
         }
