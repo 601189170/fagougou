@@ -89,7 +89,6 @@ fun HomePage(navController:NavController) {
                     .width(444.dp)
                     .height(224.dp),
                 onClick = {
-//                    navController.navigate(Router.Camera)
                     navController.navigate(Router.chatGuide)
                     UMConstans.setIntoClick(UMConstans.home_ask)
                     },

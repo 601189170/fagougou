@@ -122,6 +122,7 @@ fun Dialog() {
                 when (type) {
                     "button" -> ButtonDialog()
                     "nameDef" -> NameDefDialog()
+                    "cases" -> ContractCasesDialog()
                 }
             }
         }
@@ -239,5 +240,28 @@ fun NameDefDialog() {
     Row( Modifier.padding(top = 32.dp) ) {
         Image(painterResource(R.drawable.ic_close), null)
     }
+}
+
+@Composable
+fun ContractCasesDialog() {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(CORNER_FLOAT),
+        elevation = 2.dp
+    ) {
+        Column(
+            Modifier
+                .width(960.dp)
+                .height(696.dp)
+                .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row( horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth().padding(top = 24.dp, end = 24.dp).clickable { clear() } ){ Image(painterResource(R.drawable.ic_icon_close), null) }
+            Text(title, fontSize = 28.sp)
+            Image(painterResource(R.drawable.contract_cases_bg), null)
+        }
+    }
+
 }
 

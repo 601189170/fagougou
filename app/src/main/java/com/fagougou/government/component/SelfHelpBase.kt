@@ -26,7 +26,7 @@ fun SelfHelpBase(
     ) {
         if (!fullScreenMode.value) Column(Modifier.fillMaxWidth()) {
             Surface {
-                Image(painterResource(R.drawable.examination_bg), null)
+                Image(painterResource(R.drawable.ic_banner_examination), null)
                 Row(
                     Modifier
                         .fillMaxWidth()

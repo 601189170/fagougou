@@ -19,7 +19,10 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.Router.routeMirror
+import com.fagougou.government.chatPage.ChatViewModel
 import com.fagougou.government.consult.TouristsLoginActivity
+import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.SafeBack.safeBack
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +37,8 @@ fun Header(
     onBack:() -> Unit = {},
     canClose:Boolean = true,
     qrCode:String = "",
-    qrCodeHint:String = "微信扫码咨询"
+    qrCodeHint:String = "微信扫码咨询",
+    isCases:Boolean = false
 ){
     val scope = rememberCoroutineScope()
     Surface(
@@ -92,6 +96,21 @@ fun Header(
                 ){
                     Image(painterResource(id = R.drawable.ic_human), null)
                     Text("人工", Modifier.padding(start = 8.dp), Color.White, 24.sp)
+                }
+                if (isCases)
+                Row(Modifier.fillMaxHeight().clickable {
+                    with(DialogViewModel) {
+                        clear()
+                        DialogViewModel.title = "审查报告示例"
+                        type = "cases"
+                        content.add( ContentStyle( "审查报告示例" ) )
+                    }
+                },
+                    Arrangement.Start,
+                    Alignment.CenterVertically
+                ){
+                    Image(painterResource(id = R.drawable.ic_icon_cases), null)
+                    Text("审查示例", Modifier.padding(start = 8.dp), Color.White, 24.sp)
                 }
                 Spacer(Modifier.width(32.dp))
             }

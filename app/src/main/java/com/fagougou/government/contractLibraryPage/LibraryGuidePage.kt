@@ -115,9 +115,9 @@ fun LibraryGuidePage(navController: NavController) {
         Surface(
             Modifier
                 .height(264.dp)
-                .width(1280.dp), color = Color.Transparent
+                .fillMaxWidth(), color = Color.Transparent
         ) {
-            Image(painterResource(id = R.drawable.contract_banner),null)
+            Image(painterResource(id = R.drawable.contract_banner),null, modifier = Modifier.fillMaxWidth())
             Column(
                 Modifier
                     .height(264.dp)
