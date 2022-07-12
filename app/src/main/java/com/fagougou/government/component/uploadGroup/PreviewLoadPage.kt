@@ -27,6 +27,8 @@ import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
+import com.fagougou.government.utils.Tips
+import com.fagougou.government.utils.Tips
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.*
@@ -129,7 +131,7 @@ fun PreviewLoad(
                                     "selfPrint.pdf"
                                 )
                             )
-                            Router.ContractReview.result -> navController.navigate(Router.ContractReview.result)
+                            Router.ContractReview.result -> Tips.toast("暂未开放功能")
                         }
                     },
                     Modifier

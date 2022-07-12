@@ -27,7 +27,6 @@ import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.component.uploadGroup.UploadModel.generateSelfPrintUrl
 import com.fagougou.government.component.uploadGroup.UploadModel.taskId
-import com.fagougou.government.contractReviewPage.PaperUploadActivity
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Time
@@ -47,7 +46,7 @@ object UploadModel{
 }
 
 @Composable
-fun UploadGuidePage(navController: NavController) {
+fun UploadGuidePage(navController: NavController,navControllerMain: NavController) {
     val selectId = remember { mutableStateOf(0) }
     LaunchedEffect(null) {
         taskId=""+Time.stamp+"_"+(0..999999).random()
@@ -138,7 +137,7 @@ fun UploadGuidePage(navController: NavController) {
             {
                 when(selectId.value){
                     1 -> QrCodeViewModel.set(generateSelfPrintUrl(taskId,"contractReview"),"微信扫码上传")
-                    2 -> activity.startActivity(Intent(activity, PaperUploadActivity::class.java))
+                    2 -> navControllerMain.navigate(Router.Camera)
                     else -> { Tips.toast("请选择上传方式") }
                 }
             },
@@ -146,7 +145,7 @@ fun UploadGuidePage(navController: NavController) {
             colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue)
         ){
             Row( verticalAlignment = Alignment.CenterVertically ){
-                Text("立即上传",Modifier.padding(start = 16.dp),Color.White,21.sp)
+                Text("立即上传",Modifier,Color.White,21.sp)
             }
         }
     }

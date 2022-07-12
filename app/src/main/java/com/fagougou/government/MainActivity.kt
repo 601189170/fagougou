@@ -62,6 +62,7 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
+import com.fagougou.government.selfPrint.PrintCompletePage
 import com.fagougou.government.selfPrint.SelfPrintMain
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
@@ -74,6 +75,7 @@ import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.m7.imkfsdk.MessageConstans
 import com.m7.imkfsdk.chat.ChatActivity
 import com.m7.imkfsdk.chat.MessageEvent
@@ -191,6 +193,7 @@ fun Main() {
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stamp
                 if (routeRemain.value < 0) {
+                    clearData()
                     DialogViewModel.clear()
                     ChatViewModel.clear()
                     GenerateContractViewModel.clear()
@@ -240,6 +243,7 @@ fun Main() {
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
+            composable(Router.Camera) { CameraPage(navController) }
             composable(Router.selfPrint) { SelfPrintMain(navController) }
             composable(Router.contractReview) { ContractSelectMain(navController) }
         }

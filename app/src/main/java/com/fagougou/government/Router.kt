@@ -45,9 +45,10 @@ object Router {
         const val camera = "contractReview/camera"
         const val result = "contractReview/result"
     }
-
+    const val Camera = "Camera"
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
+
     var routeRemain = mutableStateOf(0L)
     val noAutoQuitList = listOf(
         register,
@@ -59,4 +60,5 @@ object Router {
         home,
         chat
     )
+
 }
