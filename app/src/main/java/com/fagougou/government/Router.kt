@@ -31,6 +31,11 @@ object Router {
     const val lawyer = "lawyer"
     const val selfPrint = "selfPrint"
     const val contractReview = "contractReview"
+    object Scan {
+        const val previewColumn = "previewColumn"
+        const val previewPage = "previewPage"
+        const val previewPageSingle = "previewPageSingle"
+    }
     object Upload {
         const val waiting = "upload/waiting"
         const val pdfPreview = " upload/pdfPreview"
@@ -45,7 +50,7 @@ object Router {
         const val camera = "contractReview/camera"
         const val result = "contractReview/result"
     }
-    const val Camera = "Camera"
+
     var routeMirror = ""
     var lastTouchTime = Long.MAX_VALUE
 

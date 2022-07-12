@@ -50,6 +50,9 @@ import com.fagougou.government.consult.WaitActivity
 import com.fagougou.government.contractLibraryPage.LibraryGuidePage
 import com.fagougou.government.contractLibraryPage.ContractContent
 import com.fagougou.government.contractReviewPage.*
+import com.fagougou.government.contractReviewPage.camera.CameraModel
+import com.fagougou.government.contractReviewPage.camera.PreviewColumn
+import com.fagougou.government.contractReviewPage.camera.PreviewPage
 import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
@@ -62,7 +65,6 @@ import com.fagougou.government.lawyer.LawyersPage
 import com.fagougou.government.model.ContentStyle
 import com.fagougou.government.registerPage.RegisterPage
 import com.fagougou.government.registerPage.RegisterResultPage
-import com.fagougou.government.selfPrint.PrintCompletePage
 import com.fagougou.government.selfPrint.SelfPrintMain
 import com.fagougou.government.setting.AdminPage
 import com.fagougou.government.setting.Settings
@@ -149,13 +151,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this)
         activity = this
     }
 
     override fun onPause() {
         super.onPause()
-        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -185,6 +187,7 @@ fun Main() {
         addOnDestinationChangedListener{ _, destination, _ ->
             routeMirror=destination.route ?: ""
             Timber.d("routeMirror %s@%d", routeMirror, hashCode())
+            Timber.d(this.backQueue.toString())
         }
     }
     LaunchedEffect(null) {
@@ -193,7 +196,7 @@ fun Main() {
             if (routeMirror !in noAutoQuitList) {
                 routeRemain.value = touchWaitTime + lastTouchTime - stamp
                 if (routeRemain.value < 0) {
-                    clearData()
+                    CameraModel.clear()
                     DialogViewModel.clear()
                     ChatViewModel.clear()
                     GenerateContractViewModel.clear()
@@ -243,9 +246,11 @@ fun Main() {
             composable(Router.about) { AboutUs(navController) }
             composable(Router.settings) { Settings(navController) }
             composable(Router.lawyer) { LawyersPage(navController) }
-            composable(Router.Camera) { CameraPage(navController) }
             composable(Router.selfPrint) { SelfPrintMain(navController) }
             composable(Router.contractReview) { ContractSelectMain(navController) }
+            composable(Router.Scan.previewColumn) { PreviewColumn(navController) }
+            composable(Router.Scan.previewPage) { PreviewPage(navController,true) }
+            composable(Router.Scan.previewPageSingle) { PreviewPage(navController,false) }
         }
     }
 }

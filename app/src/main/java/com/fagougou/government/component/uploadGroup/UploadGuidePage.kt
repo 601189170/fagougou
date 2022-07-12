@@ -1,6 +1,5 @@
 package com.fagougou.government.component.uploadGroup
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.QrCodeViewModel
@@ -33,6 +31,7 @@ import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import timber.log.Timber
@@ -137,7 +136,7 @@ fun UploadGuidePage(navController: NavController,navControllerMain: NavControlle
             {
                 when(selectId.value){
                     1 -> QrCodeViewModel.set(generateSelfPrintUrl(taskId,"contractReview"),"微信扫码上传")
-                    2 -> navControllerMain.navigate(Router.Camera)
+                    2 -> navControllerMain.navigate(Router.Scan.previewColumn)
                     else -> { Tips.toast("请选择上传方式") }
                 }
             },

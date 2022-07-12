@@ -1,18 +1,11 @@
 package com.fagougou.government.contractReviewPage
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
@@ -20,10 +13,7 @@ import com.fagougou.government.component.Header
 import com.fagougou.government.contractLibraryPage.ContractViewModel
 import com.fagougou.government.repo.Client
 import com.fagougou.government.repo.Client.pop
-import com.fagougou.government.ui.theme.CORNER_FLOAT
-import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.MMKV
-import com.fagougou.government.utils.SafeBack.safeBack
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import java.io.File
@@ -75,8 +65,6 @@ fun ResultWebviewPage(navController: NavController) {
                 },
                 Modifier.fillMaxSize(),
             )
-
-
         }
     }
 }

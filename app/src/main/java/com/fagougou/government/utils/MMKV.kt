@@ -10,6 +10,8 @@ import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 object MMKV {
     val appId = "appId"
@@ -25,13 +27,18 @@ object MMKV {
         kv.encode(appId, it.appId)
         kv.encode(appSec, it.appSec)
         kv.encode(mkt, it.mkt)
-        kotlin.runCatching {
-            val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
-            val tokenBody = tokenResponse.body() ?: Auth()
-            kv.encode(token, tokenBody.data.token)
-            val botListResponse = Client.apiService.botList().execute()
-            val botListBody = botListResponse.body() ?: BotList()
-            for (bot in botListBody.data) ChatViewModel.botQueryIdMap[bot.name] = bot.id
-        }.onFailure { Client.handleException(it) }
+        CoroutineScope(Dispatchers.IO).launch{
+            kotlin.runCatching {
+                val tokenResponse = Client.apiService.auth(AuthRequest()).execute()
+                val tokenBody = tokenResponse.body() ?: Auth()
+                kv.encode(token, tokenBody.data.token)
+                val botListResponse = Client.apiService.botList().execute()
+                val botListBody = botListResponse.body() ?: BotList()
+                for (bot in botListBody.data) {
+                    Timber.d("${bot.name}:${bot.id}")
+                    ChatViewModel.botQueryIdMap[bot.name] = bot.id
+                }
+            }
+        }
     }
 }

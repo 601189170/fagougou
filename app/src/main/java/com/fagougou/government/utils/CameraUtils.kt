@@ -12,15 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.fagougou.government.model.ContractFolder
 import com.iflytek.cloud.SynthesizerListener
+import timber.log.Timber
 
 import java.io.File
 
 
 object CameraUtils {
-
-    private const val TAG = "CameraXBasic"
-
-
     private val imageCapture = ImageCapture.Builder()
         .setTargetResolution(Size(2592, 1944))
         .build()
@@ -30,7 +27,7 @@ object CameraUtils {
 
     fun initCamera(context: Context, previewView: PreviewView) {
 
-        var cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         val preview = Preview.Builder().build()
 
         cameraProviderFuture.addListener({
@@ -57,12 +54,10 @@ object CameraUtils {
                         imageCapture,
                     )
                 }
-
-
                 preview.setSurfaceProvider(previewView.surfaceProvider)
 
-            } catch (exc: Exception) {
-                Log.e("TAG", "Use case binding failed", exc)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
 
         }, ContextCompat.getMainExecutor(context))
@@ -83,11 +78,12 @@ object CameraUtils {
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
-            ImgAddCallback)
+            ImgAddCallback
+        )
 
     }
 
-     var ImgAddCallback: ImageCapture.OnImageSavedCallback = object : ImageCapture.OnImageSavedCallback {
+     var ImgAddCallback = object : ImageCapture.OnImageSavedCallback {
         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 
 
