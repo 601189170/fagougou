@@ -34,12 +34,20 @@ import timber.log.Timber
 import java.io.File
 
 @Composable
-fun PreviewLoad(subNavController: NavController, navController: NavController, fullScreenMode: MutableState<Boolean>, routeTarget:String) {
-    Surface(color = Color.White){
-        Column(Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
-            if(!fullScreenMode.value)Text(
-                modifier = Modifier.padding( top = 40.dp),
-                text = "文档预览",
+fun PreviewLoad(
+    subNavController: NavController,
+    navController: NavController,
+    fullScreenMode: MutableState<Boolean>,
+    routeTarget: String
+) {
+    Surface(color = Color.White) {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (!fullScreenMode.value) Text(
+                "文档预览",
+                Modifier.padding(top = 40.dp),
                 fontSize = 28.sp,
                 color = Color(0xFF303133)
             )
@@ -48,11 +56,11 @@ fun PreviewLoad(subNavController: NavController, navController: NavController, f
                     .height(if (fullScreenMode.value) 912.dp else 568.dp)
                     .fillMaxWidth()
                     .padding(if (fullScreenMode.value) 0.dp else 28.dp)
-            ){
+            ) {
                 AndroidView(
                     {
-                        PdfRendererView(activity).apply{
-                            val url = Client.fileuploadUrl+ UploadModel.taskId +".pdf"
+                        PdfRendererView(activity).apply {
+                            val url = Client.fileuploadUrl + UploadModel.taskId + ".pdf"
                             Timber.d(url)
                             initWithUrl(url, PdfQuality.NORMAL, "selfPrint")
                         }
@@ -60,28 +68,32 @@ fun PreviewLoad(subNavController: NavController, navController: NavController, f
                     Modifier.fillMaxSize()
                 )
                 Row(
-                    Modifier.padding(16.dp),horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.Bottom
+                    Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Bottom
                 ) {
-                    Image( painterResource(R.drawable.ic_icon_full_screen),null )
+                    Image(painterResource(R.drawable.ic_icon_full_screen), null)
                     Text(
-                        modifier = Modifier
+                        "全屏",
+                        Modifier
                             .padding(top = 40.dp)
                             .clickable { fullScreenMode.value = !fullScreenMode.value },
-                        text = "全屏",
                         fontSize = 20.sp,
                         color = Color(0xFF606366)
                     )
                 }
             }
-            Surface(modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp),color = Color(0xFFDCE1E6)
-            ){}
+            Surface(
+                Modifier
+                    .fillMaxWidth()
+                    .height(2.dp),
+                color = Color(0xFFDCE1E6)
+            ) {}
             Row(
                 Modifier.fillMaxSize(),
                 Arrangement.Center,
                 Alignment.CenterVertically
-            ){
+            ) {
                 Button(
                     {
                         with(DialogViewModel) {
@@ -93,9 +105,9 @@ fun PreviewLoad(subNavController: NavController, navController: NavController, f
                             secondButtonOnClick.value = {
                                 content.clear()
                                 fullScreenMode.value = false
-                                subNavController.popBackStack(Router.Upload.waiting,true)
+                                subNavController.popBackStack(Router.Upload.waiting, true)
                             }
-                            content.add( ContentStyle( "返回后将丢失本次上传的图片" ) )
+                            content.add(ContentStyle("返回后将丢失本次上传的图片"))
                         }
                     },
                     Modifier
@@ -103,44 +115,49 @@ fun PreviewLoad(subNavController: NavController, navController: NavController, f
                         .width(200.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                     border = BorderStroke(2.dp, Dodgerblue),
-                    contentPadding = PaddingValues(horizontal = 36.dp,vertical = 12.dp),
-                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                ){ BasicText("返回上一级", color = Dodgerblue) }
+                    contentPadding = PaddingValues(horizontal = 36.dp, vertical = 12.dp),
+                    elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                ) { BasicText("返回上一级", color = Dodgerblue) }
                 Spacer(modifier = Modifier.width(24.dp))
                 Button(
-                    modifier = Modifier
-                        .height(64.dp)
-                        .width(200.dp),
-                    onClick = {
+                    {
                         fullScreenMode.value = false
                         when (routeTarget) {
-                            Router.SelfPrint.printComplete -> DialogViewModel.confirmPrint(File(activity.cacheDir, "selfPrint.pdf"))
-                            Router.ContractReview.result ->  navController.navigate(Router.ContractReview.result)
+                            Router.SelfPrint.printComplete -> DialogViewModel.confirmPrint(
+                                File(
+                                    activity.cacheDir,
+                                    "selfPrint.pdf"
+                                )
+                            )
+                            Router.ContractReview.result -> navController.navigate(Router.ContractReview.result)
                         }
                     },
+                    Modifier
+                        .height(64.dp)
+                        .width(200.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Dodgerblue),
-                    elevation = ButtonDefaults.elevation(0.dp,0.dp),
-                ){
-                    val note = when(routeTarget){
+                    elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                ) {
+                    val note = when (routeTarget) {
                         Router.SelfPrint.printComplete -> "开始打印"
                         Router.ContractReview.result -> "开始审核"
                         else -> ""
                     }
-                    Text(note,Modifier,Color.White,24.sp)
+                    Text(note, Modifier, Color.White, 24.sp)
                 }
             }
         }
     }
-    Printer.isPrint.value=false
+    Printer.isPrint.value = false
     LaunchedEffect(null) {
-        if(routeTarget==Router.SelfPrint.printComplete)withContext(Dispatchers.Default) {
-            while (isActive){
+        if (routeTarget == Router.SelfPrint.printComplete) withContext(Dispatchers.Default) {
+            while (isActive) {
                 delay(250)
                 Router.lastTouchTime = Time.stamp
-                if (Printer.isPrint.value){
-                    withContext(Dispatchers.Main){
+                if (Printer.isPrint.value) {
+                    withContext(Dispatchers.Main) {
                         subNavController.navigate(routeTarget)
-                        Printer.isPrint.value=false
+                        Printer.isPrint.value = false
                     }
                 }
             }

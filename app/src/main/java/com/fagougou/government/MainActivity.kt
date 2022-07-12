@@ -107,13 +107,11 @@ class MainActivity : ComponentActivity() {
             homeButtonBinding.homeBtn.setOnClickListener {
                 EventBus.getDefault().post(MessageEvent(MessageConstans.WindsViewGone))
                 Printer.currentJob = null
-
                 //重启
                 val intent = Intent(activity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 activity.startActivity(intent)
                 Process.killProcess(Process.myPid())
-
             }
             EventBus.getDefault().register(this)
             homeButtonBinding.homeBtn.visibility=View.GONE
@@ -123,9 +121,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             GovernmentTheme {
                 Surface(
-                    Modifier
-                        .height(1024.dp)
-                        .width(1280.dp) ) {
+                    Modifier.height(1024.dp).width(1280.dp)
+                ) {
                     Main()
                     GlobalQrCode()
                     Dialog()
@@ -182,8 +179,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Main() {
-    val navController = rememberNavController()
-    LaunchedEffect("UpdateNavContent") {
+    val navController = rememberNavController().apply {
+        addOnDestinationChangedListener{ _, destination, _ ->
+            routeMirror=destination.route ?: ""
+            Timber.d("routeMirror %s@%d", routeMirror, hashCode())
+        }
+    }
+    LaunchedEffect(null) {
         while (isActive) {
             delay(250)
             if (routeMirror !in noAutoQuitList) {
@@ -214,8 +216,6 @@ fun Main() {
                     }
                 } else if (content.firstOrNull()?.content?.contains("页面长时间无人操作") == true) content.clear()
             } else routeRemain.value = Long.MAX_VALUE
-            routeMirror = navController.currentDestination?.route ?: ""
-            if((0..7).random()==0)Timber.d("routeMirror %s@%d", routeMirror, navController.hashCode())
         }
     }
     Image( painterResource(R.drawable.home_background),null,Modifier.fillMaxSize(),contentScale = ContentScale.Crop )
