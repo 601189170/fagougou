@@ -108,7 +108,12 @@ fun PreviewLoad(
                                 fullScreenMode.value = false
                                 subNavController.popBackStack(Router.Upload.waiting, true)
                             }
-                            content.add(ContentStyle("返回后将丢失本次上传的图片"))
+                            val note = when (routeTarget) {
+                                Router.SelfPrint.printComplete -> "返回后将丢失本次上传的文件"
+                                Router.ContractReview.result -> "返回后将丢失本次上传的图片"
+                                else -> ""
+                            }
+                            content.add(ContentStyle(note))
                         }
                     },
                     Modifier

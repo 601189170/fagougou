@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
-fun RegisterPage(navController: NavController){
+    fun RegisterPage(navController: NavController){
     LaunchedEffect(null){
         Time.hook["AutoCheckRegister"]={
             Client.mainRegister.login(SerialLoginRequest(CommonApplication.serial)).enqueue(

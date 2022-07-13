@@ -57,13 +57,13 @@ fun SelfPrintPage(navController: NavController) {
             "微信扫码打印",
             Modifier.padding( top = 36.dp),
             fontSize = 28.sp,
-            color = Color(0xFF303133)
+            color = Color.Black
         )
         Text(
             "使用微信扫描以下二维码，上传文件成功后即可快速打印",
             Modifier.padding( top = 16.dp),
             fontSize = 20.sp,
-            color = Color(0xFF303133)
+            color = Color(0xFF909499)
         )
         Box(Modifier.padding(top = 48.dp),contentAlignment= Alignment.Center) {
             Image(painterResource(R.drawable.img_print_code), null, Modifier.padding(top = 16.dp) )
