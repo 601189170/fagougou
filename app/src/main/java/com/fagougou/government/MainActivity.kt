@@ -92,6 +92,7 @@ import java.lang.Long.min
 class MainActivity : ComponentActivity() {
     lateinit var homeButtonBinding: LayoutHomebtnBinding
 
+
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

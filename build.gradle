@@ -1,6 +1,5 @@
 buildscript {
     dependencies {
-        //noinspection GradleDynamicVersion
         classpath "com.bugsnag:bugsnag-android-gradle-plugin:7.+"
     }
 }
