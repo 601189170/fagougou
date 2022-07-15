@@ -7,9 +7,13 @@ import retrofit2.http.POST
 
 interface MainRegister {
     @POST("api/register-codes/register/")
-    fun register(@Body request: SerialRegisterRequest): Call<SerialRegisterResponse>
+    fun register(
+        @Body request: SerialRegisterRequest
+    ): Call<SerialRegisterResponse>
 
     @POST("api/register-codes/login/")
-    fun login(@Body request: SerialLoginRequest): Call<SerialLoginResponse>
+    fun login(
+        @Body request: SerialLoginRequest
+    ): Call<SerialLoginResponse>
 
 }

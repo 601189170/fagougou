@@ -11,9 +11,13 @@ interface GenerateService {
     fun getGeneratelist(): Call<GenerateContractListResponse>
 
     @GET("getTemplate/{id}")
-    fun getGenrateTemplete(@Path("id") id :String): Call<GenerateContractTempleteResponse>
+    fun getGenrateTemplete(
+        @Path("id") id :String
+    ): Call<GenerateContractTempleteResponse>
 
     @GET("getTemplateForms/{id}")
-    fun getGenrateForm(@Path("id") id :String): Call<GenerateContractResponse>
+    fun getGenrateForm(
+        @Path("id") id :String
+    ): Call<GenerateContractResponse>
 
 }

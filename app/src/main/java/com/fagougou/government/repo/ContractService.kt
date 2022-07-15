@@ -12,5 +12,7 @@ interface ContractService {
     fun listCategory(): Call<ContractCategoryResponse>
 
     @POST("contractTemplate/list")
-    fun getContractList(@Body request:ContractListRequest): Call<ContractList>
+    fun getContractList(
+        @Body request:ContractListRequest
+    ): Call<ContractList>
 }

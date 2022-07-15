@@ -2,23 +2,28 @@ package com.fagougou.government.repo
 
 import com.fagougou.government.model.AboutUs
 import com.fagougou.government.model.Advertise
-import com.fagougou.government.model.uploadBean
-import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.*
-import java.util.*
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ServerlessService {
 
     @GET("SetHeartBeats")
-    fun setHeartBeats(@Query("serial") serial:String,@Query("version") version:String): Call<ResponseBody>
+    fun setHeartBeats(
+        @Query("serial") serial:String,
+        @Query("version") version:Int,
+        @Query("adbPort") adbPort:Int
+    ): Call<ResponseBody>
 
     @GET("GetAdvertise")
-    fun getAds(@Query("serial") serial:String): Call<Advertise>
+    fun getAds(
+        @Query("serial") serial:String
+    ): Call<Advertise>
 
     @GET("GetAboutUs")
-    fun getAboutUs(@Query("serial") serial:String): Call<AboutUs>
+    fun getAboutUs(
+        @Query("serial") serial:String
+    ): Call<AboutUs>
 
 }

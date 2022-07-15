@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import com.bugsnag.android.Bugsnag
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.presentation.BannerPresentation
+import com.fagougou.government.utils.Frpc
 import com.fagougou.government.utils.IFly
 import com.fagougou.government.utils.TTS
 import com.iflytek.cloud.SpeechUtility
@@ -20,6 +21,7 @@ import com.umeng.commonsdk.UMConfigure
 import frpclib.Frpclib
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.io.InputStreamReader
 
 class CommonApplication: Application(){
     companion object {
@@ -32,6 +34,7 @@ class CommonApplication: Application(){
         }
         var presentation : BannerPresentation? = null
         var currentCode = Int.MAX_VALUE
+
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -53,26 +56,12 @@ class CommonApplication: Application(){
         TTS.init(this)
         GenerateContractViewModel.init(this)
         YKFUtils.init(this)
+        Frpc.connect(this@CommonApplication)
         CoroutineScope(Dispatchers.Default).launch {
             if (!Settings.canDrawOverlays(this@CommonApplication)){
                 while (!Settings.canDrawOverlays(this@CommonApplication)) delay(500)
                 openSecondScreen()
             }else openSecondScreen()
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            val port = (10000..30000).random()
-            val cfg = "[common]\n" +
-                    "server_addr = 124.71.10.187\n" +
-                    "server_port = 7000\n" +
-                    "token = 12345678\n" +
-                    "\n" +
-                    "[adb]\n" +
-                    "type = tcp\n" +
-                    "local_ip = 127.0.0.1\n" +
-                    "local_port = 5555\n" +
-                    "remote_port = 5555\n"
-            Timber.d( "Starting frpc")
-            Timber.d(Frpclib.runContent("123", cfg))
         }
     }
 
