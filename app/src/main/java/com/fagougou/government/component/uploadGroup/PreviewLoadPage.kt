@@ -2,6 +2,7 @@ package com.fagougou.government.component.uploadGroup
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
@@ -72,13 +73,13 @@ fun PreviewLoad(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.width(90.dp).height(35.dp).background(Color.White)) {
+                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.width(90.dp).height(35.dp).background(shape = RoundedCornerShape(10), color = Color(0xE2E0E0E6))) {
                         Image(painterResource(R.drawable.ic_icon_full_screen), null)
                         Text(
                             "全屏",
                             Modifier.clickable { fullScreenMode.value = !fullScreenMode.value },
                             fontSize = 20.sp,
-                            color = Color(0xFF303133)
+                            color = Color(0xFF606366)
                         )
                     }
 

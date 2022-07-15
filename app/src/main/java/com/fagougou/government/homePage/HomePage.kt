@@ -68,15 +68,14 @@ fun HomePage(navController:NavController) {
             Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .padding(top = 8.dp, start = 40.dp, end = 40.dp)
-                .clickable { navController.navigate(Router.about) },
+                .padding(top = 8.dp, start = 40.dp, end = 40.dp),
             Arrangement.SpaceBetween,
             Alignment.CenterVertically
         ) {
             Image(
                 painterResource(R.drawable.home_logo),
                 null,
-                Modifier.height(32.dp)
+                Modifier.height(32.dp).clickable { navController.navigate(Router.about) }
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
         }
@@ -162,7 +161,7 @@ fun HomePage(navController:NavController) {
         Text(
             "技术支持：法狗狗人工智能 v2.0",
             Modifier
-                .padding(top = 115.dp)
+                .padding(top = 105.dp)
                 .clickable {
                     Time.exitStack--
                     if (Time.exitStack <= 0) {
