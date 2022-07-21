@@ -2,10 +2,12 @@ package com.fagougou.government.consult
 
 import android.content.Context
 import android.os.Bundle
+import cn.udesk.eventBus.BaseDialog
+import com.fagougou.government.R
 import com.fagougou.government.component.QrCodeViewModel
 import com.fagougou.government.databinding.WechatLayoutBinding
-import com.m7.imkfsdk.R
-import com.m7.imkfsdk.chat.dialog.BaseDialog
+
+
 
 class WechatDialog(context: Context) : BaseDialog(context, R.style.shareDialog) {
     lateinit var binding : WechatLayoutBinding

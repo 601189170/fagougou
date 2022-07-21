@@ -3,17 +3,18 @@ package com.fagougou.government.consult
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import cn.udesk.eventBus.MessageConstans.*
+import cn.udesk.eventBus.MessageEvent
 import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 
 import com.fagougou.government.Router
 import com.fagougou.government.databinding.ActivityWaitBinding
-import com.fagougou.government.utils.ImSdkUtils
+
+import com.fagougou.government.utils.ImSdkUtils.startChart
 import com.fagougou.government.utils.Time
-import com.m7.imkfsdk.MessageConstans.*
-import com.m7.imkfsdk.chat.MessageEvent
-import com.m7.imkfsdk.video.YKFCallManager
+
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -26,11 +27,8 @@ class WaitActivity : AppCompatActivity() {
         CommonApplication.activity = this
         binding = ActivityWaitBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ImSdkUtils.initKfHelper()
-        ImSdkUtils.helper?.let {
-            ImSdkUtils.initSdk(it)
-        }
-        YKFCallManager.cameraRotation=0
+
+        startChart(this)
         binding.leftBtn.setOnClickListener {}
         binding.rightBtn.setOnClickListener { finish() }
         EventBus.getDefault().register(this)

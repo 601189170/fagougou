@@ -1,6 +1,7 @@
 package com.fagougou.government.repo
 
 import com.fagougou.government.model.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -39,5 +40,7 @@ interface ApiService {
         @Path("sessionId") sessionId: String,
         @Body request: DefineRequest
     ): Call<DefineResponse>
+
+
 
 }

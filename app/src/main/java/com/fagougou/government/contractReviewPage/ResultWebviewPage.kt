@@ -1,7 +1,14 @@
 package com.fagougou.government.contractReviewPage
 
+import android.view.ViewGroup
+import android.webkit.WebSettings
+
+
+import android.widget.LinearLayout
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,61 +17,52 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.component.Header
-import com.fagougou.government.contractLibraryPage.ContractViewModel
-import com.fagougou.government.repo.Client
-import com.fagougou.government.repo.Client.pop
-import com.fagougou.government.utils.MMKV
-import com.rajat.pdfviewer.PdfQuality
-import com.rajat.pdfviewer.PdfRendererView
-import java.io.File
+
+
+import com.tencent.smtt.sdk.WebView
 
 @Composable
 fun ResultWebviewPage(navController: NavController) {
+//http://test.products.fagougou.com/usercenter/audit/ai-audit-main?type=private&id=62d778fcb4bc40254378e56b
     Surface(color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header("智能审查结果", navController)
             AndroidView(
                 {
-                    PdfRendererView(activity).apply {
-                        ContractViewModel.pdfFile?.let {
-                            val hasPdfFile = File(activity.cacheDir, "${it.id}.pdf").exists()
-                            val isNewest = MMKV.pdfKv.decodeString(it.id) == it.updateAt
-                            if (hasPdfFile && isNewest) initWithFile(
-                                File(
-                                    activity.cacheDir,
-                                    "${it.id}.pdf"
-                                )
-                            )
-                            else {
-                                statusListener = object : PdfRendererView.StatusCallBack {
-                                    override fun onDownloadStart() {
-                                        Client.globalLoading.value++
-                                        super.onDownloadStart()
-                                    }
+                    WebView(activity).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
 
-                                    override fun onDownloadSuccess(filePath: String) {
-                                        Client.globalLoading.pop()
-                                        super.onDownloadSuccess(filePath)
-                                        MMKV.pdfKv.encode(it.id, it.updateAt)
-                                    }
+                        settings.javaScriptEnabled = true
+                        settings.javaScriptCanOpenWindowsAutomatically = true
+                        settings.allowFileAccess = true
+                        settings.setSupportZoom(true)
+                        settings.builtInZoomControls = true
+                        settings.useWideViewPort = true
+                        settings.setSupportMultipleWindows(true)
+                        // webSetting.setLoadWithOverviewMode(true);
+                        settings.setAppCacheEnabled(true)
+                        // webSetting.setDatabaseEnabled(true);
+                        settings.domStorageEnabled = true
+                        settings.setGeolocationEnabled(true)
+                        settings.setAppCacheMaxSize(Long.MAX_VALUE)
 
-                                    override fun onError(error: Throwable) {
-                                        Client.globalLoading.pop()
-                                        super.onError(error)
-                                        Client.handleException(error)
-                                    }
-                                }
-                                initWithUrl(
-                                    ContractViewModel.BaseLoadUrl + it.id,
-                                    PdfQuality.NORMAL,
-                                    it.id
-                                )
-                            }
-                        }
+                        settings.cacheMode = WebSettings.LOAD_NO_CACHE
+
+
+//                            loadUrl(PreviewLoadModel.fileUrl)
                     }
                 },
-                Modifier.fillMaxSize(),
-            )
+                Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.88f),
+            ){
+
+
+            }
         }
     }
 }
+

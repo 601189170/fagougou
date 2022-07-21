@@ -16,8 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-feature android:name="android.hardware.camera.any" />
 
+    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:name=".CommonApplication"
@@ -30,6 +30,10 @@
         android:theme="@style/Theme.Government"
         android:usesCleartextTraffic="true"
         tools:replace="android:label,android:theme,android:allowBackup">
+        <activity
+            android:name=".WebviewActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.bugsnag.android.API_KEY"
             android:value="ae73180eda276349a3eb4602b1eba951" />
@@ -59,6 +63,9 @@
             android:name=".contractReviewPage.PaperUploadActivity"
             android:exported="false" />
         <activity
+            android:name=".contractReviewPage.WebViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
@@ -66,8 +73,9 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!--设置为launcher-->
+                <!-- 设置为launcher -->
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -76,6 +84,7 @@
         <receiver android:name=".BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>

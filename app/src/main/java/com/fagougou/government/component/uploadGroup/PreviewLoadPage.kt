@@ -1,6 +1,11 @@
 package com.fagougou.government.component.uploadGroup
 
-import androidx.compose.foundation.*
+import android.content.Intent
+import android.util.Log
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -22,18 +27,33 @@ import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
+
+import com.fagougou.government.consult.TouristsLoginActivity
+import com.fagougou.government.contractReviewPage.WebViewActivity
+
 import com.fagougou.government.dialog.DialogViewModel
+import com.fagougou.government.generateContract.Html2DocCallback
 import com.fagougou.government.model.ContentStyle
+import com.fagougou.government.model.ContractUrlBean
+import com.fagougou.government.model.UpLoadBean2
 import com.fagougou.government.repo.Client
+import com.fagougou.government.repo.Client.pop
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.fagougou.government.utils.Printer
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips
+import com.google.gson.Gson
 import com.rajat.pdfviewer.PdfQuality
 import com.rajat.pdfviewer.PdfRendererView
 import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
+
+
 
 @Composable
 fun PreviewLoad(
@@ -73,7 +93,10 @@ fun PreviewLoad(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.width(90.dp).height(35.dp).background(shape = RoundedCornerShape(10), color = Color(0xE2E0E0E6))) {
+                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .width(90.dp)
+                        .height(35.dp)
+                        .background(shape = RoundedCornerShape(10), color = Color(0xE2E0E0E6))) {
                         Image(painterResource(R.drawable.ic_icon_full_screen), null)
                         Text(
                             "全屏",
@@ -136,7 +159,8 @@ fun PreviewLoad(
                                     "selfPrint.pdf"
                                 )
                             )
-                            Router.ContractReview.result -> Tips.toast("暂未开放功能")
+//                            Router.ContractReview.result -> Tips.toast("暂未开放功能")
+                            Router.ContractReview.result -> getGenerateData(subNavController);
                         }
                     },
                     Modifier
@@ -170,4 +194,61 @@ fun PreviewLoad(
             }
         }
     }
+}
+
+
+fun getGenerateData(subNavController: NavController){
+    Client.globalLoading.value++
+    val url = Client.tempUrl + UploadModel.taskId + ".docx"
+    Timber.d("转换后doc地址==>"+url)
+        val title="测试文件"
+        val categoryId="234f2ed0-f1d6-11ec-ae28-bd7b6644f76f"
+        val rulesType="系统推荐"
+        val rulesTypeId="234f2ed0-f1d6-11ec-ae28-bd7b6644f76f"
+        val ownerId="62d76f1bb4bc4065f578e409"
+        val category="通用合同（新）"
+
+        val okHttpClient = OkHttpClient()
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("title", title)
+            .addFormDataPart("categoryId", categoryId)
+            .addFormDataPart("rulesType", rulesType)
+            .addFormDataPart("rulesTypeId", rulesTypeId)
+            .addFormDataPart("ownerId", ownerId)
+            .addFormDataPart("category", category)
+            .addFormDataPart("fileUrl", url).build();
+
+        val request = Request.Builder().url("http://test.products.fagougou.com/api/contract-audit/out/upload").header("Authorization", "fagougou").post(requestBody).build()
+        val call: Call = okHttpClient.newCall(request)
+
+        call.enqueue(object :Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                Client.globalLoading.pop()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                Client.globalLoading.pop()
+                val body = response.body?.string()
+                var bean = Gson().fromJson(body, ContractUrlBean::class.java)
+                if (bean.code==0){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        withContext(Dispatchers.Main) {
+                            val intent = Intent(activity, WebViewActivity::class.java)
+                            intent.putExtra("data",bean.data.url)
+                            activity.startActivity(intent)
+                            subNavController.popBackStack(Router.ContractReview.classify, false)
+                        }
+                    }
+                }else{
+                    Tips.toast("审查失败")
+                }
+
+
+
+
+
+            }
+        })
+
+
 }

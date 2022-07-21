@@ -8,9 +8,10 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import cn.udesk.eventBus.MessageConstans
+import cn.udesk.eventBus.MessageEvent
 import com.blankj.utilcode.util.AppUtils
 import com.eseid.sdtapi.*
-import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.R
 import com.fagougou.government.Router
@@ -21,13 +22,13 @@ import com.fagougou.government.utils.MessageCheckUtils
 import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
-import com.m7.imkfsdk.MessageConstans
-import com.m7.imkfsdk.chat.MessageEvent
+
 import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
+
 
 class TouristsLoginActivity : BaseActivity() {
     lateinit var binding: ActivityReadCardMsgBinding
@@ -71,11 +72,10 @@ class TouristsLoginActivity : BaseActivity() {
         esSdt.SetReadDelay(1)
         setSelectSexBg("男")
         if (AppUtils.isAppDebug()){
-            binding.edName.setText("测试用户")
-            binding.edPhone.setText("18672889523")
+            binding.edName.setText("测试啊")
+            binding.edPhone.setText("15920012647")
             binding.edCard.setText("429004199506150931")
             UMConstans.setIntoClickByArea(UMConstans.home_dd,"无")
-
         }
         EventBus.getDefault().post(MessageEvent(MessageConstans.PalyVideoHumanAre))
     }

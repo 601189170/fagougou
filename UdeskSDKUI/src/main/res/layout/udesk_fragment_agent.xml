@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/navigation_root_view"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/udesk_45"
+        android:background="@color/transparent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/fragment_view"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navigation_survy"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/transparent"
+            android:paddingLeft="@dimen/udesk_16"
+            android:paddingRight="@dimen/udesk_16"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/udesk_4"
+                android:src="@drawable/udesk_useful_small" />
+
+            <TextView
+                android:id="@+id/survy_content"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="left|center"
+                android:text="@string/service_valuation"
+                android:textColor="@color/udesk_color_307AE8"
+                android:textSize="@dimen/udesk_sp12" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="#0b0135"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/udesk_5"
+        android:paddingLeft="@dimen/udesk_10"
+        android:paddingRight="@dimen/udesk_10"
+        android:layout_marginBottom="@dimen/udesk_4">
+
+
+
+        <RelativeLayout
+            android:id="@+id/center_input"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginRight="24dp"
+            android:layout_marginVertical="@dimen/dp_24"
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/bottom_chat_bg2">
+
+            <EditText
+                android:id="@+id/udesk_bottom_input"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_toLeftOf="@+id/udesk_emoji_img"
+                android:background="@null"
+                android:hint="请输入问题.."
+                android:paddingLeft="@dimen/udesk_12"
+                android:imeOptions="actionSend"
+                android:textColor="@color/white"
+                android:textColorHint="#FFC0C6CC"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textSize="@dimen/dp_24"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/udesk_emoji_img"
+                android:layout_width="@dimen/udesk_22"
+                android:layout_height="@dimen/udesk_22"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/udesk_5"
+                android:layout_marginRight="@dimen/udesk_8"
+                android:src="@drawable/udesk_chat_emoj" />
+
+            <cn.udesk.voice.AudioRecordButton
+                android:id="@+id/udesk_audio_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/transparent"
+                android:gravity="center_vertical|center_horizontal"
+                android:textColor="@color/gray1"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+        <FrameLayout
+            android:background="@drawable/bottom_chat_bg"
+            android:layout_width="64dp"
+            android:layout_height="64dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/udesk_img_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_chat_voice" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_marginRight="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:background="@drawable/bottom_chat_bg"
+            android:layout_width="64dp"
+            android:layout_height="64dp">
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/udesk_more_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_chat_more"
+            />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/udesk_bottom_send"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:background="@drawable/udesk_send_msg_bg"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/udesk_5"
+            android:text="@string/udesk_send_message"
+            android:textColor="@color/udesk_bottom_send_textcolor2"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/udesk_bottom_frame"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <cn.udesk.emotion.EmotionLayout
+            android:id="@+id/udesk_emotion_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/udesk_more_layout"
+            layout="@layout/udesk_include_func_layout"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

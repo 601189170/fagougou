@@ -76,10 +76,10 @@ fun ContractSelectMain(navController: NavController) {
                     PreviewLoad(subNavController,fullScreenMode, Router.ContractReview.result)
                     stepModel.currentIndex.value=2
                 }
-                composable(Router.ContractReview.result) {
-                    ResultWebviewPage(navController)
-                    stepModel.currentIndex.value=3
-                }
+//                composable(Router.ContractReview.result) {
+//                    ResultWebviewPage(navController)
+//                    stepModel.currentIndex.value=3
+//                }
             }
         }
     }

@@ -8,13 +8,14 @@ import android.print.PrintManager
 import android.webkit.WebView
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
+import cn.udesk.eventBus.MessageConstans
+import cn.udesk.eventBus.MessageEvent
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router
 import com.fagougou.government.contractLibraryPage.PdfPrintAdapter
 import com.fagougou.government.dialog.DialogViewModel
+
 import com.fagougou.government.utils.Tips.toast
-import com.m7.imkfsdk.MessageConstans
-import com.m7.imkfsdk.chat.MessageEvent
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File

@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.udesk'
+
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.4'
+    implementation group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1'
+    implementation 'org.igniterealtime.smack:smack-android-extensions:4.2.0'
+    implementation 'org.igniterealtime.smack:smack-tcp:4.2.0'
+    api files('libs/udesk_sdk_5.3.3.jar')
+    implementation files("libs/UdeskAVSSDK_1.0.14.aar")
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okio:okio:2.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.tencent.liteav:LiteAVSDK_TRTC:10.0.0.11953'
+    implementation group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1'
+    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+
+}

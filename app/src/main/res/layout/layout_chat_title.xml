@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:background="#17192C"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="ResourceName">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+
+    <ImageView
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:id="@+id/img"
+        android:src="@drawable/fagougou"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        tools:ignore="MissingConstraints">
+
+    </ImageView>
+
+    <TextView
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@+id/img"
+        app:layout_constraintLeft_toRightOf="@+id/img"
+        android:id="@+id/other_name"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:text=""
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <TextView
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/img"
+        android:id="@+id/info"
+        android:textColor="#60FFFFFF"
+        android:text="专家咨询，全程隐私交流"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+        <LinearLayout
+            android:layout_marginRight="20dp"
+            app:layout_constraintRight_toLeftOf="@+id/layout_video"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/layout_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/icon_chat_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:text="电话"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginRight="20dp"
+            app:layout_constraintRight_toLeftOf="@+id/layout_exit"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/layout_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/icon_chat_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:text="视频"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/layout_exit"
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/icon_chat_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+            <TextView
+                android:id="@+id/chat_tv_back"
+                android:layout_marginLeft="8dp"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:text="退出"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+
+        <TextView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/chat_tv_convert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

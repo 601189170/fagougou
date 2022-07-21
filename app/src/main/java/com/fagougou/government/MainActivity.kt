@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -31,6 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cn.udesk.activity.UdeskChatActivity
+import cn.udesk.eventBus.MessageConstans
+import cn.udesk.eventBus.MessageEvent
 import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.CommonApplication.Companion.activity
 import com.fagougou.government.Router.lastTouchTime
@@ -57,6 +61,7 @@ import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.dialog.DialogViewModel.content
+
 import com.fagougou.government.generateContract.GenerateContract
 import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.generateContract.GenerateGuide
@@ -77,9 +82,6 @@ import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ.manager
 import com.fagougou.government.webViewPage.WebViewPage
-import com.m7.imkfsdk.MessageConstans
-import com.m7.imkfsdk.chat.ChatActivity
-import com.m7.imkfsdk.chat.MessageEvent
 import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -125,7 +127,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             GovernmentTheme {
                 Surface(
-                    Modifier.height(1024.dp).width(1280.dp)
+//                    Modifier.height(1024.dp).width(1280.dp)
+                    Modifier.fillMaxSize()
                 ) {
                     Main()
                     GlobalQrCode()
@@ -259,7 +262,7 @@ fun isShowTaskActivity(): Boolean {
     return ActivityUtils.isActivityExistsInStack(ChooseDomainActivity::class.java)
         || ActivityUtils.isActivityExistsInStack(TouristsLoginActivity::class.java)
         || ActivityUtils.isActivityExistsInStack(WaitActivity::class.java)
-        || ActivityUtils.isActivityExistsInStack(ChatActivity::class.java)
+        || ActivityUtils.isActivityExistsInStack(UdeskChatActivity::class.java)
 }
 
 fun initWindsSetting():WindowManager.LayoutParams{

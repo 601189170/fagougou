@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
+import cn.udesk.eventBus.MessageConstans.*
+import cn.udesk.eventBus.MessageEvent
+import cn.udesk.eventBus.TaskTimeBaseDialog
 import com.blankj.utilcode.util.ActivityUtils
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.MainActivity
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.CommonApplication.Companion.presentation
+
 import com.fagougou.government.utils.Time
-import com.m7.imkfsdk.MessageConstans.*
-import com.m7.imkfsdk.chat.MessageEvent
-import com.m7.imkfsdk.chat.dialog.TaskTimeBaseDialog
+
+
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

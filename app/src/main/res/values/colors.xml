@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black303">#303133</color>
     <color name="blue007">#007BFF </color>
+    <color name="dialog_bg_white">#FFFFFF</color>
+    <color name="dialog_bg_blue">#007BFF</color>
+    <color name="ykfsdk_transparent">#00000000</color>
+    <color name="ykfsdk_transparent2">#33FFFFFF</color>
 </resources>

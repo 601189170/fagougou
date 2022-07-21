@@ -38,6 +38,9 @@ object Client {
     const val generateUrl = "https://products.fagougou.com/api/"
     const val serverlessUrl = "https://hwc.infiiinity.xyz/"
     const val fileuploadUrl = "https://upload-1251511189.cos.ap-nanjing.myqcloud.com/"
+    const val generateContractUrl = "http://test.products.fagougou.com/"
+    const val tempUrl = "https://temp-1251511189.cos.ap-guangzhou.myqcloud.com/"
+
     val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val okHttpClient: OkHttpClient by lazy {
@@ -122,6 +125,19 @@ object Client {
             .build()
             .create(ServerlessService::class.java)
     }
+
+    val okHttpClientUpload: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(BlockIntercept(globalLoading))
+            .addInterceptor(ParametersIntercept())
+            .addInterceptor(CommonAuthInterceptor())
+            .connectTimeout(10000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .writeTimeout(10000, TimeUnit.MILLISECONDS)
+            .build()
+    }
+
     fun handleException(t: Throwable) {
         val e: Exception
         when (t) {
