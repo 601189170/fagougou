@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.fagougou.government.consult.BaseActivity
 
 import com.fagougou.government.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.WebSettings
 
-class WebViewActivity : AppCompatActivity() {
+class WebViewActivity : BaseActivity() {
     lateinit var binding: ActivityWebviewBinding
 
     var url =""
