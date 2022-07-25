@@ -21,8 +21,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.fagougou.government.R
-import com.fagougou.government.Router
+
 import com.fagougou.government.contractReviewPage.camera.CameraModel.index
+import com.fagougou.government.contractReviewPage.camera.Page.nowPage
+import com.fagougou.government.contractReviewPage.camera.ScanModel.TackPhoto
+import com.fagougou.government.contractReviewPage.camera.ScanModel.setCameraStatus
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -31,15 +34,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 
+
+object Page{
+    var nowPage=1;
+}
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PreviewColumn(navController: NavController){
+fun PreviewColumn(){
     val pagerState = rememberPagerState(CameraModel.fileList.size)
     val scope = rememberCoroutineScope()
-    LaunchedEffect(null){
-        if(index==-1)index=0
-        if(CameraModel.fileList.isEmpty())navController.navigate(Router.Scan.previewPage)
-    }
+    if (!TackPhoto.value)
     Box{
         Column(
             Modifier
@@ -68,10 +72,11 @@ fun PreviewColumn(navController: NavController){
                 HorizontalPager(
                     CameraModel.fileList.size,
                     Modifier
-                        .padding(top = 24.dp)
+                        .padding(top = 30.dp)
                         .fillMaxWidth(),
                     pagerState,
                 ) { index ->
+                    nowPage=index;
                     if (index in 0 until CameraModel.fileList.size) {
                         Image(
                             rememberAsyncImagePainter(File(CameraModel.fileList[pagerState.currentPage])),
@@ -128,7 +133,7 @@ fun PreviewColumn(navController: NavController){
                 Alignment.CenterVertically
             ) {
                 Button(
-                    { navController.navigate(Router.Scan.previewPageSingle) },
+                    { setCameraStatus(CameraModel.Reshoot) },
                     Modifier
                         .height(60.dp)
                         .width(200.dp),
@@ -142,7 +147,7 @@ fun PreviewColumn(navController: NavController){
                 }
                 Spacer(Modifier.width(20.dp))
                 Button(
-                    { navController.navigate(Router.Scan.previewPage) },
+                    { setCameraStatus(CameraModel.TackPhoto) },
                     Modifier
                         .height(60.dp)
                         .width(200.dp),
@@ -170,6 +175,5 @@ fun PreviewColumn(navController: NavController){
                 }
             }
         }
-        BackButton(navController)
     }
 }

@@ -55,8 +55,8 @@ import com.fagougou.government.contractLibraryPage.LibraryGuidePage
 import com.fagougou.government.contractLibraryPage.ContractContent
 import com.fagougou.government.contractReviewPage.*
 import com.fagougou.government.contractReviewPage.camera.CameraModel
-import com.fagougou.government.contractReviewPage.camera.PreviewColumn
-import com.fagougou.government.contractReviewPage.camera.PreviewPage
+import com.fagougou.government.contractReviewPage.camera.ScanPage
+
 import com.fagougou.government.databinding.LayoutHomebtnBinding
 import com.fagougou.government.dialog.Dialog
 import com.fagougou.government.dialog.DialogViewModel
@@ -253,9 +253,7 @@ fun Main() {
             composable(Router.lawyer) { LawyersPage(navController) }
             composable(Router.selfPrint) { SelfPrintMain(navController) }
             composable(Router.contractReview) { ContractSelectMain(navController) }
-            composable(Router.Scan.previewColumn) { PreviewColumn(navController) }
-            composable(Router.Scan.previewPage) { PreviewPage(navController,true) }
-            composable(Router.Scan.previewPageSingle) { PreviewPage(navController,false) }
+            composable(Router.Scan.previewColumn) {  ScanPage(navController)  }
         }
     }
 }

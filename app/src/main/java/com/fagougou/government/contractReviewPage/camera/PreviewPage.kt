@@ -21,37 +21,47 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.R
+
+
 import com.fagougou.government.contractReviewPage.camera.CameraModel.fileList
-import com.fagougou.government.contractReviewPage.camera.CameraModel.index
+
+import com.fagougou.government.contractReviewPage.camera.CameraPreview
+import com.fagougou.government.contractReviewPage.camera.Page.nowPage
+import com.fagougou.government.contractReviewPage.camera.ScanModel.RePhoto
+import com.fagougou.government.contractReviewPage.camera.ScanModel.TackPhoto
+import com.fagougou.government.contractReviewPage.camera.ScanModel.setCameraStatus
+
 import com.fagougou.government.utils.CameraUtils
 import com.fagougou.government.utils.Tips
 import java.io.File
 
 @Composable
-fun PreviewPage(navController: NavController, appendMode:Boolean) {
+fun PreviewPage() {
     var isSingle by remember{ mutableStateOf(true) }
+
     Column {
-        Box(Modifier.fillMaxWidth( )) {
+        Box(Modifier.fillMaxWidth()) {
             CameraPreview(
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         CameraUtils.photoFile?.let {
-                            if (appendMode) fileList.add(it.path)
-                            else if(index<fileList.size)fileList[index] = it.path
-                            else fileList.add(it.path)
-                        }
-                        if (isSingle){
-                            navController.popBackStack()
-                        }
+                            if (RePhoto.value) {
+                                fileList[nowPage] = it.path
+                                setCameraStatus(CameraModel.Completed)
+                        } else {
+                                if (isSingle) setCameraStatus(CameraModel.Completed)
+                                fileList.add(it.path)
+                        } }
+
                         Tips.toast("拍照成功")
                     }
 
                     override fun onError(exception: ImageCaptureException) {
                         Tips.toast("拍照失败")
                     }
-                }
+                },
             )
-            if (appendMode) Box(
+            if (TackPhoto.value&& !RePhoto.value) Box(
                     Modifier
                         .fillMaxWidth()
                         .padding(top = 750.dp)
@@ -78,7 +88,7 @@ fun PreviewPage(navController: NavController, appendMode:Boolean) {
                         )
                     }
                 }
-            BackButton(navController)
+
         }
         Row(
             Modifier
@@ -88,14 +98,12 @@ fun PreviewPage(navController: NavController, appendMode:Boolean) {
             Arrangement.Center,
             Alignment.CenterVertically,
         ) {
-            if (fileList.isNotEmpty() && appendMode) Box(
+            if (fileList.isNotEmpty() && TackPhoto.value) Box(
                 Modifier
                     .padding(end = 150.dp)
+                    .clickable { TackPhoto.value=false }
                     .height(98.dp)
                     .width(76.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    }
             ) {
                 fileList.lastOrNull()?.let {
                     Image(
@@ -144,14 +152,12 @@ fun PreviewPage(navController: NavController, appendMode:Boolean) {
                     color = Color.White
                 )
             }
-            if (fileList.isNotEmpty() && appendMode)
+            if (fileList.isNotEmpty() && TackPhoto.value)
                 Text(
                     "完成扫描",
                     Modifier
-                        .padding(start = 150.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        },
+                        .clickable { setCameraStatus(CameraModel.Completed) }
+                        .padding(start = 150.dp),
                     fontSize = 20.sp,
                     color = Color.White,
                 )
