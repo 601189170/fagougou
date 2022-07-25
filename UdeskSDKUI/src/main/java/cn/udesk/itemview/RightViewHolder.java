@@ -91,6 +91,7 @@ public class RightViewHolder extends BaseViewHolder {
         try {
             this.mContext = mContext;
             tvTime = convertView.findViewById(R.id.udesk_tv_time);
+            tips = convertView.findViewById(R.id.tips);
             UdeskConfigUtil.setUITextColor(UdeskSDKManager.getInstance().getUdeskConfig().udeskIMTimeTextColorResId, tvTime);
             //头像
             llHead = convertView.findViewById(R.id.udesk_ll_head);

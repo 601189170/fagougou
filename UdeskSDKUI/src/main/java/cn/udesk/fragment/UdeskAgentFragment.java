@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -27,6 +28,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.SizeUtils;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -39,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.udesk.R;
+import cn.udesk.SpaceItemDecoration;
 import cn.udesk.UdeskSDKManager;
 import cn.udesk.UdeskUtil;
 import cn.udesk.activity.NavigationFragment;
@@ -573,16 +577,22 @@ public class UdeskAgentFragment extends UdeskbaseFragment implements View.OnClic
 //                FunctionMode fileItem = new FunctionMode(getString(R.string.file), UdeskConst.UdeskFunctionFlag.Udesk_Udesk_File, R.drawable.udesk_file_icon);
 //                functionItems.add(fileItem);
 //            }
-//
-//            if (UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions != null
-//                    && UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions.size() > 0) {
-//                functionItems.addAll(UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions);
-//            }
+
+
+
+
+
+            if (UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions != null
+                    && UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions.size() > 0) {
+                functionItems.addAll(UdeskSDKManager.getInstance().getUdeskConfig().extreFunctions);
+            }
+
             photos.clear();
             strs.clear();
             EventBus.getDefault().post(new MessageEvent(MessageConstans.PalyVideoHuman));
 
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),6));
+//            recyclerView.addItemDecoration(new SpaceItemDecoration(5));
             recyclerView.setAdapter(adapter);
             photos.add(R.drawable.icon_s1);
             photos.add(R.drawable.icon_s2);
@@ -604,6 +614,11 @@ public class UdeskAgentFragment extends UdeskbaseFragment implements View.OnClic
             strs.add("企业人事");
             strs.add("消费维权");
             strs.add("民间借贷");
+            for (int i = 0; i < photos.size(); i++) {
+                FunctionMode fileItem = new FunctionMode(strs.get(i), i, photos.get(i));
+                functionItems.add(fileItem);
+            }
+
             adapter.setList(photos);
             adapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -629,13 +644,16 @@ public class UdeskAgentFragment extends UdeskbaseFragment implements View.OnClic
             e.printStackTrace();
         }
     }
-    List photos=new ArrayList();
+    List<Integer> photos=new ArrayList();
     public int eventtpye=0;
-    List strs=new ArrayList();
+    List<String> strs=new ArrayList();
     BaseQuickAdapter adapter = new BaseQuickAdapter<Integer, BaseViewHolder>(R.layout.layout_addmore_item) {
         @Override
         protected void convert(@NotNull BaseViewHolder baseViewHolder, Integer id ) { ;
             baseViewHolder.setImageResource(R.id.img,id);
+//            baseViewHolder.setImageResource(R.id.img,R.drawable.icon_chat_more);
+//            baseViewHolder.setBackgroundResource(R.id.img,R.color.white);
+//
             baseViewHolder.setText(R.id.name,strs.get(getItemPosition(id))+"");
         }
     };
@@ -723,44 +741,57 @@ public class UdeskAgentFragment extends UdeskbaseFragment implements View.OnClic
                 try {
                     FunctionMode functionItem = (FunctionMode) adapterView.getItemAtPosition(i);
                     switch (functionItem.getId()) {
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Camera:
-                            udeskChatActivity.clickCamera();
-                            onHideBottomLayout(true);
-                            break;
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Photo:
-                            udeskChatActivity.clickPhoto();
-                            onHideBottomLayout(true);
-                            break;
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Udesk_File:
-                            udeskChatActivity.clickFile();
-                            onHideBottomLayout(true);
-                            break;
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Survy:
-                            if (udeskChatActivity.getPressionStatus()) {
-                                UdeskUtils.showToast(getActivity().getApplicationContext(),
-                                        getString(R.string.udesk_can_not_be_evaluated));
-                                return;
-                            }
-                            udeskChatActivity.clickSurvy();
-                            break;
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Location:
-                            udeskChatActivity.clickLocation();
-                            onHideBottomLayout(true);
-                            break;
-                        case UdeskConst.UdeskFunctionFlag.Udesk_Video:
-                            if (udeskChatActivity.getPressionStatus()) {
-                                UdeskUtils.showToast(udeskChatActivity.getApplicationContext(), getString(R.string.udesk_can_not_be_video));
-                                return;
-                            }
-                            udeskChatActivity.startVideo();
-                            mBottomFramlayout.setVisibility(View.GONE);
-                            onHideBottomLayout(true);
-                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Camera:
+//                            udeskChatActivity.clickCamera();
+//                            onHideBottomLayout(true);
+//                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Photo:
+//                            udeskChatActivity.clickPhoto();
+//                            onHideBottomLayout(true);
+//                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Udesk_File:
+//                            udeskChatActivity.clickFile();
+//                            onHideBottomLayout(true);
+//                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Survy:
+//                            if (udeskChatActivity.getPressionStatus()) {
+//                                UdeskUtils.showToast(getActivity().getApplicationContext(),
+//                                        getString(R.string.udesk_can_not_be_evaluated));
+//                                return;
+//                            }
+//                            udeskChatActivity.clickSurvy();
+//                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Location:
+//                            udeskChatActivity.clickLocation();
+//                            onHideBottomLayout(true);
+//                            break;
+//                        case UdeskConst.UdeskFunctionFlag.Udesk_Video:
+//                            if (udeskChatActivity.getPressionStatus()) {
+//                                UdeskUtils.showToast(udeskChatActivity.getApplicationContext(), getString(R.string.udesk_can_not_be_video));
+//                                return;
+//                            }
+//                            udeskChatActivity.startVideo();
+//                            mBottomFramlayout.setVisibility(View.GONE);
+//                            onHideBottomLayout(true);
+//                            break;
+
                         default:
-                            if (UdeskSDKManager.getInstance().getUdeskConfig().functionItemClickCallBack != null) {
-                                UdeskSDKManager.getInstance().getUdeskConfig().functionItemClickCallBack
-                                        .callBack(getActivity().getApplicationContext(), udeskViewMode, functionItem.getId(), functionItem.getName());
-                            }
+                            new SelectRuleDiallog(getActivity(), "", new TimeoDialogListener() {
+                                @Override
+                                public void Confirm() {
+                                    getActivity().finish();
+                                    eventtpye=1 ;
+                                }
+
+                                @Override
+                                public void Cancle() {
+
+                                }
+                            }).show();
+//                            if (UdeskSDKManager.getInstance().getUdeskConfig().functionItemClickCallBack != null) {
+//                                UdeskSDKManager.getInstance().getUdeskConfig().functionItemClickCallBack
+//                                        .callBack(getActivity().getApplicationContext(), udeskViewMode, functionItem.getId(), functionItem.getName());
+//                            }
                             break;
                     }
                 } catch (Exception e) {

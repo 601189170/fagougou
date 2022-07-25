@@ -58,5 +58,7 @@ dependencies {
     implementation group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1'
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+    implementation 'com.blankj:utilcode:1.9.6'
+
 
 }

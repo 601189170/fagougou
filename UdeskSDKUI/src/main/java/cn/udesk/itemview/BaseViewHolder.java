@@ -26,6 +26,7 @@ import udesk.core.model.MessageInfo;
 public abstract class BaseViewHolder {
 
     public TextView tvTime;
+    public TextView tips;
     public MessageInfo message;
     public MessageInfo preMessage;
     public MessageInfo nextMessage;
@@ -67,11 +68,13 @@ public abstract class BaseViewHolder {
      * 计算是否要显示当前位置消息的发送或接受时间
      */
     public boolean tryShowTime(MessageInfo msgInfo, int position) {
+         tips.setVisibility(position==0?View.VISIBLE:View.GONE);
         try {
             if (msgInfo != null) {
                 if (msgInfo instanceof UdeskQueueItem) {
                     tvTime.setVisibility(View.VISIBLE);
                     tvTime.setText(UdeskUtil.formatLongTypeTimeToString(mContext, System.currentTimeMillis()));
+
                     return true;
                 } else if (msgInfo.getMsgtype().equals(UdeskConst.ChatMsgTypeString.TYPE_EVENT)) {
                     tvTime.setVisibility(View.GONE);

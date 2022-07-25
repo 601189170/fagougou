@@ -69,7 +69,7 @@ fun ContractSelectMain(navController: NavController) {
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.Upload.waiting) {
-                    Uploading(subNavController)
+                    Uploading(subNavController,Router.ContractReview.classify)
                     stepModel.currentIndex.value=1
                 }
                 composable(Router.Upload.pdfPreview) {

@@ -180,6 +180,8 @@ class MainActivity : ComponentActivity() {
             homeButtonBinding.homeBtn.visibility=View.GONE
         } else if (messageEvent.message.equals(MessageConstans.WindsViewShow) ) {
             homeButtonBinding.homeBtn.visibility=View.VISIBLE
+        }else if (messageEvent.message.equals(MessageConstans.RefreshTime) ) {
+            lastTouchTime = stamp
         }
     }
 }

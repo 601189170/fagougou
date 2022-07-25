@@ -28,7 +28,7 @@ import timber.log.Timber
 
 @Composable
 
-fun Uploading(navController: NavController) {
+fun Uploading(navController: NavController,router:String) {
     LaunchedEffect(null) {
         var code = 0
         withContext(Dispatchers.IO){
@@ -48,7 +48,7 @@ fun Uploading(navController: NavController) {
     ) {
         Text(
             modifier = Modifier.padding( top = 40.dp),
-            text = "请选择文件上传方式",
+            text = if (router==Router.selfPrint)"请选择文件上传方式" else "正在上传文档,请勿离开页面",
             fontSize = 28.sp,
             color = Color(0xFF303133)
         )

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0b0135"
-    android:gravity="center"
-    android:layoutDirection="ltr"
+
+
     android:orientation="vertical">
 
 
@@ -13,23 +13,22 @@
         android:id="@+id/function_gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/udesk_20"
-        android:layout_marginTop="@dimen/udesk_20"
-        android:columnWidth="@dimen/udesk_60"
+
+        android:layout_marginHorizontal="@dimen/dp_120"
+        android:columnWidth="@dimen/udesk_100"
         android:fadeScrollbars="true"
         android:gravity="center"
         android:listSelector="#00000000"
-        android:visibility="gone"
-        android:numColumns="4"
+        android:numColumns="6"
         android:stretchMode="spacingWidthUniform"
         android:verticalSpacing="@dimen/udesk_20" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/dp_100"
-        android:layout_marginVertical="@dimen/dp_100"
-        android:layout_height="match_parent">
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -75,6 +75,7 @@
 
     <ImageView
         android:id="@+id/close"
+        android:visibility="gone"
         android:src="@drawable/icon_menu_close"
         android:layout_marginTop="24dp"
         android:layout_marginRight="24dp"

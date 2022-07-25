@@ -36,7 +36,7 @@ fun SelfPrintMain(navController: NavController) {
                     stepModel.currentIndex.value=0
                 }
                 composable(Router.Upload.waiting) {
-                    Uploading(subNavController)
+                    Uploading(subNavController,Router.selfPrint)
                     stepModel.currentIndex.value=0
                 }
                 composable(Router.Upload.pdfPreview) {

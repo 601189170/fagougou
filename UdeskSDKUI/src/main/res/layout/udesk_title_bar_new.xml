@@ -147,7 +147,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/dp_24"
             android:drawablePadding="5dp"
-            android:drawableLeft="@drawable/ic_close"
+            android:drawableLeft="@drawable/ic_close2"
             android:layout_width="0dp"
             android:gravity="center"
             android:layout_weight="1"

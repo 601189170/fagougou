@@ -18,6 +18,21 @@
         android:gravity="center"
         android:textColor="@color/udesk_color_im_time_text1"
         android:textSize="@dimen/udesk_sp14" />
+    <TextView
+        android:background="#85FFFFFF"
+        android:visibility="gone"
+        android:id="@+id/tips"
+        android:drawableLeft="@drawable/icon_tips"
+        android:text="温馨提示：咨询过程中可拿起起麦克风咨询，声音效果更清晰！"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/udesk_10"
+        android:layout_marginBottom="@dimen/udesk_5"
+        android:gravity="center_vertical"
+        android:textColor="@color/udesk_color_im_time_text1"
+        android:textSize="@dimen/udesk_sp14" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,17 +44,116 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/udesk_10"
             android:gravity="right">
-            <TextView
-                android:id="@+id/ykname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="游客"
+
+            <FrameLayout
                 android:layout_marginRight="20dp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_20"
-                />
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_29"
+                    android:layout_marginRight="@dimen/dp_84"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/udesk_ll_body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        >
+                        <RelativeLayout
+                            android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
+                            android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
+                            android:layout_marginRight="@dimen/udesk_8"
+                            android:layout_gravity="center_vertical">
+                            <ImageView
+                                android:id="@+id/udesk_iv_status"
+                                android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_gravity="center_vertical|right"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/udesk_im_retry"
+                                android:visibility="gone" />
+                            <ImageView
+                                android:id="@+id/udesk_iv_cancle"
+                                android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_gravity="center_vertical|right"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/udesk_cancle"
+                                android:visibility="gone" />
+                            <ProgressBar
+                                android:id="@+id/udesk_im_wait"
+                                android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
+                                android:layout_gravity="center_vertical"
+                                android:indeterminateDrawable="@drawable/udesk_anim_progress"
+                                android:scaleType="centerInside"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <include layout="@layout/udesk_item_txt_right" />
+
+                            <include layout="@layout/udesk_item_leave_txt_right" />
+
+                            <include layout="@layout/udesk_item_video_right" />
+
+                            <include layout="@layout/udesk_item_audio_right" />
+
+                            <include layout="@layout/udesk_item_img" />
+
+                            <include layout="@layout/udesk_item_file_right" />
+
+                            <include layout="@layout/udesk_item_smallvideo" />
+
+                            <include layout="@layout/udesk_item_location" />
+
+                            <include layout="@layout/udesk_item_product" />
+
+                            <include layout="@layout/udesk_item_reply_product" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/udesk_4"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/ykname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="游客"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_20"
+                        />
+                    <cn.udesk.widget.UdeskImageView
+                        android:src="@drawable/icon_yhtx"
+                        android:id="@+id/udesk_iv_head"
+                        android:layout_width="@dimen/dp_64"
+                        android:layout_height="@dimen/dp_64"
+                        android:scaleType="centerCrop"
+                        udesk:udesk_iv_isCircle="true"/>
+                </LinearLayout>
+            </FrameLayout>
+
 
             <TextView
                 android:id="@+id/udesk_nick_name"
@@ -54,94 +168,11 @@
                 android:textSize="@dimen/sp_20"
                 />
 
-            <cn.udesk.widget.UdeskImageView
-                android:src="@drawable/icon_yhtx"
-                android:id="@+id/udesk_iv_head"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_64"
-                android:layout_marginLeft="@dimen/udesk_4"
-                android:scaleType="centerCrop"
-                udesk:udesk_iv_isCircle="true"/>
+
 
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="-25dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-
-        <LinearLayout
-            android:id="@+id/udesk_ll_body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            >
-            <RelativeLayout
-                android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
-                android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
-                android:layout_marginRight="@dimen/udesk_8"
-                android:layout_gravity="center_vertical">
-                <ImageView
-                    android:id="@+id/udesk_iv_status"
-                    android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_gravity="center_vertical|right"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/udesk_im_retry"
-                    android:visibility="gone" />
-                <ImageView
-                    android:id="@+id/udesk_iv_cancle"
-                    android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_gravity="center_vertical|right"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/udesk_cancle"
-                    android:visibility="gone" />
-                <ProgressBar
-                    android:id="@+id/udesk_im_wait"
-                    android:layout_width="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_height="@dimen/udesk_chat_msg_send_fail_pic"
-                    android:layout_gravity="center_vertical"
-                    android:indeterminateDrawable="@drawable/udesk_anim_progress"
-                    android:scaleType="centerInside"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <include layout="@layout/udesk_item_txt_right" />
-
-                <include layout="@layout/udesk_item_leave_txt_right" />
-
-                <include layout="@layout/udesk_item_video_right" />
-
-                <include layout="@layout/udesk_item_audio_right" />
-
-                <include layout="@layout/udesk_item_img" />
-
-                <include layout="@layout/udesk_item_file_right" />
-
-                <include layout="@layout/udesk_item_smallvideo" />
-
-                <include layout="@layout/udesk_item_location" />
-
-                <include layout="@layout/udesk_item_product" />
-
-                <include layout="@layout/udesk_item_reply_product" />
-
-            </RelativeLayout>
-        </LinearLayout>
-            <TextView
-                android:layout_width="@dimen/dp_85"
-                android:layout_height="wrap_content">
-
-            </TextView>
-        </LinearLayout>
 
     </LinearLayout>
 

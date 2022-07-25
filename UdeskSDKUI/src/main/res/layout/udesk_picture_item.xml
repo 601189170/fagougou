@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/udesk_image"
-        android:layout_width="@dimen/udesk_60"
-        android:layout_height="@dimen/udesk_60"
+        android:layout_width="@dimen/udesk_100"
+        android:layout_height="@dimen/udesk_100"
         android:layout_gravity="center"
         android:scaleType="fitXY"
         android:src="@drawable/udesk_camer_normal1" />
@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/udesk_8"
         android:gravity="center_horizontal"
-        android:textColor="@color/udesk_color_7878787"
-        android:textSize="@dimen/udesk_sp14" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/udesk_sp18" />
 
 </LinearLayout>

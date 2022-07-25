@@ -86,12 +86,12 @@
                 android:layout_toLeftOf="@+id/udesk_emoji_img"
                 android:background="@null"
                 android:hint="请输入问题.."
-                android:paddingLeft="@dimen/udesk_12"
                 android:imeOptions="actionSend"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/udesk_12"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="#FFC0C6CC"
-                android:singleLine="true"
-                android:maxLines="1"
                 android:textSize="@dimen/dp_24"
                 android:visibility="visible" />
 
@@ -156,10 +156,10 @@
     </LinearLayout>
 
     <FrameLayout
+        android:background="@color/white"
         android:id="@+id/udesk_bottom_frame"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_alignParentBottom="true"
         android:visibility="gone">
 
         <cn.udesk.emotion.EmotionLayout
