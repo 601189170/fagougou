@@ -1,5 +1,6 @@
 package com.fagougou.government.contractReviewPage.camera
 
+import android.text.TextUtils
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -26,6 +30,7 @@ import com.fagougou.government.contractReviewPage.camera.CameraModel.index
 import com.fagougou.government.contractReviewPage.camera.Page.nowPage
 import com.fagougou.government.contractReviewPage.camera.ScanModel.TackPhoto
 import com.fagougou.government.contractReviewPage.camera.ScanModel.setCameraStatus
+import com.fagougou.government.dialog.DialogViewModel
 import com.fagougou.government.ui.theme.Dodgerblue
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -57,8 +62,17 @@ fun PreviewColumn(){
                 fontSize = 28.sp,
                 color = Color.Black
             )
+
+            val annotatedString = buildAnnotatedString {
+
+                append("当前预览")
+
+                withStyle(style = SpanStyle(color = Color(0xFF0E7AE6))){ append((pagerState.currentPage+1).toString()) }
+
+                append("/" + CameraModel.fileList.size + "页）")
+            }
             Text(
-                "当前预览(" + (pagerState.currentPage+1) + "/" + CameraModel.fileList.size + "页）",
+                text = annotatedString,
                 Modifier
                     .padding(top = 8.dp),
                 fontSize = 20.sp,
@@ -72,7 +86,7 @@ fun PreviewColumn(){
                 HorizontalPager(
                     CameraModel.fileList.size,
                     Modifier
-                        .padding(top = 30.dp)
+                        .padding(top = 50.dp)
                         .fillMaxWidth(),
                     pagerState,
                 ) { index ->

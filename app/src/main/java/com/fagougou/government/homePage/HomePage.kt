@@ -1,5 +1,6 @@
 package com.fagougou.government.homePage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,11 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.blankj.utilcode.util.NetworkUtils
 import com.fagougou.government.CommonApplication
 import com.fagougou.government.CommonApplication.Companion.presentation
 import com.fagougou.government.R
 import com.fagougou.government.Router
 import com.fagougou.government.component.BasicText
+import com.fagougou.government.generateContract.GenerateContractViewModel
 import com.fagougou.government.model.SerialLoginRequest
 import com.fagougou.government.repo.Client
 import com.fagougou.government.ui.theme.CORNER_FLOAT
@@ -29,6 +32,9 @@ import com.fagougou.government.utils.Time
 import com.fagougou.government.utils.Tips.toast
 import com.fagougou.government.utils.UMConstans
 import com.fagougou.government.utils.ZYSJ
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import timber.log.Timber
 
 
 @Composable
@@ -58,6 +64,7 @@ fun HomePage(navController:NavController) {
                     }
                 }
             })
+
     }
     Column(
         Modifier.fillMaxSize(),
@@ -75,9 +82,13 @@ fun HomePage(navController:NavController) {
             Image(
                 painterResource(R.drawable.home_logo),
                 null,
-                Modifier.height(32.dp).clickable { navController.navigate(Router.about) }
+                Modifier
+                    .height(32.dp)
+                    .clickable { navController.navigate(Router.about) }
             )
             BasicText(Time.timeText.value,0.dp,24.sp)
+
+
         }
 
         BasicText( "欢迎使用智能法律服务系统",130.dp,32.sp)
@@ -105,7 +116,9 @@ fun HomePage(navController:NavController) {
         }
         Row(Modifier.padding(top = 24.dp)) {
             HomeButton(
-                Modifier.width(210.dp).height(224.dp),
+                Modifier
+                    .width(210.dp)
+                    .height(224.dp),
                 {
                     navController.navigate(Router.generateGuide)
                     UMConstans.setIntoClick(UMConstans.home_generate_contract)
@@ -130,14 +143,18 @@ fun HomePage(navController:NavController) {
                 contentId = R.drawable.home_examination
             )
             HomeButton(
-                Modifier.width(210.dp).height(224.dp),
+                Modifier
+                    .width(210.dp)
+                    .height(224.dp),
                 { navController.navigate(Router.selfPrint) },
                 R.drawable.home_self
             )
         }
         Row( Modifier.padding(top = 24.dp) ) {
             HomeButton(
-                Modifier.width(288.dp).height(120.dp),
+                Modifier
+                    .width(288.dp)
+                    .height(120.dp),
                 {  navController.navigate(Router.calculator)
                     UMConstans.setIntoClick(UMConstans.home_calculator) },
                 contentId = R.drawable.home_calculator
